@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="uz"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Maktab e’lonlari detektori</title>
+<style>
+:root{
+  --primary:#0f172a; --muted:#64748b; --blue:#2563eb; --blue2:#0ea5e9;
+  --orange:#f97316; --green:#16a34a; --red:#ef4444; --purple:#7c3aed;
+  --yellow:#f59e0b; --card:#fff; --border:#dbe4f0;
+  --shadow:0 18px 45px rgba(15,23,42,.10); --radius:26px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Arial,"Segoe UI",sans-serif;color:var(--primary);line-height:1.65;
+  background:
+    radial-gradient(circle at top left,rgba(37,99,235,.12),transparent 30%),
+    radial-gradient(circle at top right,rgba(249,115,22,.10),transparent 28%),
+    linear-gradient(180deg,#f8fbff 0%,#eef5ff 48%,#f8fafc 100%);
+}
+.navbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);box-shadow:0 8px 24px rgba(15,23,42,.05)}
+.nav-inner{width:min(1180px,calc(100% - 32px));margin:auto;min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--primary);font-weight:900;letter-spacing:-.035em;font-size:18px}
+.brand-icon{width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,var(--blue),var(--orange));color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(37,99,235,.22);font-size:22px}
+.nav-links{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.nav-links a{text-decoration:none;color:#334155;font-weight:800;font-size:14px;padding:9px 12px;border-radius:999px;transition:.2s}
+.nav-links a:hover{background:#eff6ff;color:var(--blue)}
+.container{width:min(1180px,calc(100% - 32px));margin:auto}
+.hero{padding:30px 0 18px}
+.hero-card{position:relative;overflow:hidden;border-radius:34px;background:linear-gradient(135deg,#0f172a 0%,#1d4ed8 46%,#f97316 100%);color:#fff;padding:38px 34px;box-shadow:var(--shadow)}
+.hero-card::before,.hero-card::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.10)}
+.hero-card::before{width:240px;height:240px;right:-82px;top:-82px}.hero-card::after{width:170px;height:170px;left:-60px;bottom:-70px}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);color:#dbeafe;border:1px solid rgba(255,255,255,.20);padding:8px 13px;border-radius:999px;font-size:14px;font-weight:900;margin-bottom:14px;position:relative;z-index:2}
+.hero-card h1{margin:0 0 12px;font-size:clamp(32px,4.6vw,58px);line-height:1.05;letter-spacing:-.055em;font-weight:900;position:relative;z-index:2;max-width:980px}
+.hero-card p{margin:0;color:#dbeafe;font-size:19px;max-width:960px;position:relative;z-index:2}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;position:relative;z-index:2}
+.btn{border:0;border-radius:15px;padding:13px 18px;font-weight:900;cursor:pointer;transition:.2s;font-size:15px;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,23,42,.12)}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}.btn-white{background:#fff;color:#1d4ed8}.btn-success{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}.btn-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}.btn-orange{background:linear-gradient(135deg,var(--orange),var(--yellow));color:#fff}.btn-dark{background:#0f172a;color:#fff}.btn-purple{background:linear-gradient(135deg,var(--purple),#a855f7);color:#fff}
+.main-grid{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start;padding:8px 0 46px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:22px}
+.section-title{margin:0 0 14px;font-size:26px;line-height:1.2;letter-spacing:-.04em;font-weight:900;display:flex;gap:10px;align-items:center}
+.lead{margin:-4px 0 18px;color:var(--muted);font-size:17px;font-weight:650}
+.sidebar{position:sticky;top:96px}.progress{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin:10px 0 8px}.progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));transition:.4s}
+.rule-list{margin:0;padding:0;list-style:none;display:grid;gap:11px}.rule-list li{display:flex;gap:10px;align-items:flex-start;background:#f8fafc;border:1px solid #e2e8f0;border-radius:15px;padding:12px;color:#475569;font-size:15px}.rule-list b{color:#0f172a}
+.pill{flex:0 0 auto;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#eff6ff;color:var(--blue);font-weight:900}
+.result-box{display:none;margin-top:14px;border-radius:18px;padding:15px 16px;font-weight:900}.result-box.show{display:block;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+label{display:block;font-size:14px;font-weight:900;color:#1e293b;margin:14px 0 7px}textarea,select,input{width:100%;border:1px solid #cbd5e1;border-radius:14px;padding:12px;font-family:inherit;font-size:15px;outline:none;transition:.2s;background:#fff}textarea{resize:vertical;min-height:100px}textarea:focus,select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+footer{text-align:center;color:#64748b;font-size:14px;padding:0 0 38px}
+.modal{display:none;position:fixed;inset:0;background:rgba(2,6,23,.78);z-index:1000;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(5px)}.modal.show{display:flex}.modal-content{width:min(680px,96vw);background:#fff;border-radius:24px;box-shadow:0 25px 70px rgba(0,0,0,.35);overflow:hidden;border:1px solid #e2e8f0}.modal-head{padding:16px 18px;background:linear-gradient(135deg,#0f172a,#1d4ed8);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px}.modal-head h3{margin:0;font-size:21px;font-weight:900}.close{border:0;background:rgba(255,255,255,.14);color:#fff;border-radius:12px;width:38px;height:38px;cursor:pointer;font-size:22px}.modal-body{padding:20px;color:#475569;font-size:16px}.modal-question{margin:0 20px 20px;padding:15px;background:#fff7ed;border-left:4px solid var(--orange);border-radius:12px;color:#9a3412;font-weight:800}
+@media(max-width:1060px){.main-grid{grid-template-columns:1fr}.sidebar{position:static}}
+@media(max-width:760px){.nav-links{display:none}.nav-inner{justify-content:center}.hero-card{padding:24px}.card{padding:18px}}
+</style>
+
+<style>
+.hero-card{background:linear-gradient(135deg,#0f172a 0%,#2563eb 45%,#16a34a 100%)}
+.instructions{background:#eff6ff;border:1px solid #bfdbfe;border-left:6px solid var(--blue);border-radius:18px;padding:16px;color:#1e3a8a;font-weight:800;margin-bottom:16px}
+.toolbar{display:flex;gap:12px;justify-content:center;position:sticky;top:86px;z-index:10;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);padding:12px;border-radius:999px;border:1px solid #e2e8f0;box-shadow:0 10px 24px rgba(15,23,42,.06);margin-bottom:18px}
+.marker{border:3px solid transparent;border-radius:999px;padding:12px 20px;cursor:pointer;font-weight:900;transition:.2s}.marker-red{background:#fee2e2;color:#991b1b}.marker-green{background:#dcfce7;color:#166534}.marker.active{border-color:#0f172a;transform:scale(1.04)}
+.text-area{line-height:2.4;font-size:21px;padding:24px;border:2px solid #e2e8f0;border-radius:22px;background:#fff;text-align:justify}.w{cursor:pointer;transition:.1s;padding:4px 7px;border-radius:8px;display:inline-block}.w:hover{background:#f1f5f9}.h-red{background:#ef4444!important;color:white!important}.h-green{background:#16a34a!important;color:white!important}
+.statbar{display:flex;height:34px;border-radius:999px;overflow:hidden;background:#e2e8f0;margin:18px 0;border:1px solid #cbd5e1}.bar-red{background:#ef4444;width:0;transition:1s}.bar-green{background:#16a34a;width:0;transition:1s}@media(max-width:760px){.toolbar{position:static;flex-direction:column;border-radius:20px}.text-area{font-size:18px}}
+</style></head><body>
+<nav class="navbar"><div class="nav-inner"><a class="brand" href="index.html"><span class="brand-icon">🏫</span><span>Maktab e’lonlari detektori</span></a><div class="nav-links"><a href="index.html">Bosh sahifa</a><a href="#task">Marker</a><a href="#result">Natija</a></div></div></nav>
+<header class="hero"><div class="container"><div class="hero-card"><div class="badge">🎨 Interaktiv marker · Hissiyot va fakt</div><h1>Maktab xabarlarida fakt va hissiy bosimni ajratish</h1><p>O‘quvchilar matndagi bo‘rttirilgan hissiy so‘zlarni qizil, aniq faktlarni yashil rang bilan belgilaydi.</p><div class="hero-actions"><a class="btn btn-white" href="#task">Mashqni boshlash</a><button class="btn btn-primary" onclick="calculateResult()">Tahlil qilish</button></div></div></div></header>
+<main class="container main-grid"><section><div class="card" id="task"><h2 class="section-title">🖍 Maktab e’lonlari detektori</h2><div class="instructions"><b>Vazifa:</b> qizil marker — bo‘rttirilgan, hissiy, qo‘rqituvchi so‘zlar; yashil marker — aniq sana, vaqt, joy va miqdor.</div><div class="toolbar"><button id="mRed" class="marker marker-red" onclick="setMarker('red')">🔴 Hissiyot</button><button id="mGreen" class="marker marker-green" onclick="setMarker('green')">🟢 Fakt</button></div><div id="contentBox" class="text-area"></div><button class="btn btn-success" onclick="calculateResult()">Tahlil qilish</button><button class="btn btn-red" onclick="resetMarks()">Qaytadan boshlash</button></div><div class="card" id="result" style="display:none"><h2 id="resultTitle" class="section-title">Natija</h2><div class="statbar"><div id="barRed" class="bar-red"></div><div id="barGreen" class="bar-green"></div></div><div id="resNumbers" style="font-weight:900;margin-bottom:14px"></div><p id="resultDesc" class="lead"></p></div></section><aside class="sidebar"><div class="card"><h2 class="section-title">🎯 Dars maqsadi</h2><p class="lead">O‘quvchi xabar matnidagi fakt va manipulyativ hissiy bosimni farqlaydi.</p><div class="progress"><span id="progressBar"></span></div><p id="progressText" style="margin:0;color:#64748b;font-weight:800">Bajarilish holati: 0%</p></div><div class="card"><h2 class="section-title">✅ Eslatma</h2><ul class="rule-list"><li><span class="pill">1</span><span><b>Fakt:</b> vaqt, joy, sana, raqam.</span></li><li><span class="pill">2</span><span><b>Hissiyot:</b> qo‘rqitish, shoshiltirish, aybdorlik.</span></li><li><span class="pill">3</span><span><b>Bo‘rttirish:</b> “eng zo‘r”, “hamma shart”.</span></li><li><span class="pill">4</span><span><b>Xulosa:</b> faktga tayaning.</span></li></ul></div></aside></main><footer class="container">Maktab e’lonlari detektori</footer>
+<script>
+const text=`DIQQAT! HAMMA KO‘RSIN! Ertaga maktabimizda dahshatli darajada muhim tadbir bo‘ladi! Kelmaganlar eng vafosiz o‘quvchi hisoblanadi! Tadbir soat 09:00 da faollar zalida boshlanadi. Bizning maktab shahardagi eng zo‘r maktab bo‘lgani uchun hamma forma kiyishi shart! Kelmasangiz, butun umr afsuslanasiz! Tadbirda 5 ta yo‘nalish bo‘yicha chiqishlar bo‘ladi.`;
+let marker=null,p=0;function prog(v){p=Math.max(p,v);progressBar.style.width=p+'%';progressText.textContent='Bajarilish holati: '+p+'%'}
+text.split(' ').forEach(word=>{const s=document.createElement('span');s.innerText=word+' ';s.className='w';s.onclick=function(){if(!marker){alert('Avval markerni tanlang!');return}this.classList.remove('h-red','h-green');this.classList.add(marker==='red'?'h-red':'h-green');prog(35)};contentBox.appendChild(s)})
+function setMarker(c){marker=c;document.querySelectorAll('.marker').forEach(m=>m.classList.remove('active'));document.getElementById(c==='red'?'mRed':'mGreen').classList.add('active')}function calculateResult(){const r=document.querySelectorAll('.h-red').length,g=document.querySelectorAll('.h-green').length,t=r+g;if(t===0){alert('Kamida 3-4 ta so‘zni belgilang!');return}const rp=Math.round(r/t*100),gp=Math.round(g/t*100);barRed.style.width=rp+'%';barGreen.style.width=gp+'%';resNumbers.textContent=`Hissiyot: ${rp}% | Faktlar: ${gp}%`;document.getElementById('result').style.display='block';if(rp>60){resultTitle.textContent='🛑 Bu manipulyativ xabar!';resultTitle.style.color='#dc2626';resultDesc.textContent='Xabarda qo‘rqitish, aybdorlik va shoshiltirish kuchli. “Dahshatli”, “vafosiz”, “afsuslanasiz” kabi so‘zlar hissiy bosim o‘tkazadi.'}else if(gp>50){resultTitle.textContent='✅ Xabarda faktlar ustun';resultTitle.style.color='#16a34a';resultDesc.textContent='Siz aniq faktlarni ajrata oldingiz: vaqt, joy va miqdor kabi belgilar asosiy ma’lumotni beradi.'}else{resultTitle.textContent='⚖️ Aralash xabar';resultTitle.style.color='#f97316';resultDesc.textContent='Xabarda ham hissiyot, ham fakt bor. Xulosa chiqarishda yashil bilan belgilangan faktlarga tayaning.'}prog(100);result.scrollIntoView({behavior:'smooth'})}function resetMarks(){document.querySelectorAll('.w').forEach(w=>w.classList.remove('h-red','h-green'));document.getElementById('result').style.display='none';}
+</script></body></html>

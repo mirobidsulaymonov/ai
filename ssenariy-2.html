@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2-ssenariy: Faktcheking portali</title>
+  <style>
+    :root{
+      --primary:#0f172a;
+      --muted:#64748b;
+      --blue:#2563eb;
+      --blue2:#0ea5e9;
+      --red:#ef4444;
+      --orange:#f97316;
+      --green:#16a34a;
+      --purple:#7c3aed;
+      --bg:#f5f8ff;
+      --card:#ffffff;
+      --border:#dbe4f0;
+      --shadow:0 18px 45px rgba(15,23,42,.10);
+      --radius:26px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      font-family: Arial, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(239,68,68,.10), transparent 28%),
+        radial-gradient(circle at top right, rgba(37,99,235,.12), transparent 30%),
+        linear-gradient(180deg,#f8fbff 0%,#eef5ff 48%,#f8fafc 100%);
+      color:var(--primary);
+      line-height:1.65;
+    }
+
+    .navbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 8px 24px rgba(15,23,42,.05);
+    }
+
+    .nav-inner{
+      width:min(1180px,calc(100% - 32px));
+      margin:auto;
+      min-height:74px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:var(--primary);
+      font-weight:900;
+      letter-spacing:-.035em;
+      font-size:18px;
+    }
+
+    .brand-icon{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      background:linear-gradient(135deg,var(--red),var(--orange));
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 10px 24px rgba(239,68,68,.24);
+      font-size:22px;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .nav-links a{
+      text-decoration:none;
+      color:#334155;
+      font-weight:800;
+      font-size:14px;
+      padding:9px 12px;
+      border-radius:999px;
+      transition:.2s ease;
+    }
+
+    .nav-links a:hover{
+      background:#eff6ff;
+      color:var(--blue);
+    }
+
+    .container{
+      width:min(1180px,calc(100% - 32px));
+      margin:auto;
+    }
+
+    .hero{
+      padding:30px 0 18px;
+    }
+
+    .hero-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:34px;
+      background:linear-gradient(135deg,#0f172a 0%,#991b1b 42%,#2563eb 100%);
+      color:#fff;
+      padding:38px 34px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero-card::before,
+    .hero-card::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.10);
+    }
+
+    .hero-card::before{
+      width:240px;
+      height:240px;
+      right:-82px;
+      top:-82px;
+    }
+
+    .hero-card::after{
+      width:170px;
+      height:170px;
+      left:-60px;
+      bottom:-70px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(255,255,255,.15);
+      color:#dbeafe;
+      border:1px solid rgba(255,255,255,.20);
+      padding:8px 13px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:900;
+      margin-bottom:14px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-card h1{
+      margin:0 0 12px;
+      font-size:clamp(32px,4.6vw,58px);
+      line-height:1.05;
+      letter-spacing:-.055em;
+      font-weight:900;
+      position:relative;
+      z-index:2;
+      max-width:950px;
+    }
+
+    .hero-card p{
+      margin:0;
+      color:#dbeafe;
+      font-size:19px;
+      max-width:940px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:22px;
+      position:relative;
+      z-index:2;
+    }
+
+    .btn{
+      border:0;
+      border-radius:15px;
+      padding:13px 18px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.2s ease;
+      font-size:15px;
+      font-family:inherit;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      text-decoration:none;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 22px rgba(15,23,42,.12);
+    }
+
+    .btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+    .btn-white{background:#fff;color:#1d4ed8}
+    .btn-success{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+    .btn-muted{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
+    .btn-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+
+    .main-grid{
+      display:grid;
+      grid-template-columns:1fr 360px;
+      gap:22px;
+      align-items:start;
+      padding:8px 0 46px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow:var(--shadow);
+      margin-bottom:22px;
+    }
+
+    .section-title{
+      margin:0 0 14px;
+      font-size:26px;
+      line-height:1.2;
+      letter-spacing:-.04em;
+      font-weight:900;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .lead{
+      margin:-4px 0 18px;
+      color:var(--muted);
+      font-size:17px;
+      font-weight:650;
+    }
+
+    .headline-box{
+      background:
+        linear-gradient(135deg,rgba(239,68,68,.95),rgba(15,23,42,.96)),
+        repeating-linear-gradient(45deg,rgba(255,255,255,.10) 0 12px,transparent 12px 24px);
+      color:#fff;
+      padding:26px;
+      border-radius:22px;
+      border:2px dashed rgba(255,255,255,.55);
+      margin:18px 0;
+      text-align:center;
+      box-shadow:0 14px 34px rgba(239,68,68,.18);
+    }
+
+    .headline-box h2{
+      margin:0;
+      font-size:clamp(24px,4vw,42px);
+      letter-spacing:.02em;
+      line-height:1.15;
+      text-transform:uppercase;
+    }
+
+    .headline-meta{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:14px;
+      color:#fee2e2;
+      font-weight:800;
+      font-size:14px;
+    }
+
+    .warning-note{
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      border-radius:18px;
+      padding:16px;
+      color:#78350f;
+      font-weight:800;
+      margin-top:14px;
+    }
+
+    .feyk-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .feyk-btn{
+      background:#fff7f7;
+      border:1px solid #fecaca;
+      border-radius:20px;
+      padding:17px 14px;
+      min-height:150px;
+      cursor:pointer;
+      transition:.22s ease;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      justify-content:space-between;
+      text-align:left;
+      color:#991b1b;
+    }
+
+    .feyk-btn:hover{
+      transform:translateY(-5px);
+      box-shadow:0 14px 28px rgba(239,68,68,.14);
+      background:#fef2f2;
+    }
+
+    .feyk-icon{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      background:#fee2e2;
+      color:#b91c1c;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:23px;
+      font-weight:900;
+    }
+
+    .feyk-btn h3{
+      margin:12px 0 4px;
+      color:#111827;
+      font-size:17px;
+      font-weight:900;
+    }
+
+    .feyk-btn p{
+      margin:0;
+      color:#64748b;
+      font-size:13.5px;
+      line-height:1.45;
+    }
+
+    .sift-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .sift-card{
+      position:relative;
+      overflow:hidden;
+      min-height:220px;
+      border-radius:22px;
+      padding:20px;
+      color:#fff;
+      cursor:pointer;
+      transition:.22s ease;
+    }
+
+    .sift-card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 16px 32px rgba(15,23,42,.18);
+    }
+
+    .sift-card::after{
+      content:attr(data-letter);
+      position:absolute;
+      right:8px;
+      bottom:-28px;
+      font-size:118px;
+      font-weight:900;
+      color:rgba(255,255,255,.12);
+      line-height:1;
+    }
+
+    .sift-card h3{
+      margin:0 0 10px;
+      font-size:22px;
+      font-weight:900;
+      position:relative;
+      z-index:2;
+    }
+
+    .sift-card p{
+      margin:0;
+      color:rgba(255,255,255,.90);
+      font-size:15.5px;
+      position:relative;
+      z-index:2;
+    }
+
+    .s-stop{background:linear-gradient(135deg,#0f172a,#334155)}
+    .i-inv{background:linear-gradient(135deg,#1d4ed8,#0ea5e9)}
+    .f-find{background:linear-gradient(135deg,#0f766e,#22c55e)}
+    .t-trace{background:linear-gradient(135deg,#7c3aed,#a855f7)}
+
+    .reflection-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-bottom:14px;
+    }
+
+    label{
+      font-weight:900;
+      color:#1e293b;
+      font-size:14px;
+      display:block;
+      margin-bottom:7px;
+    }
+
+    input,textarea{
+      width:100%;
+      border:1px solid #cbd5e1;
+      border-radius:14px;
+      padding:12px;
+      font-family:inherit;
+      font-size:15px;
+      outline:none;
+      background:#fff;
+      transition:.2s;
+    }
+
+    textarea{
+      resize:vertical;
+      min-height:88px;
+    }
+
+    input:focus,textarea:focus{
+      border-color:var(--blue);
+      box-shadow:0 0 0 4px rgba(37,99,235,.12);
+    }
+
+    .question-card{
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:18px;
+      padding:16px;
+      margin-bottom:13px;
+    }
+
+    .table-wrap{
+      overflow-x:auto;
+      margin-top:18px;
+      border-radius:18px;
+      border:1px solid #e2e8f0;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:760px;
+      background:#fff;
+    }
+
+    th,td{
+      border-bottom:1px solid #e2e8f0;
+      padding:12px 14px;
+      text-align:left;
+      vertical-align:top;
+      font-size:14px;
+    }
+
+    th{
+      background:#0f172a;
+      color:#fff;
+      font-weight:900;
+    }
+
+    tr:last-child td{
+      border-bottom:0;
+    }
+
+    .result-box{
+      display:none;
+      margin-top:14px;
+      border-radius:18px;
+      padding:15px 16px;
+      font-weight:900;
+    }
+
+    .result-box.show{
+      display:block;
+      background:#f0fdf4;
+      color:#166534;
+      border:1px solid #bbf7d0;
+    }
+
+    .sidebar{
+      position:sticky;
+      top:96px;
+    }
+
+    .rule-list{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:11px;
+    }
+
+    .rule-list li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:15px;
+      padding:12px;
+      color:#475569;
+      font-size:15px;
+    }
+
+    .rule-list b{color:#0f172a}
+
+    .pill{
+      flex:0 0 auto;
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#eff6ff;
+      color:var(--blue);
+      font-weight:900;
+    }
+
+    .progress{
+      height:10px;
+      background:#e2e8f0;
+      border-radius:999px;
+      overflow:hidden;
+      margin:10px 0 8px;
+    }
+
+    .progress span{
+      display:block;
+      width:0%;
+      height:100%;
+      background:linear-gradient(90deg,var(--blue),var(--green));
+      transition:.4s ease;
+    }
+
+    .mini-cards{
+      display:grid;
+      gap:11px;
+    }
+
+    .mini-card{
+      border:1px solid #e2e8f0;
+      border-radius:16px;
+      padding:13px;
+      background:#f8fafc;
+    }
+
+    .mini-card h3{
+      margin:0 0 4px;
+      font-size:16px;
+      font-weight:900;
+    }
+
+    .mini-card p{
+      margin:0;
+      color:#64748b;
+      font-size:14px;
+    }
+
+    .modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(2,6,23,.78);
+      z-index:1000;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      backdrop-filter:blur(5px);
+    }
+
+    .modal.show{display:flex}
+
+    .modal-content{
+      width:min(620px,96vw);
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 25px 70px rgba(0,0,0,.35);
+      overflow:hidden;
+      border:1px solid #e2e8f0;
+    }
+
+    .modal-head{
+      padding:16px 18px;
+      background:linear-gradient(135deg,#0f172a,#991b1b);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .modal-head h3{
+      margin:0;
+      font-size:21px;
+      font-weight:900;
+    }
+
+    .close{
+      border:0;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border-radius:12px;
+      width:38px;
+      height:38px;
+      cursor:pointer;
+      font-size:22px;
+    }
+
+    .modal-body{
+      padding:20px;
+      color:#475569;
+      font-size:16px;
+    }
+
+    .modal-example{
+      margin:0 20px 20px;
+      padding:15px;
+      background:#fff7ed;
+      border-left:4px solid var(--orange);
+      border-radius:12px;
+      color:#9a3412;
+      font-weight:750;
+    }
+
+    footer{
+      text-align:center;
+      color:#64748b;
+      font-size:14px;
+      padding:0 0 38px;
+    }
+
+    @media (max-width:1060px){
+      .main-grid{grid-template-columns:1fr}
+      .sidebar{position:static}
+      .feyk-grid{grid-template-columns:repeat(3,1fr)}
+      .sift-grid{grid-template-columns:repeat(2,1fr)}
+    }
+
+    @media (max-width:760px){
+      .nav-links{display:none}
+      .nav-inner{justify-content:center}
+      .hero-card{padding:24px}
+      .card{padding:18px}
+      .feyk-grid,.sift-grid,.reflection-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-icon">!</span>
+        <span>Faktcheking portali</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Bosh sahifa</a>
+        <a href="#qadam1">1-qadam</a>
+        <a href="#qadam2">Feyk belgilar</a>
+        <a href="#qadam4">SIFT</a>
+        <a href="#qadam5">Refleksiya</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-card">
+        <div class="badge">🔎 2-ssenariy · Faktcheking amaliyoti</div>
+        <h1>Feyk xabarlarni aniqlash va tekshirish portali</h1>
+        <p>
+          Ushbu interaktiv sahifada o‘quvchilar shov-shuvli sarlavhalarni tahlil qiladi,
+          feyk belgilarini topadi, SIFT algoritmini qo‘llaydi va dars yakunida refleksiya topshirig‘ini bajaradi.
+        </p>
+        <div class="hero-actions">
+          <a href="#qadam1" class="btn btn-white">Darsni boshlash</a>
+          <a href="#qadam4" class="btn btn-primary">SIFT metodiga o‘tish</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-grid">
+    <section>
+      <div class="card" id="qadam1">
+        <h2 class="section-title">📢 1-qadam. Shov-shuvli sarlavhani tahlil qilish</h2>
+        <p class="lead">
+          Muallim quyidagi xabarni namoyish etadi. O‘quvchilar bu xabarga ishonish yoki ishonmaslik sabablari haqida fikr bildiradi.
+        </p>
+
+        <div class="headline-box">
+          <h2>“QARANG! MAKTABLAR ERTAGA YOPILADI!”</h2>
+          <div class="headline-meta">
+            <span>Anonim kanal</span>
+            <span>Manba ko‘rsatilmagan</span>
+            <span>Tezkor tarqatilmoqda</span>
+          </div>
+        </div>
+
+        <div class="warning-note">
+          Muhokama savoli: Bunday xabar sizda qanday hissiyot uyg‘otadi? Xabarni tekshirmasdan ulashish qanday oqibatga olib kelishi mumkin?
+        </div>
+      </div>
+
+      <div class="card" id="qadam2">
+        <h2 class="section-title">⚠ 2-qadam. Feyk belgilarini toping</h2>
+        <p class="lead">
+          Shubhali xabarlarda uchraydigan asosiy belgilarni bosing va izohini o‘qing.
+        </p>
+
+        <div class="feyk-grid">
+          <button class="feyk-btn" onclick="showFeyk('manba')">
+            <span class="feyk-icon">🔗</span>
+            <span>
+              <h3>Manba noma’lum</h3>
+              <p>Aniq rasmiy havola yo‘q.</p>
+            </span>
+          </button>
+
+          <button class="feyk-btn" onclick="showFeyk('anonim')">
+            <span class="feyk-icon">🕵</span>
+            <span>
+              <h3>Anonim kanal</h3>
+              <p>Mas’ul muallif ko‘rsatilmagan.</p>
+            </span>
+          </button>
+
+          <button class="feyk-btn" onclick="showFeyk('vahima')">
+            <span class="feyk-icon">😱</span>
+            <span>
+              <h3>Qo‘rquv uyg‘otish</h3>
+              <p>Hissiyotga ta’sir qiladi.</p>
+            </span>
+          </button>
+
+          <button class="feyk-btn" onclick="showFeyk('sana')">
+            <span class="feyk-icon">📅</span>
+            <span>
+              <h3>Sanasiz surat</h3>
+              <p>Eski rasm yangidek berilishi mumkin.</p>
+            </span>
+          </button>
+
+          <button class="feyk-btn" onclick="showFeyk('manipul')">
+            <span class="feyk-icon">⚡</span>
+            <span>
+              <h3>Manipulyatsiya</h3>
+              <p>Shoshiltirish va bosim bor.</p>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div class="card" id="qadam4">
+        <h2 class="section-title">🛡 4-qadam. SIFT — axborotni tekshirish algoritmi</h2>
+        <p class="lead">
+          Har qanday shubhali xabarni quyidagi 4 bosqich orqali tekshirish tavsiya etiladi.
+        </p>
+
+        <div class="sift-grid">
+          <div class="sift-card s-stop" data-letter="S" onclick="showSift('stop')">
+            <h3>S — STOP</h3>
+            <p>To‘xtang. Hissiyotga berilmang va xabarni darhol tarqatmang.</p>
+          </div>
+
+          <div class="sift-card i-inv" data-letter="I" onclick="showSift('investigate')">
+            <h3>I — INVESTIGATE</h3>
+            <p>Manbani tekshiring. Sayt, kanal yoki muallif ishonchlimi?</p>
+          </div>
+
+          <div class="sift-card f-find" data-letter="F" onclick="showSift('find')">
+            <h3>F — FIND</h3>
+            <p>Yana 2–3 ta ishonchli manba toping va solishtiring.</p>
+          </div>
+
+          <div class="sift-card t-trace" data-letter="T" onclick="showSift('trace')">
+            <h3>T — TRACE</h3>
+            <p>Xabar, rasm yoki videoning asl manbasiga qayting.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="qadam5">
+        <h2 class="section-title">✍ 5-qadam. Refleksiya topshirig‘i</h2>
+        <p class="lead">
+          Dars yakunida o‘quvchi 3 ta savol asosida o‘z fikrini yozadi. Natija jadvalda saqlanadi.
+        </p>
+
+        <div class="reflection-grid">
+          <div>
+            <label for="stuName">F.I.SH.</label>
+            <input type="text" id="stuName" placeholder="Masalan: Aliyev Anvar" />
+          </div>
+          <div>
+            <label for="stuClass">Sinf</label>
+            <input type="text" id="stuClass" placeholder="Masalan: 8-A" />
+          </div>
+        </div>
+
+        <div class="question-card">
+          <label for="ref1">1. Men bugungi darsda qayerda aldandim?</label>
+          <textarea id="ref1" placeholder="Javobingizni yozing..."></textarea>
+        </div>
+
+        <div class="question-card">
+          <label for="ref2">2. Endilikda xabarlarni qanday tekshiraman?</label>
+          <textarea id="ref2" placeholder="Javobingizni yozing..."></textarea>
+        </div>
+
+        <div class="question-card">
+          <label for="ref3">3. Feyk xabar jamiyat uchun nega xavfli?</label>
+          <textarea id="ref3" placeholder="Javobingizni yozing..."></textarea>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button class="btn btn-success" onclick="submitRef()">Hisobotni saqlash</button>
+          <button class="btn btn-red" onclick="clearRef()">Tozalash</button>
+        </div>
+
+        <div id="resultBox" class="result-box"></div>
+
+        <div class="table-wrap">
+          <table id="refTable">
+            <thead>
+              <tr>
+                <th>O‘quvchi</th>
+                <th>Sinf</th>
+                <th>Aldangan joyi</th>
+                <th>Tekshirish usuli</th>
+                <th>Xavf haqida</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="card">
+        <h2 class="section-title">🎯 Dars maqsadi</h2>
+        <p class="lead">
+          O‘quvchilar feyk axborotni tanish, manipulyatsiyani anglash va faktlarni tekshirish ko‘nikmasini rivojlantiradi.
+        </p>
+        <div class="progress"><span id="progressBar"></span></div>
+        <p id="progressText" style="margin:0;color:#64748b;font-weight:800;">Bajarilish holati: 0%</p>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">✅ Tekshiruv mezonlari</h2>
+        <ul class="rule-list">
+          <li><span class="pill">1</span><span><b>Sarlavha:</b> shov-shuvli yoki qo‘rqituvchi so‘zlar bormi?</span></li>
+          <li><span class="pill">2</span><span><b>Manba:</b> rasmiy havola, tashkilot yoki muallif ko‘rsatilganmi?</span></li>
+          <li><span class="pill">3</span><span><b>Sana:</b> xabar yangi va dolzarbmi?</span></li>
+          <li><span class="pill">4</span><span><b>Dalil:</b> fakt, hujjat yoki ishonchli havola bormi?</span></li>
+          <li><span class="pill">5</span><span><b>Xulosa:</b> tekshirilmagan xabar ulashilmaydi.</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">📌 SIFT qisqa eslatma</h2>
+        <div class="mini-cards">
+          <div class="mini-card"><h3>S — Stop</h3><p>Avval to‘xtang.</p></div>
+          <div class="mini-card"><h3>I — Investigate</h3><p>Manbani tekshiring.</p></div>
+          <div class="mini-card"><h3>F — Find</h3><p>Yaxshiroq manba toping.</p></div>
+          <div class="mini-card"><h3>T — Trace</h3><p>Asl manbaga qayting.</p></div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="infoModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-head">
+        <h3 id="modalTitle">Ma’lumot</h3>
+        <button class="close" onclick="closeModal()">×</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+      <div id="modalExample" class="modal-example"></div>
+    </div>
+  </div>
+
+  <footer class="container">
+    Faktcheking portali · Feyk xabarlarni aniqlash bo‘yicha interaktiv sahifa
+  </footer>
+
+  <script>
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    let progress = 0;
+
+    function setProgress(value){
+      progress = Math.max(progress, value);
+      progressBar.style.width = progress + "%";
+      progressText.textContent = "Bajarilish holati: " + progress + "%";
+    }
+
+    const feykInfo = {
+      manba: {
+        title: "Manba noma’lum",
+        text: "Xabarda “olimlar aytishicha”, “yaqinda ma’lum bo‘lishicha” kabi umumiy gaplar bo‘lishi mumkin. Ammo aniq tashkilot, rasmiy sayt yoki mas’ul shaxs ko‘rsatilmagan bo‘lsa, xabar shubhali hisoblanadi.",
+        ex: "Misol: “Britaniyalik olimlar suv ichish zarar ekanligini isbotlashdi”. Qaysi universitet? Qaysi tadqiqot? Qayerda e’lon qilingan? Manba yo‘q."
+      },
+      anonim: {
+        title: "Anonim kanal",
+        text: "Xabar rasmiy OAV yoki tashkilot sahifasida emas, egasi noma’lum kanal yoki shubhali akkaunt orqali tarqatilgan bo‘lsa, unga darhol ishonmaslik kerak.",
+        ex: "Belgisi: kanal nomi umumiy, muallif ko‘rsatilmagan, rasmiy tasdiq belgisi yoki aloqa ma’lumoti yo‘q."
+      },
+      vahima: {
+        title: "Haddan tashqari qo‘rquv uyg‘otish",
+        text: "Feyk xabarlar ko‘pincha odamlarni vahimaga solish orqali tez tarqaladi. Bunday xabarlar mantiqiy tahlil qilishdan oldin hissiyotga ta’sir qilishga urinadi.",
+        ex: "Misol: “TEZKOR! Shahar suvidan zaharlanish xavfi bor! Hech kim suv ichmasin!” Bunday xabar albatta rasmiy manbadan tekshiriladi."
+      },
+      sana: {
+        title: "Sanasiz yoki eski suratlar",
+        text: "Ba’zan eski yoki boshqa davlatda olingan rasm yangi voqea sifatida beriladi. Shuning uchun rasm sanasi va asl manbasini tekshirish muhim.",
+        ex: "Tekshirish: Google Lens yoki teskari rasm qidiruvi orqali rasm avval qayerda chiqqanini ko‘rish mumkin."
+      },
+      manipul: {
+        title: "Manipulyatsiya",
+        text: "“Shoshiling!”, “Hoziroq tarqating!”, “Hamma bilsin!” kabi chaqiriqlar odamni o‘ylamasdan harakat qilishga majbur qiladi. Bu manipulyatsiya belgisi.",
+        ex: "Misol: “Ushbu xabarni 10 ta odamga yuborsangiz, hisobingizga pul tushadi”. Bu yolg‘on va manipulyativ chaqiriq."
+      }
+    };
+
+    const siftInfo = {
+      stop: {
+        title: "S — Stop: to‘xtang",
+        text: "Shubhali xabarni ko‘rganda darhol ulashmang. Avval hissiyotga berilmasdan xabarni tinch holatda ko‘rib chiqing.",
+        ex: "Savol: Bu xabar meni shoshiltiryaptimi yoki qo‘rqityaptimi?"
+      },
+      investigate: {
+        title: "I — Investigate: manbani tekshiring",
+        text: "Xabarni kim tarqatganini, sayt yoki kanal ishonchlimi, rasmiy manbaga tayanilganmi — shularni aniqlang.",
+        ex: "Savol: Bu xabar vazirlik, maktab, hokimlik yoki rasmiy OAVda bormi?"
+      },
+      find: {
+        title: "F — Find: yaxshiroq manba toping",
+        text: "Shu mavzu bo‘yicha kamida 2–3 ta ishonchli manbani toping. Agar muhim xabar bo‘lsa, rasmiy manbalarda ham chiqadi.",
+        ex: "Masalan: vazirlik sahifasi, rasmiy telegram kanal, ishonchli OAV yoki tashkilot bayonoti."
+      },
+      trace: {
+        title: "T — Trace: asl manbaga qayting",
+        text: "Rasm, video yoki iqtibos qayerdan olinganini topishga harakat qiling. Kontekstdan uzib olingan material chalg‘itishi mumkin.",
+        ex: "Savol: Bu rasm qachon va qayerda olingan? U aynan shu xabarga tegishlimi?"
+      }
+    };
+
+    function openInfo(data){
+      document.getElementById("modalTitle").textContent = data.title;
+      document.getElementById("modalBody").textContent = data.text;
+      document.getElementById("modalExample").textContent = data.ex;
+      document.getElementById("infoModal").classList.add("show");
+      document.getElementById("infoModal").setAttribute("aria-hidden","false");
+    }
+
+    function showFeyk(key){
+      openInfo(feykInfo[key]);
+      setProgress(35);
+    }
+
+    function showSift(key){
+      openInfo(siftInfo[key]);
+      setProgress(65);
+    }
+
+    function closeModal(){
+      document.getElementById("infoModal").classList.remove("show");
+      document.getElementById("infoModal").setAttribute("aria-hidden","true");
+    }
+
+    function submitRef(){
+      const name = document.getElementById("stuName").value.trim();
+      const klass = document.getElementById("stuClass").value.trim();
+      const q1 = document.getElementById("ref1").value.trim();
+      const q2 = document.getElementById("ref2").value.trim();
+      const q3 = document.getElementById("ref3").value.trim();
+      const result = document.getElementById("resultBox");
+
+      if(!name || !klass || !q1 || !q2 || !q3){
+        result.className = "result-box show";
+        result.style.background = "#fef2f2";
+        result.style.color = "#991b1b";
+        result.style.border = "1px solid #fecaca";
+        result.textContent = "Iltimos, F.I.SH., sinf va barcha 3 ta savolga javob yozing.";
+        return;
+      }
+
+      const tbody = document.querySelector("#refTable tbody");
+      const row = tbody.insertRow(0);
+      row.innerHTML = `
+        <td>${escapeHtml(name)}</td>
+        <td>${escapeHtml(klass)}</td>
+        <td>${escapeHtml(q1)}</td>
+        <td>${escapeHtml(q2)}</td>
+        <td>${escapeHtml(q3)}</td>
+      `;
+
+      result.className = "result-box show";
+      result.style.background = "#f0fdf4";
+      result.style.color = "#166534";
+      result.style.border = "1px solid #bbf7d0";
+      result.textContent = "Rahmat! Hisobotingiz jadvalga saqlandi.";
+      setProgress(100);
+      clearRef(false);
+    }
+
+    function clearRef(clearResult = true){
+      document.getElementById("stuName").value = "";
+      document.getElementById("stuClass").value = "";
+      document.getElementById("ref1").value = "";
+      document.getElementById("ref2").value = "";
+      document.getElementById("ref3").value = "";
+      if(clearResult){
+        const result = document.getElementById("resultBox");
+        result.className = "result-box";
+        result.textContent = "";
+      }
+    }
+
+    function escapeHtml(text){
+      return text
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape") closeModal();
+    });
+
+    document.getElementById("infoModal").addEventListener("click", function(e){
+      if(e.target.id === "infoModal") closeModal();
+    });
+  </script>
+</body>
+</html>

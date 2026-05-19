@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4-ssenariy: Professional media-tahlil portali</title>
+  <style>
+    :root{
+      --primary:#0f172a;
+      --muted:#64748b;
+      --blue:#2563eb;
+      --blue2:#0ea5e9;
+      --purple:#7c3aed;
+      --orange:#f97316;
+      --green:#16a34a;
+      --red:#ef4444;
+      --yellow:#f59e0b;
+      --card:#ffffff;
+      --border:#dbe4f0;
+      --shadow:0 18px 45px rgba(15,23,42,.10);
+      --radius:26px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      font-family: Arial, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.12), transparent 30%),
+        radial-gradient(circle at top right, rgba(249,115,22,.10), transparent 28%),
+        linear-gradient(180deg,#f8fbff 0%,#eef5ff 48%,#f8fafc 100%);
+      color:var(--primary);
+      line-height:1.65;
+    }
+
+    .navbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 8px 24px rgba(15,23,42,.05);
+    }
+
+    .nav-inner{
+      width:min(1180px,calc(100% - 32px));
+      margin:auto;
+      min-height:74px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:var(--primary);
+      font-weight:900;
+      letter-spacing:-.035em;
+      font-size:18px;
+    }
+
+    .brand-icon{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      background:linear-gradient(135deg,var(--blue),var(--orange));
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 10px 24px rgba(37,99,235,.22);
+      font-size:22px;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .nav-links a{
+      text-decoration:none;
+      color:#334155;
+      font-weight:800;
+      font-size:14px;
+      padding:9px 12px;
+      border-radius:999px;
+      transition:.2s ease;
+    }
+
+    .nav-links a:hover{
+      background:#eff6ff;
+      color:var(--blue);
+    }
+
+    .container{
+      width:min(1180px,calc(100% - 32px));
+      margin:auto;
+    }
+
+    .hero{
+      padding:30px 0 18px;
+    }
+
+    .hero-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:34px;
+      background:linear-gradient(135deg,#0f172a 0%,#1d4ed8 44%,#f97316 100%);
+      color:#fff;
+      padding:38px 34px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero-card::before,
+    .hero-card::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.10);
+    }
+
+    .hero-card::before{
+      width:240px;
+      height:240px;
+      right:-82px;
+      top:-82px;
+    }
+
+    .hero-card::after{
+      width:170px;
+      height:170px;
+      left:-60px;
+      bottom:-70px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(255,255,255,.15);
+      color:#dbeafe;
+      border:1px solid rgba(255,255,255,.20);
+      padding:8px 13px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:900;
+      margin-bottom:14px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-card h1{
+      margin:0 0 12px;
+      font-size:clamp(32px,4.6vw,58px);
+      line-height:1.05;
+      letter-spacing:-.055em;
+      font-weight:900;
+      position:relative;
+      z-index:2;
+      max-width:960px;
+    }
+
+    .hero-card p{
+      margin:0;
+      color:#dbeafe;
+      font-size:19px;
+      max-width:940px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:22px;
+      position:relative;
+      z-index:2;
+    }
+
+    .btn{
+      border:0;
+      border-radius:15px;
+      padding:13px 18px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.2s ease;
+      font-size:15px;
+      font-family:inherit;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      text-decoration:none;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 22px rgba(15,23,42,.12);
+    }
+
+    .btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+    .btn-white{background:#fff;color:#1d4ed8}
+    .btn-success{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+    .btn-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+    .btn-muted{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
+
+    .main-grid{
+      display:grid;
+      grid-template-columns:1fr 360px;
+      gap:22px;
+      align-items:start;
+      padding:8px 0 46px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow:var(--shadow);
+      margin-bottom:22px;
+    }
+
+    .section-title{
+      margin:0 0 14px;
+      font-size:26px;
+      line-height:1.2;
+      letter-spacing:-.04em;
+      font-weight:900;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .lead{
+      margin:-4px 0 18px;
+      color:var(--muted);
+      font-size:17px;
+      font-weight:650;
+    }
+
+    .feed-simulator{
+      border:1px solid #dbe4f0;
+      border-radius:22px;
+      max-height:455px;
+      overflow-y:auto;
+      padding:16px;
+      background:linear-gradient(180deg,#f8fafc,#eff6ff);
+    }
+
+    .post{
+      background:#fff;
+      border:1px solid #e2e8f0;
+      border-radius:18px;
+      padding:16px;
+      margin-bottom:12px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      align-items:center;
+      transition:.2s ease;
+    }
+
+    .post:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 20px rgba(15,23,42,.07);
+    }
+
+    .post.bad{border-left:6px solid var(--red)}
+    .post.good{border-left:6px solid var(--green)}
+    .post strong{display:block;margin-bottom:5px}
+    .post span{color:#64748b;font-size:14px}
+
+    .post.removed{
+      opacity:.45;
+      filter:grayscale(1);
+      text-decoration:line-through;
+    }
+
+    .constructor-box{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .chip{
+      border:1px solid #dbe4f0;
+      background:#fff;
+      color:#334155;
+      border-radius:999px;
+      padding:10px 14px;
+      cursor:pointer;
+      font-weight:800;
+      transition:.2s ease;
+      font-family:inherit;
+    }
+
+    .chip:hover{
+      background:#eff6ff;
+      border-color:#bfdbfe;
+      transform:translateY(-2px);
+    }
+
+    .chip.active{
+      background:linear-gradient(135deg,var(--orange),var(--red));
+      color:#fff;
+      border-color:transparent;
+    }
+
+    .preview{
+      margin-top:18px;
+      border:2px dashed #cbd5e1;
+      border-radius:20px;
+      padding:20px;
+      background:#f8fafc;
+    }
+
+    .preview-title{
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .preview-box{
+      background:#fff;
+      border:1px solid #e2e8f0;
+      border-radius:16px;
+      padding:15px;
+      color:#475569;
+      min-height:58px;
+      font-weight:800;
+    }
+
+    .danger-grid{
+      display:grid;
+      gap:12px;
+    }
+
+    .danger-row{
+      background:#fff;
+      border:1px solid #e2e8f0;
+      border-radius:18px;
+      padding:14px;
+      display:grid;
+      grid-template-columns:1fr 170px;
+      gap:14px;
+      align-items:center;
+    }
+
+    .danger-row h3{
+      margin:0 0 4px;
+      font-size:17px;
+      font-weight:900;
+    }
+
+    .danger-row p{
+      margin:0;
+      color:#64748b;
+      font-size:14px;
+    }
+
+    .riskbar{
+      height:13px;
+      border-radius:999px;
+      background:#e2e8f0;
+      overflow:hidden;
+      margin-top:7px;
+    }
+
+    .riskbar span{
+      display:block;
+      height:100%;
+      width:0;
+      background:linear-gradient(90deg,var(--green),var(--orange),var(--red));
+      transition:.4s ease;
+    }
+
+    .risk-percent{
+      font-weight:900;
+      color:#991b1b;
+      font-size:14px;
+      text-align:right;
+    }
+
+    .decon-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .decon-card{
+      border:1px solid #e2e8f0;
+      border-radius:20px;
+      background:#fff;
+      padding:17px;
+      min-height:145px;
+      cursor:pointer;
+      transition:.22s ease;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .decon-card::after{
+      content:"";
+      width:80px;
+      height:80px;
+      border-radius:50%;
+      background:rgba(37,99,235,.08);
+      position:absolute;
+      right:-28px;
+      bottom:-28px;
+    }
+
+    .decon-card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 14px 28px rgba(15,23,42,.10);
+      border-color:#bfdbfe;
+    }
+
+    .decon-icon{
+      width:44px;
+      height:44px;
+      border-radius:15px;
+      background:#eff6ff;
+      color:var(--blue);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      margin-bottom:12px;
+    }
+
+    .decon-card h3{
+      margin:0 0 6px;
+      font-size:17px;
+      font-weight:900;
+      position:relative;
+      z-index:2;
+    }
+
+    .decon-card p{
+      margin:0;
+      color:#64748b;
+      font-size:13.5px;
+      position:relative;
+      z-index:2;
+    }
+
+    .task-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:16px;
+    }
+
+    label{
+      display:block;
+      font-size:14px;
+      font-weight:900;
+      color:#1e293b;
+      margin-bottom:7px;
+    }
+
+    textarea,input,select{
+      width:100%;
+      border:1px solid #cbd5e1;
+      border-radius:14px;
+      padding:12px;
+      font-family:inherit;
+      font-size:15px;
+      outline:none;
+      transition:.2s ease;
+      background:#fff;
+    }
+
+    textarea{resize:vertical;min-height:110px}
+
+    textarea:focus,input:focus,select:focus{
+      border-color:var(--blue);
+      box-shadow:0 0 0 4px rgba(37,99,235,.12);
+    }
+
+    .result-box{
+      display:none;
+      margin-top:14px;
+      border-radius:18px;
+      padding:15px 16px;
+      font-weight:900;
+    }
+
+    .result-box.show{
+      display:block;
+      background:#f0fdf4;
+      color:#166534;
+      border:1px solid #bbf7d0;
+    }
+
+    .sidebar{
+      position:sticky;
+      top:96px;
+    }
+
+    .progress{
+      height:10px;
+      background:#e2e8f0;
+      border-radius:999px;
+      overflow:hidden;
+      margin:10px 0 8px;
+    }
+
+    .progress span{
+      display:block;
+      width:0%;
+      height:100%;
+      background:linear-gradient(90deg,var(--blue),var(--green));
+      transition:.4s ease;
+    }
+
+    .rule-list{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:11px;
+    }
+
+    .rule-list li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:15px;
+      padding:12px;
+      color:#475569;
+      font-size:15px;
+    }
+
+    .rule-list b{color:#0f172a}
+
+    .pill{
+      flex:0 0 auto;
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#eff6ff;
+      color:var(--blue);
+      font-weight:900;
+    }
+
+    .mini-cards{
+      display:grid;
+      gap:11px;
+    }
+
+    .mini-card{
+      border:1px solid #e2e8f0;
+      border-radius:16px;
+      padding:13px;
+      background:#f8fafc;
+    }
+
+    .mini-card h3{
+      margin:0 0 4px;
+      font-size:16px;
+      font-weight:900;
+    }
+
+    .mini-card p{
+      margin:0;
+      color:#64748b;
+      font-size:14px;
+    }
+
+    .modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(2,6,23,.78);
+      z-index:1000;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      backdrop-filter:blur(5px);
+    }
+
+    .modal.show{display:flex}
+
+    .modal-content{
+      width:min(650px,96vw);
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 25px 70px rgba(0,0,0,.35);
+      overflow:hidden;
+      border:1px solid #e2e8f0;
+    }
+
+    .modal-head{
+      padding:16px 18px;
+      background:linear-gradient(135deg,#0f172a,#1d4ed8);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .modal-head h3{
+      margin:0;
+      font-size:21px;
+      font-weight:900;
+    }
+
+    .close{
+      border:0;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border-radius:12px;
+      width:38px;
+      height:38px;
+      cursor:pointer;
+      font-size:22px;
+    }
+
+    .modal-body{
+      padding:20px;
+      color:#475569;
+      font-size:16px;
+    }
+
+    .modal-question{
+      margin:0 20px 20px;
+      padding:15px;
+      background:#fff7ed;
+      border-left:4px solid var(--orange);
+      border-radius:12px;
+      color:#9a3412;
+      font-weight:800;
+    }
+
+    footer{
+      text-align:center;
+      color:#64748b;
+      font-size:14px;
+      padding:0 0 38px;
+    }
+
+    @media (max-width:1060px){
+      .main-grid{grid-template-columns:1fr}
+      .sidebar{position:static}
+      .decon-grid{grid-template-columns:repeat(2,1fr)}
+    }
+
+    @media (max-width:760px){
+      .nav-links{display:none}
+      .nav-inner{justify-content:center}
+      .hero-card{padding:24px}
+      .card{padding:18px}
+      .post,.danger-row,.task-grid{grid-template-columns:1fr}
+      .decon-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-icon">🧠</span>
+        <span>Media-tahlil portali</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Bosh sahifa</a>
+        <a href="#feed-sec">Saralash</a>
+        <a href="#const-sec">Konstruktor</a>
+        <a href="#foot-sec">Xavfsizlik</a>
+        <a href="#decon-sec">Dekonstruksiya</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-card">
+        <div class="badge">🎯 4-ssenariy · Professional media-tahlil</div>
+        <h1>Ma’lumotlar bilan ishlashning kengaytirilgan tizimi</h1>
+        <p>
+          Ushbu sahifa o‘quvchilarga axborotni saralash, manipulyatsiya elementlarini ko‘rish,
+          raqamli xavflarni baholash va media kontentni dekonstruksiya qilishni interaktiv tarzda o‘rgatadi.
+        </p>
+        <div class="hero-actions">
+          <a href="#feed-sec" class="btn btn-white">Darsni boshlash</a>
+          <a href="#decon-sec" class="btn btn-primary">Media-dekonstruksiyaga o‘tish</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-grid">
+    <section>
+      <div class="card" id="feed-sec">
+        <h2 class="section-title">🧩 1-qadam. Axborotli saralash</h2>
+        <p class="lead">
+          Lenta ichidagi foydali va zararli axborotlarni ajrating. Feyk va xavfli postlarni o‘chiring, foydali postlarni saqlang.
+        </p>
+
+        <div class="feed-simulator" id="feed">
+          <div class="post bad">
+            <div><strong>🚨 FEYK:</strong><span>Tunda samolyotlar dori sepyapti!</span></div>
+            <button class="btn btn-red" onclick="removePost(this)">O‘chirish</button>
+          </div>
+          <div class="post good">
+            <div><strong>📚 ILM:</strong><span>AI sohasida yangi kashfiyot bo‘yicha maqola e’lon qilindi.</span></div>
+            <button class="btn btn-success" onclick="savePost(this)">Saqlash</button>
+          </div>
+          <div class="post bad">
+            <div><strong>💰 REKLAMA:</strong><span>1 soatda boyib ketish siri!</span></div>
+            <button class="btn btn-red" onclick="removePost(this)">O‘chirish</button>
+          </div>
+          <div class="post good">
+            <div><strong>🏛 TARIX:</strong><span>Samarqand tarixiga oid yangi ilmiy manbalar.</span></div>
+            <button class="btn btn-success" onclick="savePost(this)">Saqlash</button>
+          </div>
+          <div class="post bad">
+            <div><strong>⚠️ VAHIMA:</strong><span>Ertaga internet o‘char ekan, hamma tarqatsin!</span></div>
+            <button class="btn btn-red" onclick="removePost(this)">O‘chirish</button>
+          </div>
+          <div class="post good">
+            <div><strong>💻 TEXNO:</strong><span>Yangi smartfonlar taqdimoti va texnik tahlil.</span></div>
+            <button class="btn btn-success" onclick="savePost(this)">Saqlash</button>
+          </div>
+          <div class="post bad">
+            <div><strong>🎁 SOVGA:</strong><span>Bepul iPhone olish uchun shubhali havolaga bosing.</span></div>
+            <button class="btn btn-red" onclick="removePost(this)">O‘chirish</button>
+          </div>
+          <div class="post good">
+            <div><strong>🌱 EKOLOGIYA:</strong><span>Shaharlarda yashil hududlarni kengaytirish loyihasi.</span></div>
+            <button class="btn btn-success" onclick="savePost(this)">Saqlash</button>
+          </div>
+        </div>
+
+        <div id="feedResult" class="result-box"></div>
+      </div>
+
+      <div class="card" id="const-sec">
+        <h2 class="section-title">🛠 2-qadam. Manipulyatsiya konstruktori</h2>
+        <p class="lead">
+          Feyk xabar qanday qurilishini ko‘ring. Elementlarni tanlang va pastdagi “feyk tarkibi” qanday shakllanishini kuzating.
+        </p>
+
+        <div class="constructor-box">
+          <button class="chip" onclick="toggleChip(this,'🚨 Shoshilinch sarlavha')">Shoshilinch sarlavha</button>
+          <button class="chip" onclick="toggleChip(this,'👤 Anonim manba')">Anonim manba</button>
+          <button class="chip" onclick="toggleChip(this,'📸 Foto-montaj')">Foto-montaj</button>
+          <button class="chip" onclick="toggleChip(this,'❗ Emotsional bosim')">Emotsional bosim</button>
+          <button class="chip" onclick="toggleChip(this,'📉 Soxta statistika')">Soxta statistika</button>
+          <button class="chip" onclick="toggleChip(this,'🗣 Mavhum guvohlar')">Mavhum guvohlar</button>
+          <button class="chip" onclick="toggleChip(this,'🌍 Nufuzli tashkilot nomi')">Nufuzli tashkilot nomi</button>
+          <button class="chip" onclick="toggleChip(this,'⏰ Vaqt bo‘yicha cheklov')">Vaqt bo‘yicha cheklov</button>
+          <button class="chip" onclick="toggleChip(this,'🤐 Yashirin haqiqat')">Konspirologiya</button>
+          <button class="chip" onclick="toggleChip(this,'🚩 Clickbait havola')">Clickbait havola</button>
+        </div>
+
+        <div class="preview">
+          <div class="preview-title">Feyk tarkibi:</div>
+          <div id="previewBox" class="preview-box">Elementlarni tanlang...</div>
+        </div>
+      </div>
+
+      <div class="card" id="foot-sec">
+        <h2 class="section-title">🛡 3-qadam. Raqamli xavflarni baholash</h2>
+        <p class="lead">
+          Quyidagi raqamli xavflar foydalanuvchining xavfsizligi va shaxsiy ma’lumotlariga ta’sir qilishi mumkin.
+        </p>
+
+        <div class="danger-grid">
+          <div class="danger-row">
+            <div><h3>1. Geolokatsiyani ochiq ko‘rsatish</h3><p>Joylashuv shaxsiy xavfsizlikka tahdid tug‘dirishi mumkin.</p></div>
+            <div><div class="risk-percent">XAVF: 95%</div><div class="riskbar"><span style="width:95%"></span></div></div>
+          </div>
+          <div class="danger-row">
+            <div><h3>2. Telefon raqamini ochiq qoldirish</h3><p>Spam, firibgarlik va ijtimoiy muhandislik xavfi oshadi.</p></div>
+            <div><div class="risk-percent">XAVF: 80%</div><div class="riskbar"><span style="width:80%"></span></div></div>
+          </div>
+          <div class="danger-row">
+            <div><h3>3. Oddiy parollardan foydalanish</h3><p>Akkauntni buzib kirish ehtimoli ortadi.</p></div>
+            <div><div class="risk-percent">XAVF: 70%</div><div class="riskbar"><span style="width:70%"></span></div></div>
+          </div>
+          <div class="danger-row">
+            <div><h3>4. Ikki bosqichli himoyadan foydalanmaslik</h3><p>Parol bilinib qolsa, akkaunt himoyasiz qoladi.</p></div>
+            <div><div class="risk-percent">XAVF: 85%</div><div class="riskbar"><span style="width:85%"></span></div></div>
+          </div>
+          <div class="danger-row">
+            <div><h3>5. Fishing havolalarga kirish</h3><p>Login, parol yoki bank ma’lumotlari o‘g‘irlanishi mumkin.</p></div>
+            <div><div class="risk-percent">XAVF: 90%</div><div class="riskbar"><span style="width:90%"></span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="decon-sec">
+        <h2 class="section-title">🔬 4-qadam. Media-dekonstruksiya</h2>
+        <p class="lead">
+          Media xabarni chuqur tahlil qilish uchun har bir kartochkani bosing va izohini ko‘ring.
+        </p>
+
+        <div class="decon-grid">
+          <div class="decon-card" onclick="showDecon('visual')"><div class="decon-icon">🖼</div><h3>Vizual tahlil</h3><p>Rang, tasvir va diqqat markazi.</p></div>
+          <div class="decon-card" onclick="showDecon('author')"><div class="decon-icon">✍</div><h3>Muallif pozitsiyasi</h3><p>Subyektiv yoki xolis yondashuv.</p></div>
+          <div class="decon-card" onclick="showDecon('purpose')"><div class="decon-icon">🎯</div><h3>Yashirin maqsad</h3><p>Ta’sir o‘tkazish yoki ishontirish.</p></div>
+          <div class="decon-card" onclick="showDecon('money')"><div class="decon-icon">💰</div><h3>Iqtisodiy asos</h3><p>Kontentdan foyda olish.</p></div>
+          <div class="decon-card" onclick="showDecon('fact')"><div class="decon-icon">✅</div><h3>Fakt vs fikr</h3><p>Isbotlangan va shaxsiy baho farqi.</p></div>
+          <div class="decon-card" onclick="showDecon('object')"><div class="decon-icon">⚖</div><h3>Obyektivlik</h3><p>Bir tomonlama yoki muvozanatli yondashuv.</p></div>
+          <div class="decon-card" onclick="showDecon('time')"><div class="decon-icon">⏳</div><h3>Vaqtli tahlil</h3><p>Axborotning dolzarbligi.</p></div>
+          <div class="decon-card" onclick="showDecon('culture')"><div class="decon-icon">🌍</div><h3>Madaniy qatlam</h3><p>Qadriyat va mentalitetga ta’siri.</p></div>
+        </div>
+      </div>
+
+      <div class="card" id="reflection">
+        <h2 class="section-title">✍ Yakuniy topshiriq</h2>
+        <p class="lead">
+          O‘quvchi media-tahlil bo‘yicha qisqa xulosa yozadi.
+        </p>
+
+        <div class="task-grid">
+          <div>
+            <label for="q1">1. Qaysi axborotni o‘chirdingiz va nima uchun?</label>
+            <textarea id="q1" placeholder="Javobingizni yozing..."></textarea>
+          </div>
+          <div>
+            <label for="q2">2. Manipulyatsiyaning eng xavfli belgisi qaysi?</label>
+            <textarea id="q2" placeholder="Javobingizni yozing..."></textarea>
+          </div>
+          <div>
+            <label for="q3">3. Kelgusida media xabarni qanday tahlil qilasiz?</label>
+            <textarea id="q3" placeholder="Javobingizni yozing..."></textarea>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;">
+          <button class="btn btn-success" onclick="saveReflection()">Xulosani saqlash</button>
+          <button class="btn btn-red" onclick="clearReflection()">Tozalash</button>
+        </div>
+        <div id="reflectionResult" class="result-box"></div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="card">
+        <h2 class="section-title">🎯 Dars maqsadi</h2>
+        <p class="lead">
+          O‘quvchi axborot lentasini saralaydi, manipulyatsion belgilarni aniqlaydi va media xabarni tahlil qiladi.
+        </p>
+        <div class="progress"><span id="progressBar"></span></div>
+        <p id="progressText" style="margin:0;color:#64748b;font-weight:800;">Bajarilish holati: 0%</p>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">✅ Media-tahlil qoidalari</h2>
+        <ul class="rule-list">
+          <li><span class="pill">1</span><span><b>Saralash:</b> foydali va zararli axborotni ajrating.</span></li>
+          <li><span class="pill">2</span><span><b>Manba:</b> muallif va manbani tekshiring.</span></li>
+          <li><span class="pill">3</span><span><b>Manipulyatsiya:</b> shoshiltirish va qo‘rqitishga aldanmang.</span></li>
+          <li><span class="pill">4</span><span><b>Xavfsizlik:</b> parol, joylashuv va shaxsiy ma’lumotni himoya qiling.</span></li>
+          <li><span class="pill">5</span><span><b>Xulosa:</b> dalil asosida fikr bildiring.</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">📌 Tahlil yo‘nalishlari</h2>
+        <div class="mini-cards">
+          <div class="mini-card"><h3>Kontent</h3><p>Xabar nima haqida?</p></div>
+          <div class="mini-card"><h3>Muallif</h3><p>Kim yaratgan?</p></div>
+          <div class="mini-card"><h3>Maqsad</h3><p>Nima uchun tarqatilgan?</p></div>
+          <div class="mini-card"><h3>Ta’sir</h3><p>Kimga va qanday ta’sir qiladi?</p></div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="infoModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-head">
+        <h3 id="modalTitle">Ma’lumot</h3>
+        <button class="close" onclick="closeModal()">×</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+      <div id="modalQuestion" class="modal-question"></div>
+    </div>
+  </div>
+
+  <footer class="container">
+    Professional media-tahlil portali · Axborot iste’moli madaniyati bo‘yicha interaktiv sahifa
+  </footer>
+
+  <script>
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    let progress = 0;
+    let selected = [];
+    let savedCount = 0;
+    let removedCount = 0;
+
+    function setProgress(value){
+      progress = Math.max(progress, value);
+      progressBar.style.width = progress + "%";
+      progressText.textContent = "Bajarilish holati: " + progress + "%";
+    }
+
+    function removePost(btn){
+      const post = btn.closest(".post");
+      post.classList.add("removed");
+      btn.disabled = true;
+      btn.textContent = "O‘chirildi";
+      removedCount++;
+      updateFeedResult();
+      setProgress(25);
+    }
+
+    function savePost(btn){
+      btn.disabled = true;
+      btn.textContent = "Saqlandi";
+      savedCount++;
+      updateFeedResult();
+      setProgress(25);
+    }
+
+    function updateFeedResult(){
+      const box = document.getElementById("feedResult");
+      box.className = "result-box show";
+      box.textContent = "Saralash holati: " + savedCount + " ta foydali post saqlandi, " + removedCount + " ta xavfli post o‘chirildi.";
+    }
+
+    function toggleChip(el, txt){
+      el.classList.toggle("active");
+      if(el.classList.contains("active")){
+        selected.push(txt);
+      }else{
+        selected = selected.filter(item => item !== txt);
+      }
+
+      const preview = document.getElementById("previewBox");
+      if(selected.length){
+        preview.textContent = selected.join(" + ");
+        setProgress(45);
+      }else{
+        preview.textContent = "Elementlarni tanlang...";
+      }
+    }
+
+    const deconInfo = {
+      visual:{
+        title:"Vizual tahlil",
+        text:"Rasm, rang, kadr, belgilar va joylashuv tomoshabinning diqqatini qayerga qaratayotganini aniqlash kerak.",
+        q:"Savol: tasvir sizda qanday hissiyot uyg‘otmoqda?"
+      },
+      author:{
+        title:"Muallif pozitsiyasi",
+        text:"Har bir media kontent ortida muallifning qarashi bo‘lishi mumkin. U xolis yondashyaptimi yoki bir tomonlama baho beryaptimi?",
+        q:"Savol: muallifning pozitsiyasi neytralmi?"
+      },
+      purpose:{
+        title:"Yashirin maqsad",
+        text:"Xabar faqat ma’lumot berish uchun emas, balki ishontirish, sotish, qo‘rqitish yoki qaror qabul qildirish uchun tarqatilgan bo‘lishi mumkin.",
+        q:"Savol: bu xabar meni nimaga undayapti?"
+      },
+      money:{
+        title:"Iqtisodiy asos",
+        text:"Ayrim kontentlar ko‘rishlar, reklama yoki sotuv orqali foyda olish uchun yaratiladi. Bunda sarlavha bo‘rttirilishi mumkin.",
+        q:"Savol: bu kontentdan kim foyda ko‘radi?"
+      },
+      fact:{
+        title:"Fakt va fikr",
+        text:"Fakt tekshiriladi, fikr esa shaxsiy qarashdir. Media xabarda faktlar fikrlar bilan aralashib ketgan bo‘lishi mumkin.",
+        q:"Savol: bu gap dalilmi yoki shaxsiy bahomi?"
+      },
+      object:{
+        title:"Obyektivlik darajasi",
+        text:"Xolis media turli nuqtai nazarlarni beradi. Bir tomonlama yondashuv manipulyatsion ta’sirni kuchaytirishi mumkin.",
+        q:"Savol: qarama-qarshi fikr ham berilganmi?"
+      },
+      time:{
+        title:"Vaqtli tahlil",
+        text:"Eski axborot yangi voqea sifatida tarqatilishi mumkin. Sana va kontekstni tekshirish zarur.",
+        q:"Savol: bu ma’lumot hozir ham dolzarbmi?"
+      },
+      culture:{
+        title:"Madaniy qatlam",
+        text:"Media kontent milliy qadriyat, odob-axloq va jamiyatdagi munosabatlarga ta’sir qilishi mumkin.",
+        q:"Savol: bu kontent qadriyatlarimizga qanday ta’sir qiladi?"
+      }
+    };
+
+    function showDecon(key){
+      const item = deconInfo[key];
+      document.getElementById("modalTitle").textContent = item.title;
+      document.getElementById("modalBody").textContent = item.text;
+      document.getElementById("modalQuestion").textContent = item.q;
+      document.getElementById("infoModal").classList.add("show");
+      document.getElementById("infoModal").setAttribute("aria-hidden","false");
+      setProgress(70);
+    }
+
+    function closeModal(){
+      document.getElementById("infoModal").classList.remove("show");
+      document.getElementById("infoModal").setAttribute("aria-hidden","true");
+    }
+
+    function saveReflection(){
+      const q1 = document.getElementById("q1").value.trim();
+      const q2 = document.getElementById("q2").value.trim();
+      const q3 = document.getElementById("q3").value.trim();
+      const box = document.getElementById("reflectionResult");
+
+      if(!q1 || !q2 || !q3){
+        box.className = "result-box show";
+        box.style.background = "#fef2f2";
+        box.style.color = "#991b1b";
+        box.style.border = "1px solid #fecaca";
+        box.textContent = "Iltimos, barcha 3 ta savolga javob yozing.";
+        return;
+      }
+
+      box.className = "result-box show";
+      box.style.background = "#f0fdf4";
+      box.style.color = "#166534";
+      box.style.border = "1px solid #bbf7d0";
+      box.textContent = "Xulosa saqlandi. Siz media xabarni tahlil qilish bo‘yicha shaxsiy fikringizni yozdingiz.";
+      setProgress(100);
+    }
+
+    function clearReflection(){
+      document.getElementById("q1").value = "";
+      document.getElementById("q2").value = "";
+      document.getElementById("q3").value = "";
+      document.getElementById("reflectionResult").className = "result-box";
+      document.getElementById("reflectionResult").textContent = "";
+    }
+
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape") closeModal();
+    });
+
+    document.getElementById("infoModal").addEventListener("click", function(e){
+      if(e.target.id === "infoModal") closeModal();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2-KEYS: Surat haqiqiyligini tekshirish</title>
+  <style>
+    :root{
+      --primary:#0f172a;
+      --muted:#64748b;
+      --blue:#2563eb;
+      --blue2:#0ea5e9;
+      --purple:#8b5cf6;
+      --pink:#d946ef;
+      --orange:#f97316;
+      --green:#16a34a;
+      --red:#ef4444;
+      --card:#ffffff;
+      --border:#dbe4f0;
+      --shadow:0 18px 45px rgba(15,23,42,.10);
+      --radius:26px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      font-family: Arial, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(139,92,246,.13), transparent 30%),
+        radial-gradient(circle at top right, rgba(14,165,233,.13), transparent 28%),
+        linear-gradient(180deg,#f8fbff 0%,#f4efff 48%,#f8fafc 100%);
+      color:var(--primary);
+      line-height:1.65;
+    }
+
+    .navbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 8px 24px rgba(15,23,42,.05);
+    }
+
+    .nav-inner{
+      width:min(1180px,calc(100% - 32px));
+      margin:auto;
+      min-height:74px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:var(--primary);
+      font-weight:900;
+      letter-spacing:-.035em;
+      font-size:18px;
+    }
+
+    .brand-icon{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      background:linear-gradient(135deg,var(--purple),var(--blue));
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 10px 24px rgba(139,92,246,.24);
+      font-size:22px;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .nav-links a{
+      text-decoration:none;
+      color:#334155;
+      font-weight:800;
+      font-size:14px;
+      padding:9px 12px;
+      border-radius:999px;
+      transition:.2s ease;
+    }
+
+    .nav-links a:hover{
+      background:#eff6ff;
+      color:var(--blue);
+    }
+
+    .container{
+      width:min(1180px,calc(100% - 32px));
+      margin:auto;
+    }
+
+    .hero{
+      padding:30px 0 18px;
+    }
+
+    .hero-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:34px;
+      background:linear-gradient(135deg,#0f172a 0%,#7c3aed 48%,#0ea5e9 100%);
+      color:#fff;
+      padding:38px 34px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero-card::before,
+    .hero-card::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.10);
+    }
+
+    .hero-card::before{
+      width:240px;
+      height:240px;
+      right:-82px;
+      top:-82px;
+    }
+
+    .hero-card::after{
+      width:170px;
+      height:170px;
+      left:-60px;
+      bottom:-70px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(255,255,255,.15);
+      color:#dbeafe;
+      border:1px solid rgba(255,255,255,.20);
+      padding:8px 13px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:900;
+      margin-bottom:14px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-card h1{
+      margin:0 0 12px;
+      font-size:clamp(32px,4.6vw,58px);
+      line-height:1.05;
+      letter-spacing:-.055em;
+      font-weight:900;
+      position:relative;
+      z-index:2;
+      max-width:960px;
+    }
+
+    .hero-card p{
+      margin:0;
+      color:#dbeafe;
+      font-size:19px;
+      max-width:940px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:22px;
+      position:relative;
+      z-index:2;
+    }
+
+    .btn{
+      border:0;
+      border-radius:15px;
+      padding:13px 18px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.2s ease;
+      font-size:15px;
+      font-family:inherit;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      text-decoration:none;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 22px rgba(15,23,42,.12);
+    }
+
+    .btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+    .btn-white{background:#fff;color:#1d4ed8}
+    .btn-success{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+    .btn-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+    .btn-purple{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff}
+    .btn-muted{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
+
+    .main-grid{
+      display:grid;
+      grid-template-columns:1fr 360px;
+      gap:22px;
+      align-items:start;
+      padding:8px 0 46px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow:var(--shadow);
+      margin-bottom:22px;
+    }
+
+    .section-title{
+      margin:0 0 14px;
+      font-size:26px;
+      line-height:1.2;
+      letter-spacing:-.04em;
+      font-weight:900;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .lead{
+      margin:-4px 0 18px;
+      color:var(--muted);
+      font-size:17px;
+      font-weight:650;
+    }
+
+    .status-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:#fdf2f8;
+      color:#a21caf;
+      border:1px solid #f5d0fe;
+      padding:8px 13px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:900;
+      margin-bottom:12px;
+    }
+
+    .photo-frame{
+      width:100%;
+      max-width:650px;
+      margin:20px auto;
+      border-radius:24px;
+      overflow:hidden;
+      border:8px solid #fff;
+      box-shadow:0 18px 38px rgba(15,23,42,.18);
+      position:relative;
+      background:#020617;
+      cursor:pointer;
+    }
+
+    .photo-frame img{
+      width:100%;
+      display:block;
+      min-height:300px;
+      max-height:470px;
+      object-fit:cover;
+      filter:saturate(1.08) contrast(1.02);
+    }
+
+    .photo-frame::after{
+      content:"Rasmni kattalashtirish";
+      position:absolute;
+      right:14px;
+      top:14px;
+      background:rgba(15,23,42,.78);
+      color:#fff;
+      padding:8px 11px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      opacity:0;
+      transform:translateY(-5px);
+      transition:.2s ease;
+    }
+
+    .photo-frame:hover::after{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    .overlay-text{
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+      background:linear-gradient(180deg,transparent,rgba(2,6,23,.92));
+      color:#fff;
+      padding:44px 18px 18px;
+      font-size:15px;
+      text-align:left;
+    }
+
+    .case-warning{
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      border-radius:18px;
+      padding:16px;
+      color:#78350f;
+      font-weight:800;
+      margin-top:14px;
+    }
+
+    .process{
+      display:none;
+    }
+
+    .check-grid{
+      display:grid;
+      gap:14px;
+    }
+
+    .check-step{
+      display:grid;
+      grid-template-columns:58px 1fr;
+      gap:15px;
+      align-items:start;
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:20px;
+      padding:18px;
+      transition:.22s ease;
+      border-left:7px solid var(--blue);
+    }
+
+    .check-step:hover{
+      transform:translateX(5px);
+      box-shadow:0 12px 24px rgba(15,23,42,.06);
+    }
+
+    .icon-circle{
+      width:58px;
+      height:58px;
+      border-radius:18px;
+      color:#fff;
+      background:linear-gradient(135deg,var(--purple),var(--blue));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:25px;
+      font-weight:900;
+    }
+
+    .check-step h3{
+      margin:0 0 7px;
+      font-size:19px;
+      font-weight:900;
+    }
+
+    .check-step p{
+      margin:0 0 10px;
+      color:#475569;
+    }
+
+    .lens-result{
+      display:none;
+      margin-top:12px;
+      padding:16px;
+      background:#fff;
+      border:2px dashed #60a5fa;
+      border-radius:16px;
+      color:#334155;
+    }
+
+    .lens-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      background:#eff6ff;
+      color:#1d4ed8;
+      border:1px solid #bfdbfe;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    .analysis-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .analysis-card{
+      border:1px solid #e2e8f0;
+      background:#fff;
+      border-radius:18px;
+      padding:16px;
+      cursor:pointer;
+      transition:.22s ease;
+    }
+
+    .analysis-card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 14px 28px rgba(15,23,42,.09);
+      border-color:#c4b5fd;
+    }
+
+    .analysis-card h3{
+      margin:0 0 7px;
+      font-size:17px;
+      font-weight:900;
+    }
+
+    .analysis-card p{
+      margin:0;
+      color:#64748b;
+      font-size:14px;
+    }
+
+    label{
+      display:block;
+      font-size:14px;
+      font-weight:900;
+      color:#1e293b;
+      margin:14px 0 7px;
+    }
+
+    textarea,select,input{
+      width:100%;
+      border:1px solid #cbd5e1;
+      border-radius:14px;
+      padding:12px;
+      font-family:inherit;
+      font-size:15px;
+      outline:none;
+      transition:.2s ease;
+      background:#fff;
+    }
+
+    textarea{resize:vertical;min-height:100px}
+
+    textarea:focus,select:focus,input:focus{
+      border-color:var(--blue);
+      box-shadow:0 0 0 4px rgba(37,99,235,.12);
+    }
+
+    .task-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+    .result-box{
+      display:none;
+      margin-top:14px;
+      border-radius:18px;
+      padding:15px 16px;
+      font-weight:900;
+    }
+
+    .result-box.show{
+      display:block;
+      background:#f0fdf4;
+      color:#166534;
+      border:1px solid #bbf7d0;
+    }
+
+    .sidebar{
+      position:sticky;
+      top:96px;
+    }
+
+    .progress{
+      height:10px;
+      background:#e2e8f0;
+      border-radius:999px;
+      overflow:hidden;
+      margin:10px 0 8px;
+    }
+
+    .progress span{
+      display:block;
+      width:0%;
+      height:100%;
+      background:linear-gradient(90deg,var(--purple),var(--green));
+      transition:.4s ease;
+    }
+
+    .rule-list{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:11px;
+    }
+
+    .rule-list li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:15px;
+      padding:12px;
+      color:#475569;
+      font-size:15px;
+    }
+
+    .rule-list b{color:#0f172a}
+
+    .pill{
+      flex:0 0 auto;
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#eff6ff;
+      color:var(--blue);
+      font-weight:900;
+    }
+
+    .mini-cards{
+      display:grid;
+      gap:11px;
+    }
+
+    .mini-card{
+      border:1px solid #e2e8f0;
+      border-radius:16px;
+      padding:13px;
+      background:#f8fafc;
+    }
+
+    .mini-card h3{
+      margin:0 0 4px;
+      font-size:16px;
+      font-weight:900;
+    }
+
+    .mini-card p{
+      margin:0;
+      color:#64748b;
+      font-size:14px;
+    }
+
+    .modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(2,6,23,.82);
+      z-index:1000;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      backdrop-filter:blur(5px);
+    }
+
+    .modal.show{display:flex}
+
+    .modal-content{
+      width:min(850px,96vw);
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 25px 70px rgba(0,0,0,.35);
+      overflow:hidden;
+      border:1px solid #e2e8f0;
+    }
+
+    .modal-head{
+      padding:16px 18px;
+      background:linear-gradient(135deg,#0f172a,#7c3aed);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .modal-head h3{
+      margin:0;
+      font-size:21px;
+      font-weight:900;
+    }
+
+    .close{
+      border:0;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border-radius:12px;
+      width:38px;
+      height:38px;
+      cursor:pointer;
+      font-size:22px;
+    }
+
+    .modal-body{
+      padding:20px;
+      color:#475569;
+      font-size:16px;
+    }
+
+    .modal-body img{
+      max-width:100%;
+      max-height:74vh;
+      display:block;
+      margin:auto;
+      border-radius:18px;
+      background:#020617;
+      object-fit:contain;
+    }
+
+    .modal-question{
+      margin:0 20px 20px;
+      padding:15px;
+      background:#fff7ed;
+      border-left:4px solid var(--orange);
+      border-radius:12px;
+      color:#9a3412;
+      font-weight:800;
+    }
+
+    footer{
+      text-align:center;
+      color:#64748b;
+      font-size:14px;
+      padding:0 0 38px;
+    }
+
+    @media (max-width:1060px){
+      .main-grid{grid-template-columns:1fr}
+      .sidebar{position:static}
+    }
+
+    @media (max-width:760px){
+      .nav-links{display:none}
+      .nav-inner{justify-content:center}
+      .hero-card{padding:24px}
+      .card{padding:18px}
+      .check-step,.task-grid{grid-template-columns:1fr}
+      .analysis-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-icon">🖼</span>
+        <span>Foto-faktcheking portali</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Bosh sahifa</a>
+        <a href="#case">Keys</a>
+        <a href="#process">Tekshiruv</a>
+        <a href="#analysis">Tahlil</a>
+        <a href="#task">Xulosa</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-card">
+        <div class="badge">🔍 2-KEYS · Surat haqiqiyligini tekshirish</div>
+        <h1>“Surat haqiqiymi?” — vizual axborotni faktcheking qilish</h1>
+        <p>
+          Ushbu interaktiv keysda o‘quvchilar ijtimoiy tarmoqlarda tarqalgan rasmni tekshiradi:
+          rasmning asl joyi, sanasi, muallifi va tarqatilish maqsadini aniqlashni o‘rganadi.
+        </p>
+        <div class="hero-actions">
+          <a href="#case" class="btn btn-white">Keysni ko‘rish</a>
+          <button class="btn btn-primary" onclick="startCheck()">Tekshiruvni boshlash</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-grid">
+    <section>
+      <div class="card" id="case" style="text-align:center;">
+        <span class="status-badge">📸 FOTO-KEYS</span>
+        <h2 class="section-title" style="justify-content:center;">2-KEYS: “Surat haqiqiymi?”</h2>
+        <p class="lead">
+          Ijtimoiy tarmoqda quyidagi rasm “Buxoroda yulduzlar yog‘ilishi” deb tarqatilgan. Uni tekshirib ko‘ramiz.
+        </p>
+
+        <div class="photo-frame" onclick="openImage()">
+          <img src="https://i.pinimg.com/736x/66/db/6c/66db6c992620d771582b3e56171ddb69.jpg" alt="Yulduzli osmon surati">
+          <div class="overlay-text">
+            <strong>@O‘zbekiston_Tabiati:</strong> “Ajoyib manzara! Buxoro viloyatida talabalar kecha mana shunday go‘zal yulduzlar yog‘ilishini kuzatishdi. Bizning diyor go‘zal!”
+          </div>
+        </div>
+
+        <div class="case-warning">
+          Vaziyat: rasm chiroyli, matn hissiyot uyg‘otadi. Ammo rasm haqiqatan Buxoroda olinganmi? Joy, sana va asl manbani tekshirish zarur.
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;">
+          <button class="btn btn-purple" onclick="startCheck()">Rasmni tekshirishni boshlash</button>
+          <button class="btn btn-muted" onclick="openImage()">Rasmni kattalashtirish</button>
+        </div>
+      </div>
+
+      <div id="process" class="process">
+        <div class="card">
+          <h2 class="section-title">🧪 Faktcheking bosqichlari</h2>
+          <p class="lead">
+            Rasmni tekshirishda “teskari rasm qidiruvi”, muallifni aniqlash, kontekst va maqsadni baholash ishlatiladi.
+          </p>
+
+          <div class="check-grid">
+            <div class="check-step">
+              <div class="icon-circle">📅</div>
+              <div>
+                <h3>1. Sana va asl joyni tekshirish</h3>
+                <p>Google Lens yoki teskari rasm qidiruvi orqali rasm avval qayerda va qachon e’lon qilinganini aniqlash mumkin.</p>
+                <button class="btn btn-primary" onclick="showLens()">Qidiruv natijasini ko‘rish</button>
+                <div id="lensRes" class="lens-result">
+                  <span class="lens-badge">Topildi</span>
+                  <div><b>Natija:</b> surat avvalroq boshqa manbalarda tarqalgan. <b>Joy:</b> Namibiya cho‘li, Afrika. <b>Demak:</b> rasm Buxoroda olinganini isbotlamaydi.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="check-step" style="border-left-color:#8b5cf6;">
+              <div class="icon-circle" style="background:linear-gradient(135deg,#8b5cf6,#d946ef);">👤</div>
+              <div>
+                <h3>2. Muallif va manbani aniqlash</h3>
+                <p>Postda rasm muallifi, asl sayt, fotograf yoki rasmiy havola ko‘rsatilmagan. Bu ishonchlilikni pasaytiradi.</p>
+              </div>
+            </div>
+
+            <div class="check-step" style="border-left-color:#f97316;">
+              <div class="icon-circle" style="background:linear-gradient(135deg,#f97316,#ef4444);">🎯</div>
+              <div>
+                <h3>3. Tarqatilish maqsadini baholash</h3>
+                <p>Rasm chiroyli va emotsional matn bilan berilgan. Maqsad obunachi yig‘ish, layk olish yoki soxta taassurot uyg‘otish bo‘lishi mumkin.</p>
+              </div>
+            </div>
+
+            <div class="check-step" style="border-left-color:#16a34a;">
+              <div class="icon-circle" style="background:linear-gradient(135deg,#16a34a,#22c55e);">✅</div>
+              <div>
+                <h3>4. Xulosa chiqarish</h3>
+                <p>Rasm real bo‘lishi mumkin, lekin postdagi “Buxoroda olingan” degan da’vo tasdiqlanmadi. Shuning uchun xabar manipulyativ hisoblanadi.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="analysis">
+        <h2 class="section-title">🔬 Vizual xabarni tahlil qilish mezonlari</h2>
+        <p class="lead">
+          Rasmli postni baholash uchun quyidagi mezonlardan foydalaning.
+        </p>
+
+        <div class="analysis-grid">
+          <div class="analysis-card" onclick="showInfo('source')">
+            <h3>1. Manba</h3>
+            <p>Rasm qaysi sahifa yoki muallifdan olingan?</p>
+          </div>
+          <div class="analysis-card" onclick="showInfo('context')">
+            <h3>2. Kontekst</h3>
+            <p>Rasm matndagi voqeaga haqiqatan mosmi?</p>
+          </div>
+          <div class="analysis-card" onclick="showInfo('date')">
+            <h3>3. Sana</h3>
+            <p>Rasm eski emasmi yoki boshqa voqeaga tegishlimi?</p>
+          </div>
+          <div class="analysis-card" onclick="showInfo('emotion')">
+            <h3>4. Emotsiya</h3>
+            <p>Post sizda qanday hissiyot uyg‘otmoqda?</p>
+          </div>
+          <div class="analysis-card" onclick="showInfo('purpose')">
+            <h3>5. Maqsad</h3>
+            <p>Post axborot berish, reklama yoki manipulyatsiya uchunmi?</p>
+          </div>
+          <div class="analysis-card" onclick="showInfo('share')">
+            <h3>6. Ulashish</h3>
+            <p>Tekshirmasdan tarqatish to‘g‘rimi?</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="task">
+        <h2 class="section-title">✍ O‘quvchi xulosasi</h2>
+        <p class="lead">
+          Keysni yakunlash uchun rasm haqidagi xulosangizni yozing.
+        </p>
+
+        <div class="task-grid">
+          <div>
+            <label for="isReal">1. Surat postdagi da’voni isbotlaydimi?</label>
+            <select id="isReal">
+              <option value="">— Tanlang —</option>
+              <option value="no">Yo‘q, bu manipulyatsiya</option>
+              <option value="yes">Ha, rasm postni isbotlaydi</option>
+            </select>
+
+            <label for="reason">2. Sababini qisqa yozing</label>
+            <textarea id="reason" placeholder="Masalan: rasm boshqa joyda olingan, manba ko‘rsatilmagan..."></textarea>
+          </div>
+
+          <div>
+            <label for="danger">3. Bu kabi xabarlar nima uchun xavfli?</label>
+            <textarea id="danger" placeholder="O‘z fikringizni yozing..."></textarea>
+
+            <label for="method">4. Endi rasmli xabarni qanday tekshirasiz?</label>
+            <textarea id="method" placeholder="Masalan: teskari rasm qidiruvi, manba, sana va kontekstni tekshiraman..."></textarea>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;">
+          <button class="btn btn-success" onclick="submitKey()">Keysni yakunlash</button>
+          <button class="btn btn-red" onclick="clearTask()">Tozalash</button>
+        </div>
+
+        <div id="resultBox" class="result-box"></div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="card">
+        <h2 class="section-title">🎯 Dars maqsadi</h2>
+        <p class="lead">
+          O‘quvchi rasmli xabarlarni teskari qidiruv, manba, sana va kontekst asosida tekshirishni o‘rganadi.
+        </p>
+        <div class="progress"><span id="progressBar"></span></div>
+        <p id="progressText" style="margin:0;color:#64748b;font-weight:800;">Bajarilish holati: 0%</p>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">✅ Tekshiruv qoidalari</h2>
+        <ul class="rule-list">
+          <li><span class="pill">1</span><span><b>Rasm manbasi:</b> asl muallif yoki saytni qidiring.</span></li>
+          <li><span class="pill">2</span><span><b>Sana:</b> rasm eski yoki yangi ekanini tekshiring.</span></li>
+          <li><span class="pill">3</span><span><b>Kontekst:</b> rasm matndagi voqeaga mosmi?</span></li>
+          <li><span class="pill">4</span><span><b>Emotsiya:</b> matn sizni shoshiltiryaptimi?</span></li>
+          <li><span class="pill">5</span><span><b>Ulashish:</b> shubhali rasmni tarqatmang.</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">📌 Vositalar</h2>
+        <div class="mini-cards">
+          <div class="mini-card"><h3>Google Lens</h3><p>Rasmning avval qayerda chiqqanini tekshiradi.</p></div>
+          <div class="mini-card"><h3>TinEye</h3><p>Teskari rasm qidiruvi uchun qulay vosita.</p></div>
+          <div class="mini-card"><h3>Rasmiy manba</h3><p>Da’vo rasmiy sahifalarda bormi?</p></div>
+          <div class="mini-card"><h3>Solishtirish</h3><p>Bir nechta ishonchli manbani tekshiring.</p></div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="infoModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-head">
+        <h3 id="modalTitle">Ma’lumot</h3>
+        <button class="close" onclick="closeModal()">×</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+      <div id="modalQuestion" class="modal-question"></div>
+    </div>
+  </div>
+
+  <div id="imageModal" class="modal" aria-hidden="true">
+    <div class="modal-content" style="width:min(980px,96vw);">
+      <div class="modal-head">
+        <h3>Tekshirilayotgan surat</h3>
+        <button class="close" onclick="closeImage()">×</button>
+      </div>
+      <div class="modal-body">
+        <img src="https://i.pinimg.com/736x/66/db/6c/66db6c992620d771582b3e56171ddb69.jpg" alt="Yulduzli osmon surati">
+      </div>
+    </div>
+  </div>
+
+  <footer class="container">
+    Foto-faktcheking portali · Rasm haqiqiyligini tekshirish bo‘yicha interaktiv keys
+  </footer>
+
+  <script>
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    let progress = 0;
+
+    function setProgress(value){
+      progress = Math.max(progress, value);
+      progressBar.style.width = progress + "%";
+      progressText.textContent = "Bajarilish holati: " + progress + "%";
+    }
+
+    function startCheck(){
+      document.getElementById("process").style.display = "block";
+      setProgress(35);
+      setTimeout(() => {
+        document.getElementById("process").scrollIntoView({behavior:"smooth", block:"start"});
+      }, 120);
+    }
+
+    function showLens(){
+      document.getElementById("lensRes").style.display = "block";
+      setProgress(60);
+    }
+
+    const infoData = {
+      source:{
+        title:"Manbani tekshirish",
+        text:"Rasm muallifi, asl sayt yoki rasm birinchi tarqatilgan joy aniqlanmasa, xabar ishonchsiz bo‘lishi mumkin.",
+        q:"Savol: postda rasm muallifi yoki rasmiy havola bormi?"
+      },
+      context:{
+        title:"Kontekstni tekshirish",
+        text:"Rasm haqiqiy bo‘lsa ham, u boshqa joy yoki boshqa voqeaga tegishli bo‘lishi mumkin. Bu chalg‘itish usuli hisoblanadi.",
+        q:"Savol: rasm matndagi da’voni isbotlayaptimi?"
+      },
+      date:{
+        title:"Sana va dolzarblik",
+        text:"Eski rasm yangi voqea sifatida tarqatilishi mumkin. Rasmning avval qachon e’lon qilinganini tekshirish kerak.",
+        q:"Savol: rasm eski emasmi?"
+      },
+      emotion:{
+        title:"Emotsional ta’sir",
+        text:"Chiroyli rasm va hissiyotli matn odamni tez ishonishga undaydi. Ammo hissiyot dalil o‘rnini bosmaydi.",
+        q:"Savol: post sizni o‘ylamasdan ishonishga undayaptimi?"
+      },
+      purpose:{
+        title:"Tarqatilish maqsadi",
+        text:"Rasmli post obunachi, layk, reyting yoki manipulyatsiya maqsadida tarqatilgan bo‘lishi mumkin.",
+        q:"Savol: bu post kimga foyda keltiradi?"
+      },
+      share:{
+        title:"Ulashish mas’uliyati",
+        text:"Tasdiqlanmagan rasmli xabarni ulashish boshqalarni chalg‘itishi va yolg‘on axborot tarqalishiga sabab bo‘lishi mumkin.",
+        q:"Savol: bu xabarni ulashishdan oldin qanday tekshirish kerak?"
+      }
+    };
+
+    function showInfo(key){
+      const item = infoData[key];
+      document.getElementById("modalTitle").textContent = item.title;
+      document.getElementById("modalBody").textContent = item.text;
+      document.getElementById("modalQuestion").textContent = item.q;
+      document.getElementById("infoModal").classList.add("show");
+      document.getElementById("infoModal").setAttribute("aria-hidden","false");
+      setProgress(75);
+    }
+
+    function closeModal(){
+      document.getElementById("infoModal").classList.remove("show");
+      document.getElementById("infoModal").setAttribute("aria-hidden","true");
+    }
+
+    function openImage(){
+      document.getElementById("imageModal").classList.add("show");
+      document.getElementById("imageModal").setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeImage(){
+      document.getElementById("imageModal").classList.remove("show");
+      document.getElementById("imageModal").setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+    }
+
+    function submitKey(){
+      const isReal = document.getElementById("isReal").value;
+      const reason = document.getElementById("reason").value.trim();
+      const danger = document.getElementById("danger").value.trim();
+      const method = document.getElementById("method").value.trim();
+      const box = document.getElementById("resultBox");
+
+      if(!isReal || !reason || !danger || !method){
+        box.className = "result-box show";
+        box.style.background = "#fef2f2";
+        box.style.color = "#991b1b";
+        box.style.border = "1px solid #fecaca";
+        box.textContent = "Iltimos, barcha maydonlarni to‘ldiring.";
+        return;
+      }
+
+      if(isReal === "no"){
+        box.className = "result-box show";
+        box.style.background = "#f0fdf4";
+        box.style.color = "#166534";
+        box.style.border = "1px solid #bbf7d0";
+        box.textContent = "To‘g‘ri xulosa! Rasm postdagi da’voni isbotlamaydi. Joy, sana va manba tekshirilganda manipulyatsiya belgisi aniqlandi.";
+        setProgress(100);
+      }else{
+        box.className = "result-box show";
+        box.style.background = "#fef2f2";
+        box.style.color = "#991b1b";
+        box.style.border = "1px solid #fecaca";
+        box.textContent = "Qayta o‘ylab ko‘ring: rasm chiroyli bo‘lishi uning Buxoroda olinganini isbotlamaydi. Asl manba va joy tasdiqlanmagan.";
+        setProgress(85);
+      }
+    }
+
+    function clearTask(){
+      document.getElementById("isReal").value = "";
+      document.getElementById("reason").value = "";
+      document.getElementById("danger").value = "";
+      document.getElementById("method").value = "";
+      document.getElementById("resultBox").className = "result-box";
+      document.getElementById("resultBox").textContent = "";
+    }
+
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape"){
+        closeModal();
+        closeImage();
+      }
+    });
+
+    document.getElementById("infoModal").addEventListener("click", function(e){
+      if(e.target.id === "infoModal") closeModal();
+    });
+
+    document.getElementById("imageModal").addEventListener("click", function(e){
+      if(e.target.id === "imageModal") closeImage();
+    });
+  </script>
+</body>
+</html>

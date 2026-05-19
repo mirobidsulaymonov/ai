@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Kognitiv komponent</title>
+
+<style>
+:root{
+  --primary:#0f172a;
+  --muted:#64748b;
+  --blue:#2563eb;
+  --blue2:#0ea5e9;
+  --green:#16a34a;
+  --orange:#f97316;
+  --red:#ef4444;
+  --purple:#7c3aed;
+  --card:#ffffff;
+  --border:#dbe4f0;
+  --shadow:0 18px 45px rgba(15,23,42,.10);
+  --radius:26px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Arial,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at top left,rgba(37,99,235,.13),transparent 30%),
+    radial-gradient(circle at top right,rgba(124,58,237,.10),transparent 28%),
+    linear-gradient(180deg,#f8fbff 0%,#eef5ff 48%,#f8fafc 100%);
+  color:var(--primary);
+  line-height:1.65;
+}
+.navbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 8px 24px rgba(15,23,42,.05);
+}
+.nav-inner{
+  width:min(1180px,calc(100% - 32px));
+  margin:auto;
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.brand{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;color:var(--primary);
+  font-weight:900;letter-spacing:-.035em;font-size:18px;
+}
+.brand-icon{
+  width:46px;height:46px;border-radius:16px;
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:22px;box-shadow:0 10px 24px rgba(37,99,235,.22);
+}
+.nav-links{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.nav-links a{
+  text-decoration:none;color:#334155;font-weight:800;font-size:14px;
+  padding:9px 12px;border-radius:999px;transition:.2s
+}
+.nav-links a:hover{background:#eff6ff;color:var(--blue)}
+.container{width:min(1180px,calc(100% - 32px));margin:auto}
+.hero{padding:22px 0 14px}
+.hero-card{
+  position:relative;overflow:hidden;border-radius:34px;
+  color:#fff;padding:30px;box-shadow:var(--shadow);
+}
+.hero-card:before{
+  content:"";position:absolute;width:250px;height:250px;border-radius:50%;
+  right:-88px;top:-88px;background:rgba(255,255,255,.12)
+}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.15);color:#dbeafe;
+  border:1px solid rgba(255,255,255,.20);
+  padding:8px 13px;border-radius:999px;font-size:14px;font-weight:900;
+  margin-bottom:14px;position:relative;z-index:2;
+}
+.hero-card h1{
+  margin:0 0 12px;font-size:clamp(28px,3.7vw,48px);
+  line-height:1.08;letter-spacing:-.055em;font-weight:900;
+  position:relative;z-index:2;max-width:1000px;
+}
+.hero-card p{margin:0;color:#dbeafe;font-size:17px;max-width:980px;position:relative;z-index:2}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;position:relative;z-index:2}
+.btn{
+  border:0;border-radius:15px;padding:13px 18px;font-weight:900;cursor:pointer;
+  transition:.2s;font-size:15px;font-family:inherit;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,23,42,.12)}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+.btn-white{background:#fff;color:#1d4ed8}
+.btn-success{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+.btn-orange{background:linear-gradient(135deg,var(--orange),#f59e0b);color:#fff}
+.btn-dark{background:#0f172a;color:#fff}
+.btn-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.main-grid{
+  display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start;
+  padding:8px 0 46px;
+}
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:22px;
+}
+.section-title{
+  margin:0 0 14px;font-size:26px;line-height:1.2;letter-spacing:-.04em;
+  font-weight:900;display:flex;align-items:center;gap:10px;
+}
+.lead{margin:-4px 0 18px;color:var(--muted);font-size:17px;font-weight:650}
+.sidebar{position:sticky;top:92px}
+.progress{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin:10px 0 8px}
+.progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));transition:.4s}
+.rule-list{margin:0;padding:0;list-style:none;display:grid;gap:11px}
+.rule-list li{
+  display:flex;gap:10px;align-items:flex-start;background:#f8fafc;
+  border:1px solid #e2e8f0;border-radius:15px;padding:12px;color:#475569;font-size:15px
+}
+.rule-list b{color:#0f172a}
+.pill{
+  flex:0 0 auto;width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;background:#eff6ff;color:var(--blue);font-weight:900
+}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.info-card{
+  background:#f8fafc;border:1px solid #e2e8f0;border-radius:20px;padding:18px;
+  transition:.2s;position:relative;overflow:hidden
+}
+.info-card:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(15,23,42,.08)}
+.info-card h3{margin:0 0 8px;font-size:18px;font-weight:900}
+.info-card p{margin:0;color:#64748b;font-weight:650}
+.result-box{display:none;margin-top:14px;border-radius:18px;padding:15px 16px;font-weight:900}
+.result-box.show{display:block;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+label{display:block;font-size:14px;font-weight:900;color:#1e293b;margin:14px 0 7px}
+textarea,select,input{
+  width:100%;border:1px solid #cbd5e1;border-radius:14px;padding:12px;
+  font-family:inherit;font-size:15px;outline:none;transition:.2s;background:#fff
+}
+textarea{resize:vertical;min-height:95px}
+textarea:focus,select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+footer{text-align:center;color:#64748b;font-size:14px;padding:0 0 38px}
+@media(max-width:1060px){.main-grid{grid-template-columns:1fr}.sidebar{position:static}}
+@media(max-width:760px){.nav-links{display:none}.nav-inner{justify-content:center}.hero-card{padding:24px}.card{padding:18px}.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+
+<style>
+.brand-icon,.hero-card{background:linear-gradient(135deg,#0f172a 0%,#2563eb 52%,#0ea5e9 100%)}
+.step{display:grid;grid-template-columns:54px 1fr;gap:14px;align-items:start;background:#f8fafc;border:1px solid #e2e8f0;border-left:7px solid var(--blue);border-radius:20px;padding:17px;margin-bottom:14px}
+.num{width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px}
+.step h3{margin:0 0 5px;font-weight:900}.step p{margin:0;color:#64748b;font-weight:650}
+.quiz-option{border:2px solid #e2e8f0;background:#fff;border-radius:16px;padding:13px;margin-top:10px;cursor:pointer;font-weight:900;text-align:left;width:100%}
+.quiz-option:hover{background:#eff6ff;border-color:#bfdbfe}.quiz-option.good{background:#f0fdf4;border-color:#86efac;color:#166534}.quiz-option.bad{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
+</style>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner"><a class="brand" href="index.html"><span class="brand-icon">🧠</span><span>Kognitiv komponent</span></a><div class="nav-links"><a href="index.html">Bosh sahifa</a><a href="#mazmun">Mazmun</a><a href="#algoritm">Algoritm</a><a href="#mashq">Mashq</a></div></div></nav>
+<header class="hero"><div class="container"><div class="hero-card"><div class="badge">01 · Bilim, tahlil va dalil</div><h1>Kognitiv komponent: axborotni izlash, tahlil qilish va dalilga asoslangan xulosa chiqarish</h1><p>Ushbu sahifa o‘quvchilarga axborot manbasini tanlash, feyk xabarni aniqlash, ma’lumotni solishtirish va asosli xulosa chiqarish ko‘nikmalarini o‘rgatadi.</p><div class="hero-actions"><a href="#mazmun" class="btn btn-white">Darsni boshlash</a><a href="#mashq" class="btn btn-primary">Mashqni ishlash</a></div></div></div></header>
+<main class="container main-grid">
+<section>
+<div class="card" id="mazmun"><h2 class="section-title">📘 Kognitiv komponent nima?</h2><p class="lead">Kognitiv komponent — bu axborotni ongli anglash, izlash, saralash, dalillarni tahlil qilish va xulosa chiqarish bilan bog‘liq bilim-ko‘nikmalar tizimidir.</p><div class="grid-3"><div class="info-card"><h3>🔍 Izlash</h3><p>Kerakli ma’lumotni ishonchli manbadan topish.</p></div><div class="info-card"><h3>🧪 Tahlil</h3><p>Fakt, fikr, reklama va manipulyatsiyani ajratish.</p></div><div class="info-card"><h3>✅ Xulosa</h3><p>Dalil asosida mustaqil qaror qabul qilish.</p></div></div></div>
+<div class="card" id="algoritm"><h2 class="section-title">🧭 Axborotni tekshirish algoritmi</h2><div class="step"><div class="num">1</div><div><h3>Manbani aniqlang</h3><p>Xabarni kim e’lon qilgan? Rasmiy saytmi, anonim kanalmi yoki reklama sahifasimi?</p></div></div><div class="step"><div class="num">2</div><div><h3>Sana va kontekstni tekshiring</h3><p>Eski xabar yangi voqea sifatida tarqatilmaganmi? Rasm matnga mosmi?</p></div></div><div class="step"><div class="num">3</div><div><h3>Dalil va havolalarni baholang</h3><p>Raqam, hujjat, rasmiy ma’lumot yoki mustaqil manba bormi?</p></div></div><div class="step"><div class="num">4</div><div><h3>2–3 manba bilan solishtiring</h3><p>Faqat bitta kanalga tayanmang. Bir nechta ishonchli manba orqali tekshiring.</p></div></div><div class="step"><div class="num">5</div><div><h3>Xulosa chiqaring</h3><p>Axborot rost, shubhali yoki feyk ekanini asoslab belgilang.</p></div></div></div>
+<div class="card" id="mashq"><h2 class="section-title">📝 Mini-mashq</h2><p class="lead">Quyidagi xabarni baholang: “SHOK! Ertaga barcha maktablar yopiladi. Hammaga tarqating!”</p><button class="quiz-option" onclick="check(this,false)">Bu rasmiy xabar, darhol tarqatish kerak.</button><button class="quiz-option" onclick="check(this,true)">Bu shubhali xabar: manba, sana va rasmiy dalil yo‘q.</button><button class="quiz-option" onclick="check(this,false)">Ko‘pchilik ulashgan bo‘lsa, rost bo‘ladi.</button><div id="quizResult" class="result-box"></div></div>
+</section>
+<aside class="sidebar"><div class="card"><h2 class="section-title">🎯 Dars maqsadi</h2><p class="lead">O‘quvchi axborotni dalil asosida tahlil qiladi va feyk xabarga aldanmaslikni o‘rganadi.</p><div class="progress"><span id="progressBar"></span></div><p id="progressText" style="font-weight:900;color:#64748b">0%</p></div><div class="card"><h2 class="section-title">✅ Esda tuting</h2><ul class="rule-list"><li><span class="pill">1</span><span><b>Manba</b> — ishonchlilikning boshlanishi.</span></li><li><span class="pill">2</span><span><b>Dalil</b> — xulosaning asosi.</span></li><li><span class="pill">3</span><span><b>Solishtirish</b> — feykdan himoya.</span></li><li><span class="pill">4</span><span><b>Tanqidiy fikr</b> — kognitiv filtr.</span></li></ul></div></aside>
+</main><footer class="container">Kognitiv komponent · Axborotni anglash va tahlil qilish</footer>
+<script>
+let p=0;function prog(v){p=Math.max(p,v);progressBar.style.width=p+'%';progressText.textContent=p+'%'}
+window.addEventListener('scroll',()=>{prog(Math.min(80,Math.round(window.scrollY/(document.body.scrollHeight-innerHeight)*100)))})
+function check(btn,ok){document.querySelectorAll('.quiz-option').forEach(b=>{b.disabled=true;b.style.pointerEvents='none'});btn.classList.add(ok?'good':'bad');quizResult.className='result-box show';quizResult.textContent=ok?'To‘g‘ri! Avval manba, sana va dalil tekshiriladi.':'Qayta o‘ylab ko‘ring: shov-shuvli xabarni dalilsiz tarqatish mumkin emas.';prog(100)}
+</script>
+</body></html>

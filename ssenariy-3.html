@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3-ssenariy: Manba ishonchliligini baholash</title>
+  <style>
+    :root{
+      --primary:#0f172a;
+      --muted:#64748b;
+      --blue:#2563eb;
+      --blue2:#0ea5e9;
+      --purple:#7c3aed;
+      --orange:#f97316;
+      --green:#16a34a;
+      --yellow:#f59e0b;
+      --red:#ef4444;
+      --bg:#f5f8ff;
+      --card:#ffffff;
+      --border:#dbe4f0;
+      --shadow:0 18px 45px rgba(15,23,42,.10);
+      --radius:26px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      font-family: Arial, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.12), transparent 30%),
+        radial-gradient(circle at top right, rgba(124,58,237,.11), transparent 28%),
+        linear-gradient(180deg,#f8fbff 0%,#eef5ff 48%,#f8fafc 100%);
+      color:var(--primary);
+      line-height:1.65;
+    }
+
+    .navbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 8px 24px rgba(15,23,42,.05);
+    }
+
+    .nav-inner{
+      width:min(1180px,calc(100% - 32px));
+      margin:auto;
+      min-height:74px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:var(--primary);
+      font-weight:900;
+      letter-spacing:-.035em;
+      font-size:18px;
+    }
+
+    .brand-icon{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      background:linear-gradient(135deg,var(--blue),var(--purple));
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 10px 24px rgba(37,99,235,.22);
+      font-size:22px;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .nav-links a{
+      text-decoration:none;
+      color:#334155;
+      font-weight:800;
+      font-size:14px;
+      padding:9px 12px;
+      border-radius:999px;
+      transition:.2s ease;
+    }
+
+    .nav-links a:hover{
+      background:#eff6ff;
+      color:var(--blue);
+    }
+
+    .container{
+      width:min(1180px,calc(100% - 32px));
+      margin:auto;
+    }
+
+    .hero{
+      padding:30px 0 18px;
+    }
+
+    .hero-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:34px;
+      background:linear-gradient(135deg,#0f172a 0%,#1d4ed8 46%,#7c3aed 100%);
+      color:#fff;
+      padding:38px 34px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero-card::before,
+    .hero-card::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.10);
+    }
+
+    .hero-card::before{
+      width:240px;
+      height:240px;
+      right:-82px;
+      top:-82px;
+    }
+
+    .hero-card::after{
+      width:170px;
+      height:170px;
+      left:-60px;
+      bottom:-70px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(255,255,255,.15);
+      color:#dbeafe;
+      border:1px solid rgba(255,255,255,.20);
+      padding:8px 13px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:900;
+      margin-bottom:14px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-card h1{
+      margin:0 0 12px;
+      font-size:clamp(32px,4.6vw,58px);
+      line-height:1.05;
+      letter-spacing:-.055em;
+      font-weight:900;
+      position:relative;
+      z-index:2;
+      max-width:960px;
+    }
+
+    .hero-card p{
+      margin:0;
+      color:#dbeafe;
+      font-size:19px;
+      max-width:940px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:22px;
+      position:relative;
+      z-index:2;
+    }
+
+    .btn{
+      border:0;
+      border-radius:15px;
+      padding:13px 18px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.2s ease;
+      font-size:15px;
+      font-family:inherit;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      text-decoration:none;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 22px rgba(15,23,42,.12);
+    }
+
+    .btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+    .btn-white{background:#fff;color:#1d4ed8}
+    .btn-success{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+    .btn-muted{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
+    .btn-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+
+    .main-grid{
+      display:grid;
+      grid-template-columns:1fr 360px;
+      gap:22px;
+      align-items:start;
+      padding:8px 0 46px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow:var(--shadow);
+      margin-bottom:22px;
+    }
+
+    .section-title{
+      margin:0 0 14px;
+      font-size:26px;
+      line-height:1.2;
+      letter-spacing:-.04em;
+      font-weight:900;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .lead{
+      margin:-4px 0 18px;
+      color:var(--muted);
+      font-size:17px;
+      font-weight:650;
+    }
+
+    .source-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+      margin-top:16px;
+    }
+
+    .source-card{
+      border:1px solid #e2e8f0;
+      border-radius:22px;
+      padding:20px;
+      min-height:230px;
+      cursor:pointer;
+      transition:.22s ease;
+      background:#fff;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .source-card::after{
+      content:"";
+      position:absolute;
+      width:110px;
+      height:110px;
+      border-radius:50%;
+      right:-42px;
+      bottom:-42px;
+      background:rgba(37,99,235,.08);
+    }
+
+    .source-card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 16px 32px rgba(15,23,42,.10);
+      border-color:#bfdbfe;
+    }
+
+    .source-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:7px 10px;
+      border-radius:999px;
+      color:#fff;
+      font-size:12px;
+      font-weight:900;
+      margin-bottom:14px;
+    }
+
+    .tag-official{background:linear-gradient(135deg,var(--green),#22c55e)}
+    .tag-blog{background:linear-gradient(135deg,var(--purple),#a855f7)}
+    .tag-anon{background:linear-gradient(135deg,var(--red),var(--orange))}
+
+    .source-icon{
+      width:54px;
+      height:54px;
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      margin-bottom:12px;
+      background:#eff6ff;
+      color:var(--blue);
+    }
+
+    .source-card h3{
+      margin:0 0 8px;
+      font-size:20px;
+      font-weight:900;
+      letter-spacing:-.03em;
+    }
+
+    .source-card p{
+      margin:0;
+      color:#475569;
+      font-size:15px;
+    }
+
+    .craap-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .craap-box{
+      border:0;
+      min-height:190px;
+      border-radius:22px;
+      padding:20px 14px;
+      color:#fff;
+      text-align:center;
+      cursor:pointer;
+      transition:.22s ease;
+      position:relative;
+      overflow:hidden;
+      font-family:inherit;
+    }
+
+    .craap-box:hover{
+      transform:translateY(-5px);
+      box-shadow:0 16px 32px rgba(15,23,42,.16);
+    }
+
+    .craap-box::after{
+      content:attr(data-letter);
+      position:absolute;
+      right:10px;
+      bottom:-28px;
+      font-size:110px;
+      font-weight:900;
+      color:rgba(255,255,255,.14);
+      line-height:1;
+    }
+
+    .craap-box h3{
+      margin:0 0 8px;
+      font-size:44px;
+      font-weight:900;
+      position:relative;
+      z-index:2;
+    }
+
+    .craap-box p{
+      margin:0;
+      color:rgba(255,255,255,.92);
+      font-weight:900;
+      position:relative;
+      z-index:2;
+    }
+
+    .c-color{background:linear-gradient(135deg,#ef4444,#f97316)}
+    .r-color{background:linear-gradient(135deg,#f59e0b,#eab308)}
+    .a1-color{background:linear-gradient(135deg,#2563eb,#0ea5e9)}
+    .a2-color{background:linear-gradient(135deg,#16a34a,#22c55e)}
+    .p-color{background:linear-gradient(135deg,#7c3aed,#a855f7)}
+
+    .table-wrap{
+      overflow-x:auto;
+      border-radius:18px;
+      border:1px solid #e2e8f0;
+      margin-top:16px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:780px;
+      background:#fff;
+    }
+
+    th,td{
+      border-bottom:1px solid #e2e8f0;
+      padding:13px 14px;
+      text-align:left;
+      vertical-align:top;
+      font-size:14px;
+    }
+
+    th{
+      background:#0f172a;
+      color:#fff;
+      font-weight:900;
+    }
+
+    tr:last-child td{border-bottom:0}
+
+    input,textarea,select{
+      width:100%;
+      border:1px solid #cbd5e1;
+      border-radius:12px;
+      padding:11px 12px;
+      font-family:inherit;
+      font-size:14px;
+      outline:none;
+      background:#fff;
+      transition:.2s;
+    }
+
+    textarea{resize:vertical;min-height:86px}
+
+    input:focus,textarea:focus,select:focus{
+      border-color:var(--blue);
+      box-shadow:0 0 0 4px rgba(37,99,235,.12);
+    }
+
+    .score-input{
+      max-width:90px;
+      text-align:center;
+      font-weight:900;
+    }
+
+    .total-box{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .total-card{
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:18px;
+      padding:16px;
+    }
+
+    .total-card h3{
+      margin:0 0 6px;
+      font-size:16px;
+      font-weight:900;
+    }
+
+    .total-card p{
+      margin:0;
+      font-size:24px;
+      font-weight:900;
+      color:var(--blue);
+    }
+
+    .sticker-wall{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+      margin-top:16px;
+    }
+
+    .sticker{
+      border-radius:20px;
+      padding:18px;
+      min-height:180px;
+      box-shadow:0 12px 24px rgba(15,23,42,.08);
+    }
+
+    .sticker h3{
+      margin:0 0 10px;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .sticker textarea{
+      background:rgba(255,255,255,.65);
+      min-height:100px;
+    }
+
+    .yellow{background:#fef3c7}
+    .blue-note{background:#dbeafe}
+    .green-note{background:#dcfce7}
+
+    .result-box{
+      display:none;
+      margin-top:14px;
+      border-radius:18px;
+      padding:15px 16px;
+      font-weight:900;
+    }
+
+    .result-box.show{
+      display:block;
+      background:#f0fdf4;
+      color:#166534;
+      border:1px solid #bbf7d0;
+    }
+
+    .sidebar{
+      position:sticky;
+      top:96px;
+    }
+
+    .rule-list{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:11px;
+    }
+
+    .rule-list li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:15px;
+      padding:12px;
+      color:#475569;
+      font-size:15px;
+    }
+
+    .rule-list b{color:#0f172a}
+
+    .pill{
+      flex:0 0 auto;
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#eff6ff;
+      color:var(--blue);
+      font-weight:900;
+    }
+
+    .progress{
+      height:10px;
+      background:#e2e8f0;
+      border-radius:999px;
+      overflow:hidden;
+      margin:10px 0 8px;
+    }
+
+    .progress span{
+      display:block;
+      width:0%;
+      height:100%;
+      background:linear-gradient(90deg,var(--blue),var(--green));
+      transition:.4s ease;
+    }
+
+    .mini-cards{
+      display:grid;
+      gap:11px;
+    }
+
+    .mini-card{
+      border:1px solid #e2e8f0;
+      border-radius:16px;
+      padding:13px;
+      background:#f8fafc;
+    }
+
+    .mini-card h3{
+      margin:0 0 4px;
+      font-size:16px;
+      font-weight:900;
+    }
+
+    .mini-card p{
+      margin:0;
+      color:#64748b;
+      font-size:14px;
+    }
+
+    .modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(2,6,23,.78);
+      z-index:1000;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      backdrop-filter:blur(5px);
+    }
+
+    .modal.show{display:flex}
+
+    .modal-content{
+      width:min(650px,96vw);
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 25px 70px rgba(0,0,0,.35);
+      overflow:hidden;
+      border:1px solid #e2e8f0;
+    }
+
+    .modal-head{
+      padding:16px 18px;
+      background:linear-gradient(135deg,#0f172a,#2563eb);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .modal-head h3{
+      margin:0;
+      font-size:21px;
+      font-weight:900;
+    }
+
+    .close{
+      border:0;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border-radius:12px;
+      width:38px;
+      height:38px;
+      cursor:pointer;
+      font-size:22px;
+    }
+
+    .modal-body{
+      padding:20px;
+      color:#475569;
+      font-size:16px;
+    }
+
+    .modal-question{
+      margin:0 20px 20px;
+      padding:15px;
+      background:#fff7ed;
+      border-left:4px solid var(--orange);
+      border-radius:12px;
+      color:#9a3412;
+      font-weight:800;
+    }
+
+    footer{
+      text-align:center;
+      color:#64748b;
+      font-size:14px;
+      padding:0 0 38px;
+    }
+
+    @media (max-width:1060px){
+      .main-grid{grid-template-columns:1fr}
+      .sidebar{position:static}
+      .source-grid{grid-template-columns:1fr}
+      .craap-grid{grid-template-columns:repeat(3,1fr)}
+    }
+
+    @media (max-width:760px){
+      .nav-links{display:none}
+      .nav-inner{justify-content:center}
+      .hero-card{padding:24px}
+      .card{padding:18px}
+      .craap-grid,.sticker-wall,.total-box{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-icon">🔎</span>
+        <span>Manba tahlili portali</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Bosh sahifa</a>
+        <a href="#qadam1">Manbalar</a>
+        <a href="#qadam2">CRAAP</a>
+        <a href="#qadam3">Tahlil</a>
+        <a href="#qadam5">Refleksiya</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-card">
+        <div class="badge">📌 3-ssenariy · Manba ishonchliligini baholash</div>
+        <h1>CRAAP mezonlari asosida manbani tekshirish</h1>
+        <p>
+          Ushbu interaktiv sahifa o‘quvchilarga axborot manbasini sana, moslik, muallif, aniqlik va maqsad
+          mezonlari asosida baholashni o‘rgatadi.
+        </p>
+        <div class="hero-actions">
+          <a href="#qadam1" class="btn btn-white">Darsni boshlash</a>
+          <a href="#qadam2" class="btn btn-primary">CRAAP metodiga o‘tish</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-grid">
+    <section>
+      <div class="card" id="qadam1">
+        <h2 class="section-title">🗂 1-qadam. Manbalarni solishtirish</h2>
+        <p class="lead">
+          Quyidagi 3 xil manbani solishtiring. Qaysi biri ko‘proq ishonch uyg‘otadi? Kartochkani bosib izohni ko‘ring.
+        </p>
+
+        <div class="source-grid">
+          <div class="source-card" onclick="showSource('official')">
+            <div class="source-tag tag-official">Rasmiy / hujjatli</div>
+            <div class="source-icon">🏛</div>
+            <h3>Gov.uz / Rasmiy OAV</h3>
+            <p>“Vazirlar Mahkamasi qaroriga ko‘ra, yangi tartib joriy etiladi...”</p>
+          </div>
+
+          <div class="source-card" onclick="showSource('blog')">
+            <div class="source-tag tag-blog">Bloger / shaxsiy fikr</div>
+            <div class="source-icon">👤</div>
+            <h3>Mashhur bloger</h3>
+            <p>“Mening fikrimcha, bu qaror juda noto‘g‘ri va xalqqa qiyin bo‘ladi...”</p>
+          </div>
+
+          <div class="source-card" onclick="showSource('anon')">
+            <div class="source-tag tag-anon">Anonim / shubhali</div>
+            <div class="source-icon">🎭</div>
+            <h3>“TEZKOR XABARLAR”</h3>
+            <p>“SENSATSIYA! Ertadan hamma narsa bepul bo‘larmish, tarqating!”</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="qadam2">
+        <h2 class="section-title">🎓 2-qadam. CRAAP metodini o‘rganamiz</h2>
+        <p class="lead">
+          CRAAP — manba ishonchliligini baholashning 5 mezonli modeli. Har bir harfni bosib, mazmunini ko‘ring.
+        </p>
+
+        <div class="craap-grid">
+          <button class="craap-box c-color" data-letter="C" onclick="openCraap('C')">
+            <h3>C</h3>
+            <p>Currency<br><small>Sana / dolzarblik</small></p>
+          </button>
+
+          <button class="craap-box r-color" data-letter="R" onclick="openCraap('R')">
+            <h3>R</h3>
+            <p>Relevance<br><small>Moslik</small></p>
+          </button>
+
+          <button class="craap-box a1-color" data-letter="A" onclick="openCraap('A1')">
+            <h3>A</h3>
+            <p>Authority<br><small>Muallif / vakolat</small></p>
+          </button>
+
+          <button class="craap-box a2-color" data-letter="A" onclick="openCraap('A2')">
+            <h3>A</h3>
+            <p>Accuracy<br><small>Aniqlik / dalil</small></p>
+          </button>
+
+          <button class="craap-box p-color" data-letter="P" onclick="openCraap('P')">
+            <h3>P</h3>
+            <p>Purpose<br><small>Maqsad</small></p>
+          </button>
+        </div>
+      </div>
+
+      <div class="card" id="qadam3">
+        <h2 class="section-title">📋 3-qadam. Guruhli ish: manbani tekshiring</h2>
+        <p class="lead">
+          Tanlangan manbani CRAAP mezonlari bo‘yicha tahlil qiling. Har bir mezonga 1–5 oralig‘ida ball bering.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mezon</th>
+                <th>Tahlil</th>
+                <th>Ball</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Currency</b><br>Sana / dolzarblik</td>
+                <td><input id="tC" placeholder="Xabar qachon yozilgan yoki yangilangan?"></td>
+                <td><input id="sC" class="score-input" type="number" min="1" max="5" value="1"></td>
+              </tr>
+              <tr>
+                <td><b>Relevance</b><br>Moslik</td>
+                <td><input id="tR" placeholder="Bu ma’lumot mavzuga mosmi?"></td>
+                <td><input id="sR" class="score-input" type="number" min="1" max="5" value="1"></td>
+              </tr>
+              <tr>
+                <td><b>Authority</b><br>Muallif / vakolat</td>
+                <td><input id="tA1" placeholder="Muallif yoki tashkilot ishonchlimi?"></td>
+                <td><input id="sA1" class="score-input" type="number" min="1" max="5" value="1"></td>
+              </tr>
+              <tr>
+                <td><b>Accuracy</b><br>Aniqlik / dalil</td>
+                <td><input id="tA2" placeholder="Dalil, havola yoki hujjat bormi?"></td>
+                <td><input id="sA2" class="score-input" type="number" min="1" max="5" value="1"></td>
+              </tr>
+              <tr>
+                <td><b>Purpose</b><br>Maqsad</td>
+                <td><input id="tP" placeholder="Xabar nima maqsadda e’lon qilingan?"></td>
+                <td><input id="sP" class="score-input" type="number" min="1" max="5" value="1"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="total-box">
+          <div class="total-card">
+            <h3>Umumiy ball</h3>
+            <p id="totalScore">0 / 25</p>
+          </div>
+          <div class="total-card">
+            <h3>Ishonchlilik</h3>
+            <p id="trustLevel">—</p>
+          </div>
+          <div class="total-card">
+            <h3>Tavsiya</h3>
+            <p id="recommendText" style="font-size:17px;color:#475569;">—</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;">
+          <button class="btn btn-success" onclick="calculateScore()">Tahlilni yakunlash</button>
+          <button class="btn btn-red" onclick="resetAnalysis()">Tozalash</button>
+        </div>
+
+        <div id="analysisResult" class="result-box"></div>
+      </div>
+
+      <div class="card" id="qadam5">
+        <h2 class="section-title">📝 5-qadam. Refleksiya darsi</h2>
+        <p class="lead">
+          O‘quvchilar o‘z fikrlarini quyidagi stikerlarga yozadilar.
+        </p>
+
+        <div class="sticker-wall">
+          <div class="sticker yellow">
+            <h3>Shubha sababi...</h3>
+            <textarea id="note1" placeholder="Nega manbaga darhol ishonmaysiz?"></textarea>
+          </div>
+
+          <div class="sticker blue-note">
+            <h3>Eng ishonchli manba...</h3>
+            <textarea id="note2" placeholder="Siz uchun eng ishonchli manba qaysi?"></textarea>
+          </div>
+
+          <div class="sticker green-note">
+            <h3>Yangi qarorim...</h3>
+            <textarea id="note3" placeholder="Endi axborotni qanday tekshiraman?"></textarea>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;">
+          <button class="btn btn-success" onclick="saveReflection()">Refleksiyani saqlash</button>
+          <button class="btn btn-red" onclick="clearReflection()">Tozalash</button>
+        </div>
+
+        <div id="reflectionResult" class="result-box"></div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="card">
+        <h2 class="section-title">🎯 Dars maqsadi</h2>
+        <p class="lead">
+          O‘quvchi manbani ishonchlilik, dolzarblik, mualliflik va dalillilik asosida baholashni o‘rganadi.
+        </p>
+        <div class="progress"><span id="progressBar"></span></div>
+        <p id="progressText" style="margin:0;color:#64748b;font-weight:800;">Bajarilish holati: 0%</p>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">✅ Ishonchli manba belgisi</h2>
+        <ul class="rule-list">
+          <li><span class="pill">1</span><span><b>Sana:</b> xabar yangi va dolzarb bo‘lishi kerak.</span></li>
+          <li><span class="pill">2</span><span><b>Muallif:</b> mas’ul shaxs yoki tashkilot ko‘rsatilgan bo‘lishi kerak.</span></li>
+          <li><span class="pill">3</span><span><b>Dalil:</b> fakt, havola, hujjat yoki statistik ma’lumot bo‘lishi kerak.</span></li>
+          <li><span class="pill">4</span><span><b>Maqsad:</b> chalg‘itish yoki manipulyatsiya emas, ma’lumot berish bo‘lishi kerak.</span></li>
+          <li><span class="pill">5</span><span><b>Solishtirish:</b> boshqa ishonchli manbalar bilan mos kelishi kerak.</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">📌 CRAAP eslatma</h2>
+        <div class="mini-cards">
+          <div class="mini-card"><h3>C — Currency</h3><p>Sana va dolzarblik.</p></div>
+          <div class="mini-card"><h3>R — Relevance</h3><p>Mavzuga moslik.</p></div>
+          <div class="mini-card"><h3>A — Authority</h3><p>Muallif vakolati.</p></div>
+          <div class="mini-card"><h3>A — Accuracy</h3><p>Dalil va aniqlik.</p></div>
+          <div class="mini-card"><h3>P — Purpose</h3><p>Maqsad va xolislik.</p></div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="infoModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-head">
+        <h3 id="modalTitle">Ma’lumot</h3>
+        <button class="close" onclick="closeModal()">×</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+      <div id="modalQuestion" class="modal-question"></div>
+    </div>
+  </div>
+
+  <footer class="container">
+    Manba tahlili portali · CRAAP metodi asosida axborot manbasini baholash
+  </footer>
+
+  <script>
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    let progress = 0;
+
+    function setProgress(value){
+      progress = Math.max(progress, value);
+      progressBar.style.width = progress + "%";
+      progressText.textContent = "Bajarilish holati: " + progress + "%";
+    }
+
+    const sourceInfo = {
+      official: {
+        title: "Rasmiy manba",
+        text: "Rasmiy manbalar odatda hujjat, qaror, buyruq yoki mas’ul tashkilot bayonotiga tayanadi. Bunday manbalarda muallif, sana va dalil aniq ko‘rsatiladi.",
+        q: "Savol: bu xabarda rasmiy hujjat yoki aniq tashkilot ko‘rsatilganmi?"
+      },
+      blog: {
+        title: "Bloger yoki shaxsiy fikr",
+        text: "Bloger yozgan xabar foydali bo‘lishi mumkin, lekin u ko‘pincha shaxsiy munosabat va bahoga asoslanadi. Uni fakt sifatida qabul qilishdan oldin rasmiy manba bilan solishtirish kerak.",
+        q: "Savol: bu fikr dalilga asoslanganmi yoki shaxsiy bahomi?"
+      },
+      anon: {
+        title: "Anonim yoki shubhali manba",
+        text: "Anonim kanal yoki muallifi noma’lum xabarlarda manipulyatsiya, mish-mish va feyk bo‘lish ehtimoli yuqori. Bunday xabarlar tarqatilmasdan oldin albatta tekshiriladi.",
+        q: "Savol: xabarni kim tarqatgan va u javobgarlikni o‘z zimmasiga olganmi?"
+      }
+    };
+
+    const craapDetails = {
+      C: {
+        title: "C — Currency: Dolzarblik / sana",
+        text: "Axborot qachon e’lon qilingan? Ma’lumot yangimi yoki eskirib qolganmi? Ayrim mavzularda eski manba noto‘g‘ri xulosa chiqarishga olib keladi.",
+        q: "Tekshiruv savoli: xabar oxirgi marta qachon yangilangan?"
+      },
+      R: {
+        title: "R — Relevance: Moslik",
+        text: "Bu ma’lumot sizning savolingizga yoki o‘rganayotgan mavzuingizga mosmi? Auditoriya kimga mo‘ljallangan? Ma’lumot juda yuzaki yoki haddan tashqari murakkab emasmi?",
+        q: "Tekshiruv savoli: bu axborot mening savolimga to‘liq javob beryaptimi?"
+      },
+      A1: {
+        title: "A — Authority: Muallif / vakolat",
+        text: "Axborotni kim yozgan? Muallif mutaxassismi? Tashkilot rasmiy va ishonchlimi? Muallifning ism-sharifi va aloqa ma’lumotlari bormi?",
+        q: "Tekshiruv savoli: muallif ushbu mavzuda vakolatli shaxsmi?"
+      },
+      A2: {
+        title: "A — Accuracy: Aniqlik / dalil",
+        text: "Ma’lumot dalil, havola, hujjat, statistik ma’lumot yoki boshqa ishonchli manbalar bilan tasdiqlanganmi? Matnda xato, bo‘rttirish yoki qarama-qarshilik yo‘qmi?",
+        q: "Tekshiruv savoli: axborotni boshqa manba orqali tasdiqlay olasizmi?"
+      },
+      P: {
+        title: "P — Purpose: Maqsad",
+        text: "Axborot nima maqsadda e’lon qilingan? Ma’lumot berish, reklama qilish, sotish, manipulyatsiya qilish yoki siyosiy ta’sir o‘tkazish maqsadi bormi?",
+        q: "Tekshiruv savoli: muallif meni nimagadir ishontirishga yoki sotishga urinmayaptimi?"
+      }
+    };
+
+    function openInfo(data){
+      document.getElementById("modalTitle").textContent = data.title;
+      document.getElementById("modalBody").textContent = data.text;
+      document.getElementById("modalQuestion").textContent = data.q;
+      document.getElementById("infoModal").classList.add("show");
+      document.getElementById("infoModal").setAttribute("aria-hidden","false");
+    }
+
+    function showSource(key){
+      openInfo(sourceInfo[key]);
+      setProgress(25);
+    }
+
+    function openCraap(key){
+      openInfo(craapDetails[key]);
+      setProgress(55);
+    }
+
+    function closeModal(){
+      document.getElementById("infoModal").classList.remove("show");
+      document.getElementById("infoModal").setAttribute("aria-hidden","true");
+    }
+
+    function calculateScore(){
+      const ids = ["C","R","A1","A2","P"];
+      let total = 0;
+      let filled = true;
+
+      ids.forEach(id => {
+        const t = document.getElementById("t" + id).value.trim();
+        const scoreEl = document.getElementById("s" + id);
+        let score = Number(scoreEl.value);
+        if(!t) filled = false;
+        if(score < 1) score = 1;
+        if(score > 5) score = 5;
+        scoreEl.value = score;
+        total += score;
+      });
+
+      document.getElementById("totalScore").textContent = total + " / 25";
+
+      let level = "Past";
+      let rec = "Foydalanish tavsiya etilmaydi";
+      let color = "#b91c1c";
+
+      if(total >= 21){
+        level = "Yuqori";
+        rec = "Foydalanish mumkin";
+        color = "#16a34a";
+      }else if(total >= 14){
+        level = "O‘rta";
+        rec = "Qo‘shimcha tekshiruv kerak";
+        color = "#f97316";
+      }
+
+      document.getElementById("trustLevel").textContent = level;
+      document.getElementById("trustLevel").style.color = color;
+      document.getElementById("recommendText").textContent = rec;
+
+      const box = document.getElementById("analysisResult");
+      box.className = "result-box show";
+      if(!filled){
+        box.style.background = "#fef2f2";
+        box.style.color = "#991b1b";
+        box.style.border = "1px solid #fecaca";
+        box.textContent = "Iltimos, barcha mezonlar bo‘yicha tahlil maydonlarini to‘ldiring.";
+      }else{
+        box.style.background = "#f0fdf4";
+        box.style.color = "#166534";
+        box.style.border = "1px solid #bbf7d0";
+        box.textContent = "Tahlil yakunlandi. Umumiy ball va tavsiya avtomatik hisoblandi.";
+        setProgress(85);
+      }
+    }
+
+    function resetAnalysis(){
+      ["C","R","A1","A2","P"].forEach(id => {
+        document.getElementById("t" + id).value = "";
+        document.getElementById("s" + id).value = "1";
+      });
+      document.getElementById("totalScore").textContent = "0 / 25";
+      document.getElementById("trustLevel").textContent = "—";
+      document.getElementById("recommendText").textContent = "—";
+      document.getElementById("analysisResult").className = "result-box";
+      document.getElementById("analysisResult").textContent = "";
+    }
+
+    function saveReflection(){
+      const n1 = document.getElementById("note1").value.trim();
+      const n2 = document.getElementById("note2").value.trim();
+      const n3 = document.getElementById("note3").value.trim();
+      const box = document.getElementById("reflectionResult");
+
+      if(!n1 || !n2 || !n3){
+        box.className = "result-box show";
+        box.style.background = "#fef2f2";
+        box.style.color = "#991b1b";
+        box.style.border = "1px solid #fecaca";
+        box.textContent = "Iltimos, barcha 3 ta stikerga fikringizni yozing.";
+        return;
+      }
+
+      box.className = "result-box show";
+      box.style.background = "#f0fdf4";
+      box.style.color = "#166534";
+      box.style.border = "1px solid #bbf7d0";
+      box.textContent = "Refleksiya saqlandi. Siz manbani baholash bo‘yicha shaxsiy xulosangizni yozdingiz.";
+      setProgress(100);
+    }
+
+    function clearReflection(){
+      document.getElementById("note1").value = "";
+      document.getElementById("note2").value = "";
+      document.getElementById("note3").value = "";
+      document.getElementById("reflectionResult").className = "result-box";
+      document.getElementById("reflectionResult").textContent = "";
+    }
+
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape") closeModal();
+    });
+
+    document.getElementById("infoModal").addEventListener("click", function(e){
+      if(e.target.id === "infoModal") closeModal();
+    });
+  </script>
+</body>
+</html>

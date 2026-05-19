@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>O‘qituvchi Paneli — Media-monitoring boshqaruvi</title>
+
+<style>
+:root{
+  --primary:#0f172a;
+  --muted:#64748b;
+  --blue:#2563eb;
+  --blue2:#0ea5e9;
+  --green:#16a34a;
+  --green2:#22c55e;
+  --red:#ef4444;
+  --orange:#f97316;
+  --purple:#7c3aed;
+  --bg:#f6f8fc;
+  --card:#ffffff;
+  --border:#dbe4f0;
+  --shadow:0 18px 45px rgba(15,23,42,.10);
+  --radius:26px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Arial,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at top left,rgba(37,99,235,.12),transparent 30%),
+    radial-gradient(circle at top right,rgba(124,58,237,.10),transparent 30%),
+    linear-gradient(180deg,#f8fbff 0%,#eef5ff 48%,#f8fafc 100%);
+  color:var(--primary);
+  line-height:1.6;
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 8px 24px rgba(15,23,42,.05);
+}
+
+.topbar-inner{
+  width:min(1600px,calc(100% - 36px));
+  min-height:74px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  color:var(--primary);
+  font-weight:900;
+  letter-spacing:-.035em;
+  font-size:18px;
+}
+
+.brand-icon{
+  width:48px;
+  height:48px;
+  border-radius:17px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  box-shadow:0 10px 24px rgba(37,99,235,.22);
+}
+
+.nav-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.page{
+  width:min(1600px,calc(100% - 36px));
+  margin:auto;
+  padding:24px 0 44px;
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  border-radius:34px;
+  background:linear-gradient(135deg,#0f172a 0%,#1d4ed8 47%,#7c3aed 100%);
+  color:#fff;
+  padding:32px;
+  box-shadow:var(--shadow);
+  margin-bottom:22px;
+}
+
+.hero:before{
+  content:"";
+  position:absolute;
+  width:280px;
+  height:280px;
+  border-radius:50%;
+  right:-96px;
+  top:-96px;
+  background:rgba(255,255,255,.12);
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.22);
+  color:#dbeafe;
+  padding:8px 13px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:900;
+  margin-bottom:14px;
+  position:relative;
+  z-index:2;
+}
+
+.hero h1{
+  margin:0 0 12px;
+  font-size:clamp(28px,3.5vw,50px);
+  line-height:1.06;
+  letter-spacing:-.055em;
+  font-weight:900;
+  position:relative;
+  z-index:2;
+  max-width:1180px;
+}
+
+.hero p{
+  margin:0;
+  color:#dbeafe;
+  font-size:17px;
+  max-width:1100px;
+  position:relative;
+  z-index:2;
+}
+
+.hero-row{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:18px;
+  align-items:end;
+  position:relative;
+  z-index:2;
+  margin-top:20px;
+}
+
+.hero-mini{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(130px,1fr));
+  gap:12px;
+}
+
+.mini-stat{
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.18);
+  color:#fff;
+  border-radius:20px;
+  padding:15px;
+}
+
+.mini-stat b{
+  display:block;
+  font-size:28px;
+  line-height:1;
+  margin-bottom:6px;
+}
+
+.mini-stat span{
+  color:#dbeafe;
+  font-size:12px;
+  font-weight:900;
+}
+
+.btn{
+  border:0;
+  border-radius:15px;
+  padding:13px 18px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.2s;
+  font-size:15px;
+  font-family:inherit;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  text-decoration:none;
+  white-space:nowrap;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(15,23,42,.12);
+}
+
+.btn-blue{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+.btn-green{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff}
+.btn-orange{background:linear-gradient(135deg,var(--orange),#f59e0b);color:#fff}
+.btn-dark{background:#0f172a;color:#fff}
+.btn-white{background:#fff;color:#1d4ed8}
+.btn-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.btn-muted{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
+
+.main-grid{
+  display:grid;
+  grid-template-columns:minmax(420px,.95fr) minmax(0,1.55fr);
+  gap:22px;
+  align-items:start;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+  box-shadow:var(--shadow);
+  margin-bottom:22px;
+}
+
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  margin-bottom:16px;
+}
+
+.section-title{
+  margin:0;
+  font-size:25px;
+  line-height:1.18;
+  letter-spacing:-.04em;
+  font-weight:900;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.lead{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:15px;
+  font-weight:650;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:900;
+  color:#1e293b;
+  margin:0 0 7px;
+}
+
+input,select,textarea{
+  width:100%;
+  border:1px solid #cbd5e1;
+  border-radius:14px;
+  padding:12px 13px;
+  font-family:inherit;
+  font-size:15px;
+  background:#fff;
+  outline:none;
+  transition:.2s;
+}
+
+textarea{
+  min-height:108px;
+  resize:vertical;
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:var(--blue);
+  box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+.input-row{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:12px;
+  align-items:end;
+}
+
+.settings{
+  background:#eff6ff;
+  border:1px dashed #93c5fd;
+  border-radius:20px;
+  padding:16px;
+  margin-bottom:16px;
+}
+
+.status-box{
+  display:none;
+  margin-top:14px;
+  border-radius:16px;
+  padding:13px 15px;
+  font-weight:900;
+  text-align:center;
+}
+
+.status-success{display:block;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.status-error{display:block;background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.status-info{display:block;background:#eff6ff;color:#1e3a8a;border:1px solid #bfdbfe}
+
+.preview{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:20px;
+  padding:17px;
+  margin-top:16px;
+}
+
+.preview h3{
+  margin:0 0 8px;
+  font-size:18px;
+  font-weight:900;
+}
+
+.preview p{
+  margin:0;
+  color:#475569;
+  font-weight:700;
+}
+
+.preview-link{
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  background:#fff;
+  border:1px solid #e2e8f0;
+  word-break:break-all;
+  color:#2563eb;
+  font-weight:800;
+}
+
+.toolbar{
+  display:grid;
+  grid-template-columns:1.2fr 180px 180px auto;
+  gap:12px;
+  align-items:end;
+  margin-bottom:14px;
+}
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(160px,1fr));
+  gap:14px;
+  margin-bottom:22px;
+}
+
+.stat-box{
+  position:relative;
+  overflow:hidden;
+  border-radius:22px;
+  color:#fff;
+  padding:19px;
+  min-height:120px;
+  box-shadow:0 14px 28px rgba(15,23,42,.12);
+}
+
+.stat-box:after{
+  content:"";
+  position:absolute;
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  right:-32px;
+  bottom:-32px;
+  background:rgba(255,255,255,.18);
+}
+
+.stat-box h2{
+  margin:0;
+  font-size:34px;
+  line-height:1;
+  position:relative;
+  z-index:2;
+}
+
+.stat-box p{
+  margin:8px 0 0;
+  font-weight:900;
+  color:rgba(255,255,255,.90);
+  position:relative;
+  z-index:2;
+}
+
+.bg-te{background:linear-gradient(135deg,#16a34a,#22c55e)}
+.bg-tx{background:linear-gradient(135deg,#15803d,#16a34a)}
+.bg-ne{background:linear-gradient(135deg,#ef4444,#dc2626)}
+.bg-nx{background:linear-gradient(135deg,#b91c1c,#ef4444)}
+
+.table-wrap{
+  overflow:auto;
+  border:1px solid #e2e8f0;
+  border-radius:20px;
+  max-height:640px;
+}
+
+table{
+  width:100%;
+  min-width:1000px;
+  border-collapse:collapse;
+  background:#fff;
+}
+
+th,td{
+  padding:13px 14px;
+  text-align:left;
+  border-bottom:1px solid #edf2f7;
+  vertical-align:middle;
+  font-size:14px;
+}
+
+th{
+  position:sticky;
+  top:0;
+  z-index:4;
+  background:#0f172a;
+  color:#fff;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+tr:hover td{background:#f8fbff}
+tbody tr:last-child td{border-bottom:0}
+
+.badge-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:12px;
+  font-weight:900;
+}
+
+.pill-green{background:#dcfce7;color:#166534}
+.pill-red{background:#fee2e2;color:#991b1b}
+.pill-blue{background:#dbeafe;color:#1e40af}
+.pill-orange{background:#ffedd5;color:#9a3412}
+
+.empty{
+  text-align:center;
+  padding:34px;
+  color:#64748b;
+  font-weight:850;
+}
+
+.loader{
+  display:inline-block;
+  width:18px;
+  height:18px;
+  border:3px solid rgba(37,99,235,.25);
+  border-top-color:#2563eb;
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.footer-note{
+  text-align:center;
+  color:#64748b;
+  font-size:14px;
+  padding:10px 0 28px;
+}
+
+@media(max-width:1180px){
+  .main-grid{grid-template-columns:1fr}
+  .hero-row{grid-template-columns:1fr}
+  .toolbar{grid-template-columns:1fr 1fr}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:760px){
+  .topbar-inner,.page{width:min(100% - 24px,1600px)}
+  .nav-actions{display:none}
+  .hero,.card{padding:18px;border-radius:22px}
+  .form-grid,.input-row,.toolbar,.stat-grid,.hero-mini{grid-template-columns:1fr}
+  table{min-width:860px}
+}
+
+@media print{
+  .topbar,.hero,.task-card,.toolbar,.btn,.footer-note{display:none!important}
+  body{background:#fff}
+  .page{width:100%;padding:0}
+  .main-grid{display:block}
+  .card{box-shadow:none;border:0;padding:0;margin:0}
+  .table-wrap{max-height:none;border:0}
+  th{background:#eee!important;color:#111!important}
+}
+</style>
+</head>
+
+<body>
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-icon">👨‍🏫</span>
+      <span>O‘qituvchi Paneli</span>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn btn-muted">← Bosh sahifa</a>
+      <a href="https://docs.google.com/spreadsheets/d/1Vi6vzK6UGo4173RFe7dWAN9mKWLyMFYWEThYHuOlo5Q/edit?gid=1297629121#gid=1297629121" target="_blank" rel="noopener" class="btn btn-white">📂 Jadval bazasi</a>
+      <button class="btn btn-blue" onclick="loadResults()">🔄 Yangilash</button>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+  <section class="hero">
+    <div class="badge">Media-monitoring · O‘qituvchi boshqaruv paneli</div>
+    <h1>Topshiriq yuborish va o‘quvchilar natijalarini kuzatish</h1>
+    <p>Bu panel orqali o‘qituvchi pre-test yoki post-test vazifasini yuboradi, media havola biriktiradi, vaqt va savollar sonini belgilaydi hamda tajriba va nazorat guruhlari natijalarini real vaqtga yaqin kuzatadi.</p>
+    <div class="hero-row">
+      <div class="hero-mini">
+        <div class="mini-stat"><b id="heroTotal">0</b><span>jami natija</span></div>
+        <div class="mini-stat"><b id="heroAvg">0%</b><span>o‘rtacha ball</span></div>
+        <div class="mini-stat"><b id="heroPre">0</b><span>pre-test</span></div>
+        <div class="mini-stat"><b id="heroPost">0</b><span>post-test</span></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="btn btn-white" onclick="scrollToTask()">🚀 Topshiriq yaratish</button>
+        <button class="btn btn-green" onclick="exportCSV()">⬇ CSV yuklab olish</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="stat-grid">
+    <div class="stat-box bg-te"><h2 id="count_te">0</h2><p>Tajriba guruhi · Pre-test</p></div>
+    <div class="stat-box bg-tx"><h2 id="count_tx">0</h2><p>Tajriba guruhi · Post-test</p></div>
+    <div class="stat-box bg-ne"><h2 id="count_ne">0</h2><p>Nazorat guruhi · Pre-test</p></div>
+    <div class="stat-box bg-nx"><h2 id="count_nx">0</h2><p>Nazorat guruhi · Post-test</p></div>
+  </section>
+
+  <div class="main-grid">
+    <section class="task-card">
+      <div class="card" id="taskCard">
+        <div class="card-head">
+          <div>
+            <h2 class="section-title">📝 Yangi topshiriq yuborish</h2>
+            <p class="lead">O‘quvchilar sahifasida ko‘rinadigan topshiriq matni, media turi, media havolasi va test sozlamalarini belgilang.</p>
+          </div>
+        </div>
+
+        <div class="settings">
+          <div class="form-grid">
+            <div>
+              <label for="t_time_limit">⏱ Test vaqti (minut)</label>
+              <input type="number" id="t_time_limit" value="15" min="1" max="180">
+            </div>
+            <div>
+              <label for="t_q_count">🧩 Savollar soni</label>
+              <input type="number" id="t_q_count" value="20" min="5" max="60">
+            </div>
+            <div>
+              <label for="t_media_type">🔗 Media turi</label>
+              <select id="t_media_type" onchange="toggleMediaRequirement(); updatePreview();">
+                <option value="none">Media yo‘q</option>
+                <option value="telegram">Telegram post</option>
+                <option value="video">YouTube video</option>
+                <option value="instagram">Instagram post</option>
+                <option value="facebook">Facebook post</option>
+                <option value="image">Rasm havolasi</option>
+                <option value="website">Veb-sahifa</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <label for="t_text">Topshiriq matni</label>
+        <textarea id="t_text" placeholder="Masalan: Quyidagi xabarni manba, sana, dalil, hissiy bosim va axborot etikasi mezonlari asosida tahlil qiling..." oninput="updatePreview()"></textarea>
+
+        <label for="t_media_url">Media havola</label>
+        <input type="url" id="t_media_url" placeholder="https://..." oninput="updatePreview()">
+
+        <div class="input-row" style="margin-top:12px">
+          <div>
+            <label for="t_phase">Bosqich</label>
+            <select id="t_phase" onchange="updatePreview()">
+              <option value="Pre-test">Pre-test</option>
+              <option value="Post-test">Post-test</option>
+            </select>
+          </div>
+          <button class="btn btn-blue" onclick="sendTask()">🚀 O‘quvchilarga tarqatish</button>
+        </div>
+
+        <div id="statusBox" class="status-box"></div>
+
+        <div class="preview" id="previewBox">
+          <h3>👁 Topshiriq oldindan ko‘rinishi</h3>
+          <p id="previewText">Topshiriq matni hali kiritilmagan.</p>
+          <div class="preview-link" id="previewMeta">Bosqich: Pre-test · Media: media yo‘q</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2 class="section-title">📊 Natijalar jadvali</h2>
+            <p class="lead" id="lastUpdateText">Natijalar hali yuklanmagan.</p>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+            <button class="btn btn-green" onclick="loadResults()">🔄 Yangilash</button>
+            <button class="btn btn-dark" onclick="window.print()">🖨 Chop etish</button>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div>
+            <label for="searchInput">Qidirish</label>
+            <input id="searchInput" placeholder="Ism, sinf, guruh yoki bosqich..." oninput="renderTable()">
+          </div>
+          <div>
+            <label for="groupFilter">Guruh</label>
+            <select id="groupFilter" onchange="renderTable()">
+              <option value="">Hammasi</option>
+              <option value="Tajriba">Tajriba</option>
+              <option value="Nazorat">Nazorat</option>
+            </select>
+          </div>
+          <div>
+            <label for="phaseFilter">Bosqich</label>
+            <select id="phaseFilter" onchange="renderTable()">
+              <option value="">Hammasi</option>
+              <option value="Pre-test">Pre-test</option>
+              <option value="Post-test">Post-test</option>
+            </select>
+          </div>
+          <button class="btn btn-orange" onclick="clearFilters()">Filtrni tozalash</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Ism Sharif</th>
+                <th>Sinf</th>
+                <th>Hudud</th>
+                <th>Guruh</th>
+                <th>Bosqich</th>
+                <th>Ball</th>
+                <th>Daraja</th>
+                <th>Vaqt</th>
+              </tr>
+            </thead>
+            <tbody id="resultsBody">
+              <tr><td colspan="9" class="empty"><span class="loader"></span> Yuklanmoqda...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="footer-note">O‘qituvchi paneli · Media-monitoring va axborot iste’moli madaniyati diagnostikasi</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycby8iPtcZuk_gTUDLFiz6BFT-49huUt6NoUieuGptW837jUIl0rnx4jKq4txwCUoRH7VFQ/exec";
+
+let allRows = [];
+let isLoading = false;
+let refreshTimer = null;
+
+function showStatus(text, type="info"){
+  const sb = document.getElementById("statusBox");
+  sb.textContent = text;
+  sb.className = "status-box status-" + type;
+  if(type !== "info"){
+    setTimeout(() => {
+      sb.style.display = "none";
+      sb.className = "status-box";
+    }, 5000);
+  }
+}
+
+function normalizeMediaType(type){
+  const map = {
+    none:"Media yo‘q",
+    telegram:"Telegram post",
+    video:"YouTube video",
+    instagram:"Instagram post",
+    facebook:"Facebook post",
+    image:"Rasm havolasi",
+    website:"Veb-sahifa"
+  };
+  return map[type] || type || "Media yo‘q";
+}
+
+function toggleMediaRequirement(){
+  const type = document.getElementById("t_media_type").value;
+  const url = document.getElementById("t_media_url");
+  if(type === "none"){
+    url.placeholder = "Media tanlanmagan — link shart emas";
+  }else{
+    url.placeholder = "https://...";
+  }
+}
+
+function updatePreview(){
+  const text = document.getElementById("t_text").value.trim();
+  const mediaType = document.getElementById("t_media_type").value;
+  const phase = document.getElementById("t_phase").value;
+  const url = document.getElementById("t_media_url").value.trim();
+  document.getElementById("previewText").textContent = text || "Topshiriq matni hali kiritilmagan.";
+  document.getElementById("previewMeta").textContent =
+    "Bosqich: " + phase + " · Media: " + normalizeMediaType(mediaType) + (url ? " · Link: " + url : "");
+}
+
+function validateTask(){
+  const text = document.getElementById("t_text").value.trim();
+  const mediaType = document.getElementById("t_media_type").value;
+  const url = document.getElementById("t_media_url").value.trim();
+  const time = Number(document.getElementById("t_time_limit").value);
+  const count = Number(document.getElementById("t_q_count").value);
+
+  if(text.length < 15){
+    alert("Topshiriq matnini kamida 15 ta belgidan iborat qilib yozing.");
+    return false;
+  }
+  if(!Number.isFinite(time) || time < 1 || time > 180){
+    alert("Test vaqti 1–180 minut oralig‘ida bo‘lishi kerak.");
+    return false;
+  }
+  if(!Number.isFinite(count) || count < 5 || count > 60){
+    alert("Savollar soni 5–60 oralig‘ida bo‘lishi kerak.");
+    return false;
+  }
+  if(mediaType !== "none"){
+    if(!url){
+      alert("Media turi tanlangan. Iltimos, media havolani kiriting.");
+      return false;
+    }
+    try{
+      new URL(url);
+    }catch(e){
+      alert("Media havola to‘g‘ri URL formatida bo‘lishi kerak: https://...");
+      return false;
+    }
+  }
+  return true;
+}
+
+async function sendTask(){
+  if(!validateTask()) return;
+
+  showStatus("Topshiriq yuborilmoqda...", "info");
+
+  const query = new URLSearchParams({
+    action: "saveTask",
+    text: document.getElementById("t_text").value.trim(),
+    phase: document.getElementById("t_phase").value,
+    m_type: document.getElementById("t_media_type").value,
+    m_url: document.getElementById("t_media_url").value.trim(),
+    time_limit: document.getElementById("t_time_limit").value,
+    q_count: document.getElementById("t_q_count").value
+  }).toString();
+
+  try{
+    await fetch(`${API_URL}?${query}`, { method:"GET", mode:"no-cors" });
+
+    localStorage.setItem("lastTeacherTask", JSON.stringify({
+      text: document.getElementById("t_text").value.trim(),
+      phase: document.getElementById("t_phase").value,
+      mediaType: document.getElementById("t_media_type").value,
+      mediaUrl: document.getElementById("t_media_url").value.trim(),
+      timeLimit: document.getElementById("t_time_limit").value,
+      questionCount: document.getElementById("t_q_count").value,
+      createdAt: new Date().toISOString()
+    }));
+
+    showStatus("Topshiriq yuborildi! ✅", "success");
+    document.getElementById("t_text").value = "";
+    document.getElementById("t_media_url").value = "";
+    updatePreview();
+  }catch(e){
+    console.warn(e);
+    showStatus("Topshiriq yuborilgan bo‘lishi mumkin, ammo aloqa javobi olinmadi. Jadvalni tekshiring. ✅", "success");
+  }
+}
+
+function safeText(v){
+  return (v === null || v === undefined || v === "") ? "-" : String(v);
+}
+
+function scoreLevel(score){
+  const n = Number(score);
+  if(!Number.isFinite(n)) return ["—","pill-orange"];
+  if(n >= 85) return ["Yuqori","pill-green"];
+  if(n >= 60) return ["O‘rta","pill-blue"];
+  return ["Boshlang‘ich","pill-orange"];
+}
+
+function parseRow(row, index){
+  return {
+    index,
+    timeRaw: row[0],
+    name: safeText(row[1]),
+    group: safeText(row[2]),
+    phase: safeText(row[6]),
+    score: safeText(row[7]),
+    grade: safeText(row[9]),
+    region: safeText(row[10] || row[3]),
+    district: safeText(row[11] || row[4]),
+    school: safeText(row[12] || row[5])
+  };
+}
+
+async function loadResults(){
+  if(isLoading) return;
+  isLoading = true;
+  const body = document.getElementById("resultsBody");
+  body.innerHTML = `<tr><td colspan="9" class="empty"><span class="loader"></span> Natijalar yuklanmoqda...</td></tr>`;
+
+  try{
+    const r = await fetch(API_URL + "?type=getResults", { cache:"no-store" });
+    const d = await r.json();
+
+    if(Array.isArray(d) && d.length > 1){
+      allRows = [];
+      for(let i = d.length - 1; i >= 1; i--){
+        allRows.push(parseRow(d[i], d.length - i));
+      }
+      localStorage.setItem("teacherPanelResultsBackup", JSON.stringify(allRows));
+    }else{
+      allRows = [];
+    }
+
+    renderTable();
+    updateLastTime(true);
+  }catch(e){
+    console.warn(e);
+    const cached = localStorage.getItem("teacherPanelResultsBackup");
+    if(cached){
+      allRows = JSON.parse(cached);
+      renderTable();
+      updateLastTime(false, "API ulanmagan. Oxirgi saqlangan natijalar ko‘rsatildi.");
+    }else{
+      allRows = [];
+      renderTable("API ulanmagan va lokal zaxira topilmadi.");
+      updateStats([]);
+    }
+  }finally{
+    isLoading = false;
+  }
+}
+
+function getFilteredRows(){
+  const q = document.getElementById("searchInput").value.toLowerCase().trim();
+  const gf = document.getElementById("groupFilter").value;
+  const pf = document.getElementById("phaseFilter").value;
+
+  return allRows.filter(row => {
+    const matchQ = !q || Object.values(row).join(" ").toLowerCase().includes(q);
+    const matchG = !gf || row.group === gf;
+    const matchP = !pf || row.phase === pf;
+    return matchQ && matchG && matchP;
+  });
+}
+
+function renderTable(customEmpty="Natijalar topilmadi."){
+  const rows = getFilteredRows();
+  const body = document.getElementById("resultsBody");
+
+  if(!rows.length){
+    body.innerHTML = `<tr><td colspan="9" class="empty">${customEmpty}</td></tr>`;
+    updateStats(allRows);
+    return;
+  }
+
+  body.innerHTML = rows.map((row, i) => {
+    const [level, levelClass] = scoreLevel(row.score);
+    const groupClass = row.group === "Tajriba" ? "pill-green" : row.group === "Nazorat" ? "pill-red" : "pill-orange";
+    const phaseClass = row.phase === "Post-test" ? "pill-blue" : "pill-orange";
+
+    return `<tr>
+      <td>${i+1}</td>
+      <td><b>${row.name}</b></td>
+      <td>${row.grade}</td>
+      <td>${row.region}${row.district !== "-" ? " / " + row.district : ""}</td>
+      <td><span class="badge-pill ${groupClass}">${row.group}</span></td>
+      <td><span class="badge-pill ${phaseClass}">${row.phase}</span></td>
+      <td><b style="color:var(--blue)">${row.score}%</b></td>
+      <td><span class="badge-pill ${levelClass}">${level}</span></td>
+      <td>${formatTime(row.timeRaw)}</td>
+    </tr>`;
+  }).join("");
+
+  updateStats(allRows);
+}
+
+function formatTime(value){
+  if(!value || value === "-") return "-";
+  const d = new Date(value);
+  if(isNaN(d.getTime())) return safeText(value);
+  return d.toLocaleDateString("uz-UZ") + " " + d.toLocaleTimeString("uz-UZ", {hour:"2-digit", minute:"2-digit"});
+}
+
+function updateStats(rows){
+  const st = { te:0, tx:0, ne:0, nx:0, pre:0, post:0, total:rows.length, sum:0, scored:0 };
+
+  rows.forEach(row => {
+    const group = row.group;
+    const phase = row.phase;
+
+    if(group === "Tajriba" && phase === "Pre-test") st.te++;
+    if(group === "Tajriba" && phase === "Post-test") st.tx++;
+    if(group === "Nazorat" && phase === "Pre-test") st.ne++;
+    if(group === "Nazorat" && phase === "Post-test") st.nx++;
+    if(phase === "Pre-test") st.pre++;
+    if(phase === "Post-test") st.post++;
+
+    const score = Number(row.score);
+    if(Number.isFinite(score)){
+      st.sum += score;
+      st.scored++;
+    }
+  });
+
+  document.getElementById("count_te").textContent = st.te;
+  document.getElementById("count_tx").textContent = st.tx;
+  document.getElementById("count_ne").textContent = st.ne;
+  document.getElementById("count_nx").textContent = st.nx;
+  document.getElementById("heroTotal").textContent = st.total;
+  document.getElementById("heroPre").textContent = st.pre;
+  document.getElementById("heroPost").textContent = st.post;
+  document.getElementById("heroAvg").textContent = st.scored ? Math.round(st.sum / st.scored) + "%" : "0%";
+}
+
+function updateLastTime(ok=true, msg=""){
+  const el = document.getElementById("lastUpdateText");
+  const now = new Date().toLocaleTimeString("uz-UZ", {hour:"2-digit", minute:"2-digit"});
+  el.textContent = msg || (ok ? "Oxirgi yangilanish: " + now : "Lokal zaxira ko‘rsatildi: " + now);
+}
+
+function clearFilters(){
+  document.getElementById("searchInput").value = "";
+  document.getElementById("groupFilter").value = "";
+  document.getElementById("phaseFilter").value = "";
+  renderTable();
+}
+
+function exportCSV(){
+  const rows = getFilteredRows();
+  if(!rows.length){
+    alert("Eksport qilish uchun natija yo‘q.");
+    return;
+  }
+
+  const headers = ["Ism Sharif","Sinf","Hudud","Tuman","Maktab","Guruh","Bosqich","Ball","Vaqt"];
+  const csv = [
+    headers.join(","),
+    ...rows.map(r => [
+      r.name,r.grade,r.region,r.district,r.school,r.group,r.phase,r.score,formatTime(r.timeRaw)
+    ].map(v => `"${String(v).replaceAll('"','""')}"`).join(","))
+  ].join("\n");
+
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "media_monitoring_natijalar.csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function scrollToTask(){
+  document.getElementById("taskCard").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function restoreLastTask(){
+  const raw = localStorage.getItem("lastTeacherTask");
+  if(!raw) return;
+  try{
+    const t = JSON.parse(raw);
+    if(!t || !t.text) return;
+    const ok = confirm("Oxirgi yuborilgan topshiriqni formaga qayta tiklaysizmi?");
+    if(!ok) return;
+    document.getElementById("t_text").value = t.text || "";
+    document.getElementById("t_phase").value = t.phase || "Pre-test";
+    document.getElementById("t_media_type").value = t.mediaType || "none";
+    document.getElementById("t_media_url").value = t.mediaUrl || "";
+    document.getElementById("t_time_limit").value = t.timeLimit || 15;
+    document.getElementById("t_q_count").value = t.questionCount || 20;
+    toggleMediaRequirement();
+    updatePreview();
+  }catch(e){}
+}
+
+toggleMediaRequirement();
+updatePreview();
+loadResults();
+refreshTimer = setInterval(loadResults, 30000);
+setTimeout(restoreLastTask, 800);
+</script>
+</body>
+</html>

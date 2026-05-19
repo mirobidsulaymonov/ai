@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Media-madaniyat: 110 ta interaktiv karta</title>
+  <style>
+    :root {
+      --primary:#0f172a;
+      --muted:#64748b;
+      --blue:#2563eb;
+      --blue2:#0ea5e9;
+      --orange:#f97316;
+      --green:#16a34a;
+      --red:#ef4444;
+      --purple:#7c3aed;
+      --gold:#b7950b;
+      --card:#ffffff;
+      --border:#dbe4f0;
+      --shadow:0 18px 45px rgba(15,23,42,.10);
+      --radius:26px;
+    }
+
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      margin:0;
+      font-family: Arial, "Segoe UI", sans-serif;
+      color:var(--primary);
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.12), transparent 30%),
+        radial-gradient(circle at top right, rgba(124,58,237,.10), transparent 28%),
+        linear-gradient(180deg,#f8fbff 0%,#eef5ff 46%,#f8fafc 100%);
+      line-height:1.65;
+    }
+
+    .navbar {
+      position:sticky;
+      top:0;
+      z-index:80;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 8px 24px rgba(15,23,42,.05);
+    }
+
+    .nav-inner {
+      width:min(1320px,calc(100% - 32px));
+      min-height:74px;
+      margin:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:var(--primary);
+      font-weight:900;
+      letter-spacing:-.035em;
+      font-size:18px;
+    }
+
+    .brand-icon {
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      background:linear-gradient(135deg,var(--blue),var(--purple));
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 10px 24px rgba(37,99,235,.22);
+      font-size:22px;
+    }
+
+    .nav-links {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .nav-links a {
+      text-decoration:none;
+      color:#334155;
+      font-weight:800;
+      font-size:14px;
+      padding:9px 12px;
+      border-radius:999px;
+      transition:.2s ease;
+    }
+
+    .nav-links a:hover {
+      background:#eff6ff;
+      color:var(--blue);
+    }
+
+    .container {
+      width:min(1320px,calc(100% - 32px));
+      margin:auto;
+    }
+
+    .hero {
+      padding:22px 0 14px;
+    }
+
+    .hero-card {
+      position:relative;
+      overflow:hidden;
+      border-radius:34px;
+      background:linear-gradient(135deg,#0f172a 0%,#1d4ed8 44%,#7c3aed 100%);
+      color:#fff;
+      padding:28px 30px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero-card::before,
+    .hero-card::after {
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.10);
+    }
+
+    .hero-card::before {
+      width:260px;
+      height:260px;
+      right:-88px;
+      top:-88px;
+    }
+
+    .hero-card::after {
+      width:180px;
+      height:180px;
+      left:-64px;
+      bottom:-78px;
+    }
+
+    .badge {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(255,255,255,.15);
+      color:#dbeafe;
+      border:1px solid rgba(255,255,255,.20);
+      padding:8px 13px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:900;
+      margin-bottom:14px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-card h1 {
+      margin:0 0 12px;
+      font-size:clamp(28px,3.7vw,48px);
+      line-height:1.05;
+      letter-spacing:-.055em;
+      font-weight:900;
+      position:relative;
+      z-index:2;
+      max-width:1020px;
+    }
+
+    .hero-card p {
+      margin:0;
+      color:#dbeafe;
+      font-size:17px;
+      max-width:1000px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:16px;
+      position:relative;
+      z-index:2;
+    }
+
+    .btn {
+      border:0;
+      border-radius:15px;
+      padding:13px 18px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.2s ease;
+      font-size:15px;
+      font-family:inherit;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      text-decoration:none;
+    }
+
+    .btn:hover {
+      transform:translateY(-2px);
+      box-shadow:0 10px 22px rgba(15,23,42,.12);
+    }
+
+    .btn-primary { background:linear-gradient(135deg,var(--blue),var(--blue2)); color:#fff; }
+    .btn-white { background:#fff; color:#1d4ed8; }
+    .btn-dark { background:#0f172a; color:#fff; }
+    .btn-muted { background:#f1f5f9; color:#334155; border:1px solid #e2e8f0; }
+    .btn-success { background:linear-gradient(135deg,#16a34a,#22c55e); color:#fff; }
+
+    .panel {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:22px;
+      box-shadow:var(--shadow);
+      margin-bottom:22px;
+    }
+
+    .section-title {
+      margin:0 0 14px;
+      font-size:26px;
+      line-height:1.2;
+      letter-spacing:-.04em;
+      font-weight:900;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .lead {
+      margin:-4px 0 18px;
+      color:var(--muted);
+      font-size:17px;
+      font-weight:650;
+    }
+
+    .stats {
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .stat-card {
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:22px;
+      padding:15px;
+      background:rgba(255,255,255,.12);
+      color:#fff;
+      min-height:92px;
+      position:relative;
+      z-index:2;
+    }
+
+    .stat-card b {
+      display:block;
+      font-size:25px;
+      line-height:1;
+      margin-bottom:7px;
+    }
+
+    .stat-card span {
+      color:#dbeafe;
+      font-weight:800;
+      font-size:14px;
+    }
+
+    .toolbar {
+      display:grid;
+      grid-template-columns:1.1fr 2fr auto;
+      gap:12px;
+      align-items:center;
+      position:sticky;
+      top:88px;
+      z-index:60;
+    }
+
+    .search {
+      position:relative;
+    }
+
+    .search input {
+      width:100%;
+      border:1px solid #cbd5e1;
+      border-radius:18px;
+      padding:14px 16px 14px 45px;
+      font-size:15px;
+      font-family:inherit;
+      outline:none;
+      transition:.2s ease;
+      background:#fff;
+    }
+
+    .search input:focus {
+      border-color:var(--blue);
+      box-shadow:0 0 0 4px rgba(37,99,235,.12);
+    }
+
+    .search span {
+      position:absolute;
+      left:16px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#64748b;
+      font-weight:900;
+    }
+
+    .filters {
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+    }
+
+    .filter {
+      border:1px solid #e2e8f0;
+      background:#fff;
+      color:#334155;
+      border-radius:999px;
+      padding:10px 13px;
+      font-weight:900;
+      cursor:pointer;
+      font-size:13px;
+      transition:.2s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+    }
+
+    .filter:hover {
+      transform:translateY(-2px);
+      border-color:#bfdbfe;
+      background:#eff6ff;
+    }
+
+    .filter.active {
+      background:#0f172a;
+      color:#fff;
+      border-color:#0f172a;
+    }
+
+    .counter {
+      color:#64748b;
+      font-weight:900;
+      white-space:nowrap;
+      text-align:right;
+    }
+
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:20px;
+      padding-bottom:38px;
+    }
+
+    .flip-card {
+      background:transparent;
+      min-height:350px;
+      perspective:1200px;
+    }
+
+    .flip-inner {
+      position:relative;
+      width:100%;
+      height:100%;
+      min-height:350px;
+      transition:transform .65s;
+      transform-style:preserve-3d;
+      border-radius:24px;
+    }
+
+    .flip-card:hover .flip-inner,
+    .flip-card.flipped .flip-inner {
+      transform:rotateY(180deg);
+    }
+
+    .face {
+      position:absolute;
+      inset:0;
+      backface-visibility:hidden;
+      border-radius:24px;
+      padding:22px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      box-shadow:0 12px 28px rgba(15,23,42,.08);
+      border:1px solid #e2e8f0;
+      overflow:hidden;
+    }
+
+    .front {
+      background:#fff;
+    }
+
+    .front::after {
+      content:"";
+      position:absolute;
+      right:-45px;
+      bottom:-45px;
+      width:140px;
+      height:140px;
+      border-radius:50%;
+      background:rgba(37,99,235,.08);
+    }
+
+    .back {
+      transform:rotateY(180deg);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.18);
+    }
+
+    .cat-tag {
+      position:absolute;
+      top:16px;
+      left:16px;
+      color:#fff;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.03em;
+      z-index:2;
+    }
+
+    .num {
+      position:absolute;
+      top:16px;
+      right:16px;
+      width:42px;
+      height:32px;
+      border-radius:999px;
+      background:#f1f5f9;
+      color:#475569;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      font-size:13px;
+      z-index:2;
+    }
+
+    .icon {
+      font-size:58px;
+      margin:28px 0 18px;
+      position:relative;
+      z-index:2;
+    }
+
+    .front h3 {
+      font-size:18px;
+      line-height:1.35;
+      margin:0;
+      color:#0f172a;
+      letter-spacing:-.025em;
+      position:relative;
+      z-index:2;
+    }
+
+    .topic {
+      margin-top:12px;
+      color:#64748b;
+      font-weight:900;
+      font-size:13px;
+      position:relative;
+      z-index:2;
+    }
+
+    .back h4 {
+      margin:0 0 12px;
+      color:#fff;
+      font-size:20px;
+      letter-spacing:-.03em;
+    }
+
+    .back p {
+      margin:0;
+      font-size:17px;
+      line-height:1.55;
+      color:rgba(255,255,255,.92);
+      font-weight:750;
+    }
+
+    .mini-note {
+      margin-top:16px;
+      font-size:12px;
+      color:rgba(255,255,255,.72);
+      font-weight:900;
+    }
+
+    .practice-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+
+    .practice-card {
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:20px;
+      padding:15px;
+    }
+
+    .practice-card h3 {
+      margin:0 0 8px;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .practice-card p {
+      margin:0 0 12px;
+      color:#475569;
+      font-weight:700;
+    }
+
+    .choice {
+      display:block;
+      width:100%;
+      border:1px solid #e2e8f0;
+      background:#fff;
+      border-radius:14px;
+      padding:12px;
+      text-align:left;
+      cursor:pointer;
+      font-weight:800;
+      margin-top:8px;
+      color:#334155;
+      transition:.2s ease;
+      font-family:inherit;
+    }
+
+    .choice:hover {
+      background:#eff6ff;
+      border-color:#bfdbfe;
+    }
+
+    .choice.good {
+      background:#f0fdf4;
+      color:#166534;
+      border-color:#86efac;
+    }
+
+    .choice.bad {
+      background:#fef2f2;
+      color:#991b1b;
+      border-color:#fca5a5;
+    }
+
+    .result-box {
+      display:none;
+      margin-top:14px;
+      border-radius:18px;
+      padding:15px 16px;
+      font-weight:900;
+    }
+
+    .result-box.show {
+      display:block;
+      background:#f0fdf4;
+      color:#166534;
+      border:1px solid #bbf7d0;
+    }
+
+    footer {
+      text-align:center;
+      color:#64748b;
+      font-size:14px;
+      padding:0 0 38px;
+    }
+
+    @media (max-width:1180px) {
+      .grid { grid-template-columns:repeat(3,1fr); }
+      .stats { grid-template-columns:repeat(3,1fr); }
+      .toolbar { grid-template-columns:1fr; position:static; }
+      .counter { text-align:left; }
+    }
+
+    @media (max-width:860px) {
+      .grid { grid-template-columns:repeat(2,1fr); }
+      .practice-grid { grid-template-columns:1fr; }
+    }
+
+    @media (max-width:640px) {
+      .nav-links { display:none; }
+      .nav-inner { justify-content:center; }
+      .hero-card { padding:26px 22px; }
+      .grid { grid-template-columns:1fr; }
+      .stats { grid-template-columns:1fr; }
+      .panel { padding:15px; }
+    }
+
+    @media print {
+      .navbar,.toolbar,.hero-actions,.practice-section,footer { display:none !important; }
+      body { background:#fff; }
+      .grid { grid-template-columns:repeat(2,1fr); }
+      .flip-inner,.flip-card:hover .flip-inner,.flip-card.flipped .flip-inner { transform:none !important; }
+      .back { display:none; }
+      .face { position:relative; min-height:250px; page-break-inside:avoid; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-icon">🧩</span>
+        <span>Media-madaniyat kartalari</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Bosh sahifa</a>
+        <a href="#cards">Kartalar</a>
+        <a href="#practice">Mashq</a>
+        <a href="#stats">Statistika</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-card">
+        <div class="badge">🎓 110 ta interaktiv karta · 7–11-sinflar uchun</div>
+        <h1>Media-madaniyat va axborot xavfsizligi bo‘yicha interaktiv kartalar</h1>
+        <p>
+          Ushbu sahifa o‘quvchilarda axborotni tanqidiy qabul qilish, shaxsiy ma’lumotni himoya qilish,
+          internetda odobli muloqot qilish va feyk xabarlarni aniqlash ko‘nikmalarini rivojlantirishga xizmat qiladi.
+        </p>
+
+        <div class="stats" id="stats">
+          <div class="stat-card"><b>110</b><span>interaktiv savol-javob kartasi</span></div>
+          <div class="stat-card"><b>5</b><span>asosiy yo‘nalish</span></div>
+          <div class="stat-card"><b>7–11</b><span>sinf o‘quvchilari uchun mos</span></div>
+          <div class="stat-card"><b>Flip</b><span>ustiga bosib javobni ko‘rish</span></div>
+          <div class="stat-card"><b>Filter</b><span>qidirish va saralash imkoniyati</span></div>
+        </div>
+
+        <div class="hero-actions">
+          <a class="btn btn-white" href="#cards">Kartalarni boshlash</a>
+          <button class="btn btn-primary" onclick="shuffleCards()">Kartalarni aralashtirish</button>
+          <button class="btn btn-dark" onclick="window.print()">Chop etish / PDF</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel toolbar" id="cards">
+      <div class="search">
+        <span>🔍</span>
+        <input id="searchInput" type="text" placeholder="Karta mavzusi yoki savol bo‘yicha qidiring..." oninput="applyFilters()">
+      </div>
+
+      <div class="filters">
+        <button class="filter active" data-cat="all" onclick="setCategory('all', this)">🌐 Hammasi</button>
+        <button class="filter" data-cat="tech" onclick="setCategory('tech', this)">💻 Texnologik</button>
+        <button class="filter" data-cat="ethic" onclick="setCategory('ethic', this)">🤝 Etika</button>
+        <button class="filter" data-cat="legal" onclick="setCategory('legal', this)">⚖️ Huquqiy</button>
+        <button class="filter" data-cat="psych" onclick="setCategory('psych', this)">🧠 Psixologik</button>
+        <button class="filter" data-cat="media" onclick="setCategory('media', this)">📰 Media</button>
+      </div>
+
+      <div class="counter" id="counter">110 ta karta</div>
+    </section>
+
+    <section class="grid" id="cardGrid"></section>
+
+    <section class="panel practice-section" id="practice">
+      <h2 class="section-title">📝 Tezkor mustahkamlash mashqi</h2>
+      <p class="lead">
+        Kartalar bilan ishlagandan so‘ng o‘quvchilar quyidagi savollarga javob berib,
+        o‘z bilimini tekshiradi.
+      </p>
+
+      <div class="practice-grid">
+        <div class="practice-card">
+          <h3>1. “Siz yutuq yutdingiz, karta raqamingizni yuboring” degan SMS keldi.</h3>
+          <p>To‘g‘ri harakatni tanlang.</p>
+          <button class="choice" onclick="markChoice(this, true)">SMSni o‘chiraman, karta ma’lumotini bermayman.</button>
+          <button class="choice" onclick="markChoice(this, false)">Karta raqamim va SMS kodni yuboraman.</button>
+        </div>
+
+        <div class="practice-card">
+          <h3>2. Bir xabarda “Shok! Dahshat!” degan sarlavha bor.</h3>
+          <p>Bu nimaning belgisi bo‘lishi mumkin?</p>
+          <button class="choice" onclick="markChoice(this, false)">Bu har doim rasmiy va ishonchli xabar.</button>
+          <button class="choice" onclick="markChoice(this, true)">Bu klikbeyt yoki hissiy manipulyatsiya bo‘lishi mumkin.</button>
+        </div>
+
+        <div class="practice-card">
+          <h3>3. Do‘stingiz haqidagi shubhali videoni guruhga tashlashmoqchi.</h3>
+          <p>Axborot etikasi nuqtayi nazaridan nima qilasiz?</p>
+          <button class="choice" onclick="markChoice(this, true)">Tarqatmayman va boshqalarni ham to‘xtataman.</button>
+          <button class="choice" onclick="markChoice(this, false)">Ko‘proq odam ko‘rsin deb ulashaman.</button>
+        </div>
+
+        <div class="practice-card">
+          <h3>4. Internetdagi ma’lumot rostligini qanday tekshirish kerak?</h3>
+          <p>Eng to‘g‘ri javobni tanlang.</p>
+          <button class="choice" onclick="markChoice(this, false)">Ko‘p odam ulashgan bo‘lsa, demak rost.</button>
+          <button class="choice" onclick="markChoice(this, true)">Bir nechta ishonchli manba bilan solishtiraman.</button>
+        </div>
+      </div>
+
+      <div id="practiceResult" class="result-box"></div>
+    </section>
+  </main>
+
+  <footer class="container">
+    Media-madaniyat kartalari · Axborot iste’moli madaniyatini rivojlantirish uchun interaktiv sahifa
+  </footer>
+
+  <script>
+    const cards = [{"i": "✉️", "t": "Fishing", "q": "Sizga “Yutuq yutdingiz, plastik karta raqamingizni yuboring” degan SMS keldi.", "a": "Bu fishing. Hech qachon karta raqami, PIN, SMS-kod yoki pasport ma’lumotini yubormang.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "📢", "t": "Klikbeyt", "q": "Rasmda qizil doira va “DAHSHAT!” so‘zi bor. Nima qilasiz?", "a": "Bu hissiy tuzoq bo‘lishi mumkin. Avval sarlavhaga emas, manba va dalilga qarang.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🤐", "t": "Etika", "q": "Do‘stingiz haqida shubhali videoni guruhga tashlamoqchisiz.", "a": "Buni tarqatmang. Shaxsiy hayot daxlsizligini hurmat qilish — axborot madaniyatining muhim qoidasi.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "🔐", "t": "Parol xavfsizligi", "q": "Hamma ijtimoiy tarmoqlarga bir xil parol qo‘yish xavfsizmi?", "a": "Yo‘q. Bitta akkaunt buzilsa, qolganlari ham xavf ostida qoladi. Har bir akkauntga alohida parol qo‘ying.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "📶", "t": "Jamoat Wi‑Fi", "q": "Bepul Wi‑Fi orqali bank ilovasiga kirish xavfsizmi?", "a": "Xavfli. Ochiq Wi‑Fi’da ma’lumotlar kuzatilishi mumkin. Bank amaliyotlarini shaxsiy internet orqali bajaring.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "📍", "t": "Geolokatsiya", "q": "Har bir rasmga joylashuvni qo‘shib yuklash to‘g‘rimi?", "a": "Yo‘q. Bu sizning qayerda ekaningizni begonalarga ko‘rsatib qo‘yadi.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🏥", "t": "Salomatlik reklamalari", "q": "Internetdagi “1 kunda davolaydi” degan reklamaga ishonasizmi?", "a": "Faqat rasmiy tibbiyot va mutaxassis tavsiyasiga ishoning. Bunday reklamalar ko‘pincha manipulyatsiya bo‘ladi.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "⚖️", "t": "Huquqiy javobgarlik", "q": "Internetda birovni haqorat qilish jazosiz qoladimi?", "a": "Yo‘q. Onlayn haqorat ham javobgarlikka sabab bo‘lishi mumkin. Fikr bildiring, lekin shaxsni kamsitmang.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "🕵️", "t": "Ijtimoiy muhandislik", "q": "Notanish profil do‘stlik yubordi, rasmida chiroyli model.", "a": "Bu soxta profil bo‘lishi mumkin. Begona odamga shaxsiy ma’lumot bermang.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🛡️", "t": "Antivirus", "q": "Kompyuterga antivirus o‘rnatish kerakmi?", "a": "Ha. Antivirus zararli dasturlar, josus fayllar va fishing havolalarini aniqlashga yordam beradi.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🛒", "t": "Onlayn savdo", "q": "Instagramda juda arzon tovar ko‘rdingiz, oldindan to‘lov so‘rashdi.", "a": "Ehtiyot bo‘ling. Do‘kon tarixi, izohlar, manzil va to‘lov xavfsizligini tekshiring.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🎙️", "t": "Deepfake audio", "q": "Tanishingiz ovozi bilan “pul yubor” degan audio xabar keldi.", "a": "Bu AI orqali yaratilgan soxta audio bo‘lishi mumkin. Telefon qilib, shaxsan tasdiqlang.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🔇", "t": "Vahima xabari", "q": "Guruhda “Ertaga non qimmatlaydi” degan xabar tarqaldi.", "a": "Rasmiy manbani tekshirmasdan tarqatmang. Vahima axborot madaniyatiga zid.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "👣", "t": "Raqamli iz", "q": "Profilni o‘chirsam, internetdagi barcha izlar yo‘qoladimi?", "a": "Har doim ham emas. Skrinshotlar, arxivlar va qayta ulashishlar qolishi mumkin.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "📁", "t": "Hujjat xavfsizligi", "q": "Chet elda ish uchun pasport nusxasini Telegramdan yuborish so‘raldi.", "a": "Ehtiyot bo‘ling. Hujjat nusxasi firibgarlikda ishlatilishi mumkin. Faqat rasmiy va tekshirilgan kanaldan foydalaning.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "🛑", "t": "Zararli saytlar", "q": "Shubhali saytda 18+ yoki qimor reklamasi chiqdi. Nima qilasiz?", "a": "Darhol yoping. Bunday saytlar virus, fishing va zararli kontent manbai bo‘lishi mumkin.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "👨‍👩‍👧", "t": "Ota‑ona nazorati", "q": "Bolaga internetdan cheksiz foydalanish imkonini berish to‘g‘rimi?", "a": "Yo‘q. Vaqt me’yori, xavfsiz kontent va ota‑ona nazorati muhim.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "📜", "t": "Ilova ruxsatlari", "q": "Ilovani o‘rnatishda “roziman” tugmasini o‘qimay bosasizmi?", "a": "O‘qing. Ilova kontaktlar, kamera, mikrofon yoki joylashuvga ruxsat so‘rashi mumkin.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "🔍", "t": "Fakt tekshirish", "q": "Ma’lumot rostligini qanday tezda bilish mumkin?", "a": "Kamida 2–3 ta ishonchli va mustaqil manba bilan solishtiring.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🧠", "t": "Tanqidiy fikrlash", "q": "Media‑madaniyatli insonning asosiy quroli nima?", "a": "Tanqidiy fikrlash: har bir xabarni manba, dalil va maqsad asosida tahlil qilish.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "📷", "t": "Daxlsizlik", "q": "Ko‘chada birovni ruxsatsiz videoga olib tarqatish mumkinmi?", "a": "Yo‘q. Bu shaxsiy hayot daxlsizligini buzishi mumkin.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "🎮", "t": "Onlayn o‘yinlar", "q": "Onlayn o‘yinda tanishgan odamga manzilingizni aytasizmi?", "a": "Yo‘q. U o‘zini boshqa odam qilib ko‘rsatishi mumkin.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🔄", "t": "Yangilanish", "q": "Telefon dasturlarini yangilab turish shartmi?", "a": "Ha. Yangilanishlar xavfsizlikdagi kamchiliklarni yopadi.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "💰", "t": "Xayriya", "q": "Guruhlarda tarqalgan “kasal bolaga yordam” kartalariga ishonasizmi?", "a": "Avval fond, hujjat va rasmiy ma’lumotlarni tekshiring. Firibgarlar bundan foydalanishi mumkin.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "🎭", "t": "Trollar", "q": "Izohlarda sizni haqorat qilishsa, bahslashasizmi?", "a": "Yo‘q. Troll maqsadi — sizni janjalga tortish. Bloklang va shikoyat qiling.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🔗", "t": "Virusli link", "q": "Tanishingizdan “bu sening rasmingmi?” degan link keldi.", "a": "Ochmang. Akkauntingizni o‘g‘irlashga mo‘ljallangan havola bo‘lishi mumkin.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🕰️", "t": "Raqamli gigiyena", "q": "Internetda cheksiz vaqt o‘tkazish media‑madaniyatga kiradimi?", "a": "Yo‘q. Raqamli gigiyena vaqtni me’yorlash va diqqatni boshqarishni talab qiladi.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "🛂", "t": "Mualliflik", "q": "Birovning maqolasini o‘ziniki qilib ko‘rsatish nima?", "a": "Bu plagiat. Har doim muallif va manbaga havola bering.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "📬", "t": "E‑mail xavfsizligi", "q": "Noma’lum manzildan kelgan faylni yuklab olish xavflimi?", "a": "Ha. Faylda zararli dastur bo‘lishi mumkin. Avval manbani tekshiring.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🌟", "t": "Media‑savodxon jamiyat", "q": "Media‑savodxon jamiyat qanday bo‘ladi?", "a": "Yolg‘on axborotni tanib, faktga asoslanib qaror qabul qiladigan jamiyat.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🤖", "t": "AI javoblari", "q": "Sun’iy intellekt bergan barcha ma’lumot 100% rostmi?", "a": "Yo‘q. AI ham xato qilishi mumkin. Muhim faktlarni albatta tekshiring.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🤳", "t": "Sharenting", "q": "Farzandning har bir suratini tarmoqqa joylash to‘g‘rimi?", "a": "Ehtiyot bo‘ling. Bola kelajagi, xavfsizligi va shaxsiy hayoti haqida o‘ylash kerak.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "🕵️‍♂️", "t": "OSINT", "q": "Ochiq manbalardan kimdir haqida ma’lumot yig‘ish qonuniymi?", "a": "Ochiq ma’lumotni ko‘rish mumkin, ammo uni zarar yetkazish uchun ishlatish mumkin emas.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "📉", "t": "FOMO", "q": "Yangiliklardan qolib ketishdan qo‘rqish nima?", "a": "Bu FOMO. Vaqti‑vaqti bilan raqamli detoks qilish foydali.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "📺", "t": "Propaganda", "q": "Bir tomonlama siyosiy xabarga darhol ishonish kerakmi?", "a": "Yo‘q. Har xil manbalarni solishtirib, muvozanatli xulosa chiqaring.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "📱", "t": "Screen time", "q": "Uyqudan oldin telefon ishlatish zararlimi?", "a": "Ha, ekran yorug‘ligi uyqu sifatiga ta’sir qilishi mumkin. Uyqudan oldin tanaffus qiling.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🍪", "t": "Cookies", "q": "Saytlardagi cookies nima uchun kerak?", "a": "Ular sizning tanlovlaringiz va harakatlaringizni eslab qolishi, reklama uchun ishlatilishi mumkin.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "💳", "t": "NFC xavfsizligi", "q": "Kontaktsiz to‘lov kartasini ehtiyotsiz saqlash xavflimi?", "a": "Ha. Kartani himoyalangan joyda saqlang va bildirishnomalarni yoqing.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🤬", "t": "Hate speech", "q": "Guruhda millatchilik yoki nafrat uyg‘otuvchi gap yozish mumkinmi?", "a": "Yo‘q. Bu etikaga ham, qonunchilikka ham zid bo‘lishi mumkin.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "🧬", "t": "Biometrika", "q": "FaceID va barmoq izi doim 100% xavfsizmi?", "a": "Ular qulay, lekin telefonni umumiy himoya, kuchli parol va ehtiyotkorlik bilan birga ishlatish kerak.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🔌", "t": "USB xavfi", "q": "Aeroportdagi notanish USB orqali telefon quvvatlash xavfsizmi?", "a": "Ehtiyot bo‘ling. USB orqali zararli dastur yoki ma’lumot o‘g‘irlanishi xavfi bor.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "📡", "t": "Veb‑kamera", "q": "Kamerani yopib qo‘yish xavfsizlikmi?", "a": "Ha. Josus dasturlar kamera yoki mikrofonni ruxsatsiz yoqishi mumkin.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🛒", "t": "Soxta izohlar", "q": "Mahsulot ostidagi hamma 5 yulduzli izohlar haqiqiymi?", "a": "Har doim emas. Bot yoki buyurtma izohlar bo‘lishi mumkin.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "📞", "t": "Vishing", "q": "Bankdanman deb qo‘ng‘iroq qilgan odam SMS kod so‘radi.", "a": "Kod bermang. Bank xodimi SMS kod yoki parol so‘ramaydi.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🧐", "t": "Hissiy sarlavha", "q": "Sarlavhada “Shok!”, “Dahshat!” kabi so‘zlar bo‘lsa?", "a": "Bu klikbeyt belgisi bo‘lishi mumkin. Sarlavhaga emas, dalilga qarang.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🙅‍♀️", "t": "Cancel culture", "q": "Internetda ommaviy tarzda kimnidir “yo‘q qilish” to‘g‘rimi?", "a": "Ko‘pincha adolatsiz bosimga aylanadi. Dalil, adolat va etikani unutmang.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "📂", "t": "Backup", "q": "Muhim fayllarni faqat telefonda saqlash to‘g‘rimi?", "a": "Yo‘q. Bulut yoki tashqi xotirada zaxira nusxa saqlang.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🌑", "t": "Dark web", "q": "Dark web saytlariga qiziqish uchun kirish xavfsizmi?", "a": "Juda xavfli. U yerda firibgarlik va zararli kontent ko‘p uchraydi.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "🕯️", "t": "Gaslighting", "q": "Internetda sizni “o‘zing adashyapsan” deb ruhiy bosim qilishsa?", "a": "Bu manipulyatsiya bo‘lishi mumkin. Muloqotni to‘xtating va ishonchli odamdan yordam so‘rang.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "📦", "t": "Posilka firibgarligi", "q": "“Posilkangiz uchun boj to‘lang” degan link keldi.", "a": "Faqat rasmiy kuryer yoki pochta saytida tekshiring. Shubhali havolaga kirmang.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🎰", "t": "Gambling", "q": "Onlayn kazinoda pul ishlash osonmi?", "a": "Yo‘q. Bu katta moliyaviy va psixologik xavf tug‘diradi.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "🤝", "t": "Netiket", "q": "Internetda muloqot qilish madaniyati nima deyiladi?", "a": "Bu netiket — tarmoq etikasi. Hurmatli, aniq va mas’uliyatli yozing.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "🌍", "t": "Global madaniyat", "q": "Chet ellik bilan yozishganda nimaga e’tibor berish kerak?", "a": "Ularning madaniyati, diniy qarashlari va qadriyatlarini hurmat qiling.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "📸", "t": "Metadata", "q": "Rasm ichida joylashuv ma’lumoti bo‘lishi mumkinmi?", "a": "Ha. EXIF ma’lumotlarida joy, vaqt va qurilma haqida ma’lumot bo‘lishi mumkin.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🐦", "t": "Echo chamber", "q": "Faqat o‘zingizga yoqadigan fikrlarni eshitish xavflimi?", "a": "Ha. Bu dunyoqarashni toraytiradi. Turli manbalarni o‘qing.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🛡️", "t": "VPN", "q": "VPN faqat bloklangan saytlarga kirish uchunmi?", "a": "Yo‘q. VPN ayrim holatlarda aloqani shifrlashga ham yordam beradi.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "📝", "t": "Akademik halollik", "q": "Boshqa talabaning ishini internetdan olib topshirish mumkinmi?", "a": "Yo‘q. Bu akademik firibgarlik. O‘z fikringiz va manba ko‘rsatish muhim.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "💡", "t": "Ijodkorlik", "q": "Internetdan faqat ko‘rish uchun foydalanish yetarlimi?", "a": "Yo‘q. Foydali kontent yarating, o‘rganing va bilim ulashing.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🔋", "t": "Raqamli detoks", "q": "Haftada bir kun internetdan tanaffus qilish foydalimi?", "a": "Ha. Diqqatni tiklaydi, stressni kamaytiradi va vaqtni boshqarishga yordam beradi.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🎓", "t": "Umrbod o‘rganish", "q": "Media‑madaniyat bir martalik darsmi?", "a": "Yo‘q. Texnologiyalar o‘zgargani sari media‑madaniyat ham doimiy o‘rganishni talab qiladi.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🧾", "t": "Chek va to‘lov", "q": "Onlayn xariddan keyin chek yoki to‘lov tasdig‘ini saqlash kerakmi?", "a": "Ha. Chek muammo chiqqanda isbot bo‘ladi. Har bir onlayn to‘lovdan keyin skrinshot yoki elektron chekni saqlang.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🔑", "t": "Ikki bosqichli himoya", "q": "Akkauntni faqat parol bilan himoyalash yetarlimi?", "a": "Yetarli emas. Ikki bosqichli himoya akkauntni buzib kirish xavfini kamaytiradi.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "📲", "t": "SMS-kod", "q": "Do‘stingiz “mening telefonim ishlamayapti, senga kelgan kodni ayt” dedi.", "a": "Kod bermang. SMS-kod shaxsiy kalitga o‘xshaydi. Uni hatto tanishlarga ham aytmaslik kerak.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🧩", "t": "Shubhali ilova", "q": "O‘yin ilovasi kontaktlar va galereyaga ruxsat so‘radi. Nima qilasiz?", "a": "Ruxsatlarni tekshiring. O‘yin uchun kerak bo‘lmagan ruxsatlarni bermang.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🪪", "t": "ID ma’lumot", "q": "Internet tanlovida pasport yoki ID karta rasmi so‘raldi.", "a": "Ehtiyot bo‘ling. Shaxsni tasdiqlovchi hujjat rasmi firibgarlikda ishlatilishi mumkin.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "🗂️", "t": "Ma’lumot zaxirasi", "q": "Telefoningiz yo‘qolsa, surat va dars fayllaringiz ham yo‘qoladimi?", "a": "Agar zaxira nusxa bo‘lmasa, yo‘qolishi mumkin. Muhim fayllarni bulut yoki tashqi xotirada saqlang.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🔒", "t": "Maxfiy profil", "q": "Ijtimoiy tarmoqdagi profilingiz hammaga ochiq bo‘lishi xavfsizmi?", "a": "Har doim ham emas. Maxfiylik sozlamalarini tekshiring va begonalarga ortiqcha ma’lumot ko‘rsatmay qo‘ying.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🧭", "t": "Manba xaritasi", "q": "Bir yangilikni faqat bitta Telegram kanal yozdi. Ishonish mumkinmi?", "a": "Darhol ishonmang. Yangilikni rasmiy saytlar va boshqa ishonchli manbalar bilan solishtiring.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🗣️", "t": "Mish-mish", "q": "“Bir tanishim aytdi” degan gap fakt bo‘la oladimi?", "a": "Yo‘q. Mish-mish fakt emas. Fakt aniq manba, dalil va tekshiruvga tayanadi.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "📊", "t": "Grafik manipulyatsiya", "q": "Grafikda farq juda katta ko‘rinadi. Har doim shundaymi?", "a": "Yo‘q. Shkala noto‘g‘ri tanlansa, kichik farq ham juda katta ko‘rinishi mumkin.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🧮", "t": "Foizni tushunish", "q": "“O‘quvchilarning 90% rozi” deyildi, lekin necha kishi so‘ralgani aytilmadi.", "a": "Bu ishonchsiz da’vo. Statistikada tanlanma soni, vaqt va usul ko‘rsatilishi kerak.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "📰", "t": "Sarlavha va mazmun", "q": "Sarlavha juda vahimali, lekin matn ichida dalil yo‘q.", "a": "Bu klikbeyt bo‘lishi mumkin. Xabarni sarlavha bilan emas, mazmun va dalil bilan baholang.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🧿", "t": "Emotsional tuzoq", "q": "Xabar sizni qo‘rqitib, darhol ulashishga majbur qilyapti.", "a": "To‘xtang. Qo‘rquv uyg‘otuvchi xabarlar ko‘pincha manipulyatsiya bo‘ladi.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "😡", "t": "G‘azab tili", "q": "Izohni o‘qib jahlingiz chiqdi. Darhol javob yozasizmi?", "a": "Avval tinchlaning. G‘azab bilan yozilgan javob muammoni kuchaytirishi mumkin.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🧘", "t": "Raqamli tanaffus", "q": "Dars qilayotganda har 5 daqiqada telefon tekshirish foydalimi?", "a": "Yo‘q. Diqqat bo‘linadi. Dars paytida bildirishnomalarni o‘chirib qo‘yish foydali.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🎯", "t": "Algoritm ta’siri", "q": "Tarmoq sizga faqat yoqadigan videolarni ko‘rsatyapti. Bu nimani bildiradi?", "a": "Algoritm sizning qiziqishlaringizni kuzatadi. Turli manbalarni ko‘rish dunyoqarashni kengaytiradi.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🧠", "t": "Tasdiqlash xatosi", "q": "Faqat o‘z fikringizni tasdiqlaydigan xabarlarni izlash to‘g‘rimi?", "a": "Yo‘q. Bu tasdiqlash xatosi. Qarama-qarshi dalillarni ham ko‘rish kerak.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🫥", "t": "Anonimlik", "q": "Anonim profil bo‘lsam, xohlagan gapni yozsam bo‘ladimi?", "a": "Yo‘q. Anonimlik javobgarlikdan ozod qilmaydi. Internetdagi so‘z ham mas’uliyat talab qiladi.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "🧑‍⚖️", "t": "Sha’n va qadr-qimmat", "q": "Birov haqida yolg‘on gap yozish hazil hisoblanadimi?", "a": "Yo‘q. Bu sha’n va qadr-qimmatga zarar yetkazishi mumkin.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "📣", "t": "Ommaviy ulashish", "q": "Shubhali xabarni “ehtiyot bo‘linglar” deb ulashish to‘g‘rimi?", "a": "Avval tekshiring. Tekshirilmagan xabarni yaxshi niyat bilan ulashish ham feykni tarqatadi.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "🤲", "t": "Hurmatli muloqot", "q": "Bahsda raqibingiz fikriga qo‘shilmadingiz. Nima qilasiz?", "a": "Shaxsga emas, fikrga munosabat bildiring. Dalil bilan, hurmat saqlagan holda yozing.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "🧑‍🏫", "t": "Ustozga murojaat", "q": "Onlayn guruhda o‘qituvchiga qo‘pol javob yozish mumkinmi?", "a": "Yo‘q. Raqamli muhitda ham odob, hurmat va muomala madaniyati saqlanadi.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "👥", "t": "Kiberbulling", "q": "Sinf guruhida bir o‘quvchi ustidan kulishyapti. Siz nima qilasiz?", "a": "Qo‘shilmang. Jabrlanuvchini qo‘llab-quvvatlang va kattalarga xabar bering.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "📵", "t": "Dars paytidagi telefon", "q": "Dars vaqtida yashirincha ijtimoiy tarmoq ko‘rish to‘g‘rimi?", "a": "Yo‘q. Bu diqqatni pasaytiradi va o‘quv jarayoniga hurmatsizlik bo‘ladi.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "🧑‍💻", "t": "Akkauntni tiklash", "q": "Akkauntingiz buzildi. Birinchi nima qilasiz?", "a": "Parolni o‘zgartiring, ikki bosqichli himoyani yoqing va yaqinlaringizga ogohlantirish bering.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🧯", "t": "Favqulodda reja", "q": "Telefoningiz o‘g‘irlansa, qanday tayyorgarlik foydali?", "a": "Qurilmani topish funksiyasi, ekran paroli va zaxira nusxalar oldindan yoqilgan bo‘lishi kerak.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "📶", "t": "Bluetooth xavfi", "q": "Bluetooth doim yoqilgan bo‘lsa, xavf bormi?", "a": "Ba’zi holatlarda begona qurilmalar ulanishi mumkin. Ishlatmaganda o‘chirib qo‘yish foydali.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🧱", "t": "Kuchli parol", "q": "“12345678” yaxshi parolmi?", "a": "Yo‘q. Kuchli parolda katta-kichik harf, raqam va belgilar bo‘lgani ma’qul.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🔎", "t": "Teskari rasm qidiruvi", "q": "Rasm qayerda olinganini qanday tekshirish mumkin?", "a": "Google Lens yoki teskari rasm qidiruvi orqali rasmning avval qayerda chiqqanini ko‘ring.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🖼️", "t": "Rasm konteksti", "q": "Haqiqiy rasm yolg‘on xabarda ishlatilishi mumkinmi?", "a": "Ha. Rasm real bo‘lsa ham, boshqa voqea yoki boshqa joyga tegishli bo‘lishi mumkin.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🎞️", "t": "Video montaj", "q": "Kesib olingan 10 soniyalik video to‘liq haqiqatni ko‘rsatadimi?", "a": "Har doim emas. To‘liq kontekst, manba va davomiylikni tekshirish kerak.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🔊", "t": "Audio manipulyatsiya", "q": "Ovozli xabar juda ishonchli eshitildi. Yetarlimi?", "a": "Yo‘q. Audio ham montaj yoki AI orqali soxtalashtirilishi mumkin.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🧪", "t": "Ilmiy manba", "q": "“Olimlar isbotladi” degan gapda nimalar bo‘lishi kerak?", "a": "Tadqiqot nomi, muallif, yil, jurnal yoki rasmiy havola bo‘lishi kerak.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "💬", "t": "Izohlar ta’siri", "q": "Ko‘p ijobiy izoh bo‘lsa, mahsulot albatta yaxshi bo‘ladimi?", "a": "Har doim emas. Izohlar soxta yoki buyurtma bo‘lishi mumkin.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🚩", "t": "Qizil bayroq", "q": "Xabarda “hech kim bilmasin, faqat sizga” deyilgan.", "a": "Bu qizil bayroq. Shoshiltirish va maxfiylik firibgarlik belgisi bo‘lishi mumkin.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🎁", "t": "Bepul sovg‘a", "q": "“Bepul telefon yutdingiz, havolaga kiring” xabari keldi.", "a": "Bu fishing bo‘lishi mumkin. Shubhali havolaga kirmang va ma’lumot kiritmang.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🏷️", "t": "Soxta chegirma", "q": "Narx avval ko‘tarilib, keyin “50% chegirma” deb berildi.", "a": "Bu narx manipulyatsiyasi bo‘lishi mumkin. Avvalgi narxlarni solishtiring.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🧑‍🔬", "t": "Ekspert fikri", "q": "Videoda “mutaxassis aytdi” deyilgan, lekin kimligi ko‘rsatilmagan.", "a": "Ekspertning ismi, sohasi va manbasi aniq bo‘lmasa, ehtiyotkor bo‘ling.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🕊️", "t": "Tinch muloqot", "q": "Internetdagi bahsda sizni haqorat qilishdi.", "a": "Haqoratga haqorat bilan javob bermang. Dalil keltiring yoki suhbatni to‘xtating.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "🧷", "t": "Muallifga havola", "q": "Internetdan rasm olib taqdimotga qo‘ydingiz. Manba kerakmi?", "a": "Ha. Mualliflik huquqini hurmat qilish uchun manbani ko‘rsatish kerak.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "🎼", "t": "Musiqa huquqi", "q": "Videoingizga mashhur qo‘shiqni ruxsatsiz qo‘shish mumkinmi?", "a": "Har doim emas. Mualliflik huquqi buzilishi mumkin. Ruxsatli musiqadan foydalaning.", "c": "legal", "cat": "Huquqiy mas’uliyat", "emoji": "⚖️"}, {"i": "📚", "t": "Akademik manba", "q": "Referat uchun faqat blog post yetarlimi?", "a": "Yo‘q. Darslik, ilmiy maqola, rasmiy manba va ishonchli saytlarni solishtiring.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🧑‍🎓", "t": "O‘quvchi mas’uliyati", "q": "Chatbot yozib bergan ishni o‘ziniki deb topshirish to‘g‘rimi?", "a": "Yo‘q. AI yordamchi bo‘lishi mumkin, lekin fikr va mas’uliyat sizniki bo‘lishi kerak.", "c": "ethic", "cat": "Axborot etikasi", "emoji": "🤝"}, {"i": "🧹", "t": "Raqamli tozalash", "q": "Eski va keraksiz akkauntlarni o‘chirib turish foydalimi?", "a": "Ha. Bu xavfsizlik va maxfiylikni oshiradi.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "📥", "t": "Spam", "q": "Elektron pochtaga juda ko‘p reklama va shubhali xatlar kelyapti.", "a": "Spamni ochmang, havolalarga kirmang va spam sifatida belgilang.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "🧊", "t": "Sovuq fikrlash", "q": "Xabar juda kuchli hissiyot uyg‘otdi. Darhol ulashasizmi?", "a": "Yo‘q. Avval “to‘xta — tekshir — solishtir — xulosa qil” qoidasini qo‘llang.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🪞", "t": "O‘zini nazorat", "q": "Internetdagi izohingizni keyin ota-onangiz yoki ustozingiz ko‘rsa, uyalasizmi?", "a": "Agar uyalishingiz mumkin bo‘lsa, yozmang. Raqamli iz uzoq saqlanadi.", "c": "psych", "cat": "Psixologik himoya", "emoji": "🧠"}, {"i": "🧵", "t": "Kontekst ipi", "q": "Iqtibos faqat bitta jumla qilib kesib olingan.", "a": "To‘liq matnni o‘qing. Kontekstdan uzilgan iqtibos noto‘g‘ri xulosa berishi mumkin.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}, {"i": "🌐", "t": "Rasmiy domen", "q": "Rasmiy saytga o‘xshash, lekin nomida bitta harf farq qiladigan sayt ko‘rdingiz.", "a": "Bu soxta sayt bo‘lishi mumkin. Domen nomini diqqat bilan tekshiring.", "c": "tech", "cat": "Texnologik xavfsizlik", "emoji": "💻"}, {"i": "✅", "t": "Yakuniy qoida", "q": "Media‑madaniyatli o‘quvchi xabarni qanday qabul qiladi?", "a": "U shoshilmaydi, manbani tekshiradi, dalil izlaydi, etikani saqlaydi va mas’uliyat bilan ulashadi.", "c": "media", "cat": "Media tahlil", "emoji": "📰"}];
+
+    const colors = {
+      tech: "#2563eb",
+      ethic: "#16a34a",
+      legal: "#ef4444",
+      psych: "#f59e0b",
+      media: "#7c3aed"
+    };
+
+    let activeCategory = "all";
+    let currentCards = [...cards];
+    let correctCount = 0;
+    let answeredCount = 0;
+
+    const grid = document.getElementById("cardGrid");
+    const counter = document.getElementById("counter");
+
+    function renderCards(list) {
+      grid.innerHTML = "";
+
+      list.forEach((c, index) => {
+        const card = document.createElement("article");
+        card.className = "flip-card";
+        card.dataset.cat = c.c;
+        card.onclick = function() {
+          this.classList.toggle("flipped");
+        };
+
+        card.innerHTML = `
+          <div class="flip-inner">
+            <div class="face front">
+              <span class="cat-tag" style="background:${colors[c.c]}">${c.emoji} ${c.cat}</span>
+              <span class="num">${index + 1}</span>
+              <div class="icon">${c.i}</div>
+              <h3>${escapeHtml(c.q)}</h3>
+              <div class="topic">${escapeHtml(c.t)} · javob uchun bosing</div>
+            </div>
+            <div class="face back" style="background:linear-gradient(135deg,#0f172a 0%,${colors[c.c]} 100%)">
+              <h4>${escapeHtml(c.t)} bo‘yicha javob</h4>
+              <p>${escapeHtml(c.a)}</p>
+              <div class="mini-note">Kartani yana bosib savolga qayting</div>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      counter.textContent = list.length + " ta karta ko‘rsatildi";
+    }
+
+    function setCategory(category, button) {
+      activeCategory = category;
+      document.querySelectorAll(".filter").forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const query = document.getElementById("searchInput").value.toLowerCase().trim();
+
+      currentCards = cards.filter(c => {
+        const matchCategory = activeCategory === "all" || c.c === activeCategory;
+        const haystack = (c.t + " " + c.q + " " + c.a + " " + c.cat).toLowerCase();
+        const matchQuery = !query || haystack.includes(query);
+        return matchCategory && matchQuery;
+      });
+
+      renderCards(currentCards);
+    }
+
+    function shuffleCards() {
+      currentCards = [...currentCards].sort(() => Math.random() - 0.5);
+      renderCards(currentCards);
+      document.getElementById("cards").scrollIntoView({behavior:"smooth"});
+    }
+
+    function markChoice(button, isCorrect) {
+      const parent = button.parentElement;
+      if (parent.dataset.done === "1") return;
+
+      parent.dataset.done = "1";
+      parent.querySelectorAll(".choice").forEach(btn => {
+        btn.disabled = true;
+        btn.style.pointerEvents = "none";
+      });
+
+      answeredCount++;
+      if (isCorrect) {
+        correctCount++;
+        button.classList.add("good");
+      } else {
+        button.classList.add("bad");
+      }
+
+      const box = document.getElementById("practiceResult");
+      box.className = "result-box show";
+      box.textContent = "Natija: " + correctCount + " ta to‘g‘ri javob / " + answeredCount + " ta bajarilgan savol.";
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    renderCards(cards);
+  </script>
+</body>
+</html>

@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Axborot iste’moli madaniyati | Bosh sahifa</title>
+<style>
+:root {
+  --ink:#0f172a;
+  --muted:#64748b;
+  --blue:#2563eb;
+  --sky:#0ea5e9;
+  --violet:#7c3aed;
+  --green:#16a34a;
+  --orange:#f97316;
+  --soft:#f8fbff;
+  --card:#ffffff;
+  --line:#dbe4f0;
+  --shadow:0 16px 38px rgba(15,23,42,.10);
+  --radius:24px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:86px}
+body{
+  margin:0;
+  font-family:Arial, "Segoe UI", sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 9% 8%, rgba(14,165,233,.16), transparent 28%),
+    radial-gradient(circle at 91% 4%, rgba(124,58,237,.13), transparent 26%),
+    linear-gradient(180deg,#f8fbff 0%,#eef6ff 46%,#f9fafb 100%);
+  line-height:1.6;
+}
+.navbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 8px 24px rgba(15,23,42,.05);
+}
+.nav-inner{
+  width:min(1440px,calc(100% - 32px));
+  min-height:72px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+.brand{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;color:var(--ink);
+  font-weight:900;letter-spacing:-.035em;
+}
+.brand-icon{
+  width:46px;height:46px;border-radius:16px;
+  background:linear-gradient(135deg,var(--blue),var(--violet));
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:22px;box-shadow:0 10px 24px rgba(37,99,235,.22);
+}
+.brand small{display:block;color:var(--muted);font-size:12px;font-weight:800;letter-spacing:0;margin-top:-3px}
+.nav-links{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.nav-links a{
+  text-decoration:none;color:#334155;font-weight:900;
+  font-size:13px;padding:9px 11px;border-radius:999px;
+  transition:.2s;
+}
+.nav-links a:hover{background:#eff6ff;color:var(--blue)}
+.nav-toggle{display:none;border:0;background:var(--blue);color:#fff;border-radius:13px;width:44px;height:44px;font-size:20px;cursor:pointer}
+.container{width:min(1440px,calc(100% - 32px));margin:auto}
+.hero{padding:22px 0 18px}
+.hero-shell{
+  position:relative;overflow:hidden;
+  min-height:390px;
+  border-radius:32px;
+  background:
+    linear-gradient(115deg, rgba(15,23,42,.94), rgba(30,64,175,.86)),
+    radial-gradient(circle at 14% 72%, rgba(125,211,252,.35), transparent 24%),
+    radial-gradient(circle at 82% 20%, rgba(167,139,250,.34), transparent 28%);
+  color:#fff;
+  box-shadow:var(--shadow);
+  padding:44px;
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:24px;
+  align-items:center;
+}
+.hero-shell::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+  background-size:42px 42px;
+  opacity:.20;
+}
+.hero-shell::after{
+  content:"";position:absolute;right:-76px;top:-72px;width:230px;height:230px;border-radius:50%;
+  background:rgba(255,255,255,.12);
+}
+.hero-content{position:relative;z-index:2;max-width:820px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.18);
+  color:#dbeafe;
+  padding:8px 12px;border-radius:999px;
+  font-size:13px;font-weight:900;margin-bottom:16px;
+}
+.hero h1{
+  margin:0 0 14px;
+  font-size:clamp(34px,5vw,64px);
+  line-height:1.03;
+  letter-spacing:-.065em;
+  font-weight:900;
+}
+.gradient-text{
+  background:linear-gradient(90deg,#93c5fd,#67e8f9,#c4b5fd);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{
+  margin:0;color:#dbeafe;
+  font-size:17px;
+  max-width:700px;
+}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.btn{
+  border:0;border-radius:16px;padding:13px 18px;
+  font-weight:900;cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:.2s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,23,42,.18)}
+.btn-white{background:#fff;color:var(--blue)}
+.btn-glass{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.school-visual{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:repeat(2,1fr);gap:14px;
+}
+.visual-card{
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:22px;
+  padding:18px;
+  min-height:135px;
+  backdrop-filter:blur(6px);
+}
+.visual-card b{display:block;font-size:44px;line-height:1;margin-bottom:10px;filter:saturate(1.2)}
+.visual-card span{color:#e0f2fe;font-weight:800;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:0 0 22px}
+.stat{
+  background:#fff;border:1px solid var(--line);border-radius:22px;
+  padding:18px;box-shadow:0 8px 22px rgba(15,23,42,.06);
+  display:flex;gap:12px;align-items:center;
+}
+.stat-icon{
+  width:62px;
+  height:62px;
+  border-radius:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#dbeafe,#f8fbff);
+  color:var(--blue);
+  font-size:32px;
+  flex:0 0 auto;
+  box-shadow:0 9px 20px rgba(37,99,235,.10);
+}
+.stat strong{display:block;font-size:26px;line-height:1;font-weight:900}
+.stat span{color:var(--muted);font-weight:800;font-size:13px}
+.section{
+  background:#fff;border:1px solid var(--line);border-radius:30px;
+  padding:28px;margin-bottom:24px;box-shadow:var(--shadow);
+}
+.section-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+  border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:20px;
+}
+.kicker{display:inline-flex;gap:8px;align-items:center;color:var(--blue);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.section h2{margin:0;font-size:clamp(22px,2.8vw,32px);line-height:1.14;letter-spacing:-.04em}
+.section-desc{margin:8px 0 0;color:var(--muted);max-width:850px;font-size:15px;font-weight:650}
+.badge{
+  background:#eff6ff;color:#1d4ed8;border:1px solid #dbeafe;
+  border-radius:999px;padding:8px 12px;font-size:13px;font-weight:900;white-space:nowrap;
+}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:16px}
+.grid.comp{grid-template-columns:repeat(3,1fr)}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:22px;
+  padding:18px;min-height:215px;text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;gap:12px;
+  transition:.2s;position:relative;overflow:hidden;
+}
+.card:hover{transform:translateY(-4px);box-shadow:0 15px 32px rgba(37,99,235,.14);border-color:#bfdbfe}
+.card::after{
+  content:"";position:absolute;right:-44px;bottom:-44px;width:120px;height:120px;border-radius:50%;background:#eff6ff;
+}
+.card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;position:relative;z-index:2}
+.icon{
+  width:74px;
+  height:74px;
+  border-radius:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#f8fafc,#eef6ff);
+  font-size:38px;
+  line-height:1;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.8), 0 10px 22px rgba(15,23,42,.08);
+  filter:saturate(1.18);
+}
+.card.lesson .icon{background:linear-gradient(135deg,#dbeafe,#eff6ff)}
+.card.component .icon{background:linear-gradient(135deg,#ede9fe,#f8f7ff)}
+.card.case .icon{background:linear-gradient(135deg,#ffedd5,#fff7ed)}
+.card.sim .icon{background:linear-gradient(135deg,#dcfce7,#f0fdf4)}
+.card.diag .icon{background:linear-gradient(135deg,#e0e7ff,#f5f7ff)}
+.num{
+  min-width:40px;height:32px;border-radius:999px;
+  background:#f1f5f9;color:#475569;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:900;padding:0 10px;
+}
+.card h3{margin:0;font-size:18px;line-height:1.28;letter-spacing:-.03em;position:relative;z-index:2}
+.card p{margin:0;color:var(--muted);font-size:14px;font-weight:650;position:relative;z-index:2;flex:1}
+.open{
+  border-top:1px solid var(--line);
+  padding-top:12px;
+  color:var(--blue);
+  font-weight:900;
+  font-size:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:relative;
+  z-index:2;
+}
+.open span{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:#eff6ff;
+}
+.quick-panel{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+}
+.quick{
+  background:linear-gradient(135deg,#f8fafc,#ffffff);
+  border:1px solid var(--line);border-radius:22px;
+  padding:18px;text-decoration:none;color:inherit;transition:.2s;
+}
+.quick:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(15,23,42,.08)}
+.quick b{display:block;font-size:38px;margin-bottom:10px;filter:saturate(1.18)}
+.quick h3{margin:0 0 6px;font-size:17px}
+.quick p{margin:0;color:var(--muted);font-size:13px;font-weight:700}
+.footer{padding:0 0 28px}
+.footer-shell{
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:#e2e8f0;border-radius:28px;padding:30px;text-align:center;
+}
+.footer-title{font-weight:900;font-size:22px;color:#fff;margin-bottom:6px}
+.footer p{margin:0;color:#cbd5e1}
+@media(max-width:1080px){
+  .hero-shell{grid-template-columns:1fr;min-height:auto}
+  .stats,.quick-panel,.grid.comp{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:780px){
+  .nav-toggle{display:flex;align-items:center;justify-content:center}
+  .nav-links{
+    position:absolute;top:72px;left:12px;right:12px;
+    display:none;flex-direction:column;align-items:stretch;
+    background:#fff;border:1px solid var(--line);border-radius:18px;
+    padding:12px;box-shadow:var(--shadow);
+  }
+  .nav-links.show{display:flex}
+  .nav-links a{padding:12px}
+  .hero-shell{padding:26px 20px;border-radius:24px}
+  .school-visual,.stats,.quick-panel,.grid.comp{grid-template-columns:1fr}
+  .section{padding:20px;border-radius:24px}
+  .section-head{flex-direction:column}
+  .badge{white-space:normal}
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-icon">🛡️</span>
+      <span>Axborot madaniyati<small>Metodik-didaktik platforma</small></span>
+    </a>
+    <button class="nav-toggle" id="navToggle" type="button">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#ilmiy">Ilmiy asos</a>
+      <a href="#darslar">Darslar</a>
+      <a href="#keyslar">Keyslar</a>
+      <a href="#simulyatorlar">Simulyatorlar</a>
+      <a href="#diagnostika">Diagnostika</a>
+      <a href="qo'shimcha manbalar.html">Manbalar</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-shell">
+      <div class="hero-content">
+        <div class="eyebrow">🎒 Maktab o‘quvchilari uchun interaktiv platforma</div>
+        <h1>Axborotni ongli <span class="gradient-text">qabul qilish, saralash va baholash</span>ni o‘rganamiz</h1>
+        <p>Platforma o‘quvchilarda manba ishonchliligini tekshirish, feyk xabarni aniqlash, axborot etikasi va xavfsiz raqamli xulq-atvor ko‘nikmalarini rivojlantirishga xizmat qiladi.</p>
+        <div class="hero-actions">
+          <a class="btn btn-white" href="#darslar">▶ Modulni boshlash</a>
+          <a class="btn btn-glass" href="#diagnostika">☑ Bilimni tekshirish</a>
+        </div>
+      </div>
+      <div class="school-visual">
+        <div class="visual-card"><b>📚</b><span>16 ta dars moduli</span></div>
+        <div class="visual-card"><b>🧩</b><span>Keys va ssenariylar</span></div>
+        <div class="visual-card"><b>🎮</b><span>Interaktiv simulyatorlar</span></div>
+        <div class="visual-card"><b>🎓</b><span>Test va sertifikat</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="stats">
+    <div class="stat"><div class="stat-icon">🧠</div><div><strong>3</strong><span>Ilmiy komponent</span></div></div>
+    <div class="stat"><div class="stat-icon">📘</div><div><strong>16</strong><span>O‘quv moduli</span></div></div>
+    <div class="stat"><div class="stat-icon">📄</div><div><strong>15</strong><span>Ssenariy va keys</span></div></div>
+    <div class="stat"><div class="stat-icon">🎮</div><div><strong>6</strong><span>Simulyator</span></div></div>
+  </section>
+
+  <section id="ilmiy" class="section">
+    <div class="section-head">
+      <div>
+        <div class="kicker">🔬 Dissertatsiya asosidagi model</div>
+        <h2>Ilmiy-metodik komponentlar</h2>
+        <p class="section-desc">Bu bo‘lim platformaning nazariy asosini ko‘rsatadi: kognitiv, affektiv va axloqiy-amaliy komponentlar orqali o‘quvchi axborotni tushunadi, qadriyatli baholaydi va xavfsiz amaliy qaror qabul qiladi.</p>
+      </div>
+      <span class="badge">3 ta asosiy komponent</span>
+    </div>
+    <div class="grid comp">
+      
+    <a class="card component" href="Ilmiy_kognitiv_komponent_alohida_sahifa.html">
+      <div class="card-top">
+        <span class="icon">🧠</span>
+        <span class="num">01</span>
+      </div>
+      <h3>Kognitiv komponent</h3>
+      <p>Axborotni izlash, tahlil qilish va dalilga asoslangan xulosa chiqarish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card component" href="Ilmiy_affektiv_komponent_alohida_sahifa.html">
+      <div class="card-top">
+        <span class="icon">🧡</span>
+        <span class="num">02</span>
+      </div>
+      <h3>Affektiv komponent</h3>
+      <p>Axborotga nisbatan qadriyatli munosabat, vijdon va hurmatni shakllantirish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card component" href="Ilmiy_axloqiy_amaliy_komponent_alohida_sahifa.html">
+      <div class="card-top">
+        <span class="icon">✅</span>
+        <span class="num">03</span>
+      </div>
+      <h3>Axloqiy-amaliy komponent</h3>
+      <p>Raqamli muhitda to‘g‘ri qaror qabul qilish va xavfsiz harakat qilish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <div class="kicker">⚡ Tezkor bo‘limlar</div>
+        <h2>Platforma boshqaruv nuqtalari</h2>
+        <p class="section-desc">O‘quvchi, o‘qituvchi va qo‘shimcha materiallarga tez o‘tish uchun asosiy havolalar.</p>
+      </div>
+      <span class="badge">Tayyor havolalar</span>
+    </div>
+    <div class="quick-panel">
+      <a class="quick" href="test_o'quvchilar_uchun.html"><b>👨‍🎓</b><h3>O‘quvchilar uchun test</h3><p>O‘quvchilar axborot iste’moli madaniyati bo‘yicha bilimini tekshiradi.</p></a><a class="quick" href="test_o'qituvchi_nazorati.html"><b>👨‍🏫</b><h3>O‘qituvchi nazorati</h3><p>O‘qituvchi topshiriq berish va natijalarni nazorat qilish paneli.</p></a><a class="quick" href="test_diagnostika_sertifikat_uchun.html"><b>🎓</b><h3>Diagnostika va sertifikat</h3><p>Test yakunida natija va sertifikat hosil qilinadi.</p></a><a class="quick" href="qo'shimcha manbalar.html"><b>📚</b><h3>Qo‘shimcha manbalar</h3><p>Dars jarayonida foydalanish uchun qo‘shimcha materiallar.</p></a>
+    </div>
+  </section>
+
+  <section id="darslar" class="section">
+    <div class="section-head">
+      <div>
+        <div class="kicker">📘 Metodik-didaktik modullar</div>
+        <h2>16 ta o‘quv darsi</h2>
+        <p class="section-desc">Har bir dars alohida HTML sahifaga bog‘langan. Fayllar bir papkada bo‘lsa, kartani bosganda kerakli dars ochiladi.</p>
+      </div>
+      <span class="badge">1-dars.html — 16-dars.html</span>
+    </div>
+    <div class="grid">
+      
+    <a class="card lesson" href="1-dars.html">
+      <div class="card-top">
+        <span class="icon">⚡</span>
+        <span class="num">01</span>
+      </div>
+      <h3>Axborot iste’moli madaniyatiga kirish</h3>
+      <p>Axborotni ongli qabul qilish va mas’uliyatli foydalanish asoslari.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="2-dars.html">
+      <div class="card-top">
+        <span class="icon">📖</span>
+        <span class="num">02</span>
+      </div>
+      <h3>Axborot savodxonligi va axborot madaniyati</h3>
+      <p>Savodxonlik va madaniyat o‘rtasidagi farqni misollar bilan tushunish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="3-dars.html">
+      <div class="card-top">
+        <span class="icon">🔍</span>
+        <span class="num">03</span>
+      </div>
+      <h3>Manba ishonchliligini baholash</h3>
+      <p>Sayt, muallif, sana, dalil va havolalarni tekshirish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="4-dars.html">
+      <div class="card-top">
+        <span class="icon">✅</span>
+        <span class="num">04</span>
+      </div>
+      <h3>Fakt-checking algoritmi</h3>
+      <p>Xabarni bir nechta manba orqali solishtirish va tekshirish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="5-dars.html">
+      <div class="card-top">
+        <span class="icon">⚠️</span>
+        <span class="num">05</span>
+      </div>
+      <h3>Dezinformatsiya va manipulyatsiya</h3>
+      <p>Yolg‘on dalil, shov-shuvli sarlavha va emotsional ta’sirni aniqlash.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="6-dars.html">
+      <div class="card-top">
+        <span class="icon">🛡️</span>
+        <span class="num">06</span>
+      </div>
+      <h3>Axborot xavfsizligi</h3>
+      <p>Parol, akkaunt, shaxsiy ma’lumot va raqamli izlarni himoya qilish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="7-dars.html">
+      <div class="card-top">
+        <span class="icon">📰</span>
+        <span class="num">07</span>
+      </div>
+      <h3>Media xabarni tahlil qilish</h3>
+      <p>Xabar maqsadi, auditoriyasi va ijtimoiy ta’sirini tahlil qilish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="8-dars.html">
+      <div class="card-top">
+        <span class="icon">⚖️</span>
+        <span class="num">08</span>
+      </div>
+      <h3>Axborot etikasi</h3>
+      <p>Internetda hurmat, mualliflik, adolat va ijtimoiy mas’uliyat.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="9-dars.html">
+      <div class="card-top">
+        <span class="icon">👁️</span>
+        <span class="num">09</span>
+      </div>
+      <h3>Vizual axborot savodxonligi</h3>
+      <p>Rasm, video, infografika va memlardagi yashirin ma’nolarni baholash.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="10-dars.html">
+      <div class="card-top">
+        <span class="icon">💬</span>
+        <span class="num">10</span>
+      </div>
+      <h3>Ijtimoiy tarmoq madaniyati</h3>
+      <p>Post, izoh va ulashish jarayonida mas’uliyatli bo‘lish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="11-dars.html">
+      <div class="card-top">
+        <span class="icon">🧬</span>
+        <span class="num">11</span>
+      </div>
+      <h3>Raqamli iz va shaxsiy javobgarlik</h3>
+      <p>Internetdagi harakatlarimiz kelajakda qanday oqibat berishini tushunish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="12-dars.html">
+      <div class="card-top">
+        <span class="icon">🧠</span>
+        <span class="num">12</span>
+      </div>
+      <h3>Tanqidiy fikrlash strategiyalari</h3>
+      <p>Savol berish, dalil izlash, solishtirish va xulosa chiqarish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="13-dars.html">
+      <div class="card-top">
+        <span class="icon">📣</span>
+        <span class="num">13</span>
+      </div>
+      <h3>Reklama va ta’sir texnologiyalari</h3>
+      <p>Reklama, blogerlik va trendlarning qarorga ta’sirini tahlil qilish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="14-dars.html">
+      <div class="card-top">
+        <span class="icon">🌱</span>
+        <span class="num">14</span>
+      </div>
+      <h3>Milliy-ma’naviy filtr</h3>
+      <p>Axborotni qadriyat, ma’naviyat va axloqiy mezonlar asosida baholash.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="15-dars.html">
+      <div class="card-top">
+        <span class="icon">🎭</span>
+        <span class="num">15</span>
+      </div>
+      <h3>Deepfake va sun’iy kontent</h3>
+      <p>Sun’iy yaratilgan video, audio va rasmni tekshirish belgilari.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card lesson" href="16-dars.html">
+      <div class="card-top">
+        <span class="icon">🏁</span>
+        <span class="num">16</span>
+      </div>
+      <h3>Refleksiya va yakuniy loyiha</h3>
+      <p>O‘quvchi o‘z axborot iste’moli odatini tahlil qiladi.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    </div>
+  </section>
+
+  <section id="keyslar" class="section">
+    <div class="section-head">
+      <div>
+        <div class="kicker">🧩 Vaziyatli topshiriqlar</div>
+        <h2>Ssenariylar va keyslar</h2>
+        <p class="section-desc">Bu bo‘lim real axborot vaziyatlarini tahlil qilish, dalil topish, manbani tekshirish va mas’uliyatli xulosa chiqarishga yordam beradi.</p>
+      </div>
+      <span class="badge">4 ssenariy + 11 keys</span>
+    </div>
+    <div class="grid">
+      
+    <a class="card case" href="ssenariy-1.html">
+      <div class="card-top">
+        <span class="icon">🎬</span>
+        <span class="num">S1</span>
+      </div>
+      <h3>Ssenariy - 1</h3>
+      <p>Real vaziyat asosida axborotni tahlil qilish va to‘g‘ri qaror tanlash.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card case" href="ssenariy-2.html">
+      <div class="card-top">
+        <span class="icon">🎬</span>
+        <span class="num">S2</span>
+      </div>
+      <h3>Ssenariy - 2</h3>
+      <p>Real vaziyat asosida axborotni tahlil qilish va to‘g‘ri qaror tanlash.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card case" href="ssenariy-3.html">
+      <div class="card-top">
+        <span class="icon">🎬</span>
+        <span class="num">S3</span>
+      </div>
+      <h3>Ssenariy - 3</h3>
+      <p>Real vaziyat asosida axborotni tahlil qilish va to‘g‘ri qaror tanlash.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card case" href="ssenariy-4.html">
+      <div class="card-top">
+        <span class="icon">🎬</span>
+        <span class="num">S4</span>
+      </div>
+      <h3>Ssenariy - 4</h3>
+      <p>Real vaziyat asosida axborotni tahlil qilish va to‘g‘ri qaror tanlash.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+      
+    <a class="card case" href="keys-1.html">
+      <div class="card-top">
+        <span class="icon">📄</span>
+        <span class="num">K1</span>
+      </div>
+      <h3>Keys - 1</h3>
+      <p>Muammo, dalil, manba va yechimni aniqlashga qaratilgan topshiriq.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card case" href="keys-2.html">
+      <div class="card-top">
+        <span class="icon">📄</span>
+        <span class="num">K2</span>
+      </div>
+      <h3>Keys - 2</h3>
+      <p>Muammo, dalil, manba va yechimni aniqlashga qaratilgan topshiriq.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card case" href="keys-3.html">
+      <div class="card-top">
+        <span class="icon">📄</span>
+        <span class="num">K3</span>
+      </div>
+      <h3>Keys - 3</h3>
+      <p>Muammo, dalil, manba va yechimni aniqlashga qaratilgan topshiriq.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card case" href="keys-4.html">
+      <div class="card-top">
+        <span class="icon">📄</span>
+        <span class="num">K4</span>
+      </div>
+      <h3>Keys - 4</h3>
+      <p>Muammo, dalil, manba va yechimni aniqlashga qaratilgan topshiriq.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card case" href="keys-5.html">
+      <div class="card-top">
+        <span class="icon">📄</span>
+        <span class="num">K5</span>
+      </div>
+      <h3>Keys - 5</h3>
+      <p>Muammo, dalil, manba va yechimni aniqlashga qaratilgan topshiriq.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card case" href="keys-6.html">
+      <div class="card-top">
+        <span class="icon">📄</span>
+        <span class="num">K6</span>
+      </div>
+      <h3>Keys - 6</h3>
+      <p>Muammo, dalil, manba va yechimni aniqlashga qaratilgan topshiriq.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card case" href="keys-7.html">
+      <div class="card-top">
+        <span class="icon">📄</span>
+        <span class="num">K7</span>
+      </div>
+      <h3>Keys - 7</h3>
+      <p>Muammo, dalil, manba va yechimni aniqlashga qaratilgan topshiriq.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card case" href="keys-8.html">
+      <div class="card-top">
+        <span class="icon">📄</span>
+        <span class="num">K8</span>
+      </div>
+      <h3>Keys - 8</h3>
+      <p>Muammo, dalil, manba va yechimni aniqlashga qaratilgan topshiriq.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card case" href="keys-9.html">
+      <div class="card-top">
+        <span class="icon">📄</span>
+        <span class="num">K9</span>
+      </div>
+      <h3>Keys - 9</h3>
+      <p>Muammo, dalil, manba va yechimni aniqlashga qaratilgan topshiriq.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card case" href="keys-10.html">
+      <div class="card-top">
+        <span class="icon">📄</span>
+        <span class="num">K10</span>
+      </div>
+      <h3>Keys - 10</h3>
+      <p>Muammo, dalil, manba va yechimni aniqlashga qaratilgan topshiriq.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card case" href="keys-11.html">
+      <div class="card-top">
+        <span class="icon">📄</span>
+        <span class="num">K11</span>
+      </div>
+      <h3>Keys - 11</h3>
+      <p>Muammo, dalil, manba va yechimni aniqlashga qaratilgan topshiriq.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    </div>
+  </section>
+
+  <section id="simulyatorlar" class="section">
+    <div class="section-head">
+      <div>
+        <div class="kicker">🎮 O‘yin orqali o‘rganish</div>
+        <h2>Interaktiv simulyatorlar</h2>
+        <p class="section-desc">Simulyatorlar o‘quvchiga xavfli havola, feyk xabar, manipulyativ post va noto‘g‘ri raqamli qarorlarni amaliy holatda baholashni o‘rgatadi.</p>
+      </div>
+      <span class="badge">6 ta simulyator</span>
+    </div>
+    <div class="grid">
+      
+    <a class="card sim" href="simulyator-1.html">
+      <div class="card-top">
+        <span class="icon">🎮</span>
+        <span class="num">O1</span>
+      </div>
+      <h3>Simulyator - 1</h3>
+      <p>O‘yinli muhitda media xavfsizlik va tanqidiy fikrlashni mashq qilish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card sim" href="simulyator-2.html">
+      <div class="card-top">
+        <span class="icon">🎮</span>
+        <span class="num">O2</span>
+      </div>
+      <h3>Simulyator - 2</h3>
+      <p>O‘yinli muhitda media xavfsizlik va tanqidiy fikrlashni mashq qilish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card sim" href="simulyator-3.html">
+      <div class="card-top">
+        <span class="icon">🎮</span>
+        <span class="num">O3</span>
+      </div>
+      <h3>Simulyator - 3</h3>
+      <p>O‘yinli muhitda media xavfsizlik va tanqidiy fikrlashni mashq qilish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card sim" href="simulyator-4.html">
+      <div class="card-top">
+        <span class="icon">🎮</span>
+        <span class="num">O4</span>
+      </div>
+      <h3>Simulyator - 4</h3>
+      <p>O‘yinli muhitda media xavfsizlik va tanqidiy fikrlashni mashq qilish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card sim" href="simulyator-5.html">
+      <div class="card-top">
+        <span class="icon">🎮</span>
+        <span class="num">O5</span>
+      </div>
+      <h3>Simulyator - 5</h3>
+      <p>O‘yinli muhitda media xavfsizlik va tanqidiy fikrlashni mashq qilish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card sim" href="simulyator-6.html">
+      <div class="card-top">
+        <span class="icon">🎮</span>
+        <span class="num">O6</span>
+      </div>
+      <h3>Simulyator - 6</h3>
+      <p>O‘yinli muhitda media xavfsizlik va tanqidiy fikrlashni mashq qilish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    </div>
+  </section>
+
+  <section id="diagnostika" class="section">
+    <div class="section-head">
+      <div>
+        <div class="kicker">🎓 Baholash va monitoring</div>
+        <h2>Diagnostika, test va nazorat</h2>
+        <p class="section-desc">Bu bo‘limda o‘quvchilar test ishlaydi, sertifikat oladi, o‘qituvchi esa natijalarni nazorat qilishi mumkin.</p>
+      </div>
+      <span class="badge">Test + nazorat + sertifikat</span>
+    </div>
+    <div class="grid">
+      
+    <a class="card diag" href="test_o'quvchilar_uchun.html">
+      <div class="card-top">
+        <span class="icon">👨‍🎓</span>
+        <span class="num">D1</span>
+      </div>
+      <h3>O‘quvchilar uchun test</h3>
+      <p>O‘quvchilar axborot iste’moli madaniyati bo‘yicha bilimini tekshiradi.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card diag" href="test_o'qituvchi_nazorati.html">
+      <div class="card-top">
+        <span class="icon">👨‍🏫</span>
+        <span class="num">D2</span>
+      </div>
+      <h3>O‘qituvchi nazorati</h3>
+      <p>O‘qituvchi topshiriq berish va natijalarni nazorat qilish paneli.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card diag" href="test_diagnostika_sertifikat_uchun.html">
+      <div class="card-top">
+        <span class="icon">🎓</span>
+        <span class="num">D3</span>
+      </div>
+      <h3>Diagnostika va sertifikat</h3>
+      <p>Test yakunida natija va sertifikat hosil qilinadi.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card diag" href="qo'shimcha manbalar.html">
+      <div class="card-top">
+        <span class="icon">📚</span>
+        <span class="num">D4</span>
+      </div>
+      <h3>Qo‘shimcha manbalar</h3>
+      <p>Dars jarayonida foydalanish uchun qo‘shimcha materiallar.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-shell">
+      <div class="footer-title">Sulaymonov Mirobid Abduxolikovich</div>
+      <p>Yoshlarning axborot iste’moli madaniyatini oshirishga qaratilgan metodik-didaktik platforma</p>
+
+      <div class="footer-contacts">
+        <a href="tel:+998944740609" class="footer-contact">📞 +998 (94) 474-06-09</a>
+        <a href="mailto:mirobid30@gmail.com" class="footer-contact">✉️ mirobid30@gmail.com</a>
+        <a href="https://t.me/mirobid30" target="_blank" rel="noopener" class="footer-contact">✈️ @mirobid30</a>
+      </div>
+
+      <div class="footer-copy">© 2025 MDIM | Axborot iste’moli madaniyati metodik-didaktik platformasi.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('show');
+  navToggle.textContent = navLinks.classList.contains('show') ? '×' : '☰';
+});
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  navLinks.classList.remove('show');
+  navToggle.textContent = '☰';
+}));
+</script>
+
+</body>
+</html>

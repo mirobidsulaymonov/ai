@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="uz"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Bot-detektor 3.0</title>
+<style>
+:root{
+  --primary:#0f172a; --muted:#64748b; --blue:#2563eb; --blue2:#0ea5e9;
+  --orange:#f97316; --green:#16a34a; --red:#ef4444; --purple:#7c3aed;
+  --yellow:#f59e0b; --card:#fff; --border:#dbe4f0;
+  --shadow:0 18px 45px rgba(15,23,42,.10); --radius:26px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Arial,"Segoe UI",sans-serif;color:var(--primary);line-height:1.65;
+  background:
+    radial-gradient(circle at top left,rgba(37,99,235,.12),transparent 30%),
+    radial-gradient(circle at top right,rgba(249,115,22,.10),transparent 28%),
+    linear-gradient(180deg,#f8fbff 0%,#eef5ff 48%,#f8fafc 100%);
+}
+.navbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);box-shadow:0 8px 24px rgba(15,23,42,.05)}
+.nav-inner{width:min(1180px,calc(100% - 32px));margin:auto;min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--primary);font-weight:900;letter-spacing:-.035em;font-size:18px}
+.brand-icon{width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,var(--blue),var(--orange));color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(37,99,235,.22);font-size:22px}
+.nav-links{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.nav-links a{text-decoration:none;color:#334155;font-weight:800;font-size:14px;padding:9px 12px;border-radius:999px;transition:.2s}
+.nav-links a:hover{background:#eff6ff;color:var(--blue)}
+.container{width:min(1180px,calc(100% - 32px));margin:auto}
+.hero{padding:30px 0 18px}
+.hero-card{position:relative;overflow:hidden;border-radius:34px;background:linear-gradient(135deg,#0f172a 0%,#1d4ed8 46%,#f97316 100%);color:#fff;padding:38px 34px;box-shadow:var(--shadow)}
+.hero-card::before,.hero-card::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.10)}
+.hero-card::before{width:240px;height:240px;right:-82px;top:-82px}.hero-card::after{width:170px;height:170px;left:-60px;bottom:-70px}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);color:#dbeafe;border:1px solid rgba(255,255,255,.20);padding:8px 13px;border-radius:999px;font-size:14px;font-weight:900;margin-bottom:14px;position:relative;z-index:2}
+.hero-card h1{margin:0 0 12px;font-size:clamp(32px,4.6vw,58px);line-height:1.05;letter-spacing:-.055em;font-weight:900;position:relative;z-index:2;max-width:980px}
+.hero-card p{margin:0;color:#dbeafe;font-size:19px;max-width:960px;position:relative;z-index:2}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;position:relative;z-index:2}
+.btn{border:0;border-radius:15px;padding:13px 18px;font-weight:900;cursor:pointer;transition:.2s;font-size:15px;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,23,42,.12)}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}.btn-white{background:#fff;color:#1d4ed8}.btn-success{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}.btn-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}.btn-orange{background:linear-gradient(135deg,var(--orange),var(--yellow));color:#fff}.btn-dark{background:#0f172a;color:#fff}.btn-purple{background:linear-gradient(135deg,var(--purple),#a855f7);color:#fff}
+.main-grid{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start;padding:8px 0 46px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:22px}
+.section-title{margin:0 0 14px;font-size:26px;line-height:1.2;letter-spacing:-.04em;font-weight:900;display:flex;gap:10px;align-items:center}
+.lead{margin:-4px 0 18px;color:var(--muted);font-size:17px;font-weight:650}
+.sidebar{position:sticky;top:96px}.progress{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin:10px 0 8px}.progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));transition:.4s}
+.rule-list{margin:0;padding:0;list-style:none;display:grid;gap:11px}.rule-list li{display:flex;gap:10px;align-items:flex-start;background:#f8fafc;border:1px solid #e2e8f0;border-radius:15px;padding:12px;color:#475569;font-size:15px}.rule-list b{color:#0f172a}
+.pill{flex:0 0 auto;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#eff6ff;color:var(--blue);font-weight:900}
+.result-box{display:none;margin-top:14px;border-radius:18px;padding:15px 16px;font-weight:900}.result-box.show{display:block;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+label{display:block;font-size:14px;font-weight:900;color:#1e293b;margin:14px 0 7px}textarea,select,input{width:100%;border:1px solid #cbd5e1;border-radius:14px;padding:12px;font-family:inherit;font-size:15px;outline:none;transition:.2s;background:#fff}textarea{resize:vertical;min-height:100px}textarea:focus,select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+footer{text-align:center;color:#64748b;font-size:14px;padding:0 0 38px}
+.modal{display:none;position:fixed;inset:0;background:rgba(2,6,23,.78);z-index:1000;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(5px)}.modal.show{display:flex}.modal-content{width:min(680px,96vw);background:#fff;border-radius:24px;box-shadow:0 25px 70px rgba(0,0,0,.35);overflow:hidden;border:1px solid #e2e8f0}.modal-head{padding:16px 18px;background:linear-gradient(135deg,#0f172a,#1d4ed8);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px}.modal-head h3{margin:0;font-size:21px;font-weight:900}.close{border:0;background:rgba(255,255,255,.14);color:#fff;border-radius:12px;width:38px;height:38px;cursor:pointer;font-size:22px}.modal-body{padding:20px;color:#475569;font-size:16px}.modal-question{margin:0 20px 20px;padding:15px;background:#fff7ed;border-left:4px solid var(--orange);border-radius:12px;color:#9a3412;font-weight:800}
+@media(max-width:1060px){.main-grid{grid-template-columns:1fr}.sidebar{position:static}}
+@media(max-width:760px){.nav-links{display:none}.nav-inner{justify-content:center}.hero-card{padding:24px}.card{padding:18px}}
+</style>
+
+<style>
+.hero-card{background:linear-gradient(135deg,#0f172a 0%,#334155 45%,#16a34a 100%)}
+.table-wrap{overflow-x:auto;border-radius:22px;border:1px solid #e2e8f0}table{width:100%;min-width:900px;border-collapse:collapse;background:#fff}th,td{padding:14px;border-bottom:1px solid #e2e8f0;text-align:left;vertical-align:top}th{background:#0f172a;color:#fff}.user-cell{display:flex;align-items:center;gap:10px;min-width:170px}.avatar{width:44px;height:44px;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:20px}.uname{font-weight:900;color:#1d4ed8}.comment{background:#f8fafc;border-left:4px solid #cbd5e1;border-radius:12px;padding:10px;color:#475569;font-style:italic}.status{font-weight:900}.sbot{color:#b91c1c;border-color:#fca5a5}.sreal{color:#166534;border-color:#86efac}.monitor-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.report-line{padding:12px;border-bottom:1px dashed #dbe4f0}@media(max-width:760px){.monitor-grid{grid-template-columns:1fr}}
+</style></head><body>
+<nav class="navbar"><div class="nav-inner"><a class="brand" href="index.html"><span class="brand-icon">🤖</span><span>Bot-detektor 3.0</span></a><div class="nav-links"><a href="index.html">Bosh sahifa</a><a href="#analysis">Izohlar</a><a href="#monitor">Monitoring</a><a href="#final">Hisobot</a></div></div></nav>
+<header class="hero"><div class="container"><div class="hero-card"><div class="badge">🛡 Raqamli immunitet · Bot nutqini aniqlash</div><h1>Ijtimoiy tarmoq izohlaridagi bot va real foydalanuvchini farqlash</h1><p>O‘quvchilar izohlardagi shoshiltirish, haddan tashqari maqtov, fishing havolalari va real savollarni tahlil qiladi.</p><div class="hero-actions"><a href="#analysis" class="btn btn-white">Tahlilni boshlash</a><button class="btn btn-primary" onclick="showFinal()">Hisobotni generatsiya qilish</button></div></div></div></header>
+<main class="container main-grid"><section><div class="card" id="analysis"><h2 class="section-title">🔬 Izohlarni tahlil qiling</h2><p class="lead">Har bir izoh bo‘yicha shubhali belgini yozing va BOT yoki REAL deb belgilang.</p><div class="table-wrap"><table><thead><tr><th>Foydalanuvchi</th><th>Izoh mazmuni</th><th>Shubhali belgi / dalil</th><th>Xulosa</th></tr></thead><tbody id="botRows"></tbody></table></div></div>
+<div class="card" id="monitor"><h2 class="section-title">📊 Monitoring o‘lchovlari</h2><div class="monitor-grid"><div><label>Izohlar soni ko‘pligi sizda ishonch uyg‘otadimi?</label><select id="aff"><option value="">Tanlang...</option><option>Ha, ko‘pchilik yozgan bo‘lsa ishonaman</option><option>Yo‘q, bu sun’iy ommaviylik bo‘lishi mumkin</option></select></div><div><label>Bot nutqini aniqlashda qaysi belgi yordam berdi?</label><input id="kog" placeholder="Masalan: shoshiling, kafolat, havola, haddan ortiq maqtov..."></div></div><button class="btn btn-success" onclick="showFinal()">Monitoring hisobotini generatsiya qilish</button></div>
+<div class="card" id="final" style="display:none"><h2 class="section-title">✅ Tahlil yakunlandi</h2><div id="reportContent"></div></div></section><aside class="sidebar"><div class="card"><h2 class="section-title">🎯 Dars maqsadi</h2><p class="lead">O‘quvchi bot izohlarini real foydalanuvchi izohidan farqlaydi.</p><div class="progress"><span id="progressBar"></span></div><p id="progressText" style="margin:0;color:#64748b;font-weight:800">Bajarilish holati: 0%</p></div><div class="card"><h2 class="section-title">✅ Bot belgisi</h2><ul class="rule-list"><li><span class="pill">1</span><span><b>Shoshiltirish:</b> “faqat bugun”.</span></li><li><span class="pill">2</span><span><b>Kafolat:</b> “daromad kafolatlangan”.</span></li><li><span class="pill">3</span><span><b>Havola:</b> shaxsiy ma’lumot so‘raydi.</span></li><li><span class="pill">4</span><span><b>Takror:</b> bir xil formulalar.</span></li><li><span class="pill">5</span><span><b>Real izoh:</b> savol, tajriba, muvozanat.</span></li></ul></div></aside></main><footer class="container">Bot-detektor 3.0 · Raqamli immunitet monitoringi</footer>
+<script>
+const data=[
+['User_9928','👤','Ajoyib imkoniyat! Shoshiling, joylar kam qolgan! Daromad kafolatlangan!'],
+['Bekzod_Karimov','👔','Kuni kecha xizmatdan foydalanib ko‘rdim. Reklamasidagidek emas, ayrim kamchiliklari bor.'],
+['A.S.88_Crypto','🤖','✅ Daromad ✅ Ishonch ✅ Sifat. Kuniga 500$ gacha pul toping, telegram silkada!'],
+['Malika_Designer','🎨','Rasmda filtr ishlatilgan shekilli? Asl holatini ko‘rish mumkinmi?'],
+['Global_Promotion_24','⚡','SUPER CHEGIRMA!!! Faqat bugun! Hamma sotib olmoqda, quruq qolmang!'],
+['Jasur_77','👤','Toshkentda qaysi filialingizda bor? Viloyatlarga ham dostavka bormi?'],
+['Winner_Prize_Bot','🎁','Tabriklaymiz! Sovg‘ani olish uchun havola orqali shaxsiy ma’lumot kiriting.'],
+['Umidaxon_Sh','🎓','Maqoladagi faktlar shubhali tuyuldi. Manbalar qayerdan olingan?'],
+['Best_Service_Uz','⭐','Xizmatimiz eng zo‘ri, eng arzoni va eng ishonchlisi. Baxtli mijoz bo‘ling!'],
+['Xayrullo_Aka','🚗','Narxi qancha? To‘lovni terminal orqali qilsa bo‘ladimi?']
+];let p=0;function prog(v){p=Math.max(p,v);progressBar.style.width=p+'%';progressText.textContent='Bajarilish holati: '+p+'%'}
+data.forEach((it,i)=>{botRows.innerHTML+=`<tr><td><div class="user-cell"><div class="avatar">${it[1]}</div><span class="uname">${it[0]}</span></div></td><td><div class="comment">${it[2]}</div></td><td><input id="sign_${i}" placeholder="Nega shubha qildingiz?"></td><td><select id="status_${i}" class="status" onchange="this.className='status '+(this.value==='BOT'?'sbot':'sreal');prog(40)"><option value="">Tanlang</option><option>BOT</option><option>REAL</option></select></td></tr>`})
+function showFinal(){if(!aff.value||!kog.value.trim()){alert('Monitoring savollarini to‘ldiring!');return}let bots=0,filled=0;data.forEach((_,i)=>{const v=document.getElementById('status_'+i).value;if(v)filled++;if(v==='BOT')bots++});if(filled<5){alert('Kamida 5 ta izohni BOT yoki REAL deb belgilang.');return}reportContent.innerHTML=`<div class="report-line"><b>Tahlil qilingan izohlar:</b> 10 ta.</div><div class="report-line"><b>Belgilangan javoblar:</b> ${filled} ta.</div><div class="report-line"><b>Aniqlangan botlar:</b> ${bots} ta.</div><div class="report-line"><b>Affektiv holat:</b> ${aff.value}</div><div class="report-line"><b>Kognitiv filtr belgisi:</b> ${kog.value}</div><p style="font-weight:900;color:#16a34a">Xulosa: siz ommaviylikka ko‘r-ko‘rona ergashmasdan, izohlarni mantiqiy filtr orqali tekshirdingiz.</p>`;document.getElementById('final').style.display='block';prog(100);final.scrollIntoView({behavior:'smooth'})}
+</script></body></html>

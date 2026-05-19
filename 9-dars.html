@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vizual axborot savodxonligi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    :root{
+      --primary:#0f172a;
+      --accent:#2563eb;
+      --accent2:#7c3aed;
+      --card:#ffffff;
+      --border:#e2e8f0;
+      --text:#0f172a;
+      --muted:#64748b;
+      --radius:22px;
+      --shadow:0 10px 28px rgba(15,23,42,.08);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Inter',sans-serif;background:linear-gradient(180deg,#f8fbff 0%, #f3f6ff 46%, #f8fafc 100%);color:var(--text);line-height:1.75;font-size:17px}
+    .container{width:min(1180px, calc(100% - 32px));margin:auto}
+    .topbar{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:74px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;text-decoration:none;color:var(--primary)}
+    .brand-icon{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px}
+    .back-btn{text-decoration:none;color:var(--accent);font-weight:800;background:#eff6ff;border:1px solid #dbeafe;padding:10px 14px;border-radius:12px}
+    .hero{padding:30px 0 10px}
+    .hero-box{background:linear-gradient(135deg,#0f172a 0%, #1d4ed8 45%, #7c3aed 100%);color:#fff;border-radius:30px;padding:36px 30px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .hero-box::before,.hero-box::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08)}
+    .hero-box::before{right:-50px;top:-50px;width:180px;height:180px}
+    .hero-box::after{left:-40px;bottom:-60px;width:160px;height:160px}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.13);color:#dbeafe;padding:8px 12px;border-radius:999px;font-size:.92rem;font-weight:800;margin-bottom:14px}
+    .hero h1{margin:0 0 10px;font-size:clamp(2rem, 4vw, 3rem);line-height:1.08;letter-spacing:-.04em}
+    .hero p{margin:0;max-width:930px;color:#dbeafe;font-size:1.18rem}
+    .meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0 28px}
+    .meta-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(15,23,42,.05)}
+    .meta-card i{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#eff6ff;color:var(--accent);margin-bottom:10px}
+    .meta-card h4{margin:0 0 4px;font-size:.96rem;font-weight:900}
+    .meta-card p{margin:0;color:var(--muted);font-size:.92rem}
+    .section{margin:0 0 26px}
+    .section-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+    .section-title{display:flex;align-items:center;gap:10px;margin:0 0 16px;font-size:1.72rem;line-height:1.2;font-weight:900;letter-spacing:-.03em}
+    .section-title i{color:var(--accent)}
+    .lead{color:#475569;margin-top:-4px;margin-bottom:20px;font-size:1.08rem;font-weight:650}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .card,.goal-card,.theory-card,.task-card,.small-card,.resource-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px}
+    .card h3,.goal-card h3,.theory-card h3,.task-card h3,.small-card h3,.resource-card h3{margin:0 0 10px;font-size:1.16rem;font-weight:900}
+    .card p,.goal-card p,.theory-card p,.task-card p,.small-card p,.resource-card p,li{color:#475569;font-size:1.03rem}
+    .goal-card i,.task-card i,.small-card i{color:var(--accent);margin-right:8px}
+    .highlight{background:linear-gradient(135deg,#eff6ff,#eef2ff);border:1px solid #dbeafe;border-radius:18px;padding:18px;margin-top:16px}
+    .highlight strong{color:var(--primary)}
+    .info-table{width:100%;border-collapse:collapse;margin-top:16px;overflow:hidden;border-radius:14px}
+    .info-table th,.info-table td{border:1px solid var(--border);padding:12px 14px;text-align:left;vertical-align:top;font-size:1rem}
+    .info-table th{background:#f8fafc;font-weight:900}
+    .visual-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:18px}
+    .visual-step{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px 14px;text-align:center}
+    .visual-num{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-weight:900}
+    .visual-step h4{margin:0 0 6px;font-size:1rem;font-weight:900}
+    .visual-step p{margin:0;color:var(--muted);font-size:.96rem;line-height:1.55}
+    .timeline{display:grid;gap:14px;margin-top:8px}
+    .timeline-item{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:start;background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px}
+    .time-badge{background:#eff6ff;color:var(--accent);border-radius:12px;padding:10px 12px;font-weight:900;text-align:center}
+    .timeline-item h4{margin:0 0 6px;font-size:1.16rem;font-weight:900}
+    .timeline-item p{margin:0;color:var(--muted);font-size:1.02rem}
+    .checklist{margin:0;padding-left:18px}
+    .checklist li{margin:6px 0}
+    .resource-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:12px}
+    .resource-card{background:linear-gradient(180deg,#ffffff,#f8fbff);box-shadow:0 8px 20px rgba(15,23,42,.06)}
+    .media-slot{min-height:240px;border:2px dashed #93c5fd;border-radius:18px;background:linear-gradient(135deg,#eff6ff,#f0fdfa);display:flex;align-items:center;justify-content:center;text-align:center;color:#2563eb;font-weight:900;padding:18px;overflow:hidden;cursor:pointer;position:relative;transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease}
+    .media-slot:hover{transform:translateY(-2px);border-color:#2563eb;box-shadow:0 12px 28px rgba(37,99,235,.14)}
+    .media-slot::after{content:"Kattalashtirib ko‘rish";position:absolute;right:14px;bottom:14px;background:rgba(15,23,42,.78);color:#fff;padding:7px 10px;border-radius:999px;font-size:.82rem;font-weight:900;opacity:0;transform:translateY(6px);transition:opacity .18s ease, transform .18s ease;pointer-events:none}
+    .media-slot:hover::after{opacity:1;transform:translateY(0)}
+    .media-slot img,.media-slot video{width:100%;max-height:360px;object-fit:contain;border-radius:14px;display:block;background:#000}
+    .media-slot img{background:transparent}
+    .media-open-btn{width:100%;margin-top:12px;border:0;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-weight:900;padding:11px 14px;border-radius:12px;cursor:pointer;font-family:inherit;font-size:1rem}
+    .media-open-btn:hover{background:#dbeafe}
+    .quiz-question{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px}
+    .quiz-question h4{margin:0 0 10px;font-size:1rem}
+    .quiz-question label{display:block;margin:7px 0;color:var(--muted);cursor:pointer}
+    .short-answer{width:100%;margin-top:10px;border:1px solid #cbd5e1;border-radius:12px;padding:13px 14px;font-size:1.05rem;font-family:inherit;outline:none;transition:border-color .18s ease, box-shadow .18s ease}
+    .short-answer:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+    .open-hint{color:#64748b;font-size:.95rem;margin:8px 0 0}
+    .quiz-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:14px}
+    .btn{border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;padding:12px 16px;border-radius:12px;cursor:pointer}
+    .btn.secondary{background:#e2e8f0;color:var(--primary)}
+    .result{font-weight:800;color:var(--primary)}
+    .footer{padding:20px 0 40px;color:var(--muted);text-align:center;font-size:1rem}
+    .fullscreen-modal{position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,.92);display:none;align-items:center;justify-content:center;padding:22px}
+    .fullscreen-modal.show{display:flex}
+    .modal-content{width:min(1200px,96vw);max-height:92vh;background:#0f172a;border:1px solid rgba(255,255,255,.18);border-radius:22px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+    .modal-header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 16px;color:#fff;background:linear-gradient(135deg,#0f172a,#1e293b);border-bottom:1px solid rgba(255,255,255,.12)}
+    .modal-close{width:40px;height:40px;border:0;border-radius:12px;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;font-size:1.25rem}
+    .modal-body{background:#020617;display:flex;align-items:center;justify-content:center;min-height:55vh;max-height:82vh;padding:14px}
+    .modal-body img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:14px;background:#fff}
+    .modal-body video{width:100%;max-height:78vh;border-radius:14px;background:#000}
+    @media (max-width: 1080px){.meta-grid,.grid-4,.visual-grid,.resource-grid{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}}
+    @media (max-width: 700px){.meta-grid,.grid-4,.visual-grid,.resource-grid{grid-template-columns:1fr}.timeline-item{grid-template-columns:1fr}.hero-box{padding:24px 18px}.section-box{padding:18px}.topbar-inner{flex-direction:column;align-items:flex-start;padding:10px 0}}
+  
+
+    /* === QAYTA ISHLANGAN: haqiqiy infografika zoom, yirik ikonlar va mavzuga mos meta matn === */
+    .brand-icon{width:56px !important;height:56px !important;border-radius:18px !important;font-size:24px !important;box-shadow:0 14px 30px rgba(37,99,235,.24) !important}
+    .meta-card{min-height:154px !important;transition:.25s ease !important}
+    .meta-card:hover{transform:translateY(-3px) !important;box-shadow:0 14px 34px rgba(15,23,42,.10) !important}
+    .meta-card i{
+      width:64px !important;height:64px !important;border-radius:22px !important;font-size:28px !important;
+      display:flex !important;align-items:center !important;justify-content:center !important;
+      background:linear-gradient(135deg,#e0f2fe,#eef2ff) !important;color:#2563eb !important;
+      box-shadow:0 12px 26px rgba(37,99,235,.16) !important;margin-bottom:14px !important;
+    }
+    .meta-card h4{font-size:1.12rem !important;letter-spacing:-.02em !important}
+    .meta-card p{font-size:1.04rem !important;line-height:1.7 !important}
+
+    .fullscreen-modal{position:fixed !important;inset:0 !important;z-index:99999 !important;background:rgba(2,6,23,.94) !important;display:none !important;align-items:center !important;justify-content:center !important;padding:14px !important}
+    .fullscreen-modal.show{display:flex !important}
+    .modal-content{width:min(1560px,98vw) !important;height:min(94vh,980px) !important;max-height:94vh !important;background:#020617 !important;border:1px solid rgba(255,255,255,.18) !important;border-radius:26px !important;overflow:hidden !important;box-shadow:0 34px 90px rgba(0,0,0,.55) !important;display:flex !important;flex-direction:column !important}
+    .modal-header{min-height:64px !important;padding:12px 16px !important;color:#fff !important;background:linear-gradient(135deg,#0f172a,#1e293b) !important;border-bottom:1px solid rgba(255,255,255,.12) !important;display:flex !important;align-items:center !important;justify-content:space-between !important;gap:12px !important}
+    .modal-close{width:46px !important;height:46px !important;border:0 !important;border-radius:15px !important;background:rgba(255,255,255,.14) !important;color:#fff !important;cursor:pointer !important;font-size:1.35rem !important}
+    .modal-body{flex:1 !important;min-height:0 !important;max-height:none !important;padding:0 !important;display:block !important;overflow:hidden !important;background:#020617 !important}
+    .modal-body video{display:block !important;width:100% !important;height:100% !important;max-height:none !important;border-radius:0 !important;background:#000 !important}
+
+    .az-zoom-panel{height:100%;display:flex;flex-direction:column;background:#020617}
+    .az-zoom-toolbar{min-height:64px;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 12px;background:rgba(15,23,42,.98);border-bottom:1px solid rgba(255,255,255,.12);color:#fff;flex-wrap:wrap}
+    .az-zoom-btn{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;min-width:48px;height:43px;border-radius:14px;font-weight:900;font-size:1.05rem;cursor:pointer;transition:.18s ease;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 13px}
+    .az-zoom-btn:hover{background:#2563eb;transform:translateY(-1px)}
+    .az-zoom-value{min-width:82px;text-align:center;font-weight:900;color:#dbeafe;background:rgba(37,99,235,.18);border:1px solid rgba(147,197,253,.22);height:43px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center}
+    .az-zoom-hint{font-size:.86rem;color:#cbd5e1;font-weight:700;margin-left:6px}
+    .az-stage{flex:1;min-height:0;overflow:auto;display:block;background:radial-gradient(circle at top,rgba(37,99,235,.14),transparent 35%),#020617;padding:28px;text-align:center;cursor:grab;scroll-behavior:auto;touch-action:none;user-select:none}
+    .az-stage.az-dragging{cursor:grabbing}
+    .az-img{display:block;margin:0 auto;background:#fff;border-radius:18px;box-shadow:0 28px 80px rgba(0,0,0,.45);max-width:none !important;max-height:none !important;object-fit:contain;user-select:none;-webkit-user-drag:none;transition:width .12s ease}
+    @media(max-width:700px){.az-zoom-toolbar{justify-content:flex-start}.az-zoom-hint{width:100%;margin-left:0;text-align:center}.az-stage{padding:16px}.modal-content{height:95vh !important;width:98vw !important}.meta-card{min-height:auto !important}}
+
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <a href="#" class="brand">
+        <span class="brand-icon"><i class="fa-solid fa-eye"></i></span>
+        <span>Axborot madaniyati platformasi</span>
+      </a>
+      <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Bosh sahifaga qaytish</a>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-box">
+        <div class="hero-badge"><i class="fa-solid fa-bolt"></i> 9-modul · Dars ishlanmasi</div>
+        <h1>Vizual axborot savodxonligi</h1>
+        <p>Ushbu darsda o‘quvchilar rasm, video, infografika va memlarda yashirin ma’nolarni anglash, vizual manipulyatsiyani aniqlash, tasvirning konteksti va ijtimoiy ta’sirini baholash ko‘nikmalarini rivojlantiradilar.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <div class="meta-grid">
+        <div class="meta-card"><i class="fa-solid fa-school"></i><h4>Yo‘nalish</h4><p>Yoshlarning axborot madaniyatini oshirishga yo‘naltirilgan</p></div>
+        <div class="meta-card"><i class="fa-solid fa-clock"></i><h4>Davomiyligi</h4><p>45 daqiqa</p></div>
+        <div class="meta-card"><i class="fa-solid fa-layer-group"></i><h4>Dars turi</h4><p>Tahliliy, vizual va amaliy mashg‘ulot</p></div>
+        <div class="meta-card"><i class="fa-solid fa-eye"></i><h4>Asosiy natija</h4><p>O‘quvchi vizual axborotni ongli tahlil qiladi</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-chalkboard-user"></i> Dars jarayoni</h2>
+        <p class="lead">45 daqiqalik namunaviy dars taqsimoti</p>
+        <div class="timeline">
+          <div class="timeline-item"><div class="time-badge">5 daqiqa</div><div><h4>Tashkiliy qism</h4><p>Salomlashish, davomat, dars mavzusi va maqsadini e’lon qilish.</p></div></div>
+          <div class="timeline-item"><div class="time-badge">7 daqiqa</div><div><h4>Motivatsiya</h4><p>Bir rasm yoki mem ko‘rsatiladi va “Bu tasvir bizga qanday fikr bermoqchi?” savoli asosida suhbat boshlanadi.</p></div></div>
+          <div class="timeline-item"><div class="time-badge">10 daqiqa</div><div><h4>Nazariy tushuntirish</h4><p>Vizual axborot, yashirin ma’no, ramz, kontekst, rakurs va vizual manipulyatsiya tushunchalari izohlanadi.</p></div></div>
+          <div class="timeline-item"><div class="time-badge">12 daqiqa</div><div><h4>Amaliy mashq</h4><p>O‘quvchilar rasm, video lavha yoki infografikani tahlil mezonlari bo‘yicha guruhda ko‘rib chiqadilar.</p></div></div>
+          <div class="timeline-item"><div class="time-badge">6 daqiqa</div><div><h4>Mustahkamlash</h4><p>“Nima ko‘ryapman — nima anglayapman?” jadvali asosida xulosa qilinadi.</p></div></div>
+          <div class="timeline-item"><div class="time-badge">5 daqiqa</div><div><h4>Baholash va uyga vazifa</h4><p>Test, yozma savollar va uyga vazifa beriladi.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-id-card"></i> Dars pasporti</h2>
+        <p class="lead">Darsning qisqacha reja-ma’lumoti</p>
+        <div class="grid-2">
+          <div class="small-card"><h3><i class="fa-solid fa-bullseye"></i> Dars maqsadi</h3><p>O‘quvchilarda vizual axborotni tanqidiy tahlil qilish, rasm va videodagi yashirin ma’no, hissiy ta’sir, kontekst va manipulyativ belgilarni aniqlash ko‘nikmalarini shakllantirish.</p></div>
+          <div class="small-card"><h3><i class="fa-solid fa-toolbox"></i> Jihozlar</h3><p>Kompyuter, proyektor, rasm va video namunalari, memlar, infografikalar, taqdimot, tahlil varaqalari va test topshiriqlari.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-star"></i> O‘quv maqsadlari</h2>
+        <p class="lead">Dars yakunida o‘quvchi quyidagilarni bajara oladi:</p>
+        <div class="grid-3">
+          <div class="goal-card"><h3><i class="fa-solid fa-check"></i> Biladi</h3><p>Vizual axborot, ramz, kontekst, vizual manipulyatsiya va infografika tushunchalarini izohlab bera oladi.</p></div>
+          <div class="goal-card"><h3><i class="fa-solid fa-check"></i> Tushunadi</h3><p>Rasm yoki video faqat ko‘rinadigan ma’lumot emas, balki ma’lum maqsad va ta’sirga ega bo‘lishini tushunadi.</p></div>
+          <div class="goal-card"><h3><i class="fa-solid fa-check"></i> Qo‘llaydi</h3><p>Rasm, video, infografika yoki memni mazmun, kontekst, maqsad va ta’sir bo‘yicha tahlil qila oladi.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-book"></i> Nazariy qism</h2>
+        <p class="lead">Vizual axborotni anglash va baholash</p>
+        <div class="grid-2">
+          <div class="theory-card">
+            <h3>Vizual axborot savodxonligi nima?</h3>
+            <p>Vizual axborot savodxonligi — bu rasm, video, infografika, reklama, mem va belgilar orqali berilgan ma’lumotni tushunish, tahlil qilish, yashirin ma’nolarini anglash va ularning ta’sirini baholash qobiliyatidir.</p>
+          </div>
+          <div class="theory-card">
+            <h3>Nega bu muhim?</h3>
+            <p>Chunki bugungi kunda ko‘plab axborotlar matndan ko‘ra ko‘proq tasvir, video va grafikalar orqali yetkaziladi. Bunday materiallar hissiyotga tez ta’sir qiladi, ayrim hollarda esa voqelikni noto‘g‘ri ko‘rsatishi mumkin.</p>
+          </div>
+        </div>
+        <div class="highlight"><strong>Esda tuting:</strong> rasm yoki video “o‘zi gapiradi” deb o‘ylash xato bo‘lishi mumkin. Har bir vizual material tanlangan rakurs, rang, kadr, sarlavha va kontekst orqali ma’lum fikrni shakllantiradi.</div>
+        <table class="info-table">
+          <thead><tr><th>Tushuncha</th><th>Qisqa izoh</th></tr></thead>
+          <tbody>
+            <tr><td>Vizual axborot</td><td>Rasm, video, grafik, belgi, mem yoki infografika orqali berilgan ma’lumot.</td></tr>
+            <tr><td>Kontekst</td><td>Tasvir qaysi vaziyat, vaqt va joy bilan bog‘liqligini ko‘rsatuvchi sharoit.</td></tr>
+            <tr><td>Ramz</td><td>Muayyan ma’no ifodalovchi belgi, rang, obyekt yoki tasvir elementi.</td></tr>
+            <tr><td>Rakurs</td><td>Rasm yoki videoning qaysi burchakdan olingani va tomoshabinga qanday ta’sir qilishi.</td></tr>
+            <tr><td>Vizual manipulyatsiya</td><td>Tasvirni kesish, tahrirlash, rangini o‘zgartirish yoki noto‘g‘ri kontekstda berish orqali fikrni chalg‘itish.</td></tr>
+            <tr><td>Mem</td><td>Qisqa, kulgili yoki tanqidiy g‘oyani rasm va matn orqali ifodalovchi media shakli.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-diagram-project"></i> Vizual axborotni tahlil qilishning 6 bosqichi</h2>
+        <p class="lead">O‘quvchilar rasm, video yoki infografikani quyidagi tartibda tahlil qiladilar:</p>
+        <div class="visual-grid">
+          <div class="visual-step"><div class="visual-num">1</div><h4>Nimani ko‘ryapman?</h4><p>Tasvirdagi obyektlar, odamlar, joy va harakatlarni sanang.</p></div>
+          <div class="visual-step"><div class="visual-num">2</div><h4>Kim yaratgan?</h4><p>Muallif, manba, kanal yoki sahifani aniqlang.</p></div>
+          <div class="visual-step"><div class="visual-num">3</div><h4>Nima maqsadda?</h4><p>Axborot berish, ishontirish, reklama qilish yoki kuldirish maqsadini toping.</p></div>
+          <div class="visual-step"><div class="visual-num">4</div><h4>Qanday ta’sir qiladi?</h4><p>Rang, musiqa, sarlavha, rakurs va kadr hissiyotga qanday ta’sir qilishini baholang.</p></div>
+          <div class="visual-step"><div class="visual-num">5</div><h4>Kontekst to‘g‘rimi?</h4><p>Rasm yoki video eski emasmi, boshqa voqeaga tegishli emasmi?</p></div>
+          <div class="visual-step"><div class="visual-num">6</div><h4>Xulosa chiqaring</h4><p>Vizual material ishonchlimi, foydalimi yoki manipulyativmi — asoslab ayting.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-scale-balanced"></i> Vizual materiallarda nimalarga e’tibor beriladi?</h2>
+        <p class="lead">Rasm, video, infografika va memni ko‘rganda quyidagilarni tekshirish muhim:</p>
+        <div class="grid-4">
+          <div class="card"><h3>Rang va kayfiyat</h3><p>Ranglar tomoshabinda qo‘rquv, ishonch, quvonch yoki xavotir uyg‘otishi mumkin.</p></div>
+          <div class="card"><h3>Kadr va rakurs</h3><p>Bir voqea turli burchakdan turlicha ko‘rinishi mumkin.</p></div>
+          <div class="card"><h3>Sarlavha va matn</h3><p>Rasm ostidagi yozuv tasvir ma’nosini o‘zgartirib yuborishi mumkin.</p></div>
+          <div class="card"><h3>Tahrir va montaj</h3><p>Kesilgan, qo‘shilgan yoki o‘zgartirilgan tasvir voqelikni noto‘g‘ri ko‘rsatishi mumkin.</p></div>
+        </div>
+        <div class="grid-2" style="margin-top:18px;">
+          <div class="small-card"><h3><i class="fa-solid fa-circle-check"></i> Ongli tahlil belgiları</h3><ul class="checklist"><li>Tasvir manbasi tekshiriladi</li><li>Vaqt va joy aniqlanadi</li><li>Rang, kadr va sarlavha baholanadi</li><li>Boshqa manbalar bilan solishtiriladi</li><li>Hissiyotga berilmasdan xulosa qilinadi</li></ul></div>
+          <div class="small-card"><h3><i class="fa-solid fa-triangle-exclamation"></i> Xatolarga olib keluvchi holatlar</h3><ul class="checklist"><li>Rasmga darhol ishonish</li><li>Memni fakt sifatida qabul qilish</li><li>Kontekstni tekshirmaslik</li><li>Montaj yoki kesishni sezmaslik</li><li>Sarlavha ta’sirida shoshilinch xulosa qilish</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-pen-ruler"></i> Amaliy topshiriqlar</h2>
+        <p class="lead">Maktab o‘quvchilari bilan bajariladigan mashqlar</p>
+        <div class="grid-3">
+          <div class="task-card"><h3><i class="fa-solid fa-image"></i> 1-topshiriq: Rasmni tavsiflang</h3><p>Berilgan rasmda nimalar ko‘rinayotganini fakt sifatida yozing.</p></div>
+          <div class="task-card"><h3><i class="fa-solid fa-magnifying-glass"></i> 2-topshiriq: Yashirin ma’noni toping</h3><p>Rasm yoki mem qanday fikrni singdirishga urinayotganini izohlang.</p></div>
+          <div class="task-card"><h3><i class="fa-solid fa-camera"></i> 3-topshiriq: Rakursni baholang</h3><p>Kadr qaysi tomondan olingani xulosa chiqarishga qanday ta’sir qilganini tushuntiring.</p></div>
+          <div class="task-card"><h3><i class="fa-solid fa-chart-pie"></i> 4-topshiriq: Infografikani tekshiring</h3><p>Infografikadagi raqamlar, manbalar va ranglar qanday ma’no berayotganini tahlil qiling.</p></div>
+          <div class="task-card"><h3><i class="fa-solid fa-film"></i> 5-topshiriq: Video lavhani tahlil qiling</h3><p>Video lavhada musiqa, montaj va sarlavha qanday ta’sir ko‘rsatayotganini aniqlang.</p></div>
+          <div class="task-card"><h3><i class="fa-solid fa-gavel"></i> 6-topshiriq: Yakuniy xulosa</h3><p>Vizual material ishonchli, manipulyativ yoki shubhali ekanini asoslab ayting.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-image"></i> Qo‘shimcha infografika va video ma’lumotlar</h2>
+        <div class="resource-grid">
+          <div class="resource-card">
+            <h3><i class="fa-solid fa-chart-column"></i> Infografika</h3>
+            <div class="media-slot" onclick="openMediaModal('image','9-infografika.png','Infografika')">
+              <img src="9-infografika.png" alt="Vizual axborot savodxonligi infografikasi" onerror="this.style.display='none'; this.parentElement.insertAdjacentHTML('beforeend','<span>Infografika</span>');">
+            </div>
+            <button class="media-open-btn" type="button" onclick="openMediaModal('image','9-infografika.png','Infografika')"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Infografikani katta ekranda ochish</button>
+          </div>
+          <div class="resource-card">
+            <h3><i class="fa-solid fa-clapperboard"></i> Video ma’lumot</h3>
+            <div class="media-slot" onclick="openMediaModal('video','9-dars.mp4','Video ma’lumot')">
+              <video controls preload="metadata" onclick="event.stopPropagation()">
+                <source src="9-dars.mp4" type="video/mp4">
+              </video>
+            </div>
+            <button class="media-open-btn" type="button" onclick="openMediaModal('video','9-dars.mp4','Video ma’lumot')"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Videoni katta ekranda ochish</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-circle-question"></i> Tezkor test</h2>
+        <p class="lead">Dars yakunida o‘quvchi 3 ta tanlovli test va 2 ta yozma yopiq savol orqali o‘zini tekshiradi</p>
+        <div class="quiz-question">
+          <h4>1. Vizual axborot savodxonligi nimani anglatadi?</h4>
+          <label><input type="radio" name="q1" value="1"> Rasm, video va grafik axborotni tahlil qilish hamda baholashni</label>
+          <label><input type="radio" name="q1" value="0"> Faqat rasm chizishni</label>
+          <label><input type="radio" name="q1" value="0"> Faqat video ko‘rishni</label>
+        </div>
+        <div class="quiz-question">
+          <h4>2. Rasm yoki videoning qaysi vaziyatda olinganini bildiruvchi tushuncha nima?</h4>
+          <label><input type="radio" name="q2" value="0"> Rang</label>
+          <label><input type="radio" name="q2" value="1"> Kontekst</label>
+          <label><input type="radio" name="q2" value="0"> O‘lcham</label>
+        </div>
+        <div class="quiz-question">
+          <h4>3. Tasvirni kesish, tahrirlash yoki noto‘g‘ri kontekstda berish nimaga olib keladi?</h4>
+          <label><input type="radio" name="q3" value="1"> Vizual manipulyatsiyaga</label>
+          <label><input type="radio" name="q3" value="0"> Xolis tahlilga</label>
+          <label><input type="radio" name="q3" value="0"> Rasm sifati oshishiga</label>
+        </div>
+        <div class="quiz-question open-question">
+          <h4>4. Tasvir qaysi vaziyat, vaqt va joy bilan bog‘liqligini bildiruvchi tushuncha nima?</h4>
+          <input type="text" id="q4" class="short-answer" placeholder="Javobni yozing...">
+          <p class="open-hint">Javobni bitta so‘z bilan yozing.</p>
+        </div>
+        <div class="quiz-question open-question">
+          <h4>5. Muayyan ma’no ifodalovchi belgi, rang yoki obyekt nima deyiladi?</h4>
+          <input type="text" id="q5" class="short-answer" placeholder="Javobni yozing...">
+          <p class="open-hint">Javobni bitta so‘z bilan yozing.</p>
+        </div>
+        <div class="quiz-actions">
+          <button class="btn" onclick="checkQuiz()">Natijani ko‘rish</button>
+          <button class="btn secondary" onclick="resetQuiz()">Tozalash</button>
+          <span id="quizResult" class="result"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-house-laptop"></i> Uyga vazifa</h2>
+        <p class="lead">Qisqa va foydali topshiriq</p>
+        <ol class="checklist">
+          <li>Biror rasm, video yoki memni tanlab, uning asosiy mazmunini yozing.</li>
+          <li>Tasvirda ishlatilgan rang, ramz va sarlavha qanday ta’sir qilayotganini izohlang.</li>
+          <li>“Vizual axborotga darhol ishonish nega xavfli?” mavzusida 5–6 gap yozing.</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <div id="mediaModal" class="fullscreen-modal" role="dialog" aria-modal="true" aria-label="Media ko‘rish oynasi">
+    <div class="modal-content">
+      <div class="modal-header">
+        <strong id="modalTitle">Media</strong>
+        <button class="modal-close" type="button" onclick="closeMediaModal()" aria-label="Yopish"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <footer class="footer container">Ushbu sahifa maktab o‘quvchilari uchun “Vizual axborot savodxonligi” mavzusidagi darsni zamonaviy va tushunarli shaklda tashkil etish uchun tayyorlandi.</footer>
+
+  <script>
+    function openMediaModal(type, src, title){
+      const modal=document.getElementById('mediaModal');
+      const modalTitle=document.getElementById('modalTitle');
+      const modalBody=document.getElementById('modalBody');
+      modalTitle.textContent=title||'Media';
+      if(type==='image'){
+        modalBody.innerHTML=`<img src="${src}" alt="${title||'Infografika'}" onerror="this.outerHTML='<div style=&quot;color:white;text-align:center;font-weight:800;padding:30px&quot;>Rasm topilmadi.</div>'">`;
+      }else{
+        modalBody.innerHTML=`<video controls autoplay><source src="${src}" type="video/mp4">Brauzeringiz MP4 videoni qo‘llab-quvvatlamaydi.</video>`;
+      }
+      modal.classList.add('show');
+      document.body.style.overflow='hidden';
+    }
+    function closeMediaModal(){
+      const modal=document.getElementById('mediaModal');
+      const modalBody=document.getElementById('modalBody');
+      modal.classList.remove('show');
+      modalBody.innerHTML='';
+      document.body.style.overflow='';
+    }
+    document.addEventListener('keydown',e=>{if(e.key==='Escape') closeMediaModal();});
+    document.addEventListener('click',e=>{const modal=document.getElementById('mediaModal');if(e.target===modal) closeMediaModal();});
+    function normalizeAnswer(text){return text.toLowerCase().replace(/[’‘`']/g,"'").replace(/\s+/g,' ').trim();}
+    function checkQuiz(){
+      const answers=['q1','q2','q3']; let score=0; let checkedCount=0;
+      answers.forEach(q=>{ const selected=document.querySelector(`input[name="${q}"]:checked`); if(selected){checkedCount++; score+=Number(selected.value);} });
+      const q4=normalizeAnswer(document.getElementById('q4').value);
+      const q5=normalizeAnswer(document.getElementById('q5').value);
+      const result=document.getElementById('quizResult');
+      if(checkedCount<answers.length || !q4 || !q5){ result.textContent="Iltimos, barcha savollarga javob bering."; result.style.color="#b45309"; return; }
+      if(["kontekst"].includes(q4)) score++;
+      if(["ramz","belgi","simvol"].includes(q5)) score++;
+      if(score===5){result.textContent="Ajoyib! Natija: 5 / 5"; result.style.color="#15803d";}
+      else if(score>=3){result.textContent="Yaxshi! Natija: "+score+" / 5"; result.style.color="#2563eb";}
+      else {result.textContent="Yana bir bor urinib ko‘ring. Natija: "+score+" / 5"; result.style.color="#dc2626";}
+    }
+    function resetQuiz(){document.querySelectorAll('input[type="radio"]').forEach(el=>el.checked=false);document.querySelectorAll('.short-answer').forEach(el=>el.value='');document.getElementById('quizResult').textContent='';}
+  </script>
+
+
+  <script>
+  /* === QAYTA ISHLANGAN: infografika haqiqiy kattalashadi, scroll va surish ishlaydi === */
+  (function(){
+    const state = { scale:1, min:.45, max:5, baseWidth:900, dragging:false, sx:0, sy:0, sl:0, st:0 };
+    function ensureModal(){
+      let modal = document.getElementById('mediaModal');
+      if(!modal){
+        modal = document.createElement('div');
+        modal.id = 'mediaModal';
+        modal.className = 'fullscreen-modal';
+        modal.setAttribute('role','dialog');
+        modal.setAttribute('aria-modal','true');
+        modal.innerHTML = '<div class="modal-content"><div class="modal-header"><strong id="modalTitle">Media</strong><button class="modal-close" type="button" aria-label="Yopish"><i class="fa-solid fa-xmark"></i></button></div><div id="modalBody" class="modal-body"></div></div>';
+        document.body.appendChild(modal);
+      }
+      const closeBtn = modal.querySelector('.modal-close');
+      if(closeBtn) closeBtn.onclick = window.closeMediaModal;
+      return modal;
+    }
+    function clamp(v){ return Math.max(state.min, Math.min(state.max, v)); }
+    function update(){
+      const img = document.getElementById('azZoomImg');
+      const value = document.getElementById('azZoomValue');
+      if(!img) return;
+      img.style.width = Math.round(state.baseWidth * state.scale) + 'px';
+      img.style.height = 'auto';
+      if(value) value.textContent = Math.round(state.scale * 100) + '%';
+    }
+    window.zoomImage = function(delta){
+      const stage = document.getElementById('azZoomStage');
+      if(!stage) return;
+      const oldScale = state.scale;
+      const oldLeft = stage.scrollLeft, oldTop = stage.scrollTop;
+      const cx = oldLeft + stage.clientWidth/2;
+      const cy = oldTop + stage.clientHeight/2;
+      state.scale = clamp(state.scale + delta);
+      update();
+      const ratio = state.scale / oldScale;
+      stage.scrollLeft = cx * ratio - stage.clientWidth/2;
+      stage.scrollTop = cy * ratio - stage.clientHeight/2;
+    };
+    window.resetImageZoom = function(){
+      const stage = document.getElementById('azZoomStage');
+      state.scale = 1;
+      update();
+      if(stage){ stage.scrollLeft = Math.max(0,(stage.scrollWidth-stage.clientWidth)/2); stage.scrollTop = 0; }
+    };
+    window.closeMediaModal = function(){
+      const modal = document.getElementById('mediaModal');
+      const body = document.getElementById('modalBody');
+      if(modal) modal.classList.remove('show');
+      if(body) body.innerHTML = '';
+      document.body.style.overflow = '';
+    };
+    window.openMediaModal = function(type, src, title){
+      const modal = ensureModal();
+      const modalTitle = document.getElementById('modalTitle');
+      const modalBody = document.getElementById('modalBody');
+      if(modalTitle) modalTitle.textContent = title || 'Media';
+      if(!modalBody) return;
+      if(type === 'image'){
+        state.scale = 1;
+        modalBody.innerHTML = '<div class="az-zoom-panel"><div class="az-zoom-toolbar"><button class="az-zoom-btn" type="button" onclick="zoomImage(-0.25)" title="Kichraytirish">−</button><span id="azZoomValue" class="az-zoom-value">100%</span><button class="az-zoom-btn" type="button" onclick="zoomImage(0.25)" title="Kattalashtirish">+</button><button class="az-zoom-btn" type="button" onclick="zoomImage(0.75)" title="Tez kattalashtirish"><i class="fa-solid fa-magnifying-glass-plus"></i></button><button class="az-zoom-btn" type="button" onclick="resetImageZoom()" title="Boshlang\'ich holat">100%</button><span class="az-zoom-hint">+ / − tugmalari, sichqoncha g‘ildiragi va rasmni ushlab surish ishlaydi</span></div><div id="azZoomStage" class="az-stage"><img id="azZoomImg" class="az-img" alt="Infografika"></div></div>';
+        const stage = document.getElementById('azZoomStage');
+        const img = document.getElementById('azZoomImg');
+        img.onload = function(){
+          const available = Math.max(320, stage.clientWidth - 70);
+          const natural = img.naturalWidth || 1200;
+          state.baseWidth = Math.min(natural, available);
+          if(natural < available) state.baseWidth = Math.min(available, 1100);
+          update();
+          requestAnimationFrame(()=>{ stage.scrollLeft = Math.max(0,(stage.scrollWidth-stage.clientWidth)/2); stage.scrollTop = 0; });
+        };
+        img.onerror = function(){ stage.innerHTML = '<div style="color:#fff;text-align:center;font-weight:900;padding:34px">Rasm topilmadi. Infografika fayli HTML bilan bitta papkada turganini tekshiring.</div>'; };
+        img.src = src;
+      } else {
+        modalBody.innerHTML = '<video controls autoplay><source src="'+String(src).replace(/"/g,'&quot;')+'" type="video/mp4">Brauzeringiz MP4 videoni qo‘llab-quvvatlamaydi.</video>';
+      }
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    };
+    document.addEventListener('wheel', function(e){
+      const stage = e.target.closest && e.target.closest('#azZoomStage');
+      if(!stage) return;
+      e.preventDefault();
+      window.zoomImage(e.deltaY < 0 ? 0.18 : -0.18);
+    }, {passive:false});
+    document.addEventListener('pointerdown', function(e){
+      const stage = e.target.closest && e.target.closest('#azZoomStage');
+      if(!stage) return;
+      state.dragging = true; state.sx = e.clientX; state.sy = e.clientY; state.sl = stage.scrollLeft; state.st = stage.scrollTop;
+      stage.classList.add('az-dragging');
+      stage.setPointerCapture && stage.setPointerCapture(e.pointerId);
+    });
+    document.addEventListener('pointermove', function(e){
+      if(!state.dragging) return;
+      const stage = document.getElementById('azZoomStage'); if(!stage) return;
+      stage.scrollLeft = state.sl - (e.clientX - state.sx);
+      stage.scrollTop = state.st - (e.clientY - state.sy);
+    });
+    document.addEventListener('pointerup', function(){
+      state.dragging = false;
+      const stage = document.getElementById('azZoomStage'); if(stage) stage.classList.remove('az-dragging');
+    });
+    document.addEventListener('keydown', function(e){
+      const modal = document.getElementById('mediaModal');
+      if(!modal || !modal.classList.contains('show')) return;
+      if(e.key === 'Escape') window.closeMediaModal();
+      if(e.key === '+' || e.key === '=') window.zoomImage(0.25);
+      if(e.key === '-') window.zoomImage(-0.25);
+      if(e.key === '0') window.resetImageZoom();
+    });
+    document.addEventListener('click', function(e){
+      const modal = document.getElementById('mediaModal');
+      if(modal && e.target === modal) window.closeMediaModal();
+    });
+  })();
+  </script>
+
+</body>
+</html>

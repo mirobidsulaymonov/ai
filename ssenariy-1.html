@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Media savodxonlik portali</title>
+  <style>
+    :root{
+      --primary:#0f172a;
+      --muted:#64748b;
+      --blue:#2563eb;
+      --blue2:#0ea5e9;
+      --purple:#7c3aed;
+      --orange:#f97316;
+      --green:#16a34a;
+      --red:#ef4444;
+      --bg:#f5f8ff;
+      --card:#ffffff;
+      --border:#dbe4f0;
+      --shadow:0 18px 45px rgba(15,23,42,.10);
+      --radius:26px;
+    }
+
+    *{box-sizing:border-box}
+
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      font-family: Arial, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.11), transparent 30%),
+        radial-gradient(circle at top right, rgba(124,58,237,.10), transparent 28%),
+        linear-gradient(180deg,#f8fbff 0%,#eef5ff 46%,#f8fafc 100%);
+      color:var(--primary);
+      line-height:1.65;
+    }
+
+    .navbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(255,255,255,.92);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 8px 24px rgba(15,23,42,.05);
+    }
+
+    .nav-inner{
+      width:min(1180px,calc(100% - 32px));
+      margin:auto;
+      min-height:74px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:var(--primary);
+      font-weight:900;
+      letter-spacing:-.035em;
+      font-size:18px;
+    }
+
+    .brand-icon{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      background:linear-gradient(135deg,var(--blue),var(--purple));
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 10px 24px rgba(37,99,235,.22);
+      font-size:22px;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .nav-links a{
+      text-decoration:none;
+      color:#334155;
+      font-weight:800;
+      font-size:14px;
+      padding:9px 12px;
+      border-radius:999px;
+      transition:.2s ease;
+    }
+
+    .nav-links a:hover{
+      background:#eff6ff;
+      color:var(--blue);
+    }
+
+    .container{
+      width:min(1180px,calc(100% - 32px));
+      margin:auto;
+    }
+
+    .hero{
+      padding:30px 0 18px;
+    }
+
+    .hero-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:34px;
+      background:linear-gradient(135deg,#0f172a 0%,#1d4ed8 48%,#7c3aed 100%);
+      color:#fff;
+      padding:38px 34px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero-card::before,
+    .hero-card::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.10);
+    }
+
+    .hero-card::before{
+      width:240px;
+      height:240px;
+      right:-82px;
+      top:-82px;
+    }
+
+    .hero-card::after{
+      width:170px;
+      height:170px;
+      left:-60px;
+      bottom:-70px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(255,255,255,.15);
+      color:#dbeafe;
+      border:1px solid rgba(255,255,255,.20);
+      padding:8px 13px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:900;
+      margin-bottom:14px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-card h1{
+      margin:0 0 12px;
+      font-size:clamp(32px,4.6vw,58px);
+      line-height:1.05;
+      letter-spacing:-.055em;
+      font-weight:900;
+      position:relative;
+      z-index:2;
+      max-width:920px;
+    }
+
+    .hero-card p{
+      margin:0;
+      color:#dbeafe;
+      font-size:19px;
+      max-width:940px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:22px;
+      position:relative;
+      z-index:2;
+    }
+
+    .btn{
+      border:0;
+      border-radius:15px;
+      padding:13px 18px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.2s ease;
+      font-size:15px;
+      font-family:inherit;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      text-decoration:none;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 22px rgba(15,23,42,.12);
+    }
+
+    .btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+    .btn-white{background:#fff;color:#1d4ed8}
+    .btn-success{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+    .btn-muted{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
+    .btn-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+
+    .content-grid{
+      display:grid;
+      grid-template-columns:1fr 360px;
+      gap:22px;
+      align-items:start;
+      padding:8px 0 46px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow:var(--shadow);
+      margin-bottom:22px;
+    }
+
+    .section-title{
+      margin:0 0 14px;
+      font-size:26px;
+      line-height:1.2;
+      letter-spacing:-.04em;
+      font-weight:900;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .lead{
+      margin:-4px 0 18px;
+      color:var(--muted);
+      font-size:17px;
+      font-weight:650;
+    }
+
+    .types-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:14px;
+    }
+
+    .type-card{
+      border:1px solid #e2e8f0;
+      border-radius:20px;
+      padding:18px 14px;
+      min-height:150px;
+      cursor:pointer;
+      transition:.22s ease;
+      color:#fff;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .type-card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 14px 30px rgba(15,23,42,.15);
+    }
+
+    .type-card::after{
+      content:"";
+      position:absolute;
+      width:85px;
+      height:85px;
+      border-radius:50%;
+      background:rgba(255,255,255,.15);
+      right:-25px;
+      bottom:-25px;
+    }
+
+    .type-icon{
+      width:44px;
+      height:44px;
+      border-radius:15px;
+      background:rgba(255,255,255,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      margin-bottom:12px;
+      position:relative;
+      z-index:2;
+    }
+
+    .type-card h3{
+      margin:0 0 6px;
+      font-size:18px;
+      font-weight:900;
+      position:relative;
+      z-index:2;
+    }
+
+    .type-card p{
+      margin:0;
+      font-size:13.5px;
+      color:rgba(255,255,255,.88);
+      position:relative;
+      z-index:2;
+      line-height:1.45;
+    }
+
+    .fact{background:linear-gradient(135deg,#2563eb,#0ea5e9)}
+    .opinion{background:linear-gradient(135deg,#7c3aed,#a855f7)}
+    .ad{background:linear-gradient(135deg,#16a34a,#22c55e)}
+    .rumor{background:linear-gradient(135deg,#f97316,#ef4444)}
+    .analysis{background:linear-gradient(135deg,#0f172a,#334155)}
+
+    .case-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px;
+    }
+
+    .case-box{
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      border-left:6px solid var(--orange);
+      border-radius:20px;
+      padding:18px;
+    }
+
+    .case-box h3{
+      margin:0 0 8px;
+      color:#9a3412;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .case-box p{
+      margin:0 0 14px;
+      color:#475569;
+      font-size:15.5px;
+    }
+
+    .choice{
+      width:100%;
+      display:block;
+      text-align:left;
+      border:1px solid #e2e8f0;
+      background:#fff;
+      border-radius:14px;
+      padding:12px 14px;
+      margin-top:9px;
+      font-family:inherit;
+      cursor:pointer;
+      transition:.2s ease;
+      color:#334155;
+      font-weight:750;
+    }
+
+    .choice:hover{
+      background:#eff6ff;
+      border-color:#bfdbfe;
+    }
+
+    .choice.good{border-color:#bbf7d0;background:#f0fdf4;color:#166534}
+    .choice.bad{border-color:#fecaca;background:#fef2f2;color:#991b1b}
+
+    .quiz-item{
+      padding:16px;
+      border:1px solid #e2e8f0;
+      border-radius:18px;
+      background:#f8fafc;
+      margin-bottom:14px;
+    }
+
+    .quiz-item h3{
+      margin:0 0 10px;
+      font-size:17px;
+      font-weight:900;
+    }
+
+    .quiz-options{
+      display:grid;
+      gap:8px;
+    }
+
+    .quiz-option{
+      border:1px solid #e2e8f0;
+      background:#fff;
+      border-radius:14px;
+      padding:11px 13px;
+      cursor:pointer;
+      font-family:inherit;
+      text-align:left;
+      color:#334155;
+      transition:.2s ease;
+      font-weight:750;
+    }
+
+    .quiz-option:hover{background:#eff6ff;border-color:#bfdbfe}
+    .quiz-option.correct{background:#f0fdf4;border-color:#86efac;color:#166534}
+    .quiz-option.wrong{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
+
+    .quiz-result{
+      display:none;
+      margin-top:14px;
+      padding:14px 16px;
+      border-radius:16px;
+      font-weight:900;
+    }
+
+    .quiz-result.show{
+      display:block;
+      background:#eff6ff;
+      border:1px solid #bfdbfe;
+      color:#1d4ed8;
+    }
+
+    .btn-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .video-box{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:18px;
+      align-items:center;
+      background:linear-gradient(135deg,#0f172a,#1d4ed8);
+      color:#fff;
+      border-radius:22px;
+      padding:22px;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .video-box::after{
+      content:"";
+      width:140px;
+      height:140px;
+      border-radius:50%;
+      background:rgba(255,255,255,.10);
+      position:absolute;
+      right:-45px;
+      top:-45px;
+    }
+
+    .video-box h3{
+      margin:0 0 8px;
+      font-size:22px;
+      font-weight:900;
+      letter-spacing:-.03em;
+    }
+
+    .video-box p{
+      margin:0;
+      color:#dbeafe;
+    }
+
+    .youtube-btn{
+      justify-self:end;
+      background:#ff0000;
+      color:#fff;
+      text-decoration:none;
+      padding:16px 20px;
+      border-radius:999px;
+      font-weight:900;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      box-shadow:0 10px 24px rgba(255,0,0,.25);
+      position:relative;
+      z-index:2;
+      transition:.2s ease;
+    }
+
+    .youtube-btn:hover{
+      transform:scale(1.04);
+      background:#dc2626;
+    }
+
+    .sidebar{
+      position:sticky;
+      top:96px;
+    }
+
+    .rule-list{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:11px;
+    }
+
+    .rule-list li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:15px;
+      padding:12px;
+      color:#475569;
+      font-size:15px;
+    }
+
+    .pill{
+      flex:0 0 auto;
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#eff6ff;
+      color:var(--blue);
+      font-weight:900;
+    }
+
+    .progress{
+      height:10px;
+      background:#e2e8f0;
+      border-radius:999px;
+      overflow:hidden;
+      margin:10px 0 8px;
+    }
+
+    .progress span{
+      display:block;
+      width:0%;
+      height:100%;
+      background:linear-gradient(90deg,var(--blue),var(--green));
+      transition:.4s ease;
+    }
+
+    .tip{
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      border-radius:18px;
+      padding:16px;
+      color:#78350f;
+      font-weight:800;
+    }
+
+    .modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(2,6,23,.72);
+      z-index:1000;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    .modal.show{display:flex}
+
+    .modal-content{
+      width:min(540px,96vw);
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 25px 70px rgba(0,0,0,.35);
+      overflow:hidden;
+      border:1px solid #e2e8f0;
+    }
+
+    .modal-head{
+      padding:16px 18px;
+      background:linear-gradient(135deg,#0f172a,#1d4ed8);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .modal-head h3{
+      margin:0;
+      font-size:21px;
+      font-weight:900;
+    }
+
+    .close{
+      border:0;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border-radius:12px;
+      width:38px;
+      height:38px;
+      cursor:pointer;
+      font-size:22px;
+    }
+
+    .modal-body{
+      padding:20px;
+      color:#475569;
+      font-size:16px;
+    }
+
+    .modal-body b{
+      color:#0f172a;
+    }
+
+    footer{
+      text-align:center;
+      color:#64748b;
+      font-size:14px;
+      padding:0 0 38px;
+    }
+
+    @media (max-width:1050px){
+      .content-grid{grid-template-columns:1fr}
+      .sidebar{position:static}
+      .types-grid{grid-template-columns:repeat(3,1fr)}
+    }
+
+    @media (max-width:760px){
+      .nav-links{display:none}
+      .nav-inner{justify-content:center}
+      .hero-card{padding:24px}
+      .card{padding:18px}
+      .types-grid,.case-grid{grid-template-columns:1fr}
+      .video-box{grid-template-columns:1fr}
+      .youtube-btn{justify-self:start}
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-icon">📚</span>
+        <span>Media savodxonlik portali</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Bosh sahifa</a>
+        <a href="#turlar">Axborot turlari</a>
+        <a href="#keyslar">Keyslar</a>
+        <a href="#quiz">Test</a>
+        <a href="#video">Video</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-card">
+        <div class="badge">🌐 Interaktiv dars sahifasi</div>
+        <h1>Axborot iste’moli madaniyati</h1>
+        <p>
+          Media olamida to‘g‘ri, ongli va xavfsiz harakatlanishni o‘rganamiz.
+          Fakt, fikr, reklama, mish-mish va tahlilni farqlash orqali axborotni saralash ko‘nikmasini rivojlantiramiz.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-white" href="#turlar">Darsni boshlash</a>
+          <a class="btn btn-primary" href="#quiz">Bilimni sinash</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container content-grid">
+    <section>
+      <div class="card" id="turlar">
+        <h2 class="section-title">🧩 Axborot turlarini o‘rganing</h2>
+        <p class="lead">
+          Har bir axborot turi alohida maqsadga ega. Tugmalarni bosib, ularning mazmunini ko‘ring.
+        </p>
+
+        <div class="types-grid">
+          <div class="type-card fact" onclick="showDetails('fakt')">
+            <div class="type-icon">✓</div>
+            <h3>FAKT</h3>
+            <p>Isbotlangan, tekshiriladigan aniq ma’lumot.</p>
+          </div>
+
+          <div class="type-card opinion" onclick="showDetails('fikr')">
+            <div class="type-icon">💬</div>
+            <h3>FIKR</h3>
+            <p>Shaxsiy munosabat yoki baho.</p>
+          </div>
+
+          <div class="type-card ad" onclick="showDetails('reklama')">
+            <div class="type-icon">📢</div>
+            <h3>REKLAMA</h3>
+            <p>Sotish yoki targ‘ib qilishga qaratilgan xabar.</p>
+          </div>
+
+          <div class="type-card rumor" onclick="showDetails('mishmish')">
+            <div class="type-icon">⚠</div>
+            <h3>MISH-MISH</h3>
+            <p>Manbasi noaniq, tekshirilmagan gap.</p>
+          </div>
+
+          <div class="type-card analysis" onclick="showDetails('tahlil')">
+            <div class="type-icon">🔎</div>
+            <h3>TAHLIL</h3>
+            <p>Voqeani sabab-oqibat asosida o‘rganish.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="keyslar">
+        <h2 class="section-title">🧠 Amaliy keyslar</h2>
+        <p class="lead">
+          Quyidagi vaziyatlarda qanday yo‘l tutish kerakligini tanlang. To‘g‘ri javoblar yashil, xato javoblar qizil ko‘rinadi.
+        </p>
+
+        <div class="case-grid">
+          <div class="case-box">
+            <h3>1-keys: “Vahimali xabar”</h3>
+            <p>
+              Telegramda: “Bugun tunda telefonni o‘chiring, kosmik nurlar portlatadi!” degan xabar keldi.
+              Siz nima qilasiz?
+            </p>
+            <button class="choice" onclick="markChoice(this,true)">Manbasini tekshiraman va asossiz bo‘lsa ulashmayman.</button>
+            <button class="choice" onclick="markChoice(this,false)">Xabarni darhol yaqinlarimga tarqataman.</button>
+          </div>
+
+          <div class="case-box">
+            <h3>2-keys: “Deepfake”</h3>
+            <p>
+              Mashhur insonning g‘alati videosini ko‘rdingiz. Video haqiqiy yoki sun’iyligini bilmaysiz.
+              Siz nima qilasiz?
+            </p>
+            <button class="choice" onclick="markChoice(this,true)">Video soxta bo‘lishi mumkinligini o‘ylab, rasmiy manbalardan tekshiraman.</button>
+            <button class="choice" onclick="markChoice(this,false)">Videoga darhol ishonaman va boshqalarga yuboraman.</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="quiz">
+        <h2 class="section-title">✅ Bilimingizni sinang</h2>
+        <p class="lead">
+          5 ta savolga javob bering. Oxirida umumiy natijangiz ko‘rsatiladi.
+        </p>
+
+        <div class="quiz-item" data-answer="0">
+          <h3>1. Clickbait nima?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option">Shov-shuvli va chalg‘ituvchi sarlavha</button>
+            <button class="quiz-option">Rasmiy davlat xabari</button>
+          </div>
+        </div>
+
+        <div class="quiz-item" data-answer="0">
+          <h3>2. “Fake News” nima?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option">Yolg‘on, to‘qima yoki chalg‘ituvchi xabar</button>
+            <button class="quiz-option">Ingliz tilidagi yangiliklar</button>
+          </div>
+        </div>
+
+        <div class="quiz-item" data-answer="0">
+          <h3>3. Qaysi biri fakt?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option">O‘zbekiston poytaxti — Toshkent</button>
+            <button class="quiz-option">Bu rasm juda chiroyli</button>
+          </div>
+        </div>
+
+        <div class="quiz-item" data-answer="0">
+          <h3>4. Axborotni tekshirishda nima muhim?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option">Rasmiy manba va bir nechta dalil</button>
+            <button class="quiz-option">Telegramdagi ko‘p ko‘rilgan xabar</button>
+          </div>
+        </div>
+
+        <div class="quiz-item" data-answer="0">
+          <h3>5. Media savodxonlikning asosiy maqsadi nima?</h3>
+          <div class="quiz-options">
+            <button class="quiz-option">Axborotni tahlil qilish, saralash va mas’uliyatli foydalanish</button>
+            <button class="quiz-option">Faqat kompyuterni o‘rganish</button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-success" onclick="checkQuiz()">Natijani ko‘rish</button>
+          <button class="btn btn-red" onclick="resetQuiz()">Testni tozalash</button>
+        </div>
+
+        <div id="quizResult" class="quiz-result"></div>
+      </div>
+
+      <div class="card" id="video">
+        <h2 class="section-title">▶ Video darslik</h2>
+        <div class="video-box">
+          <div>
+            <h3>Media savodxonlik bo‘yicha qo‘shimcha video</h3>
+            <p>
+              Video yangi oynada ochiladi. Brauzer ichida YouTube iframe bloklanib qolmasligi uchun havola tugma ko‘rinishida berildi.
+            </p>
+          </div>
+          <a
+            class="youtube-btn"
+            href="https://www.youtube.com/watch?v=g1wCtg0nGd4&list=PLsAOt_b3-kdtiC5A7Jxqxxkmm7okppe2r"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            ▶ Videoni ko‘rish
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="card">
+        <h2 class="section-title">🎯 Dars maqsadi</h2>
+        <p class="lead">
+          O‘quvchi axborot turlarini farqlaydi, shubhali xabarni tekshiradi va media muhitda mas’uliyatli harakat qiladi.
+        </p>
+        <div class="progress"><span id="progressBar"></span></div>
+        <p id="progressText" style="margin:0;color:#64748b;font-weight:800;">Bajarilish holati: 0%</p>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">📌 5 oltin qoida</h2>
+        <ul class="rule-list">
+          <li><span class="pill">1</span><span><b>Manbani tekshiring:</b> xabar kimdan chiqqan?</span></li>
+          <li><span class="pill">2</span><span><b>Faktni fikrdan ajrating:</b> isbot bormi?</span></li>
+          <li><span class="pill">3</span><span><b>Shoshilmang:</b> emotsional sarlavhaga aldanmang.</span></li>
+          <li><span class="pill">4</span><span><b>Solishtiring:</b> boshqa rasmiy manbalar nima deydi?</span></li>
+          <li><span class="pill">5</span><span><b>Mas’uliyatli bo‘ling:</b> yolg‘on xabarni tarqatmang.</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">💡 Eslatma</h2>
+        <div class="tip">
+          “Ko‘p odam ko‘rgan xabar” har doim ham ishonchli degani emas. Ishonch dalil, manba va tekshiruv bilan belgilanadi.
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="infoModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-head">
+        <h3 id="modalTitle">Ma’lumot</h3>
+        <button class="close" onclick="closeModal()">×</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <footer class="container">
+    Media savodxonlik portali · Axborot iste’moli madaniyati bo‘yicha interaktiv sahifa
+  </footer>
+
+  <script>
+    const infoData = {
+      fakt: {
+        title: "FAKT",
+        body: "<b>Fakt</b> — tekshirish va isbotlash mumkin bo‘lgan aniq ma’lumot. Masalan: <b>O‘zbekiston poytaxti — Toshkent shahri.</b> Fakt dalil, sana, hujjat yoki rasmiy manbaga tayanadi."
+      },
+      fikr: {
+        title: "FIKR",
+        body: "<b>Fikr</b> — insonning shaxsiy qarashi, munosabati yoki bahosi. Masalan: <b>Bugun havo juda yoqimli.</b> Fikr fakt bo‘lishi uchun dalil bilan isbotlanishi kerak."
+      },
+      reklama: {
+        title: "REKLAMA",
+        body: "<b>Reklama</b> — mahsulot, xizmat yoki g‘oyani targ‘ib qilishga qaratilgan xabar. Reklama odatda e’tibor jalb qilish, ishontirish va tanlovga ta’sir qilishga harakat qiladi."
+      },
+      mishmish: {
+        title: "MISH-MISH",
+        body: "<b>Mish-mish</b> — aniq manbasi yo‘q, tekshirilmagan yoki gumonga asoslangan xabar. Bunday ma’lumotni ulashishdan oldin rasmiy manbalar bilan tekshirish zarur."
+      },
+      tahlil: {
+        title: "TAHLIL",
+        body: "<b>Tahlil</b> — voqea yoki xabarni sabab, oqibat, manba, dalil va ta’sir nuqtai nazaridan chuqur o‘rganish. Tahlil xulosa chiqarishga yordam beradi."
+      }
+    };
+
+    let progress = 0;
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+
+    function setProgress(value){
+      progress = Math.max(progress, value);
+      progressBar.style.width = progress + "%";
+      progressText.textContent = "Bajarilish holati: " + progress + "%";
+    }
+
+    function showDetails(type){
+      document.getElementById("modalTitle").textContent = infoData[type].title;
+      document.getElementById("modalBody").innerHTML = infoData[type].body;
+      document.getElementById("infoModal").classList.add("show");
+      document.getElementById("infoModal").setAttribute("aria-hidden","false");
+      setProgress(20);
+    }
+
+    function closeModal(){
+      document.getElementById("infoModal").classList.remove("show");
+      document.getElementById("infoModal").setAttribute("aria-hidden","true");
+    }
+
+    function markChoice(button, isGood){
+      const buttons = button.parentElement.querySelectorAll(".choice");
+      buttons.forEach(b => b.classList.remove("good","bad"));
+      button.classList.add(isGood ? "good" : "bad");
+      if(isGood){
+        button.textContent = "✅ " + button.textContent.replace(/^✅ |^❌ /,"");
+        setProgress(45);
+      }else{
+        button.textContent = "❌ " + button.textContent.replace(/^✅ |^❌ /,"");
+      }
+    }
+
+    document.querySelectorAll(".quiz-item").forEach((item) => {
+      const answer = Number(item.dataset.answer);
+      const options = item.querySelectorAll(".quiz-option");
+
+      options.forEach((option, index) => {
+        option.addEventListener("click", () => {
+          options.forEach(o => o.classList.remove("correct","wrong"));
+          if(index === answer){
+            option.classList.add("correct");
+          }else{
+            option.classList.add("wrong");
+            options[answer].classList.add("correct");
+          }
+        });
+      });
+    });
+
+    function checkQuiz(){
+      let correct = 0;
+      const items = document.querySelectorAll(".quiz-item");
+
+      items.forEach(item => {
+        if(item.querySelector(".quiz-option.correct")){
+          const correctIndex = Number(item.dataset.answer);
+          const options = Array.from(item.querySelectorAll(".quiz-option"));
+          if(options[correctIndex].classList.contains("correct")){
+            correct++;
+          }
+        }
+      });
+
+      const result = document.getElementById("quizResult");
+      result.classList.add("show");
+
+      if(correct === 5){
+        result.textContent = "Ajoyib! Siz 5 ta savoldan 5 tasiga to‘g‘ri javob berdingiz.";
+        setProgress(100);
+      }else if(correct >= 3){
+        result.textContent = "Yaxshi natija! To‘g‘ri javoblar soni: " + correct + " / 5. Mavzuni yana bir bor mustahkamlang.";
+        setProgress(80);
+      }else{
+        result.textContent = "Natija: " + correct + " / 5. Axborot turlari va tekshirish qoidalarini qayta o‘qing.";
+        setProgress(60);
+      }
+    }
+
+    function resetQuiz(){
+      document.querySelectorAll(".quiz-option").forEach(o => o.classList.remove("correct","wrong"));
+      document.getElementById("quizResult").classList.remove("show");
+      document.getElementById("quizResult").textContent = "";
+      setProgress(45);
+    }
+
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape") closeModal();
+    });
+
+    document.getElementById("infoModal").addEventListener("click", function(e){
+      if(e.target.id === "infoModal") closeModal();
+    });
+  </script>
+</body>
+</html>

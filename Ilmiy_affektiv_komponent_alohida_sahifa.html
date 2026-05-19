@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Affektiv komponent</title>
+
+<style>
+:root{
+  --primary:#0f172a;
+  --muted:#64748b;
+  --blue:#2563eb;
+  --blue2:#0ea5e9;
+  --green:#16a34a;
+  --orange:#f97316;
+  --red:#ef4444;
+  --purple:#7c3aed;
+  --card:#ffffff;
+  --border:#dbe4f0;
+  --shadow:0 18px 45px rgba(15,23,42,.10);
+  --radius:26px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Arial,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at top left,rgba(37,99,235,.13),transparent 30%),
+    radial-gradient(circle at top right,rgba(124,58,237,.10),transparent 28%),
+    linear-gradient(180deg,#f8fbff 0%,#eef5ff 48%,#f8fafc 100%);
+  color:var(--primary);
+  line-height:1.65;
+}
+.navbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 8px 24px rgba(15,23,42,.05);
+}
+.nav-inner{
+  width:min(1180px,calc(100% - 32px));
+  margin:auto;
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.brand{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;color:var(--primary);
+  font-weight:900;letter-spacing:-.035em;font-size:18px;
+}
+.brand-icon{
+  width:46px;height:46px;border-radius:16px;
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:22px;box-shadow:0 10px 24px rgba(37,99,235,.22);
+}
+.nav-links{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.nav-links a{
+  text-decoration:none;color:#334155;font-weight:800;font-size:14px;
+  padding:9px 12px;border-radius:999px;transition:.2s
+}
+.nav-links a:hover{background:#eff6ff;color:var(--blue)}
+.container{width:min(1180px,calc(100% - 32px));margin:auto}
+.hero{padding:22px 0 14px}
+.hero-card{
+  position:relative;overflow:hidden;border-radius:34px;
+  color:#fff;padding:30px;box-shadow:var(--shadow);
+}
+.hero-card:before{
+  content:"";position:absolute;width:250px;height:250px;border-radius:50%;
+  right:-88px;top:-88px;background:rgba(255,255,255,.12)
+}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.15);color:#dbeafe;
+  border:1px solid rgba(255,255,255,.20);
+  padding:8px 13px;border-radius:999px;font-size:14px;font-weight:900;
+  margin-bottom:14px;position:relative;z-index:2;
+}
+.hero-card h1{
+  margin:0 0 12px;font-size:clamp(28px,3.7vw,48px);
+  line-height:1.08;letter-spacing:-.055em;font-weight:900;
+  position:relative;z-index:2;max-width:1000px;
+}
+.hero-card p{margin:0;color:#dbeafe;font-size:17px;max-width:980px;position:relative;z-index:2}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;position:relative;z-index:2}
+.btn{
+  border:0;border-radius:15px;padding:13px 18px;font-weight:900;cursor:pointer;
+  transition:.2s;font-size:15px;font-family:inherit;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,23,42,.12)}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+.btn-white{background:#fff;color:#1d4ed8}
+.btn-success{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+.btn-orange{background:linear-gradient(135deg,var(--orange),#f59e0b);color:#fff}
+.btn-dark{background:#0f172a;color:#fff}
+.btn-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.main-grid{
+  display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start;
+  padding:8px 0 46px;
+}
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:22px;
+}
+.section-title{
+  margin:0 0 14px;font-size:26px;line-height:1.2;letter-spacing:-.04em;
+  font-weight:900;display:flex;align-items:center;gap:10px;
+}
+.lead{margin:-4px 0 18px;color:var(--muted);font-size:17px;font-weight:650}
+.sidebar{position:sticky;top:92px}
+.progress{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin:10px 0 8px}
+.progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));transition:.4s}
+.rule-list{margin:0;padding:0;list-style:none;display:grid;gap:11px}
+.rule-list li{
+  display:flex;gap:10px;align-items:flex-start;background:#f8fafc;
+  border:1px solid #e2e8f0;border-radius:15px;padding:12px;color:#475569;font-size:15px
+}
+.rule-list b{color:#0f172a}
+.pill{
+  flex:0 0 auto;width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;background:#eff6ff;color:var(--blue);font-weight:900
+}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.info-card{
+  background:#f8fafc;border:1px solid #e2e8f0;border-radius:20px;padding:18px;
+  transition:.2s;position:relative;overflow:hidden
+}
+.info-card:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(15,23,42,.08)}
+.info-card h3{margin:0 0 8px;font-size:18px;font-weight:900}
+.info-card p{margin:0;color:#64748b;font-weight:650}
+.result-box{display:none;margin-top:14px;border-radius:18px;padding:15px 16px;font-weight:900}
+.result-box.show{display:block;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+label{display:block;font-size:14px;font-weight:900;color:#1e293b;margin:14px 0 7px}
+textarea,select,input{
+  width:100%;border:1px solid #cbd5e1;border-radius:14px;padding:12px;
+  font-family:inherit;font-size:15px;outline:none;transition:.2s;background:#fff
+}
+textarea{resize:vertical;min-height:95px}
+textarea:focus,select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+footer{text-align:center;color:#64748b;font-size:14px;padding:0 0 38px}
+@media(max-width:1060px){.main-grid{grid-template-columns:1fr}.sidebar{position:static}}
+@media(max-width:760px){.nav-links{display:none}.nav-inner{justify-content:center}.hero-card{padding:24px}.card{padding:18px}.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+
+<style>
+.brand-icon,.hero-card{background:linear-gradient(135deg,#0f172a 0%,#f97316 52%,#fb923c 100%)}
+.emotion-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.emotion{border:2px solid #e2e8f0;background:#fff;border-radius:20px;padding:18px;text-align:center;cursor:pointer;font-weight:900;transition:.2s}
+.emotion:hover{transform:translateY(-4px);border-color:#fed7aa}.emotion.active{background:linear-gradient(135deg,#f97316,#f59e0b);color:#fff;border-color:transparent}
+.emoji{font-size:36px;display:block;margin-bottom:8px}
+.scenario{background:#fff7ed;border:1px solid #fed7aa;border-left:7px solid #f97316;border-radius:20px;padding:18px;margin-bottom:16px}
+.scenario h3{margin:0 0 8px;font-weight:900}.scenario p{margin:0;color:#7c2d12;font-weight:750}
+.reflect{background:#f8fafc;border:1px solid #e2e8f0;border-radius:20px;padding:18px}
+@media(max-width:760px){.emotion-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<nav class="navbar"><div class="nav-inner"><a class="brand" href="index.html"><span class="brand-icon">🧡</span><span>Affektiv komponent</span></a><div class="nav-links"><a href="index.html">Bosh sahifa</a><a href="#mazmun">Mazmun</a><a href="#vaziyat">Vaziyat</a><a href="#refleksiya">Refleksiya</a></div></div></nav>
+<header class="hero"><div class="container"><div class="hero-card"><div class="badge">02 · Hissiyot, qadriyat va munosabat</div><h1>Affektiv komponent: axborotga nisbatan qadriyatli munosabatni shakllantirish</h1><p>Bu komponent o‘quvchida axborotga nisbatan vijdon, hurmat, adolat, mas’uliyat va ehtiyotkorlik hissini rivojlantiradi.</p><div class="hero-actions"><a href="#mazmun" class="btn btn-white">Darsni boshlash</a><a href="#refleksiya" class="btn btn-orange">Refleksiya qilish</a></div></div></div></header>
+<main class="container main-grid">
+<section>
+<div class="card" id="mazmun"><h2 class="section-title">💡 Affektiv komponent mazmuni</h2><p class="lead">Affektiv komponent — bu axborotni faqat bilish emas, balki unga axloqiy, hissiy va qadriyatli munosabat bildirish qobiliyatidir.</p><div class="grid-3"><div class="info-card"><h3>🤝 Hurmat</h3><p>Internetda inson sha’ni va shaxsiy hayotini hurmat qilish.</p></div><div class="info-card"><h3>⚖️ Adolat</h3><p>Axborotni bir tomonlama emas, xolis va adolatli baholash.</p></div><div class="info-card"><h3>🛡 Ehtiyotkorlik</h3><p>Vahima va emotsional bosimga berilmaslik.</p></div></div></div>
+<div class="card" id="vaziyat"><h2 class="section-title">🎭 Vaziyatli mashq</h2><div class="scenario"><h3>Vaziyat</h3><p>Sinf guruhida bir o‘quvchi haqida kulgili, lekin uni xafa qilishi mumkin bo‘lgan rasm tarqaldi. Siz nima qilasiz?</p></div><p class="lead">Birinchi hissiy reaksiyangizni belgilang:</p><div class="emotion-grid"><div class="emotion" onclick="selectEmotion(this,'kulgi')"><span class="emoji">😂</span>Kulib yuboraman</div><div class="emotion" onclick="selectEmotion(this,'achinish')"><span class="emoji">😟</span>Achinaman</div><div class="emotion" onclick="selectEmotion(this,'masuliyat')"><span class="emoji">🛑</span>To‘xtataman</div><div class="emotion" onclick="selectEmotion(this,'befarq')"><span class="emoji">😐</span>Befarq bo‘laman</div></div><div id="emotionResult" class="result-box"></div></div>
+<div class="card" id="refleksiya"><h2 class="section-title">✍ Refleksiya kundaligi</h2><p class="lead">Axborotga munosabat madaniyatini rivojlantirish uchun o‘quvchi o‘z hissiyotini anglaydi va axloqiy qaror chiqaradi.</p><div class="reflect"><label>1. Bunday vaziyatda eng to‘g‘ri axloqiy qaror nima?</label><textarea id="r1" placeholder="Masalan: rasmni tarqatmaslik, do‘stni qo‘llab-quvvatlash..."></textarea><label>2. Nima uchun bunday axborotni tarqatish zararli?</label><textarea id="r2"></textarea><button class="btn btn-success" onclick="finish()">Xulosani saqlash</button><div id="finalResult" class="result-box"></div></div></div>
+</section>
+<aside class="sidebar"><div class="card"><h2 class="section-title">🎯 Dars maqsadi</h2><p class="lead">O‘quvchi axborotga vijdon, hurmat, adolat va mas’uliyat bilan munosabat bildirishni o‘rganadi.</p><div class="progress"><span id="progressBar"></span></div><p id="progressText" style="font-weight:900;color:#64748b">0%</p></div><div class="card"><h2 class="section-title">✅ Affektiv mezonlar</h2><ul class="rule-list"><li><span class="pill">1</span><span><b>Hissiyot</b>ni tanish.</span></li><li><span class="pill">2</span><span><b>Vijdon</b> bilan baholash.</span></li><li><span class="pill">3</span><span><b>Hurmat</b>ni saqlash.</span></li><li><span class="pill">4</span><span><b>Mas’uliyat</b> bilan qaror qilish.</span></li></ul></div></aside>
+</main><footer class="container">Affektiv komponent · Qadriyatli munosabat va refleksiya</footer>
+<script>
+let p=0;function prog(v){p=Math.max(p,v);progressBar.style.width=p+'%';progressText.textContent=p+'%'}
+function selectEmotion(el,type){document.querySelectorAll('.emotion').forEach(e=>e.classList.remove('active'));el.classList.add('active');emotionResult.className='result-box show';if(type==='masuliyat'){emotionResult.textContent='Ajoyib! Mas’uliyatli munosabat — zararli axborotni tarqatmaslik va boshqalarni himoya qilishdir.';prog(55)}else if(type==='achinish'){emotionResult.textContent='Yaxshi boshlanish. Endi achinishni amaliy yordamga aylantiring: rasmni tarqatmaslik va do‘stni qo‘llash.';prog(45)}else{emotionResult.style.background='#fff7ed';emotionResult.style.color='#9a3412';emotionResult.style.border='1px solid #fed7aa';emotionResult.textContent='Bu hissiyot tabiiy bo‘lishi mumkin, ammo axborot etikasi mas’uliyatli qaror talab qiladi.';prog(35)}}
+function finish(){if(!r1.value.trim()||!r2.value.trim()){alert('Iltimos, ikkala savolga ham javob yozing.');return}finalResult.className='result-box show';finalResult.textContent='Xulosa saqlandi. Siz axborotga hissiy emas, qadriyatli va mas’uliyatli munosabat bildirdingiz.';prog(100)}
+</script>
+</body></html>

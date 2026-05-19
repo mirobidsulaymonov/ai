@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3-KEYS: Statistika bilan aldash</title>
+  <style>
+    :root{
+      --primary:#0f172a;
+      --muted:#64748b;
+      --blue:#2563eb;
+      --blue2:#0ea5e9;
+      --orange:#f97316;
+      --yellow:#f59e0b;
+      --green:#16a34a;
+      --red:#ef4444;
+      --purple:#7c3aed;
+      --card:#ffffff;
+      --border:#dbe4f0;
+      --shadow:0 18px 45px rgba(15,23,42,.10);
+      --radius:26px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      font-family: Arial, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(249,115,22,.12), transparent 30%),
+        radial-gradient(circle at top right, rgba(37,99,235,.12), transparent 28%),
+        linear-gradient(180deg,#f8fbff 0%,#fff7ed 48%,#f8fafc 100%);
+      color:var(--primary);
+      line-height:1.65;
+    }
+
+    .navbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 8px 24px rgba(15,23,42,.05);
+    }
+
+    .nav-inner{
+      width:min(1180px,calc(100% - 32px));
+      margin:auto;
+      min-height:74px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:var(--primary);
+      font-weight:900;
+      letter-spacing:-.035em;
+      font-size:18px;
+    }
+
+    .brand-icon{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      background:linear-gradient(135deg,var(--orange),var(--red));
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 10px 24px rgba(249,115,22,.24);
+      font-size:22px;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .nav-links a{
+      text-decoration:none;
+      color:#334155;
+      font-weight:800;
+      font-size:14px;
+      padding:9px 12px;
+      border-radius:999px;
+      transition:.2s ease;
+    }
+
+    .nav-links a:hover{
+      background:#fff7ed;
+      color:var(--orange);
+    }
+
+    .container{
+      width:min(1180px,calc(100% - 32px));
+      margin:auto;
+    }
+
+    .hero{
+      padding:30px 0 18px;
+    }
+
+    .hero-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:34px;
+      background:linear-gradient(135deg,#0f172a 0%,#c2410c 48%,#2563eb 100%);
+      color:#fff;
+      padding:38px 34px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero-card::before,
+    .hero-card::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.10);
+    }
+
+    .hero-card::before{
+      width:240px;
+      height:240px;
+      right:-82px;
+      top:-82px;
+    }
+
+    .hero-card::after{
+      width:170px;
+      height:170px;
+      left:-60px;
+      bottom:-70px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(255,255,255,.15);
+      color:#ffedd5;
+      border:1px solid rgba(255,255,255,.20);
+      padding:8px 13px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:900;
+      margin-bottom:14px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-card h1{
+      margin:0 0 12px;
+      font-size:clamp(32px,4.6vw,58px);
+      line-height:1.05;
+      letter-spacing:-.055em;
+      font-weight:900;
+      position:relative;
+      z-index:2;
+      max-width:960px;
+    }
+
+    .hero-card p{
+      margin:0;
+      color:#ffedd5;
+      font-size:19px;
+      max-width:940px;
+      position:relative;
+      z-index:2;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:22px;
+      position:relative;
+      z-index:2;
+    }
+
+    .btn{
+      border:0;
+      border-radius:15px;
+      padding:13px 18px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.2s ease;
+      font-size:15px;
+      font-family:inherit;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      text-decoration:none;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 22px rgba(15,23,42,.12);
+    }
+
+    .btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+    .btn-white{background:#fff;color:#c2410c}
+    .btn-success{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+    .btn-orange{background:linear-gradient(135deg,var(--orange),var(--yellow));color:#fff}
+    .btn-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+    .btn-muted{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
+
+    .main-grid{
+      display:grid;
+      grid-template-columns:1fr 360px;
+      gap:22px;
+      align-items:start;
+      padding:8px 0 46px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow:var(--shadow);
+      margin-bottom:22px;
+    }
+
+    .section-title{
+      margin:0 0 14px;
+      font-size:26px;
+      line-height:1.2;
+      letter-spacing:-.04em;
+      font-weight:900;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .lead{
+      margin:-4px 0 18px;
+      color:var(--muted);
+      font-size:17px;
+      font-weight:650;
+    }
+
+    .status-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:#fff7ed;
+      color:#c2410c;
+      border:1px solid #fed7aa;
+      padding:8px 13px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:900;
+      margin-bottom:12px;
+    }
+
+    .blogger-post{
+      max-width:620px;
+      margin:20px auto;
+      background:#fff;
+      border:1px solid #e2e8f0;
+      border-radius:24px;
+      padding:20px;
+      box-shadow:0 16px 35px rgba(15,23,42,.10);
+      text-align:left;
+    }
+
+    .blogger-header{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .avatar{
+      width:54px;
+      height:54px;
+      border-radius:50%;
+      background:linear-gradient(135deg,#0f172a,#f97316);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:25px;
+      font-weight:900;
+      flex:0 0 auto;
+    }
+
+    .post-name{
+      font-weight:900;
+      color:#0f172a;
+      line-height:1.2;
+    }
+
+    .post-name span{
+      display:block;
+      font-size:13px;
+      color:#64748b;
+      font-weight:700;
+      margin-top:3px;
+    }
+
+    .post-content{
+      font-size:20px;
+      line-height:1.55;
+      color:#1e293b;
+      background:#f8fafc;
+      border-radius:18px;
+      padding:17px;
+      border-left:6px solid var(--red);
+    }
+
+    .stat-highlight{
+      color:#dc2626;
+      font-weight:900;
+      font-size:34px;
+      text-decoration:underline;
+      text-decoration-thickness:3px;
+      text-underline-offset:4px;
+    }
+
+    .post-meta{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      border-top:1px solid #e2e8f0;
+      padding-top:12px;
+      margin-top:14px;
+      color:#64748b;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .problem-box{
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      border-radius:18px;
+      padding:16px;
+      color:#78350f;
+      font-weight:800;
+      margin-top:14px;
+      text-align:center;
+    }
+
+    .process{
+      display:none;
+    }
+
+    .analysis-step{
+      display:grid;
+      grid-template-columns:58px 1fr;
+      gap:15px;
+      align-items:start;
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:20px;
+      padding:18px;
+      transition:.22s ease;
+      border-left:7px solid var(--orange);
+      margin-bottom:14px;
+    }
+
+    .analysis-step:hover{
+      transform:translateX(5px);
+      box-shadow:0 12px 24px rgba(15,23,42,.06);
+    }
+
+    .step-icon{
+      width:58px;
+      height:58px;
+      border-radius:18px;
+      color:#fff;
+      background:linear-gradient(135deg,var(--orange),var(--red));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:25px;
+      font-weight:900;
+    }
+
+    .analysis-step h3{
+      margin:0 0 7px;
+      font-size:19px;
+      font-weight:900;
+    }
+
+    .analysis-step p{
+      margin:0;
+      color:#475569;
+    }
+
+    .source-box{
+      display:none;
+      margin-top:16px;
+      padding:18px;
+      background:#eff6ff;
+      border:2px dashed #60a5fa;
+      border-radius:18px;
+      color:#334155;
+    }
+
+    .chart-box{
+      background:#fff;
+      border:1px solid #e2e8f0;
+      padding:20px;
+      border-radius:20px;
+      margin-top:18px;
+      text-align:center;
+      overflow:hidden;
+    }
+
+    .bar-container{
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      gap:60px;
+      height:250px;
+      margin-top:24px;
+      border-bottom:2px solid #cbd5e1;
+      padding-bottom:0;
+    }
+
+    .bar-wrap{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-end;
+      height:100%;
+      width:120px;
+    }
+
+    .bar{
+      width:78px;
+      background:var(--blue);
+      border-radius:12px 12px 0 0;
+      position:relative;
+      animation:grow 1.3s ease-out;
+      box-shadow:0 10px 20px rgba(15,23,42,.12);
+    }
+
+    @keyframes grow{
+      from{height:0}
+    }
+
+    .bar-label{
+      position:absolute;
+      top:-34px;
+      left:0;
+      width:100%;
+      text-align:center;
+      font-weight:900;
+      font-size:19px;
+      color:#0f172a;
+    }
+
+    .bar-name{
+      margin-top:12px;
+      color:#334155;
+      font-weight:900;
+      font-size:14px;
+      min-height:42px;
+    }
+
+    .manip-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .manip-card{
+      background:#fff;
+      border:1px solid #e2e8f0;
+      border-radius:18px;
+      padding:16px;
+      cursor:pointer;
+      transition:.22s ease;
+    }
+
+    .manip-card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 14px 28px rgba(15,23,42,.09);
+      border-color:#fed7aa;
+    }
+
+    .manip-card h3{
+      margin:0 0 7px;
+      font-size:17px;
+      font-weight:900;
+    }
+
+    .manip-card p{
+      margin:0;
+      color:#64748b;
+      font-size:14px;
+    }
+
+    label{
+      display:block;
+      font-size:14px;
+      font-weight:900;
+      color:#1e293b;
+      margin:14px 0 7px;
+    }
+
+    textarea,select,input{
+      width:100%;
+      border:1px solid #cbd5e1;
+      border-radius:14px;
+      padding:12px;
+      font-family:inherit;
+      font-size:15px;
+      outline:none;
+      transition:.2s ease;
+      background:#fff;
+    }
+
+    textarea{resize:vertical;min-height:105px}
+
+    textarea:focus,select:focus,input:focus{
+      border-color:var(--blue);
+      box-shadow:0 0 0 4px rgba(37,99,235,.12);
+    }
+
+    .task-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+    .result-box{
+      display:none;
+      margin-top:14px;
+      border-radius:18px;
+      padding:15px 16px;
+      font-weight:900;
+    }
+
+    .result-box.show{
+      display:block;
+      background:#f0fdf4;
+      color:#166534;
+      border:1px solid #bbf7d0;
+    }
+
+    .sidebar{
+      position:sticky;
+      top:96px;
+    }
+
+    .progress{
+      height:10px;
+      background:#e2e8f0;
+      border-radius:999px;
+      overflow:hidden;
+      margin:10px 0 8px;
+    }
+
+    .progress span{
+      display:block;
+      width:0%;
+      height:100%;
+      background:linear-gradient(90deg,var(--orange),var(--green));
+      transition:.4s ease;
+    }
+
+    .rule-list{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:11px;
+    }
+
+    .rule-list li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:15px;
+      padding:12px;
+      color:#475569;
+      font-size:15px;
+    }
+
+    .rule-list b{color:#0f172a}
+
+    .pill{
+      flex:0 0 auto;
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#fff7ed;
+      color:#c2410c;
+      font-weight:900;
+    }
+
+    .mini-cards{
+      display:grid;
+      gap:11px;
+    }
+
+    .mini-card{
+      border:1px solid #e2e8f0;
+      border-radius:16px;
+      padding:13px;
+      background:#f8fafc;
+    }
+
+    .mini-card h3{
+      margin:0 0 4px;
+      font-size:16px;
+      font-weight:900;
+    }
+
+    .mini-card p{
+      margin:0;
+      color:#64748b;
+      font-size:14px;
+    }
+
+    .modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(2,6,23,.78);
+      z-index:1000;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      backdrop-filter:blur(5px);
+    }
+
+    .modal.show{display:flex}
+
+    .modal-content{
+      width:min(650px,96vw);
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 25px 70px rgba(0,0,0,.35);
+      overflow:hidden;
+      border:1px solid #e2e8f0;
+    }
+
+    .modal-head{
+      padding:16px 18px;
+      background:linear-gradient(135deg,#0f172a,#c2410c);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .modal-head h3{
+      margin:0;
+      font-size:21px;
+      font-weight:900;
+    }
+
+    .close{
+      border:0;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border-radius:12px;
+      width:38px;
+      height:38px;
+      cursor:pointer;
+      font-size:22px;
+    }
+
+    .modal-body{
+      padding:20px;
+      color:#475569;
+      font-size:16px;
+    }
+
+    .modal-question{
+      margin:0 20px 20px;
+      padding:15px;
+      background:#fff7ed;
+      border-left:4px solid var(--orange);
+      border-radius:12px;
+      color:#9a3412;
+      font-weight:800;
+    }
+
+    footer{
+      text-align:center;
+      color:#64748b;
+      font-size:14px;
+      padding:0 0 38px;
+    }
+
+    @media (max-width:1060px){
+      .main-grid{grid-template-columns:1fr}
+      .sidebar{position:static}
+      .manip-grid{grid-template-columns:repeat(2,1fr)}
+    }
+
+    @media (max-width:760px){
+      .nav-links{display:none}
+      .nav-inner{justify-content:center}
+      .hero-card{padding:24px}
+      .card{padding:18px}
+      .analysis-step,.task-grid{grid-template-columns:1fr}
+      .manip-grid{grid-template-columns:1fr}
+      .bar-container{gap:26px;height:220px}
+      .bar-wrap{width:95px}
+      .bar{width:62px}
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-icon">📊</span>
+        <span>Statistika tahlili portali</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Bosh sahifa</a>
+        <a href="#case">Keys</a>
+        <a href="#process">Tekshiruv</a>
+        <a href="#methods">Usullar</a>
+        <a href="#task">Xulosa</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-card">
+        <div class="badge">📈 3-KEYS · Statistik manipulyatsiya</div>
+        <h1>“Statistika bilan aldash” — raqamlarni faktcheking qilish</h1>
+        <p>
+          Ushbu keys o‘quvchilarga ijtimoiy tarmoqdagi katta foizlar, vahimali da’volar va bo‘rttirilgan
+          statistikani tanqidiy tahlil qilishni o‘rgatadi.
+        </p>
+        <div class="hero-actions">
+          <a href="#case" class="btn btn-white">Keysni ko‘rish</a>
+          <button class="btn btn-primary" onclick="startAnalysis()">Tahlilni boshlash</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-grid">
+    <section>
+      <div class="card" id="case" style="text-align:center;">
+        <span class="status-badge">📊 STATISTIK KEYS</span>
+        <h2 class="section-title" style="justify-content:center;">3-KEYS: “Statistika bilan aldash”</h2>
+        <p class="lead">
+          Ijtimoiy tarmoqdagi quyidagi postni tahlil qiling. Undagi 90% raqami qanchalik asosli?
+        </p>
+
+        <div class="blogger-post">
+          <div class="blogger-header">
+            <div class="avatar">🥷</div>
+            <div class="post-name">
+              Blogger_X
+              <span>@trend_uz · 12 daqiqa oldin</span>
+            </div>
+          </div>
+
+          <div class="post-content">
+            “Dahshatli fakt! O‘quvchilarning <span class="stat-highlight">90%</span> smartfonsiz bir kun ham yashay olmaydi! Kelajak avlod tamom bo‘lyapti... 😱📵”
+          </div>
+
+          <div class="post-meta">
+            <span>❤️ 15.4K</span>
+            <span>🔁 2.1K</span>
+            <span>💬 940 izoh</span>
+            <span>📌 Manba ko‘rsatilmagan</span>
+          </div>
+        </div>
+
+        <div class="problem-box">
+          Muammo: postda katta foiz ishlatilgan, lekin ilmiy tadqiqot, tanlanma hajmi, sana yoki rasmiy manba berilmagan.
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px;">
+          <button class="btn btn-orange" onclick="startAnalysis()">Raqamlarni tekshirishni boshlash</button>
+        </div>
+      </div>
+
+      <div id="process" class="process">
+        <div class="card">
+          <h2 class="section-title">🧪 Statistik faktcheking bosqichlari</h2>
+          <p class="lead">
+            Raqamga ishonishdan oldin uning manbasi, tanlanmasi, konteksti va maqsadi tekshiriladi.
+          </p>
+
+          <div class="analysis-step">
+            <div class="step-icon">⚠</div>
+            <div>
+              <h3>1. Manba bormi?</h3>
+              <p>Postda ilmiy tadqiqot, rasmiy tashkilot yoki aniq havola yo‘q. Shuning uchun 90% raqami hozircha da’vo, fakt emas.</p>
+            </div>
+          </div>
+
+          <div class="analysis-step" style="border-left-color:#ef4444;">
+            <div class="step-icon" style="background:linear-gradient(135deg,#ef4444,#991b1b);">%</div>
+            <div>
+              <h3>2. Mutlaq ko‘rsatkichlar manipulyatsiyasi</h3>
+              <p>“90%”, “hamma”, “hech kim”, “butun avlod” kabi iboralar hissiyotga ta’sir qilib, vaziyatni bo‘rttirib ko‘rsatishi mumkin.</p>
+            </div>
+          </div>
+
+          <div class="analysis-step" style="border-left-color:#2563eb;">
+            <div class="step-icon" style="background:linear-gradient(135deg,#2563eb,#0ea5e9);">🔎</div>
+            <div>
+              <h3>3. Solishtirish zarur</h3>
+              <p>Bunday da’voni rasmiy hisobot, maktab so‘rovi, ilmiy maqola yoki boshqa ishonchli manbalar bilan solishtirish kerak.</p>
+              <button class="btn btn-primary" onclick="showRealStat()">Rasmiy statistika bilan solishtirish</button>
+              <div id="sourceData" class="source-box">
+                <b>Simulyatsiya natijasi:</b> rasmiy va ilmiy tahlillarda gadjetga kuchli bog‘liqlik ko‘rsatkichi 12–18% atrofida deb ko‘rsatilgan deb faraz qilamiz. Demak, bloger da’vosi juda bo‘rttirilgan.
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-box">
+            <h3 style="margin:0 0 8px;">Bloger da’vosi va tekshirilgan ma’lumot taqqoslanishi</h3>
+            <p style="margin:0;color:#64748b;font-weight:700;">Grafik bloger aytgan raqam va tekshiruvdan keyingi taxminiy ko‘rsatkich farqini ko‘rsatadi.</p>
+
+            <div class="bar-container">
+              <div class="bar-wrap">
+                <div class="bar" style="height:90%;background:linear-gradient(180deg,#ef4444,#991b1b);">
+                  <div class="bar-label">90%</div>
+                </div>
+                <div class="bar-name">Bloger da’vosi</div>
+              </div>
+
+              <div class="bar-wrap">
+                <div class="bar" style="height:15%;background:linear-gradient(180deg,#22c55e,#15803d);">
+                  <div class="bar-label">15%</div>
+                </div>
+                <div class="bar-name">Tekshirilgan ko‘rsatkich</div>
+              </div>
+            </div>
+
+            <div class="problem-box" style="margin-top:22px;text-align:left;">
+              Xulosa: katta foiz har doim ham katta haqiqat degani emas. Raqam ortidagi manba, usul va tanlanmani bilish zarur.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="methods">
+        <h2 class="section-title">🧠 Statistik manipulyatsiyaning asosiy usullari</h2>
+        <p class="lead">
+          Quyidagi kartochkalarni bosib, raqamlar orqali chalg‘itish usullarini o‘rganing.
+        </p>
+
+        <div class="manip-grid">
+          <div class="manip-card" onclick="showInfo('source')">
+            <h3>1. Manbasiz foiz</h3>
+            <p>Raqam aytiladi, lekin havola yoki tadqiqot yo‘q.</p>
+          </div>
+          <div class="manip-card" onclick="showInfo('sample')">
+            <h3>2. Tanlanma yashiriladi</h3>
+            <p>Necha kishi so‘ralgani aytilmaydi.</p>
+          </div>
+          <div class="manip-card" onclick="showInfo('emotion')">
+            <h3>3. Vahima uyg‘otish</h3>
+            <p>Raqam qo‘rquv va xavotir bilan beriladi.</p>
+          </div>
+          <div class="manip-card" onclick="showInfo('compare')">
+            <h3>4. Solishtirish yo‘q</h3>
+            <p>Boshqa ishonchli ma’lumotlar keltirilmaydi.</p>
+          </div>
+          <div class="manip-card" onclick="showInfo('absolute')">
+            <h3>5. “Hamma” usuli</h3>
+            <p>Holat umumlashtirib yuboriladi.</p>
+          </div>
+          <div class="manip-card" onclick="showInfo('context')">
+            <h3>6. Kontekst yo‘q</h3>
+            <p>Raqam qaysi sharoitda olingani aytilmaydi.</p>
+          </div>
+          <div class="manip-card" onclick="showInfo('graph')">
+            <h3>7. Grafik bilan aldash</h3>
+            <p>O‘lchov noto‘g‘ri tanlanishi mumkin.</p>
+          </div>
+          <div class="manip-card" onclick="showInfo('motive')">
+            <h3>8. Maqsad yashirin</h3>
+            <p>Layk, obuna yoki reklama maqsadi bo‘lishi mumkin.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="task">
+        <h2 class="section-title">✍ O‘quvchi xulosasi</h2>
+        <p class="lead">
+          Keysni yakunlash uchun statistik da’vo haqidagi xulosangizni yozing.
+        </p>
+
+        <div class="task-grid">
+          <div>
+            <label for="isTrust">1. 90% raqami ishonchlimi?</label>
+            <select id="isTrust">
+              <option value="">— Tanlang —</option>
+              <option value="no">Yo‘q, ishonchli emas</option>
+              <option value="yes">Ha, ishonchli</option>
+            </select>
+
+            <label for="reason">2. Sababini yozing</label>
+            <textarea id="reason" placeholder="Masalan: manba, tanlanma va tadqiqot usuli ko‘rsatilmagan..."></textarea>
+          </div>
+
+          <div>
+            <label for="danger">3. Statistik manipulyatsiya nima uchun xavfli?</label>
+            <textarea id="danger" placeholder="O‘z fikringizni yozing..."></textarea>
+
+            <label for="method">4. Raqamli da’voni qanday tekshirasiz?</label>
+            <textarea id="method" placeholder="Masalan: manba, sana, tanlanma, metodika va boshqa manbalar bilan solishtiraman..."></textarea>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;">
+          <button class="btn btn-success" onclick="submitKey()">Keysni yakunlash</button>
+          <button class="btn btn-red" onclick="clearTask()">Tozalash</button>
+        </div>
+
+        <div id="resultBox" class="result-box"></div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="card">
+        <h2 class="section-title">🎯 Dars maqsadi</h2>
+        <p class="lead">
+          O‘quvchi statistik da’volarni manba, tanlanma, kontekst va dalil asosida tekshirishni o‘rganadi.
+        </p>
+        <div class="progress"><span id="progressBar"></span></div>
+        <p id="progressText" style="margin:0;color:#64748b;font-weight:800;">Bajarilish holati: 0%</p>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">✅ Statistik tekshiruv qoidalari</h2>
+        <ul class="rule-list">
+          <li><span class="pill">1</span><span><b>Manba:</b> foiz qaysi tadqiqotdan olingan?</span></li>
+          <li><span class="pill">2</span><span><b>Tanlanma:</b> necha kishi qatnashgan?</span></li>
+          <li><span class="pill">3</span><span><b>Sana:</b> ma’lumot qachon olingan?</span></li>
+          <li><span class="pill">4</span><span><b>Kontekst:</b> raqam qaysi sharoitda paydo bo‘lgan?</span></li>
+          <li><span class="pill">5</span><span><b>Solishtirish:</b> boshqa manbalar nima deydi?</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">📌 Eslab qoling</h2>
+        <div class="mini-cards">
+          <div class="mini-card"><h3>Katta foiz</h3><p>Doim ham haqiqat degani emas.</p></div>
+          <div class="mini-card"><h3>Raqam</h3><p>Manba bilan birga kuchli bo‘ladi.</p></div>
+          <div class="mini-card"><h3>Grafik</h3><p>O‘lchov noto‘g‘ri bo‘lsa aldaydi.</p></div>
+          <div class="mini-card"><h3>Xulosa</h3><p>Dalil asosida chiqariladi.</p></div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="infoModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-head">
+        <h3 id="modalTitle">Ma’lumot</h3>
+        <button class="close" onclick="closeModal()">×</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+      <div id="modalQuestion" class="modal-question"></div>
+    </div>
+  </div>
+
+  <footer class="container">
+    Statistika tahlili portali · Raqamlar orqali manipulyatsiyani aniqlash bo‘yicha interaktiv keys
+  </footer>
+
+  <script>
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    let progress = 0;
+
+    function setProgress(value){
+      progress = Math.max(progress, value);
+      progressBar.style.width = progress + "%";
+      progressText.textContent = "Bajarilish holati: " + progress + "%";
+    }
+
+    function startAnalysis(){
+      document.getElementById("process").style.display = "block";
+      setProgress(35);
+      setTimeout(() => {
+        document.getElementById("process").scrollIntoView({behavior:"smooth", block:"start"});
+      }, 120);
+    }
+
+    function showRealStat(){
+      document.getElementById("sourceData").style.display = "block";
+      setProgress(60);
+      setTimeout(() => {
+        document.getElementById("sourceData").scrollIntoView({behavior:"smooth", block:"center"});
+      }, 120);
+    }
+
+    const infoData = {
+      source:{
+        title:"Manbasiz foiz",
+        text:"Agar foiz aytilsa-yu, qaysi tadqiqot, qaysi tashkilot yoki qaysi hujjatdan olingani ko‘rsatilmasa, u ishonchli dalil bo‘la olmaydi.",
+        q:"Savol: bu raqamning rasmiy yoki ilmiy manbasi bormi?"
+      },
+      sample:{
+        title:"Tanlanma yashirilishi",
+        text:"Statistika necha kishi, qaysi hudud va qaysi yosh guruhi orasida olingani aytilmasa, natijani umumlashtirish noto‘g‘ri bo‘ladi.",
+        q:"Savol: so‘rovda necha kishi qatnashgan?"
+      },
+      emotion:{
+        title:"Vahima uyg‘otish",
+        text:"Raqamlar ko‘pincha odamni qo‘rqitish yoki shoshiltirish uchun ishlatiladi. Bunda auditoriya raqamni tekshirmasdan qabul qilishi mumkin.",
+        q:"Savol: post sizda qo‘rquv yoki g‘azab uyg‘otyaptimi?"
+      },
+      compare:{
+        title:"Solishtirish yo‘qligi",
+        text:"Ishonchli tahlilda bir nechta manba solishtiriladi. Faqat bitta da’vo berilsa, u noto‘liq axborot bo‘lishi mumkin.",
+        q:"Savol: boshqa manbalar ham shunday raqam aytyaptimi?"
+      },
+      absolute:{
+        title:"“Hamma” usuli",
+        text:"“Hamma”, “hech kim”, “butun avlod” kabi umumlashtiruvchi so‘zlar ko‘pincha manipulyatsiya vazifasini bajaradi.",
+        q:"Savol: post muammoni haddan tashqari umumlashtirmayaptimi?"
+      },
+      context:{
+        title:"Kontekst yo‘qligi",
+        text:"Raqam qaysi sharoitda, qaysi savol asosida yoki qaysi mezon bo‘yicha olingani aytilmasa, xulosa noto‘g‘ri bo‘lishi mumkin.",
+        q:"Savol: raqam nimani aniq o‘lchayapti?"
+      },
+      graph:{
+        title:"Grafik bilan aldash",
+        text:"Grafiklarda o‘lchov shkalasi, rang, ustun balandligi yoki boshlanish nuqtasi noto‘g‘ri tanlansa, farq bo‘rttirib ko‘rsatiladi.",
+        q:"Savol: grafik o‘lchovi adolatli berilganmi?"
+      },
+      motive:{
+        title:"Maqsad yashirinligi",
+        text:"Ayrim statistik postlar bilim berish uchun emas, balki ko‘rish, layk, obuna yoki reklama foydasi uchun tayyorlanadi.",
+        q:"Savol: bu postdan kim foyda ko‘radi?"
+      }
+    };
+
+    function showInfo(key){
+      const item = infoData[key];
+      document.getElementById("modalTitle").textContent = item.title;
+      document.getElementById("modalBody").textContent = item.text;
+      document.getElementById("modalQuestion").textContent = item.q;
+      document.getElementById("infoModal").classList.add("show");
+      document.getElementById("infoModal").setAttribute("aria-hidden","false");
+      setProgress(75);
+    }
+
+    function closeModal(){
+      document.getElementById("infoModal").classList.remove("show");
+      document.getElementById("infoModal").setAttribute("aria-hidden","true");
+    }
+
+    function submitKey(){
+      const isTrust = document.getElementById("isTrust").value;
+      const reason = document.getElementById("reason").value.trim();
+      const danger = document.getElementById("danger").value.trim();
+      const method = document.getElementById("method").value.trim();
+      const box = document.getElementById("resultBox");
+
+      if(!isTrust || !reason || !danger || !method){
+        box.className = "result-box show";
+        box.style.background = "#fef2f2";
+        box.style.color = "#991b1b";
+        box.style.border = "1px solid #fecaca";
+        box.textContent = "Iltimos, barcha maydonlarni to‘ldiring.";
+        return;
+      }
+
+      if(isTrust === "no"){
+        box.className = "result-box show";
+        box.style.background = "#f0fdf4";
+        box.style.color = "#166534";
+        box.style.border = "1px solid #bbf7d0";
+        box.textContent = "To‘g‘ri xulosa! 90% raqami manba, tanlanma va metodika bilan tasdiqlanmagan. Shuning uchun bu statistik manipulyatsiya bo‘lishi mumkin.";
+        setProgress(100);
+      }else{
+        box.className = "result-box show";
+        box.style.background = "#fef2f2";
+        box.style.color = "#991b1b";
+        box.style.border = "1px solid #fecaca";
+        box.textContent = "Qayta o‘ylab ko‘ring: katta foiz aytilgani bilan u fakt bo‘lib qolmaydi. Manba, tanlanma va dalil yetishmayapti.";
+        setProgress(85);
+      }
+    }
+
+    function clearTask(){
+      document.getElementById("isTrust").value = "";
+      document.getElementById("reason").value = "";
+      document.getElementById("danger").value = "";
+      document.getElementById("method").value = "";
+      document.getElementById("resultBox").className = "result-box";
+      document.getElementById("resultBox").textContent = "";
+    }
+
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape") closeModal();
+    });
+
+    document.getElementById("infoModal").addEventListener("click", function(e){
+      if(e.target.id === "infoModal") closeModal();
+    });
+  </script>
+</body>
+</html>

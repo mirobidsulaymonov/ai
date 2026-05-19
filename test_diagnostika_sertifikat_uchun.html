@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Axborot iste’moli madaniyati diagnostikasi</title>
+<style>
+:root {
+  --primary:#0f172a;
+  --blue:#2563eb;
+  --blue2:#0ea5e9;
+  --green:#16a34a;
+  --orange:#f97316;
+  --red:#ef4444;
+  --purple:#7c3aed;
+  --gold:#b7950b;
+  --muted:#64748b;
+  --border:#dbe4f0;
+  --card:#ffffff;
+  --shadow:0 18px 45px rgba(15,23,42,.12);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Arial,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at top left,rgba(37,99,235,.12),transparent 30%),
+    radial-gradient(circle at top right,rgba(249,115,22,.10),transparent 28%),
+    linear-gradient(180deg,#f8fbff 0%,#eef5ff 48%,#f8fafc 100%);
+  color:var(--primary);
+  line-height:1.65;
+}
+.navbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 8px 24px rgba(15,23,42,.05);
+}
+.nav-inner{
+  width:min(1180px,calc(100% - 32px));
+  min-height:72px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.brand{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;color:var(--primary);
+  font-weight:900;letter-spacing:-.035em;font-size:18px;
+}
+.brand-icon{
+  width:48px;height:48px;border-radius:17px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:23px;box-shadow:0 10px 24px rgba(37,99,235,.22);
+}
+.nav-links{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.nav-links a{
+  text-decoration:none;color:#334155;font-weight:800;font-size:14px;
+  padding:9px 12px;border-radius:999px;transition:.2s
+}
+.nav-links a:hover{background:#eff6ff;color:var(--blue)}
+.container{width:min(1180px,calc(100% - 32px));margin:auto}
+.hero{padding:24px 0 16px}
+.hero-card{
+  position:relative;overflow:hidden;border-radius:34px;
+  background:linear-gradient(135deg,#0f172a 0%,#1d4ed8 48%,#7c3aed 100%);
+  color:#fff;padding:34px 32px;box-shadow:var(--shadow);
+}
+.hero-card:before{
+  content:"";position:absolute;width:260px;height:260px;border-radius:50%;
+  right:-90px;top:-90px;background:rgba(255,255,255,.12)
+}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.15);color:#dbeafe;
+  border:1px solid rgba(255,255,255,.22);
+  padding:8px 13px;border-radius:999px;font-size:14px;font-weight:900;
+  margin-bottom:14px;position:relative;z-index:2;
+}
+.hero-card h1{
+  margin:0 0 12px;font-size:clamp(30px,4vw,52px);
+  line-height:1.06;letter-spacing:-.055em;font-weight:900;
+  position:relative;z-index:2;max-width:1040px;
+}
+.hero-card p{margin:0;color:#dbeafe;font-size:18px;max-width:980px;position:relative;z-index:2}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px;position:relative;z-index:2}
+.btn{
+  border:0;border-radius:15px;padding:13px 18px;font-weight:900;cursor:pointer;
+  transition:.2s;font-size:15px;font-family:inherit;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,23,42,.12)}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+.btn-white{background:#fff;color:#1d4ed8}
+.btn-success{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+.btn-orange{background:linear-gradient(135deg,var(--orange),#f59e0b);color:#fff}
+.btn-dark{background:#0f172a;color:#fff}
+.btn-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.main{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start;padding:8px 0 46px}
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:26px;padding:24px;box-shadow:var(--shadow);margin-bottom:22px;
+}
+.section-title{
+  margin:0 0 14px;font-size:26px;line-height:1.2;letter-spacing:-.04em;
+  font-weight:900;display:flex;align-items:center;gap:10px;
+}
+.lead{margin:-4px 0 18px;color:var(--muted);font-size:17px;font-weight:650}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.info-card{
+  background:#f8fafc;border:1px solid #e2e8f0;border-radius:20px;padding:18px;
+}
+.info-card h3{margin:0 0 8px;font-weight:900;font-size:18px}
+.info-card p{margin:0;color:#64748b;font-weight:650}
+.reg-box{
+  display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:end;
+  background:#f8fafc;border:1px dashed #94a3b8;border-radius:22px;padding:20px;
+}
+label{display:block;font-size:14px;font-weight:900;color:#1e293b;margin:0 0 7px}
+input,select,textarea{
+  width:100%;border:1px solid #cbd5e1;border-radius:14px;padding:13px;
+  font-family:inherit;font-size:15px;outline:none;transition:.2s;background:#fff;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+.dashboard{display:none}
+.module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.module{
+  background:#fff;border:1px solid #e2e8f0;border-radius:22px;padding:20px;
+  position:relative;overflow:hidden;cursor:pointer;transition:.2s;
+}
+.module:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(15,23,42,.10)}
+.module.completed{background:#f0fdf4;border-color:#86efac}
+.module .micon{font-size:36px;margin-bottom:12px}
+.module h3{margin:0 0 8px;font-weight:900}
+.module p{margin:0;color:#64748b;font-weight:650}
+.question-box{
+  display:none;
+}
+.q-top{
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  color:#64748b;font-weight:900;margin-bottom:14px;
+}
+.scenario{
+  background:#fff7ed;border:1px solid #fed7aa;border-left:7px solid var(--orange);
+  border-radius:20px;padding:18px;margin-bottom:16px;color:#7c2d12;font-weight:750;
+}
+.question{
+  font-size:23px;font-weight:900;line-height:1.35;margin:0 0 16px;
+}
+.option{
+  width:100%;border:2px solid #e2e8f0;background:#fff;border-radius:17px;
+  padding:15px 16px;margin-top:10px;text-align:left;font-weight:850;cursor:pointer;
+  color:#334155;transition:.2s;font-family:inherit;font-size:16px;
+}
+.option:hover{background:#eff6ff;border-color:#bfdbfe;transform:translateX(4px)}
+.option.good{background:#f0fdf4;border-color:#86efac;color:#166534}
+.option.bad{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
+.option.disabled{pointer-events:none;opacity:.78}
+.explain{
+  display:none;margin-top:14px;border-radius:18px;padding:15px 16px;
+  background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-weight:800;
+}
+.sidebar{position:sticky;top:92px}
+.progress{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin:10px 0 8px}
+.progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));transition:.4s}
+.progress-text{font-weight:900;color:#64748b;margin:0}
+.rule-list{margin:0;padding:0;list-style:none;display:grid;gap:11px}
+.rule-list li{
+  display:flex;gap:10px;align-items:flex-start;background:#f8fafc;
+  border:1px solid #e2e8f0;border-radius:15px;padding:12px;color:#475569;font-size:15px;
+}
+.rule-list b{color:#0f172a}
+.pill{
+  flex:0 0 auto;width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;background:#eff6ff;color:var(--blue);font-weight:900;
+}
+.result-box{display:none;margin-top:14px;border-radius:18px;padding:15px 16px;font-weight:900}
+.result-box.show{display:block;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:18px;padding:16px;text-align:center}
+.stat b{display:block;font-size:30px;line-height:1;color:#1d4ed8;margin-bottom:7px}
+.stat span{font-weight:850;color:#64748b;font-size:13px}
+.certificate-wrap{display:none}
+.certificate{
+  width:100%;min-height:620px;background:
+  radial-gradient(circle at top left,rgba(183,149,11,.18),transparent 28%),
+  radial-gradient(circle at bottom right,rgba(37,99,235,.16),transparent 30%),
+  #fff;
+  border:8px double var(--gold);
+  border-radius:28px;padding:42px;text-align:center;position:relative;overflow:hidden;
+  box-shadow:0 22px 50px rgba(15,23,42,.14);
+}
+.cert-seal{
+  width:96px;height:96px;border-radius:50%;margin:0 auto 14px;
+  background:linear-gradient(135deg,var(--gold),#facc15);
+  display:flex;align-items:center;justify-content:center;font-size:46px;
+  box-shadow:0 12px 28px rgba(183,149,11,.25);
+}
+.cert-sub{letter-spacing:.26em;text-transform:uppercase;color:#64748b;font-weight:900;font-size:13px}
+.cert-title{font-family:Georgia,serif;font-size:58px;line-height:1;margin:12px 0;color:#1a5276;letter-spacing:.04em}
+.cert-name{font-family:Georgia,serif;font-size:34px;color:#b91c1c;margin:18px 0;font-weight:900;border-bottom:2px solid #e2e8f0;display:inline-block;padding:0 30px 10px}
+.cert-text{font-size:18px;color:#334155;max-width:800px;margin:0 auto 18px;font-weight:650}
+.cert-score{
+  display:inline-flex;gap:16px;align-items:center;justify-content:center;
+  background:#f8fafc;border:1px solid #e2e8f0;border-radius:999px;padding:12px 20px;
+  margin:8px 0 18px;font-weight:900;color:#0f172a;
+}
+.cert-footer{display:flex;justify-content:space-between;gap:20px;margin-top:36px;text-align:left;color:#475569;font-weight:800}
+.cert-line{border-top:2px solid #94a3b8;padding-top:8px;min-width:210px}
+.final-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:18px}
+footer{text-align:center;color:#64748b;font-size:14px;padding:0 0 38px}
+@media(max-width:1060px){.main{grid-template-columns:1fr}.sidebar{position:static}.reg-box,.module-grid,.grid-3,.stats-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.nav-links{display:none}.nav-inner{justify-content:center}.hero-card{padding:24px}.card{padding:18px}.cert-title{font-size:38px}.cert-name{font-size:25px}.certificate{padding:24px;min-height:auto}.cert-footer{flex-direction:column}}
+@media print{
+  body{background:#fff}
+  .navbar,.hero,.main > aside,.dashboard,.question-box,.intro,.final-actions,footer{display:none!important}
+  .main{display:block;padding:0}
+  .card{box-shadow:none;border:0;padding:0;margin:0}
+  .certificate-wrap{display:block!important}
+  .certificate{box-shadow:none;border-radius:0;min-height:690px}
+}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="brand-icon">🎓</span><span>Axborot iste’moli diagnostikasi</span></a>
+    <div class="nav-links">
+      <a href="index.html">Bosh sahifa</a>
+      <a href="#kirish">Kirish</a>
+      <a href="#diagnostika">Diagnostika</a>
+      <a href="#sertifikat">Sertifikat</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-card">
+      <div class="badge">7–11-sinf o‘quvchilari uchun · Ilmiy ish mavzusiga mos diagnostika</div>
+      <h1>Yoshlarning axborot iste’moli madaniyatini aniqlash diagnostikasi</h1>
+      <p>Testlar kognitiv, affektiv va axloqiy-amaliy komponentlar asosida tuzildi. O‘quvchi axborotni izlash, tahlil qilish, qadriyatli baholash va mas’uliyatli amaliy qaror qabul qilish darajasini aniqlaydi.</p>
+      <div class="hero-actions">
+        <a href="#diagnostika" class="btn btn-white">Diagnostikani boshlash</a>
+        <a href="#sertifikat" class="btn btn-primary">Sertifikat namunasi</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container main">
+  <section>
+    <div class="card intro" id="kirish">
+      <h2 class="section-title">📌 Diagnostika mazmuni</h2>
+      <p class="lead">Ushbu sahifada avvalgi kamchiliklar tuzatildi: ball hisoblash aniqlandi, progress to‘g‘ri ishlaydi, savollar mavzuga moslashtirildi, natija komponentlar kesimida chiqariladi va yakunda chiroyli sertifikat hosil bo‘ladi.</p>
+      <div class="grid-3">
+        <div class="info-card"><h3>🧠 Kognitiv</h3><p>Axborotni izlash, saralash, feykni aniqlash va dalilga asoslangan xulosa chiqarish.</p></div>
+        <div class="info-card"><h3>🧡 Affektiv</h3><p>Axborotga nisbatan vijdon, hurmat, adolat va mas’uliyatli munosabat bildirish.</p></div>
+        <div class="info-card"><h3>✅ Axloqiy-amaliy</h3><p>Raqamli xavfsizlik, shaxsiy ma’lumotni himoya qilish va foydali kontent yaratish.</p></div>
+      </div>
+    </div>
+
+    <div class="card dashboard" id="diagnostika" style="display:block">
+      <h2 class="section-title">👤 O‘quvchi ma’lumotlari</h2>
+      <div class="reg-box" id="regBox">
+        <div>
+          <label for="fullname">Familiya, ism</label>
+          <input type="text" id="fullname" placeholder="Masalan: Aliyev Jasur">
+        </div>
+        <div>
+          <label for="className">Sinf</label>
+          <select id="className">
+            <option value="">Sinfni tanlang</option>
+            <option>7-sinf</option>
+            <option>8-sinf</option>
+            <option>9-sinf</option>
+            <option>10-sinf</option>
+            <option>11-sinf</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="startDiagnostic()" style="grid-column:1/-1">Diagnostikani boshlash</button>
+      </div>
+
+      <div id="moduleDashboard" style="display:none">
+        <h2 class="section-title">📚 Komponentlar bo‘yicha testlar</h2>
+        <p class="lead">Har bir komponentda 8 tadan savol mavjud. Jami 24 savol. Barcha komponentlar bajarilgandan so‘ng sertifikat ochiladi.</p>
+        <div class="stats-grid">
+          <div class="stat"><b id="totalScore">0</b><span>to‘plangan ball</span></div>
+          <div class="stat"><b id="percentScore">0%</b><span>umumiy foiz</span></div>
+          <div class="stat"><b id="doneModules">0/3</b><span>yakunlangan komponent</span></div>
+          <div class="stat"><b id="levelText">—</b><span>daraja</span></div>
+        </div>
+        <div class="module-grid" id="moduleGrid" style="margin-top:18px"></div>
+        <button class="btn btn-success" id="finishBtn" onclick="showCertificate()" disabled style="margin-top:18px;width:100%">Yakuniy natija va sertifikatni ko‘rish</button>
+      </div>
+    </div>
+
+    <div class="card question-box" id="questionBox">
+      <div class="q-top">
+        <span id="componentLabel"></span>
+        <span id="questionCounter"></span>
+      </div>
+      <div class="scenario" id="scenarioText"></div>
+      <h2 class="question" id="questionText"></h2>
+      <div id="optionsBox"></div>
+      <div id="explainBox" class="explain"></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
+        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Keyingi savol</button>
+        <button class="btn btn-dark" onclick="backToDashboard()">Komponentlarga qaytish</button>
+      </div>
+    </div>
+
+    <div class="card certificate-wrap" id="sertifikat">
+      <div class="certificate" id="certificate">
+        <div class="cert-seal">🎓</div>
+        <div class="cert-sub">Axborot iste’moli madaniyati diagnostikasi</div>
+        <div class="cert-title">SERTIFIKAT</div>
+        <div class="cert-text">Mazkur sertifikat quyidagi o‘quvchiga “Yoshlarning axborot iste’moli madaniyatini oshirish” mavzusi bo‘yicha diagnostik testlarni muvaffaqiyatli yakunlagani uchun beriladi.</div>
+        <div class="cert-name" id="certName">O‘quvchi F.I.</div>
+        <div class="cert-score">
+          <span id="certClass">Sinf: —</span>
+          <span>•</span>
+          <span id="certResult">Natija: —</span>
+          <span>•</span>
+          <span id="certLevel">Daraja: —</span>
+        </div>
+        <div class="cert-text" id="certComment">O‘quvchi axborotni tahlil qilish, qadriyatli baholash va raqamli muhitda mas’uliyatli qaror qabul qilish bo‘yicha bilim-ko‘nikmalarini namoyon etdi.</div>
+        <div class="cert-footer">
+          <div class="cert-line">Platforma: Media-madaniyat diagnostikasi</div>
+          <div class="cert-line" id="certDate">Sana: —</div>
+        </div>
+      </div>
+      <div class="final-actions">
+        <button class="btn btn-primary" onclick="window.print()">Sertifikatni PDF/chop etish</button>
+        <button class="btn btn-orange" onclick="restartAll()">Qayta topshirish</button>
+        <a class="btn btn-dark" href="index.html">Bosh sahifa</a>
+      </div>
+    </div>
+  </section>
+
+  <aside class="sidebar">
+    <div class="card">
+      <h2 class="section-title">📊 Progress</h2>
+      <div class="progress"><span id="progressBar"></span></div>
+      <p class="progress-text" id="progressText">0%</p>
+    </div>
+    <div class="card">
+      <h2 class="section-title">✅ Baholash mezoni</h2>
+      <ul class="rule-list">
+        <li><span class="pill">A</span><span><b>85–100%</b> — yuqori daraja</span></li>
+        <li><span class="pill">B</span><span><b>60–84%</b> — o‘rta daraja</span></li>
+        <li><span class="pill">C</span><span><b>0–59%</b> — boshlang‘ich daraja</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2 class="section-title">🎯 Eslatma</h2>
+      <p class="lead">Test savollari feyk xabar, faktcheking, axborot etikasi, raqamli xavfsizlik va mas’uliyatli media iste’molga qaratilgan.</p>
+    </div>
+  </aside>
+</main>
+
+<footer class="container">Axborot iste’moli madaniyati diagnostikasi · Maktab o‘quvchilari uchun interaktiv test</footer>
+
+<script>
+const questions = [{"cat": "Kognitiv komponent", "icon": "🧠", "scenario": "Telegram guruhida “Ertadan boshlab barcha maktablarda darslar bekor qilindi” degan xabar tarqaldi.", "q": "Bu xabarni tekshirishda birinchi navbatda nima qilasiz?", "options": [["Rasmiy manba yoki maktab ma’muriyati xabarini tekshiraman", 3], ["Xabarni tezda boshqa guruhlarga yuboraman", 0], ["Ko‘pchilik yozgan bo‘lsa, rost deb ishonaman", 0], ["Faqat sarlavhani o‘qib xulosa qilaman", 0]], "explain": "Kognitiv yondashuvda avval manba, sana va rasmiy tasdiq tekshiriladi."}, {"cat": "Kognitiv komponent", "icon": "🧠", "scenario": "Internetda “Olimlar isbotladi” degan gap bilan reklama berildi, lekin tadqiqot nomi ko‘rsatilmagan.", "q": "Bunday axborotga qanday munosabat bildirish kerak?", "options": [["Tadqiqot nomi, muallifi, yili va manbasini izlayman", 3], ["Olimlar degani uchun darhol ishonaman", 0], ["Reklama chiroyli bo‘lsa, rost deb o‘ylayman", 0], ["Izohlar ko‘p bo‘lsa, yetarli deb bilaman", 1]], "explain": "Ilmiy da’vo aniq muallif, yil, manba va dalil bilan tasdiqlanishi kerak."}, {"cat": "Kognitiv komponent", "icon": "🧠", "scenario": "Bir rasm “Samarqandda bugun olingan” deb tarqaldi, ammo rasm juda tanish ko‘rinadi.", "q": "Rasmning haqiqiyligini qanday tekshirasiz?", "options": [["Teskari rasm qidiruvi orqali avval qayerda chiqqanini tekshiraman", 3], ["Rasm chiroyli bo‘lsa, ishonaman", 0], ["Do‘stim yuborgan bo‘lsa, tekshirmayman", 0], ["Faqat rasm ostidagi izohlarga qarayman", 1]], "explain": "Vizual axborotda teskari rasm qidiruvi, sana va kontekst muhim."}, {"cat": "Kognitiv komponent", "icon": "🧠", "scenario": "YouTube’da “Dahshatli haqiqat!” degan sarlavhali video ko‘rdingiz.", "q": "Klikbeytni aniqlashda qaysi belgi muhim?", "options": [["Hissiy so‘zlar, katta harflar va dalilsiz chaqiriqlar", 3], ["Videoning rangi yorqin bo‘lishi", 0], ["Kanal nomining uzunligi", 0], ["Videoning tez yuklanishi", 0]], "explain": "Klikbeyt ko‘pincha hissiyotga bosim qiladi, dalil esa kam bo‘ladi."}, {"cat": "Kognitiv komponent", "icon": "🧠", "scenario": "Statistik postda “O‘quvchilarning 90 foizi smartfonsiz yashay olmaydi” deyilgan.", "q": "Bu raqamni baholash uchun nima kerak?", "options": [["Tanlanma soni, tadqiqot va manba ko‘rsatilganini tekshirish", 3], ["Foiz katta bo‘lsa, darhol ishonish", 0], ["Post ostidagi emojilar soniga qarash", 0], ["Rasm rangiga qarab baholash", 0]], "explain": "Statistik axborotda tanlanma, metodika, sana va manba ko‘rsatilishi zarur."}, {"cat": "Kognitiv komponent", "icon": "🧠", "scenario": "Ikki manba bir voqea haqida turlicha xabar berdi.", "q": "To‘g‘ri xulosa chiqarish uchun nima qilasiz?", "options": [["Bir nechta ishonchli manbani solishtiraman", 3], ["Menga yoqqan manbani tanlayman", 0], ["Eng vahimali xabarga ishonaman", 0], ["Hech qaysisini o‘qimayman", 0]], "explain": "Dalilga asoslangan xulosa solishtirish va tahlil orqali shakllanadi."}, {"cat": "Kognitiv komponent", "icon": "🧠", "scenario": "Sizga “maktabda yangi qoida chiqdi” degan skrinshot yuborildi.", "q": "Skrinshotning ishonchliligini qanday baholaysiz?", "options": [["Asl manba, sana, muallif va rasmiy tasdiqni tekshiraman", 3], ["Skrinshot bo‘lsa, demak rost", 0], ["Uni statusga qo‘yaman", 0], ["Faqat dizayniga qarayman", 1]], "explain": "Skrinshotni ham tahrirlash mumkin. Asl manba muhim."}, {"cat": "Kognitiv komponent", "icon": "🧠", "scenario": "Dars uchun internetdan ma’lumot topdingiz.", "q": "Qaysi holat axborot savodxonligiga mos?", "options": [["Manbani ko‘rsatib, ma’lumotni qayta tahlil qilib yozish", 3], ["Matnni to‘liq ko‘chirib topshirish", 0], ["Muallifni ko‘rsatmaslik", 0], ["Faqat birinchi chiqqan saytga ishonish", 0]], "explain": "Axborot savodxonligi manbani ko‘rsatish va mustaqil tahlil qilishni talab qiladi."}, {"cat": "Affektiv komponent", "icon": "🧡", "scenario": "Sinf guruhida bir o‘quvchi ustidan kuluvchi meme tarqaldi.", "q": "Axborotga qadriyatli munosabat nuqtayi nazaridan eng to‘g‘ri harakat qaysi?", "options": [["Memeni tarqatmaslik va guruhdagilarni to‘xtatishga harakat qilish", 3], ["Kulib, yana boshqa guruhlarga yuborish", 0], ["Shunchaki tomosha qilish", 1], ["Yangi meme yasash", 0]], "explain": "Affektiv komponent hurmat, vijdon va mas’uliyatli munosabatni talab qiladi."}, {"cat": "Affektiv komponent", "icon": "🧡", "scenario": "Internetda juda qo‘rqinchli sarlavha ko‘rdingiz.", "q": "Emotsional manipulyatsiyaga tushmaslik uchun nima qilasiz?", "options": [["Tinchlanib, manba va dalilni tekshiraman", 3], ["Darhol do‘stlarimga yuboraman", 0], ["Sarlavhaga qarab xulosa qilaman", 0], ["Faqat izohlarga ishonaman", 1]], "explain": "Hissiy bosim paytida to‘xtash, o‘ylash va tekshirish kerak."}, {"cat": "Affektiv komponent", "icon": "🧡", "scenario": "Do‘stingiz shubhali xabarni chin dildan rost deb ishonmoqda.", "q": "Unga qanday munosabat bildirasiz?", "options": [["Hurmat bilan tushuntirib, birga tekshirishni taklif qilaman", 3], ["Uni masxara qilaman", 0], ["Jahlim chiqib urishaman", 0], ["Indamay, xabarni tarqataman", 0]], "explain": "Media madaniyat faqat bilim emas, muloqot odobi va hurmat hamdir."}, {"cat": "Affektiv komponent", "icon": "🧡", "scenario": "Reklama sizda “hozir olmasam, kech qolaman” degan hissiyot uyg‘otdi.", "q": "Bu qanday psixologik ta’sir bo‘lishi mumkin?", "options": [["Shoshiltirish va FOMO manipulyatsiyasi", 3], ["Oddiy axborot", 0], ["Ilmiy dalil", 0], ["Rasmiy xabar", 0]], "explain": "FOMO — imkoniyatdan qolib ketish qo‘rquvi. Reklamada tez-tez ishlatiladi."}, {"cat": "Affektiv komponent", "icon": "🧡", "scenario": "Bir post boshqa millat yoki guruhga nisbatan nafrat uyg‘otmoqda.", "q": "Axborot etikasi bo‘yicha to‘g‘ri munosabat qaysi?", "options": [["Bunday kontentni tarqatmaslik va shikoyat qilish", 3], ["Uni bahs uchun tarqatish", 0], ["Nafratli izoh yozish", 0], ["Ko‘proq odam ko‘rsin deb ulashish", 0]], "explain": "Nafrat uyg‘otuvchi axborot ijtimoiy zarar keltiradi."}, {"cat": "Affektiv komponent", "icon": "🧡", "scenario": "Sizga yolg‘on bo‘lishi mumkin bo‘lgan xabar juda qiziq tuyuldi.", "q": "Qiziqish va mas’uliyat o‘rtasida qanday yo‘l tutasiz?", "options": [["Qiziq bo‘lsa ham tekshirmasdan tarqatmayman", 3], ["Qiziq bo‘lgani uchun tarqataman", 0], ["Faqat yaqin do‘stlarga yuboraman", 1], ["Sarlavhani o‘zgartirib yuboraman", 0]], "explain": "Media madaniyatli o‘quvchi qiziqishdan ko‘ra mas’uliyatni ustun qo‘yadi."}, {"cat": "Affektiv komponent", "icon": "🧡", "scenario": "Izohlarda kimdir sizning fikringizga qo‘pol javob berdi.", "q": "Eng to‘g‘ri javob qaysi?", "options": [["Haqorat qilmasdan, dalil bilan yoki umuman javob bermasdan vaziyatni tinchlantirish", 3], ["Undan ham qo‘polroq javob yozish", 0], ["Boshqalarni ham unga qarshi chaqirish", 0], ["Uning shaxsiy ma’lumotini tarqatish", 0]], "explain": "Affektiv nazorat jahlni boshqarish va odobli muloqot qilishdir."}, {"cat": "Affektiv komponent", "icon": "🧡", "scenario": "Bir xabar sizni juda xursand qildi, lekin manbasi noma’lum.", "q": "Hissiyot va tahlil uyg‘unligi qanday bo‘lishi kerak?", "options": [["Xursand bo‘lsam ham, tekshirishni unutmayman", 3], ["Xursand bo‘lsam, demak rost", 0], ["Uni darhol ulashaman", 0], ["Faqat rasmiga qarayman", 0]], "explain": "Ijobiy hissiyot ham tanqidiy fikrni almashtirmasligi kerak."}, {"cat": "Axloqiy-amaliy komponent", "icon": "✅", "scenario": "Sizga “SMS kodni yuboring, yutuqni olasiz” degan xabar keldi.", "q": "Eng xavfsiz amaliy harakat qaysi?", "options": [["Kodni bermayman, xabarni o‘chiraman va kattalarga aytaman", 3], ["Kodni yuboraman", 0], ["Do‘stimga maslahat uchun kodni ko‘rsataman", 0], ["Yutuqni olish uchun havolaga kiraman", 0]], "explain": "SMS kod, parol va karta ma’lumotlari maxfiy saqlanadi."}, {"cat": "Axloqiy-amaliy komponent", "icon": "✅", "scenario": "Ochiq Wi-Fi orqali bank ilovasiga kirmoqchisiz.", "q": "Xavfsiz amaliy qaror qaysi?", "options": [["Bank amaliyotini shaxsiy internet orqali bajaraman", 3], ["Ochiq Wi-Fi tez bo‘lsa, kiraveraman", 0], ["Karta raqamimni yozib ko‘raman", 0], ["Begona odamdan parol so‘rayman", 0]], "explain": "Ochiq Wi-Fi’da shaxsiy moliyaviy ma’lumotlar xavf ostida qolishi mumkin."}, {"cat": "Axloqiy-amaliy komponent", "icon": "✅", "scenario": "Sinfda media savodxonlik bo‘yicha loyiha tayyorlash kerak.", "q": "Ijtimoiy foydali axborot yaratishning yaxshi namunasi qaysi?", "options": [["Feyk xabarni tekshirish bo‘yicha infografika tayyorlash", 3], ["Birovni kamsituvchi meme tayyorlash", 0], ["Manbasiz vahimali xabar tarqatish", 0], ["Faqat reklamalarni ulashish", 0]], "explain": "Axloqiy-amaliy komponent axborotni ijtimoiy foyda uchun qo‘llashni o‘rgatadi."}, {"cat": "Axloqiy-amaliy komponent", "icon": "✅", "scenario": "Notanish profil sizdan manzilingiz va maktabingizni so‘radi.", "q": "Qanday javob berasiz?", "options": [["Shaxsiy ma’lumot bermayman va profilni bloklayman", 3], ["Maktabim va uy manzilimni yozaman", 0], ["Rasmimni ham yuboraman", 0], ["Do‘stlarim haqida ma’lumot beraman", 0]], "explain": "Shaxsiy ma’lumot xavfsizligi raqamli madaniyatning asosiy qismidir."}, {"cat": "Axloqiy-amaliy komponent", "icon": "✅", "scenario": "Guruhga birovning ruxsatsiz surati tashlandi.", "q": "Mas’uliyatli harakat qaysi?", "options": [["Suratni tarqatmaslik, o‘chirishni so‘rash va kerak bo‘lsa ustozga aytish", 3], ["Suratni saqlab olish", 0], ["Boshqa guruhga yuborish", 0], ["Suratga kulgili yozuv qo‘shish", 0]], "explain": "Shaxsiy hayot daxlsizligini hurmat qilish axborot etikasi va amaliy mas’uliyatdir."}, {"cat": "Axloqiy-amaliy komponent", "icon": "✅", "scenario": "Sizga zararli havola kelganini bildingiz.", "q": "Boshqalarni himoya qilish uchun nima qilasiz?", "options": [["Guruhda ogohlantiraman, havolani ochmaslikni aytaman", 3], ["Havolani ko‘proq odamga yuboraman", 0], ["Hazil uchun do‘stimga yuboraman", 0], ["O‘zim kirib tekshirib ko‘raman", 0]], "explain": "Media madaniyatli o‘quvchi o‘zini ham, boshqalarni ham himoya qiladi."}, {"cat": "Axloqiy-amaliy komponent", "icon": "✅", "scenario": "Dars uchun internetdan rasm oldingiz.", "q": "Mualliflik huquqiga mos amaliy harakat qaysi?", "options": [["Rasm manbasini ko‘rsataman yoki ruxsatli rasmdan foydalanaman", 3], ["Muallifni o‘chirib tashlayman", 0], ["O‘zim chizgandek ko‘rsataman", 0], ["Manba kerak emas deb o‘ylayman", 0]], "explain": "Mualliflik huquqiga hurmat axborot madaniyatining amaliy ko‘rinishidir."}, {"cat": "Axloqiy-amaliy komponent", "icon": "✅", "scenario": "Parolingiz juda oson: 12345678.", "q": "Amaliy xavfsizlik uchun nima qilasiz?", "options": [["Kuchli parol yaratib, ikki bosqichli himoyani yoqaman", 3], ["Shu parolni hamma akkauntda ishlataman", 0], ["Parolni do‘stlarimga aytaman", 0], ["Parol kerak emas deb o‘ylayman", 0]], "explain": "Kuchli parol va ikki bosqichli himoya akkaunt xavfsizligini oshiradi."}];
+
+const groups = ["Kognitiv komponent","Affektiv komponent","Axloqiy-amaliy komponent"];
+let user = { name:"", className:"" };
+let state = {
+  started:false,
+  activeGroup:null,
+  currentIndex:0,
+  selected:false,
+  completed:{},
+  scores:{},
+  answers:{}
+};
+
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function startDiagnostic() {
+  const name = document.getElementById("fullname").value.trim();
+  const className = document.getElementById("className").value;
+  if (name.length < 5) {
+    alert("Iltimos, familiya va ismingizni to‘liq kiriting.");
+    return;
+  }
+  if (!className) {
+    alert("Iltimos, sinfni tanlang.");
+    return;
+  }
+  user.name = name;
+  user.className = className;
+  state.started = true;
+  document.getElementById("regBox").style.display = "none";
+  document.getElementById("moduleDashboard").style.display = "block";
+  renderModules();
+  updateStats();
+}
+
+function getGroupQuestions(group) {
+  return questions.filter(q => q.cat === group);
+}
+
+function renderModules() {
+  const grid = document.getElementById("moduleGrid");
+  grid.innerHTML = "";
+  groups.forEach((g, idx) => {
+    const done = state.completed[g];
+    const qs = getGroupQuestions(g);
+    const score = state.scores[g] || 0;
+    const max = qs.length * 3;
+    const icon = qs[0].icon;
+    const div = document.createElement("div");
+    div.className = "module" + (done ? " completed" : "");
+    div.onclick = () => startModule(g);
+    div.innerHTML = `
+      <div class="micon">${icon}</div>
+      <h3>${idx+1}. ${g}</h3>
+      <p>${done ? "Yakunlandi: " + score + "/" + max + " ball" : qs.length + " ta savol · boshlash uchun bosing"}</p>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function startModule(group) {
+  state.activeGroup = group;
+  state.currentIndex = 0;
+  state.selected = false;
+  state.scores[group] = 0;
+  state.answers[group] = [];
+  document.getElementById("moduleDashboard").style.display = "none";
+  document.getElementById("questionBox").style.display = "block";
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const qs = getGroupQuestions(state.activeGroup);
+  const q = qs[state.currentIndex];
+  state.selected = false;
+  document.getElementById("nextBtn").disabled = true;
+  document.getElementById("componentLabel").textContent = q.icon + " " + state.activeGroup;
+  document.getElementById("questionCounter").textContent = "Savol " + (state.currentIndex + 1) + " / " + qs.length;
+  document.getElementById("scenarioText").textContent = q.scenario;
+  document.getElementById("questionText").textContent = q.q;
+  document.getElementById("explainBox").style.display = "none";
+  document.getElementById("explainBox").textContent = "";
+  const box = document.getElementById("optionsBox");
+  box.innerHTML = "";
+  shuffle(q.options).forEach(([text, point]) => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = text;
+    btn.onclick = () => chooseAnswer(btn, point, q.explain);
+    box.appendChild(btn);
+  });
+  updateProgress();
+}
+
+function chooseAnswer(btn, point, explanation) {
+  if (state.selected) return;
+  state.selected = true;
+  const group = state.activeGroup;
+  state.scores[group] = (state.scores[group] || 0) + point;
+  state.answers[group].push(point);
+  document.querySelectorAll(".option").forEach(o => {
+    o.classList.add("disabled");
+  });
+  btn.classList.add(point === 3 ? "good" : "bad");
+  const explain = document.getElementById("explainBox");
+  explain.style.display = "block";
+  explain.textContent = (point === 3 ? "To‘g‘ri! " : "Eslatma: ") + explanation;
+  document.getElementById("nextBtn").disabled = false;
+  updateStats();
+}
+
+function nextQuestion() {
+  const qs = getGroupQuestions(state.activeGroup);
+  if (state.currentIndex < qs.length - 1) {
+    state.currentIndex++;
+    renderQuestion();
+  } else {
+    state.completed[state.activeGroup] = true;
+    document.getElementById("questionBox").style.display = "none";
+    document.getElementById("moduleDashboard").style.display = "block";
+    renderModules();
+    updateStats();
+  }
+}
+
+function backToDashboard() {
+  document.getElementById("questionBox").style.display = "none";
+  document.getElementById("moduleDashboard").style.display = "block";
+  renderModules();
+  updateStats();
+}
+
+function totalScore() {
+  return Object.values(state.scores).reduce((a,b)=>a+b,0);
+}
+
+function maxScore() {
+  return questions.length * 3;
+}
+
+function doneCount() {
+  return groups.filter(g => state.completed[g]).length;
+}
+
+function levelByPercent(p) {
+  if (p >= 85) return "Yuqori";
+  if (p >= 60) return "O‘rta";
+  return "Boshlang‘ich";
+}
+
+function updateStats() {
+  const total = totalScore();
+  const percent = Math.round(total / maxScore() * 100);
+  document.getElementById("totalScore").textContent = total;
+  document.getElementById("percentScore").textContent = percent + "%";
+  document.getElementById("doneModules").textContent = doneCount() + "/3";
+  document.getElementById("levelText").textContent = doneCount() ? levelByPercent(percent) : "—";
+  document.getElementById("finishBtn").disabled = doneCount() !== 3;
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = Object.values(state.answers).flat().length;
+  const percent = Math.round(answered / questions.length * 100);
+  document.getElementById("progressBar").style.width = percent + "%";
+  document.getElementById("progressText").textContent = percent + "%";
+}
+
+function showCertificate() {
+  const total = totalScore();
+  const percent = Math.round(total / maxScore() * 100);
+  const level = levelByPercent(percent);
+  document.querySelector(".certificate-wrap").style.display = "block";
+  document.getElementById("certName").textContent = user.name;
+  document.getElementById("certClass").textContent = "Sinf: " + user.className;
+  document.getElementById("certResult").textContent = "Natija: " + total + "/" + maxScore() + " ball (" + percent + "%)";
+  document.getElementById("certLevel").textContent = "Daraja: " + level;
+  const today = new Date();
+  document.getElementById("certDate").textContent = "Sana: " + today.toLocaleDateString("uz-UZ");
+  const comment = level === "Yuqori"
+    ? "O‘quvchi axborotni tanqidiy tahlil qilish, qadriyatli baholash va raqamli muhitda mas’uliyatli qaror qabul qilish ko‘nikmalarini yuqori darajada namoyon etdi."
+    : level === "O‘rta"
+    ? "O‘quvchi axborot bilan ishlashda asosiy ko‘nikmalarga ega, biroq faktcheking va axborot xavfsizligi bo‘yicha muntazam mashq qilish tavsiya etiladi."
+    : "O‘quvchiga axborotni tekshirish, shaxsiy ma’lumotni himoya qilish va shubhali xabarlarni baholash bo‘yicha qo‘shimcha mashg‘ulotlar tavsiya etiladi.";
+  document.getElementById("certComment").textContent = comment;
+  document.getElementById("sertifikat").scrollIntoView({behavior:"smooth"});
+}
+
+function restartAll() {
+  if (!confirm("Natijalar tozalanadi. Qayta boshlaysizmi?")) return;
+  state = { started:false, activeGroup:null, currentIndex:0, selected:false, completed:{}, scores:{}, answers:{} };
+  user = { name:"", className:"" };
+  document.getElementById("fullname").value = "";
+  document.getElementById("className").value = "";
+  document.getElementById("regBox").style.display = "grid";
+  document.getElementById("moduleDashboard").style.display = "none";
+  document.getElementById("questionBox").style.display = "none";
+  document.querySelector(".certificate-wrap").style.display = "none";
+  updateStats();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+</script>
+</body>
+</html>
