@@ -535,13 +535,13 @@ tbody tr:last-child td{border-bottom:0}
   <section class="hero">
     <div class="badge">Media-monitoring · O‘qituvchi boshqaruv paneli</div>
     <h1>Topshiriq yuborish va o‘quvchilar natijalarini kuzatish</h1>
-    <p>Bu panel orqali o‘qituvchi pre-test yoki post-test vazifasini yuboradi, media havola biriktiradi, vaqt va savollar sonini belgilaydi hamda tajriba va nazorat guruhlari natijalarini real vaqtga yaqin kuzatadi.</p>
+    <p>Bu panel orqali o‘qituvchi Dastlabki-test yoki yakuniy-test vazifasini yuboradi, media havola biriktiradi, vaqt va savollar sonini belgilaydi hamda tajriba va nazorat guruhlari natijalarini real vaqtga yaqin kuzatadi.</p>
     <div class="hero-row">
       <div class="hero-mini">
         <div class="mini-stat"><b id="heroTotal">0</b><span>jami natija</span></div>
         <div class="mini-stat"><b id="heroAvg">0%</b><span>o‘rtacha ball</span></div>
-        <div class="mini-stat"><b id="heroPre">0</b><span>pre-test</span></div>
-        <div class="mini-stat"><b id="heroPost">0</b><span>post-test</span></div>
+        <div class="mini-stat"><b id="heroPre">0</b><span>Dastlabki-test</span></div>
+        <div class="mini-stat"><b id="heroPost">0</b><span>Yakuniy-test</span></div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
         <button class="btn btn-white" onclick="scrollToTask()">🚀 Topshiriq yaratish</button>
@@ -551,10 +551,10 @@ tbody tr:last-child td{border-bottom:0}
   </section>
 
   <section class="stat-grid">
-    <div class="stat-box bg-te"><h2 id="count_te">0</h2><p>Tajriba guruhi · Pre-test</p></div>
-    <div class="stat-box bg-tx"><h2 id="count_tx">0</h2><p>Tajriba guruhi · Post-test</p></div>
-    <div class="stat-box bg-ne"><h2 id="count_ne">0</h2><p>Nazorat guruhi · Pre-test</p></div>
-    <div class="stat-box bg-nx"><h2 id="count_nx">0</h2><p>Nazorat guruhi · Post-test</p></div>
+    <div class="stat-box bg-te"><h2 id="count_te">0</h2><p>Tajriba guruhi · Dastlabki-test</p></div>
+    <div class="stat-box bg-tx"><h2 id="count_tx">0</h2><p>Tajriba guruhi · Yakuniy-test</p></div>
+    <div class="stat-box bg-ne"><h2 id="count_ne">0</h2><p>Nazorat guruhi · Dastlabk-test</p></div>
+    <div class="stat-box bg-nx"><h2 id="count_nx">0</h2><p>Nazorat guruhi · Yakuniy-test</p></div>
   </section>
 
   <div class="main-grid">
@@ -602,8 +602,8 @@ tbody tr:last-child td{border-bottom:0}
           <div>
             <label for="t_phase">Bosqich</label>
             <select id="t_phase" onchange="updatePreview()">
-              <option value="Pre-test">Pre-test</option>
-              <option value="Post-test">Post-test</option>
+              <option value="Dastabki-test">Dastabki-test</option>
+              <option value="Yakuniy-test">Yakuniy-test</option>
             </select>
           </div>
           <button class="btn btn-blue" onclick="sendTask()">🚀 O‘quvchilarga tarqatish</button>
@@ -614,7 +614,7 @@ tbody tr:last-child td{border-bottom:0}
         <div class="preview" id="previewBox">
           <h3>👁 Topshiriq oldindan ko‘rinishi</h3>
           <p id="previewText">Topshiriq matni hali kiritilmagan.</p>
-          <div class="preview-link" id="previewMeta">Bosqich: Pre-test · Media: media yo‘q</div>
+          <div class="preview-link" id="previewMeta">Bosqich: Dastlabki-test · Media: media yo‘q</div>
         </div>
       </div>
     </section>
@@ -649,8 +649,8 @@ tbody tr:last-child td{border-bottom:0}
             <label for="phaseFilter">Bosqich</label>
             <select id="phaseFilter" onchange="renderTable()">
               <option value="">Hammasi</option>
-              <option value="Pre-test">Pre-test</option>
-              <option value="Post-test">Post-test</option>
+              <option value="Dastabki-test">Dastoabki-test</option>
+              <option value="Yakuniy-test">Yakuniy-test</option>
             </select>
           </div>
           <button class="btn btn-orange" onclick="clearFilters()">Filtrni tozalash</button>
@@ -899,7 +899,7 @@ function renderTable(customEmpty="Natijalar topilmadi."){
   body.innerHTML = rows.map((row, i) => {
     const [level, levelClass] = scoreLevel(row.score);
     const groupClass = row.group === "Tajriba" ? "pill-green" : row.group === "Nazorat" ? "pill-red" : "pill-orange";
-    const phaseClass = row.phase === "Post-test" ? "pill-blue" : "pill-orange";
+    const phaseClass = row.phase === "Yakuniy-test" ? "pill-blue" : "pill-orange";
 
     return `<tr>
       <td>${i+1}</td>
@@ -931,12 +931,12 @@ function updateStats(rows){
     const group = row.group;
     const phase = row.phase;
 
-    if(group === "Tajriba" && phase === "Pre-test") st.te++;
-    if(group === "Tajriba" && phase === "Post-test") st.tx++;
-    if(group === "Nazorat" && phase === "Pre-test") st.ne++;
-    if(group === "Nazorat" && phase === "Post-test") st.nx++;
-    if(phase === "Pre-test") st.pre++;
-    if(phase === "Post-test") st.post++;
+    if(group === "Tajriba" && phase === "Dastabki-test") st.te++;
+    if(group === "Tajriba" && phase === "Yakuniy-test") st.tx++;
+    if(group === "Nazorat" && phase === "Dastabki-test") st.ne++;
+    if(group === "Nazorat" && phase === "Yakuniy-test") st.nx++;
+    if(phase === "Dastabki-test") st.pre++;
+    if(phase === "Yakuniy-test") st.post++;
 
     const score = Number(row.score);
     if(Number.isFinite(score)){
@@ -1007,7 +1007,7 @@ function restoreLastTask(){
     const ok = confirm("Oxirgi yuborilgan topshiriqni formaga qayta tiklaysizmi?");
     if(!ok) return;
     document.getElementById("t_text").value = t.text || "";
-    document.getElementById("t_phase").value = t.phase || "Pre-test";
+    document.getElementById("t_phase").value = t.phase || "Dastabki-test";
     document.getElementById("t_media_type").value = t.mediaType || "none";
     document.getElementById("t_media_url").value = t.mediaUrl || "";
     document.getElementById("t_time_limit").value = t.timeLimit || 15;
