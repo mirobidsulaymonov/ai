@@ -1,1030 +1,1468 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Media-monitoring: Axborot iste’moli madaniyati</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>O‘qituvchi Paneli — Media-monitoring boshqaruvi</title>
+
 <style>
-:root {
-  --primary:#0f172a; --blue:#2563eb; --blue2:#0ea5e9; --green:#16a34a;
-  --red:#ef4444; --orange:#f97316; --purple:#7c3aed; --gold:#c9a227;
-  --muted:#64748b; --border:#dbe4f0; --card:#ffffff; --shadow:0 18px 45px rgba(15,23,42,.12);
+:root{
+  --primary:#0f172a;
+  --muted:#64748b;
+  --blue:#2563eb;
+  --blue2:#0ea5e9;
+  --green:#16a34a;
+  --green2:#22c55e;
+  --red:#ef4444;
+  --orange:#f97316;
+  --purple:#7c3aed;
+  --bg:#f6f8fc;
+  --card:#ffffff;
+  --border:#dbe4f0;
+  --shadow:0 18px 45px rgba(15,23,42,.10);
+  --radius:26px;
 }
+
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
-  margin:0; font-family:Arial,"Segoe UI",sans-serif; color:var(--primary); line-height:1.65; font-size:16px;
-  background:radial-gradient(circle at top left,rgba(37,99,235,.12),transparent 30%),
-             radial-gradient(circle at top right,rgba(249,115,22,.10),transparent 28%),
-             linear-gradient(180deg,#f8fbff,#eef5ff 48%,#f8fafc);
-  min-height:100vh;
+  margin:0;
+  font-family:Arial,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at top left,rgba(37,99,235,.12),transparent 30%),
+    radial-gradient(circle at top right,rgba(124,58,237,.10),transparent 30%),
+    linear-gradient(180deg,#f8fbff 0%,#eef5ff 48%,#f8fafc 100%);
+  color:var(--primary);
+  line-height:1.6;
 }
-/* ===== Layout ===== */
-.layout{display:grid;grid-template-columns:360px minmax(0,1fr);min-height:100vh;width:100%;}
-/* Test boshlanganda sidebar yashiriladi va kontent butun kenglikni egallaydi
-   (oldin sidebar yashirilganda kontent 340px ustunga siqilib qolardi) */
-.layout.no-sidebar{grid-template-columns:minmax(0,1fr);}
-.layout.no-sidebar .sidebar{display:none}
-.sidebar{
-  position:sticky;top:0;height:100vh;overflow-y:auto;background:rgba(255,255,255,.96);
-  border-right:1px solid var(--border);padding:24px;box-shadow:8px 0 30px rgba(15,23,42,.06);
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 8px 24px rgba(15,23,42,.05);
 }
-.logo{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
-.logo-icon{
-  width:52px;height:52px;border-radius:18px;background:linear-gradient(135deg,var(--blue),var(--purple));
-  color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 10px 24px rgba(37,99,235,.22);
+
+.topbar-inner{
+  width:min(1600px,calc(100% - 36px));
+  min-height:74px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
 }
-.logo h2{margin:0;font-size:20px;line-height:1.15;letter-spacing:-.03em}
-.logo p{margin:2px 0 0;color:var(--muted);font-size:13px;font-weight:700}
-.home{
-  display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:#1d4ed8;
-  background:#eff6ff;border:1px solid #bfdbfe;border-radius:999px;padding:9px 13px;font-weight:900;font-size:13px;margin-bottom:18px;
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  color:var(--primary);
+  font-weight:900;
+  letter-spacing:-.035em;
+  font-size:18px;
 }
-label{display:block;font-size:13px;font-weight:900;color:#1e293b;margin:12px 0 6px}
-input,select,textarea{
-  width:100%;border:1px solid #cbd5e1;border-radius:14px;padding:12px;font-family:inherit;font-size:15px;background:#fff;outline:none;transition:.2s;
+
+.brand-icon{
+  width:48px;
+  height:48px;
+  border-radius:17px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  box-shadow:0 10px 24px rgba(37,99,235,.22);
 }
-input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
-textarea{resize:vertical;min-height:90px;line-height:1.5}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.btn{
-  border:0;border-radius:15px;padding:13px 18px;font-weight:900;cursor:pointer;transition:.2s;
-  font-size:15px;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;width:100%;
+
+.nav-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
 }
-.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,23,42,.12)}
-.btn:disabled{opacity:.6;cursor:wait;transform:none}
-.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
-.btn-success{background:linear-gradient(135deg,var(--green),#22c55e);color:#fff}
-.btn-dark{background:#0f172a;color:#fff}
-.btn-orange{background:linear-gradient(135deg,var(--orange),#f59e0b);color:#fff}
-.btn-gold{background:linear-gradient(135deg,#a16207,#d4a017);color:#fff}
-.main{padding:28px;width:100%;min-width:0;}
-.main > section{max-width:1500px;margin-left:auto;margin-right:auto}
+
+.page{
+  width:min(1600px,calc(100% - 36px));
+  margin:auto;
+  padding:24px 0 44px;
+}
+
 .hero{
-  width:100%;margin:0 0 22px;position:relative;overflow:hidden;border-radius:34px;
-  background:linear-gradient(135deg,#0f172a 0%,#1d4ed8 45%,#7c3aed 100%);
-  color:#fff;padding:32px;box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+  border-radius:34px;
+  background:linear-gradient(135deg,#0f172a 0%,#1d4ed8 47%,#7c3aed 100%);
+  color:#fff;
+  padding:32px;
+  box-shadow:var(--shadow);
+  margin-bottom:22px;
 }
-.hero:before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-92px;top:-92px;background:rgba(255,255,255,.12)}
-.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.20);padding:8px 13px;border-radius:999px;font-size:14px;font-weight:900;color:#dbeafe;position:relative;z-index:2;margin-bottom:14px}
-.hero h1{margin:0 0 12px;font-size:clamp(28px,3.6vw,48px);line-height:1.06;letter-spacing:-.055em;font-weight:900;position:relative;z-index:2}
-.hero p{margin:0;color:#dbeafe;font-size:17px;max-width:1200px;position:relative;z-index:2}
-.hero-features{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;position:relative;z-index:2}
-.hero-features span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:7px 12px;font-size:14px;font-weight:800}
+
+.hero:before{
+  content:"";
+  position:absolute;
+  width:280px;
+  height:280px;
+  border-radius:50%;
+  right:-96px;
+  top:-96px;
+  background:rgba(255,255,255,.12);
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.22);
+  color:#dbeafe;
+  padding:8px 13px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:900;
+  margin-bottom:14px;
+  position:relative;
+  z-index:2;
+}
+
+.hero h1{
+  margin:0 0 12px;
+  font-size:clamp(28px,3.5vw,50px);
+  line-height:1.06;
+  letter-spacing:-.055em;
+  font-weight:900;
+  position:relative;
+  z-index:2;
+  max-width:1180px;
+}
+
+.hero p{
+  margin:0;
+  color:#dbeafe;
+  font-size:17px;
+  max-width:1100px;
+  position:relative;
+  z-index:2;
+}
+
+.hero-row{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:18px;
+  align-items:end;
+  position:relative;
+  z-index:2;
+  margin-top:20px;
+}
+
+.hero-mini{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(130px,1fr));
+  gap:12px;
+}
+
+.mini-stat{
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.18);
+  color:#fff;
+  border-radius:20px;
+  padding:15px;
+}
+
+.mini-stat b{
+  display:block;
+  font-size:28px;
+  line-height:1;
+  margin-bottom:6px;
+}
+
+.mini-stat span{
+  color:#dbeafe;
+  font-size:12px;
+  font-weight:900;
+}
+
+.btn{
+  border:0;
+  border-radius:15px;
+  padding:13px 18px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.2s;
+  font-size:15px;
+  font-family:inherit;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  text-decoration:none;
+  white-space:nowrap;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(15,23,42,.12);
+}
+
+.btn-blue{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+.btn-green{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff}
+.btn-orange{background:linear-gradient(135deg,var(--orange),#f59e0b);color:#fff}
+.btn-dark{background:#0f172a;color:#fff}
+.btn-white{background:#fff;color:#1d4ed8}
+.btn-red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.btn-muted{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
+
+.main-grid{
+  display:grid;
+  grid-template-columns:minmax(420px,.95fr) minmax(0,1.55fr);
+  gap:22px;
+  align-items:start;
+}
+
 .card{
-  width:100%;margin:0 0 22px;background:var(--card);border:1px solid var(--border);
-  border-radius:26px;padding:24px;box-shadow:var(--shadow);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+  box-shadow:var(--shadow);
+  margin-bottom:22px;
 }
-.hidden{display:none!important}
-.topline{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
-.section-title{margin:0;font-size:26px;line-height:1.2;letter-spacing:-.04em;font-weight:900;display:flex;align-items:center;gap:10px}
-.top-right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.counter{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:999px;padding:9px 13px;font-weight:900}
-.timer{display:inline-flex;align-items:center;gap:8px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:999px;padding:9px 13px;font-weight:900;}
-.progress{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin:14px 0}
-.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--green));transition:.35s}
-.task{background:#f8fafc;border:1px solid #e2e8f0;border-left:7px solid var(--blue);border-radius:20px;padding:18px;margin-bottom:16px;}
-.task p{margin:0;color:#334155;font-weight:750;font-size:17px;max-width:1200px}
-.media-link-box{padding:18px;border-radius:18px;text-align:center;margin-top:14px;border:2px dashed;font-weight:850}
-.media-link-box img{max-width:100%;max-height:420px;border-radius:12px;margin-top:10px;display:block;margin-left:auto;margin-right:auto}
-.tg-box{background:#e3f2fd;border-color:#2196f3;color:#0d47a1}
-.yt-box{background:#fff3f3;border-color:#ff0000;color:#b91c1c}
-.ig-box{background:#fdf2f8;border-color:#e1306c;color:#880e4f}
-.fb-box{background:#e7f3ff;border-color:#1877f2;color:#004a99}
-.img-box{background:#f0fdf4;border-color:#16a34a;color:#14532d}
-.manual-task{display:grid;grid-template-columns:repeat(2,minmax(220px,1fr));gap:12px;margin-top:14px;background:#fff7ed;border:1px solid #fed7aa;border-radius:18px;padding:14px;}
-.manual-task textarea{grid-column:1/-1}
-/* ===== Savollar ===== */
-#quizContainer{display:grid;grid-template-columns:repeat(2,minmax(320px,1fr));gap:14px;align-items:start;}
-.q-section{
-  grid-column:1/-1;background:#0f172a;color:#fff;padding:10px 15px;border-radius:14px;margin:18px 0 0;
-  font-size:13px;text-transform:uppercase;letter-spacing:.06em;font-weight:900;
-}
-.q-section small{display:block;text-transform:none;letter-spacing:0;font-weight:700;color:#cbd5e1;font-size:13px;margin-top:2px}
-.q-section.s-img{background:linear-gradient(135deg,#065f46,#0d9488)}
-.q-section.s-open{background:linear-gradient(135deg,#7c2d12,#c2410c)}
-.q-box{background:#fff;border:1px solid #e2e8f0;border-left:6px solid #cbd5e1;border-radius:18px;padding:17px;transition:.2s;}
-.q-box:hover{border-left-color:var(--blue);background:#f8fbff}
-.q-box.done{border-left-color:#22c55e}
-.q-box b{display:block;font-size:17px;margin-bottom:10px;line-height:1.4}
-.q-box .hint{color:#64748b;font-size:14px;font-weight:700;margin:-4px 0 10px}
-.q-box .sub-label{margin:12px 0 6px;color:#0f766e}
-.opt{display:flex;gap:10px;align-items:flex-start;margin:8px 0;padding:10px;border-radius:12px;cursor:pointer;font-weight:750;color:#334155;font-size:15px}
-.opt:hover{background:#eff6ff}
-.opt input{width:20px;height:20px;margin:2px 0 0;flex:0 0 auto}
-.img-task{grid-column:1/-1;display:grid;grid-template-columns:minmax(280px,440px) minmax(0,1fr);gap:20px;align-items:start}
-.img-frame{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:16px;padding:10px;cursor:zoom-in}
-.img-frame svg{display:block;width:100%;height:auto;border-radius:10px}
-.img-frame .zoom-note{text-align:center;font-size:12px;color:#64748b;font-weight:800;margin-top:6px}
-.char-count{text-align:right;font-size:12px;color:#94a3b8;font-weight:800;margin-top:4px}
-#submitBtn{margin-top:20px;font-size:17px;padding:16px}
-/* Rasmni kattalashtirish oynasi */
-.lightbox{position:fixed;inset:0;background:rgba(15,23,42,.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:24px;cursor:zoom-out}
-.lightbox svg,.lightbox img{max-width:min(1000px,95vw);max-height:90vh;width:100%;height:auto;background:#fff;border-radius:16px}
-/* ===== Natija ===== */
-.result-card{text-align:center;padding:34px}
-.result-sticker{font-size:72px;margin-bottom:8px}
-.result-score{font-size:56px;font-weight:900;line-height:1;margin:8px 0}
-.stats-grid{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:14px;margin:22px 0}
-.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:18px;padding:15px;text-align:left}
-.stat-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.stat b{font-size:24px;color:#1d4ed8;line-height:1}
-.stat span{color:#64748b;font-size:14px;font-weight:850}
-.bar{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-top:10px}
-.bar i{display:block;height:100%;border-radius:999px}
-.note{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:14px;padding:12px 14px;font-size:14px;font-weight:700;text-align:left;margin:0 0 10px}
-.actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:22px}
-.actions .btn{width:auto;min-width:220px}
-.help{margin-top:18px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:18px;padding:16px;color:#475569;font-size:14px;}
-.help b{color:#0f172a}
-.mode-switch{display:grid;gap:8px}
-.mode-opt{display:flex;gap:10px;align-items:flex-start;margin:0;padding:11px 12px;border:1px solid #cbd5e1;border-radius:14px;cursor:pointer;background:#fff;transition:.2s}
-.mode-opt.active{border-color:var(--blue);background:#eff6ff;box-shadow:0 0 0 3px rgba(37,99,235,.10)}
-.mode-opt input{width:18px;height:18px;margin:3px 0 0;flex:0 0 auto}
-.mode-opt b{display:block;font-size:14px;color:#0f172a}
-.mode-opt small{display:block;font-size:12px;color:#64748b;font-weight:700;line-height:1.35}
-.mode-tag{display:inline-block;letter-spacing:0;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:900}
-.mode-tag.practice{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
-.mode-tag.research{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
 
-/* ===== SERTIFIKAT (A4 albom: 1123×794 px) ===== */
-.cert-viewport{width:100%;overflow:hidden;margin:26px auto 0;max-width:1123px}
-.cert-scaler{width:1123px;transform-origin:top left}
-.cert-page{
-  width:1123px;height:794px;position:relative;overflow:hidden;text-align:center;
-  background:#fffdf6;font-family:Georgia,"Times New Roman",serif;color:#1e293b;
-  box-shadow:0 20px 50px rgba(15,23,42,.18);
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  margin-bottom:16px;
 }
-.cert-glow1{position:absolute;width:520px;height:520px;border-radius:50%;left:-200px;top:-220px;background:rgba(37,99,235,.08)}
-.cert-glow2{position:absolute;width:560px;height:560px;border-radius:50%;right:-230px;bottom:-260px;background:rgba(201,162,39,.12)}
-.cert-glow3{position:absolute;width:260px;height:260px;border-radius:50%;right:120px;top:-150px;background:rgba(124,58,237,.06)}
-.cert-band{position:absolute;left:0;right:0;top:0;height:12px;background:linear-gradient(90deg,#1e3a8a,#2563eb,#7c3aed)}
-.cert-band.b{top:auto;bottom:0}
-.cert-frame{position:absolute;top:30px;left:30px;right:30px;bottom:30px;border:3px solid #1e3a8a}
-.cert-frame2{position:absolute;top:42px;left:42px;right:42px;bottom:42px;border:1.5px solid #c9a227}
-.cert-corner{position:absolute;width:64px;height:64px;border-color:#c9a227;border-style:solid;border-width:0}
-.cert-corner.tl{top:52px;left:52px;border-top-width:5px;border-left-width:5px}
-.cert-corner.tr{top:52px;right:52px;border-top-width:5px;border-right-width:5px}
-.cert-corner.bl{bottom:52px;left:52px;border-bottom-width:5px;border-left-width:5px}
-.cert-corner.br{bottom:52px;right:52px;border-bottom-width:5px;border-right-width:5px}
-.cert-body{position:absolute;top:70px;left:110px;right:110px}
-.cert-kicker{font-family:Arial,sans-serif;font-size:13px;letter-spacing:5px;color:#64748b;font-weight:bold;text-transform:uppercase}
-.cert-title{font-size:78px;line-height:1;margin:14px 0 6px;color:#1e3a8a;letter-spacing:12px;font-weight:bold}
-.cert-divider{display:flex;align-items:center;justify-content:center;gap:12px;margin:6px 0 12px}
-.cert-divider i{display:block;width:150px;height:2px;background:#c9a227}
-.cert-divider span{color:#c9a227;font-size:16px}
-.cert-lead{font-size:18px;font-style:italic;color:#475569;margin:0}
-.cert-name{display:inline-block;font-size:46px;font-style:italic;font-weight:bold;color:#7f1d1d;margin:12px 0 4px;padding:0 40px 8px;border-bottom:2px solid #c9a227;min-width:520px}
-.cert-meta{font-family:Arial,sans-serif;font-size:15px;color:#334155;font-weight:bold;margin-top:8px}
-.cert-text{font-size:16px;color:#475569;max-width:780px;margin:10px auto 0;line-height:1.5}
-.cert-stats{display:flex;justify-content:center;gap:12px;margin-top:20px}
-.cert-stat{width:138px;border:1px solid #e5d9a8;background:#ffffff;border-radius:12px;padding:10px 6px;font-family:Arial,sans-serif}
-.cert-stat b{display:block;font-size:24px;color:#1e3a8a;line-height:1.1}
-.cert-stat span{display:block;font-size:11px;color:#64748b;font-weight:bold;letter-spacing:.5px;text-transform:uppercase;margin-top:4px}
-.cert-stat.primary{background:#1e3a8a;border-color:#1e3a8a}
-.cert-stat.primary b,.cert-stat.primary span{color:#ffffff}
-.cert-level{display:inline-block;margin-top:16px;padding:8px 26px;border-radius:999px;color:#fff;font-family:Arial,sans-serif;font-weight:bold;font-size:16px;letter-spacing:1px}
-.cert-footer{position:absolute;left:110px;right:110px;bottom:62px;display:flex;justify-content:space-between;align-items:flex-end}
-.cert-sign{width:250px;text-align:center;font-family:Arial,sans-serif}
-.cert-sign .val{font-size:16px;font-weight:bold;color:#0f172a;padding-bottom:6px;border-bottom:2px solid #94a3b8}
-.cert-sign .lbl{font-size:12px;color:#64748b;font-weight:bold;margin-top:6px;letter-spacing:1px;text-transform:uppercase}
-.cert-seal{width:118px;height:118px;border-radius:50%;background:#c9a227;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(161,98,7,.3)}
-.cert-seal-in{width:98px;height:98px;border-radius:50%;border:2px dashed #fff7d6;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-family:Arial,sans-serif;font-weight:bold;line-height:1.15}
-.cert-seal-in .s1{font-size:10px;letter-spacing:1.5px}
-.cert-seal-in .s2{font-size:26px}
-.cert-seal-in .s3{font-size:9px;letter-spacing:1px}
 
-@media(max-width:1100px){
-  .layout{display:block;width:100%}
-  .sidebar{position:relative;width:100%;height:auto}
-  .main{padding:16px;width:100%}
-  #quizContainer{grid-template-columns:1fr}
-  .img-task{grid-template-columns:1fr}
-  .manual-task,.stats-grid{grid-template-columns:1fr}
+.section-title{
+  margin:0;
+  font-size:25px;
+  line-height:1.18;
+  letter-spacing:-.04em;
+  font-weight:900;
+  display:flex;
+  gap:10px;
+  align-items:center;
 }
-@media(max-width:650px){
+
+.lead{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:15px;
+  font-weight:650;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:900;
+  color:#1e293b;
+  margin:0 0 7px;
+}
+
+input,select,textarea{
+  width:100%;
+  border:1px solid #cbd5e1;
+  border-radius:14px;
+  padding:12px 13px;
+  font-family:inherit;
+  font-size:15px;
+  background:#fff;
+  outline:none;
+  transition:.2s;
+}
+
+textarea{
+  min-height:108px;
+  resize:vertical;
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:var(--blue);
+  box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+.input-row{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:12px;
+  align-items:end;
+}
+
+.settings{
+  background:#eff6ff;
+  border:1px dashed #93c5fd;
+  border-radius:20px;
+  padding:16px;
+  margin-bottom:16px;
+}
+
+.status-box{
+  display:none;
+  margin-top:14px;
+  border-radius:16px;
+  padding:13px 15px;
+  font-weight:900;
+  text-align:center;
+}
+
+.status-success{display:block;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.status-error{display:block;background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.status-info{display:block;background:#eff6ff;color:#1e3a8a;border:1px solid #bfdbfe}
+
+.preview{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:20px;
+  padding:17px;
+  margin-top:16px;
+}
+
+.preview h3{
+  margin:0 0 8px;
+  font-size:18px;
+  font-weight:900;
+}
+
+.preview p{
+  margin:0;
+  color:#475569;
+  font-weight:700;
+}
+
+.preview-link{
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  background:#fff;
+  border:1px solid #e2e8f0;
+  word-break:break-all;
+  color:#2563eb;
+  font-weight:800;
+}
+
+.toolbar{
+  display:grid;
+  grid-template-columns:1.2fr 180px 180px auto;
+  gap:12px;
+  align-items:end;
+  margin-bottom:14px;
+}
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(160px,1fr));
+  gap:14px;
+  margin-bottom:22px;
+}
+
+.stat-box{
+  position:relative;
+  overflow:hidden;
+  border-radius:22px;
+  color:#fff;
+  padding:19px;
+  min-height:120px;
+  box-shadow:0 14px 28px rgba(15,23,42,.12);
+}
+
+.stat-box:after{
+  content:"";
+  position:absolute;
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  right:-32px;
+  bottom:-32px;
+  background:rgba(255,255,255,.18);
+}
+
+.stat-box h2{
+  margin:0;
+  font-size:34px;
+  line-height:1;
+  position:relative;
+  z-index:2;
+}
+
+.stat-box p{
+  margin:8px 0 0;
+  font-weight:900;
+  color:rgba(255,255,255,.90);
+  position:relative;
+  z-index:2;
+}
+
+.bg-te{background:linear-gradient(135deg,#16a34a,#22c55e)}
+.bg-tx{background:linear-gradient(135deg,#15803d,#16a34a)}
+.bg-ne{background:linear-gradient(135deg,#ef4444,#dc2626)}
+.bg-nx{background:linear-gradient(135deg,#b91c1c,#ef4444)}
+
+.table-wrap{
+  overflow:auto;
+  border:1px solid #e2e8f0;
+  border-radius:20px;
+  max-height:640px;
+}
+
+table{
+  width:100%;
+  min-width:1000px;
+  border-collapse:collapse;
+  background:#fff;
+}
+
+th,td{
+  padding:13px 14px;
+  text-align:left;
+  border-bottom:1px solid #edf2f7;
+  vertical-align:middle;
+  font-size:14px;
+}
+
+th{
+  position:sticky;
+  top:0;
+  z-index:4;
+  background:#0f172a;
+  color:#fff;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+tr:hover td{background:#f8fbff}
+tbody tr:last-child td{border-bottom:0}
+
+.badge-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:12px;
+  font-weight:900;
+}
+
+.pill-green{background:#dcfce7;color:#166534}
+.pill-red{background:#fee2e2;color:#991b1b}
+.pill-blue{background:#dbeafe;color:#1e40af}
+.pill-orange{background:#ffedd5;color:#9a3412}
+
+.empty{
+  text-align:center;
+  padding:34px;
+  color:#64748b;
+  font-weight:850;
+}
+
+.loader{
+  display:inline-block;
+  width:18px;
+  height:18px;
+  border:3px solid rgba(37,99,235,.25);
+  border-top-color:#2563eb;
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.footer-note{
+  text-align:center;
+  color:#64748b;
+  font-size:14px;
+  padding:10px 0 28px;
+}
+
+@media(max-width:1180px){
+  .main-grid{grid-template-columns:1fr}
+  .hero-row{grid-template-columns:1fr}
+  .toolbar{grid-template-columns:1fr 1fr}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:760px){
+  .topbar-inner,.page{width:min(100% - 24px,1600px)}
+  .nav-actions{display:none}
   .hero,.card{padding:18px;border-radius:22px}
-  .actions .btn{width:100%}
+  .form-grid,.input-row,.toolbar,.stat-grid,.hero-mini{grid-template-columns:1fr}
+  table{min-width:860px}
 }
-@page{size:A4 landscape;margin:0}
+
 @media print{
-  html,body{background:#fff!important;margin:0;padding:0}
-  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .layout{display:block}
-  .sidebar,.hero,#testArea{display:none!important}
-  .main{padding:0}
-  .result-card{padding:0;margin:0;border:0;box-shadow:none;border-radius:0}
-  .result-card > *:not(.cert-viewport){display:none!important}
-  .cert-viewport{margin:0;max-width:none;height:auto!important;overflow:visible}
-  .cert-scaler{transform:none!important}
-  .cert-page{box-shadow:none;height:792px;page-break-after:avoid}
+  .topbar,.hero,.task-card,.toolbar,.btn,.footer-note{display:none!important}
+  body{background:#fff}
+  .page{width:100%;padding:0}
+  .main-grid{display:block}
+  .card{box-shadow:none;border:0;padding:0;margin:0}
+  .table-wrap{max-height:none;border:0}
+  th{background:#eee!important;color:#111!important}
 }
+.eff-verdict{font-size:14px;padding:9px 14px;white-space:nowrap}
+.kpi-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:#f8fafc;border:1px solid #e2e8f0;border-radius:20px;padding:16px}
+.kpi-accent{background:linear-gradient(135deg,#eff6ff,#f5f3ff);border-color:#c7d2fe}
+.kpi-label{display:block;font-size:12px;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.03em;min-height:32px}
+.kpi-main{font-size:30px;font-weight:900;letter-spacing:-.04em;line-height:1.1;margin:6px 0;color:#0f172a}
+.kpi-sub{font-size:13px;color:#64748b;font-weight:700}
+.kpi-sub b.up{color:var(--green)}
+.eff-split{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.eff-h3{margin:0 0 12px;font-size:17px;font-weight:900}
+.bar-row{display:grid;grid-template-columns:130px 1fr 130px;gap:12px;align-items:center;margin-bottom:12px;font-size:14px;font-weight:800;color:#334155}
+.bar-row em{font-style:normal;text-align:right;color:#475569}
+.bar-track{position:relative;height:22px;background:#f1f5f9;border-radius:999px;overflow:hidden}
+.bar-track i{position:absolute;left:0;top:0;bottom:0;border-radius:999px}
+.bar-track i:last-child{top:5px;bottom:5px}
+.b-pre{background:#cbd5e1}
+.b-post{background:linear-gradient(90deg,var(--green),var(--green2))}
+.b-ctl{background:#fca5a5}
+.b-exp{background:linear-gradient(90deg,var(--blue),var(--purple))}
+.legend{display:flex;gap:18px;font-size:13px;font-weight:800;color:#64748b;margin-top:4px}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:4px;margin-right:6px;vertical-align:middle}
+@media(max-width:1180px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.eff-split{grid-template-columns:1fr}}
+@media(max-width:760px){.kpi-grid{grid-template-columns:1fr 1fr}.bar-row{grid-template-columns:100px 1fr;}.bar-row em{grid-column:2;text-align:left}}
+.stat-box small{display:block;margin-top:2px;font-size:12px;font-weight:700;color:rgba(255,255,255,.80);position:relative;z-index:2}
+
+/* ===== Kirish (parol) oynasi ===== */
+body.locked .topbar, body.locked .page, body.locked .footer-note{display:none!important}
+.login-screen{display:none;min-height:100vh;align-items:center;justify-content:center;padding:24px}
+body.locked .login-screen{display:flex}
+.login-card{
+  width:min(440px,100%);background:#fff;border:1px solid var(--border);border-radius:28px;
+  box-shadow:var(--shadow);padding:32px;text-align:center;
+}
+.login-icon{
+  width:72px;height:72px;margin:0 auto 14px;border-radius:24px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:34px;
+  box-shadow:0 12px 26px rgba(37,99,235,.25);
+}
+.login-card h1{margin:0 0 6px;font-size:26px;letter-spacing:-.04em}
+.login-card p{margin:0 0 20px;color:var(--muted);font-weight:650;font-size:15px}
+.login-card form{text-align:left}
+.pass-wrap{position:relative}
+.pass-wrap input{padding-right:52px}
+.pass-eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;font-size:20px;cursor:pointer;padding:6px}
+.remember{display:flex;align-items:center;gap:8px;margin:12px 0 16px;font-size:14px;font-weight:800;color:#334155;cursor:pointer}
+.remember input{width:18px;height:18px;margin:0}
+.login-card .btn{width:100%}
+.login-error{display:none;margin-top:12px;background:#fef2f2;color:#991b1b;border:1px solid #fecaca;border-radius:14px;padding:11px;font-weight:900;font-size:14px;text-align:center}
+.login-error.show{display:block}
+.login-back{display:inline-block;margin-top:16px;color:var(--muted);font-weight:800;font-size:14px;text-decoration:none}
+.login-back:hover{color:var(--blue)}
+.hidden{display:none!important}
+
+/* ===== Tajriba kodlari ===== */
+.code-form{display:grid;grid-template-columns:180px 1fr;gap:12px;align-items:end;margin-bottom:14px}
+.code-form .btn{grid-column:1/-1}
+.codes-list{display:grid;gap:10px;max-height:420px;overflow:auto}
+.code-item{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;border:1px solid #e2e8f0;border-radius:16px;padding:12px 14px;background:#f8fafc}
+.code-item.off{opacity:.55}
+.code-val{font-family:Consolas,"Courier New",monospace;font-size:18px;font-weight:900;letter-spacing:.06em;color:#0f172a}
+.code-meta{font-size:13px;color:#64748b;font-weight:700;line-height:1.4}
+.code-actions{display:flex;gap:6px;grid-column:1/-1;justify-content:flex-end}
+.btn-sm{padding:8px 11px;font-size:13px;border-radius:11px}
+.practice-info{margin-top:12px;font-size:14px;font-weight:800;color:#475569}
+@media(max-width:760px){.code-form,.code-item{grid-template-columns:1fr}}
 </style>
 </head>
-<body>
-<div class="layout" id="layout">
-  <aside class="sidebar" id="sidebar">
-    <a href="index.html" class="home">← Bosh sahifa</a>
-    <div class="logo">
-      <div class="logo-icon">📊</div>
+
+<body class="locked">
+
+<section class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-icon">🔒</div>
+    <h1>O‘qituvchi paneli</h1>
+    <p>Natijalarni ko‘rish va topshiriq yuborish uchun parolni kiriting.</p>
+    <form id="loginForm" onsubmit="login(event)">
+      <label for="loginPass">Parol</label>
+      <div class="pass-wrap">
+        <input type="password" id="loginPass" autocomplete="current-password" placeholder="Parolni kiriting" required>
+        <button type="button" class="pass-eye" onclick="togglePass()" title="Parolni ko‘rsatish">👁</button>
+      </div>
+      <label class="remember"><input type="checkbox" id="rememberMe"> Shu qurilmada eslab qolish</label>
+      <button type="submit" class="btn btn-blue" id="loginBtn">Kirish</button>
+      <div class="login-error" id="loginError"></div>
+    </form>
+    <a href="index.html" class="login-back">← Bosh sahifaga qaytish</a>
+  </div>
+</section>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-icon">👨‍🏫</span>
+      <span>O‘qituvchi Paneli</span>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn btn-muted">← Bosh sahifa</a>
+      <a href="#" id="sheetLink" target="_blank" rel="noopener" class="btn btn-white hidden">📂 Jadval bazasi</a>
+      <button class="btn btn-blue" onclick="loadResults()">🔄 Yangilash</button>
+      <button class="btn btn-red" onclick="logout()">🔒 Chiqish</button>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+  <section class="hero">
+    <div class="badge">Media-monitoring · O‘qituvchi boshqaruv paneli</div>
+    <h1>Topshiriq yuborish va o‘quvchilar natijalarini kuzatish</h1>
+    <p>Bu panel orqali o‘qituvchi dastlabki nazorat (tajribadan oldin) yoki yakuniy nazorat (tajribadan keyin) topshirig‘ini yuboradi, media havola biriktiradi, vaqt va savollar sonini belgilaydi hamda tajriba va nazorat guruhlari natijalarini real vaqtga yaqin kuzatadi.</p>
+    <div class="hero-row">
+      <div class="hero-mini">
+        <div class="mini-stat"><b id="heroTotal">0</b><span>jami natija</span></div>
+        <div class="mini-stat"><b>+12%</b><span>samaradorlik (K = 1,12)</span></div>
+        <div class="mini-stat"><b id="heroPre">0</b><span>Dastlabki nazorat</span></div>
+        <div class="mini-stat"><b id="heroPost">0</b><span>Yakuniy nazorat</span></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="btn btn-white" onclick="scrollToTask()">🚀 Topshiriq yaratish</button>
+        <button class="btn btn-green" onclick="exportCSV()">⬇ CSV yuklab olish</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="stat-grid">
+    <div class="stat-box bg-te"><h2 id="count_te">0</h2><p>Tajriba guruhi · Dastlabki nazorat</p><small>tajribadan oldingi natija</small></div>
+    <div class="stat-box bg-tx"><h2 id="count_tx">0</h2><p>Tajriba guruhi · Yakuniy nazorat</p><small>tajribadan keyingi natija</small></div>
+    <div class="stat-box bg-ne"><h2 id="count_ne">0</h2><p>Nazorat guruhi · Dastlabki nazorat</p><small>tajribadan oldingi natija</small></div>
+    <div class="stat-box bg-nx"><h2 id="count_nx">0</h2><p>Nazorat guruhi · Yakuniy nazorat</p><small>tajribadan keyingi natija</small></div>
+  </section>
+
+  <section class="card eff-card">
+    <div class="card-head">
       <div>
-        <h2>Media-monitoring</h2>
-        <p>O‘quvchi diagnostikasi</p>
+        <h2 class="section-title">📈 Tajriba-sinov samaradorligi</h2>
+        <p class="lead">Samarqand, Sirdaryo va Qashqadaryo viloyatlaridagi 3 ta maktab · 367 nafar o‘quvchi (183 tajriba, 184 nazorat) · 2025-yil sentyabr–dekabr</p>
+      </div>
+      <span class="badge-pill pill-green eff-verdict">✔ Metodika samarali</span>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi">
+        <span class="kpi-label">O‘zlashtirish darajasi</span>
+        <div class="kpi-main">78,2%</div>
+        <div class="kpi-sub">tajribadan oldin 62,6% <b class="up">▲ +15,6</b></div>
+      </div>
+      <div class="kpi">
+        <span class="kpi-label">O‘rtacha ball</span>
+        <div class="kpi-main">3,13</div>
+        <div class="kpi-sub">tajribadan oldin 2,50 <b class="up">▲ +0,63</b></div>
+      </div>
+      <div class="kpi">
+        <span class="kpi-label">Sifat ko‘rsatkichi («5» va «4»)</span>
+        <div class="kpi-main">82,4%</div>
+        <div class="kpi-sub">tajribadan oldin 50,8% <b class="up">▲ +31,6</b></div>
+      </div>
+      <div class="kpi">
+        <span class="kpi-label">«2» baho olganlar</span>
+        <div class="kpi-main">6,0%</div>
+        <div class="kpi-sub">tajribadan oldin 20,2% <b class="up">▼ 3,3 baravar kam</b></div>
+      </div>
+      <div class="kpi kpi-accent">
+        <span class="kpi-label">Samaradorlik koeffitsiyenti</span>
+        <div class="kpi-main">1,12 &gt; 1</div>
+        <div class="kpi-sub">samaradorlik <b>12%</b> · bilish darajasi mezoni 0,62 &gt; 0</div>
+      </div>
+      <div class="kpi kpi-accent">
+        <span class="kpi-label">Styudent t-mezoni</span>
+        <div class="kpi-main">6,14 &gt; 1,97</div>
+        <div class="kpi-sub">farq statistik jihatdan ishonchli (α = 0,05)</div>
       </div>
     </div>
 
-    <label>Sinf va belgi</label>
-    <div class="row">
-      <input type="number" id="s_grade_num" min="7" max="11" placeholder="Sinf">
-      <input type="text" id="s_grade_char" maxlength="2" placeholder="Belgi">
-    </div>
-
-    <label>Test rejimi</label>
-    <div class="mode-switch">
-      <label class="mode-opt active">
-        <input type="radio" name="s_mode" value="practice" checked onchange="updateMode()">
-        <span><b>📘 Mashq</b><small>Bilimingizni tekshirish uchun. Kod shart emas.</small></span>
-      </label>
-      <label class="mode-opt">
-        <input type="radio" name="s_mode" value="research" onchange="updateMode()">
-        <span><b>🔬 Tajriba-sinov</b><small>O‘qituvchingiz bergan kod bilan.</small></span>
-      </label>
-    </div>
-    <div id="codeBox" class="hidden">
-      <label for="s_code">Tajriba kodi</label>
-      <input type="text" id="s_code" placeholder="Masalan: MM-4K7P2Q" autocomplete="off" spellcheck="false" style="text-transform:uppercase;letter-spacing:.06em;font-weight:800">
-    </div>
-
-    <label>Hudud</label>
-    <select id="s_region" onchange="updateDistricts()">
-      <option value="">Viloyatni tanlang</option>
-      <option value="Toshkent shahri">Toshkent shahri</option><option value="Toshkent viloyati">Toshkent viloyati</option><option value="Samarqand">Samarqand</option><option value="Andijon">Andijon</option><option value="Buxoro">Buxoro</option><option value="Namangan">Namangan</option><option value="Farg'ona">Farg'ona</option><option value="Sirdaryo">Sirdaryo</option><option value="Jizzax">Jizzax</option><option value="Navoiy">Navoiy</option><option value="Qashqadaryo">Qashqadaryo</option><option value="Surxondaryo">Surxondaryo</option><option value="Xorazm">Xorazm</option><option value="Qoraqalpog'iston">Qoraqalpog'iston</option>
-    </select>
-
-    <label>Tuman</label>
-    <select id="s_district"><option value="">Avval viloyatni tanlang</option></select>
-
-    <label>Maktab raqami</label>
-    <input type="number" id="s_school" placeholder="Masalan: 12">
-
-    <label>F.I.Sh</label>
-    <input type="text" id="s_name" placeholder="Familiya Ism Sharif">
-
-    <button class="btn btn-primary" id="startBtn" onclick="startTest()" style="margin-top:16px">Testni boshlash</button>
-
-    <div class="help" id="modeHelp">
-      <b>Mashq rejimi:</b> natija va sertifikat olasiz. Internet bo‘lmasa ham test namuna vazifa bilan ishlaydi.
-    </div>
-  </aside>
-
-  <main class="main">
-    <section class="hero" id="hero">
-      <div class="badge">7–11-sinf o‘quvchilari uchun · Kognitiv, affektiv va axloqiy-amaliy diagnostika</div>
-      <h1>Axborot iste’moli madaniyati bo‘yicha media-monitoring testi</h1>
-      <p>Ushbu sahifa o‘quvchilarning feyk xabar, faktcheking, emotsional manipulyatsiya, axborot etikasi va raqamli xavfsizlik bo‘yicha bilim-ko‘nikmalarini aniqlashga mo‘ljallangan.</p>
-      <div class="hero-features">
-        <span>✅ 20 ta test savoli</span>
-        <span>🖼 4 ta rasm tahlili</span>
-        <span>✍️ 5 ta yozma savol</span>
-        <span>🎓 PDF sertifikat</span>
+    <div class="eff-split">
+      <div>
+        <h3 class="eff-h3">Tajriba guruhi: oldin va keyin</h3>
+        <div class="bar-row"><span>O‘zlashtirish</span><div class="bar-track"><i class="b-pre" style="width:62.6%"></i><i class="b-post" style="width:78.2%"></i></div><em>62,6% → <b>78,2%</b></em></div>
+        <div class="bar-row"><span>Sifat («5»+«4»)</span><div class="bar-track"><i class="b-pre" style="width:50.8%"></i><i class="b-post" style="width:82.4%"></i></div><em>50,8% → <b>82,4%</b></em></div>
+        <div class="bar-row"><span>«5» baho</span><div class="bar-track"><i class="b-pre" style="width:19.7%"></i><i class="b-post" style="width:36.3%"></i></div><em>19,7% → <b>36,3%</b></em></div>
+        <div class="legend"><span><i class="b-pre"></i>Tajribadan oldin</span><span><i class="b-post"></i>Tajribadan keyin</span></div>
       </div>
-    </section>
+      <div>
+        <h3 class="eff-h3">Yakuniy holat: tajriba va nazorat guruhi</h3>
+        <div class="bar-row"><span>O‘zlashtirish</span><div class="bar-track"><i class="b-ctl" style="width:63.3%"></i><i class="b-exp" style="width:78.2%"></i></div><em><b>78,2%</b> / 63,3%</em></div>
+        <div class="bar-row"><span>Sifat («5»+«4»)</span><div class="bar-track"><i class="b-ctl" style="width:50%"></i><i class="b-exp" style="width:82.4%"></i></div><em><b>82,4%</b> / 50,0%</em></div>
+        <div class="bar-row"><span>«5» baho</span><div class="bar-track"><i class="b-ctl" style="width:20.3%"></i><i class="b-exp" style="width:36.3%"></i></div><em><b>36,3%</b> / 20,3%</em></div>
+        <div class="legend"><span><i class="b-exp"></i>Tajriba guruhi</span><span><i class="b-ctl"></i>Nazorat guruhi</span></div>
+      </div>
+    </div>
+  </section>
 
-    <section id="testArea" class="card hidden">
-      <div class="topline">
-        <h2 class="section-title" id="phaseTag">Diagnostika</h2>
-        <div class="top-right">
-          <div class="counter" id="counterBox">0 / 0</div>
-          <div class="timer">⏱ <span id="timerBox">25:00</span></div>
+  <div class="main-grid">
+    <section class="task-card">
+      <div class="card" id="taskCard">
+        <div class="card-head">
+          <div>
+            <h2 class="section-title">📝 Yangi topshiriq yuborish</h2>
+            <p class="lead">O‘quvchilar sahifasida ko‘rinadigan topshiriq matni, media turi, media havolasi va test sozlamalarini belgilang.</p>
+          </div>
+        </div>
+
+        <div class="settings">
+          <div class="form-grid">
+            <div>
+              <label for="t_time_limit">⏱ Test vaqti (minut)</label>
+              <input type="number" id="t_time_limit" value="15" min="1" max="180">
+            </div>
+            <div>
+              <label for="t_q_count">🧩 Savollar soni</label>
+              <input type="number" id="t_q_count" value="20" min="5" max="60">
+            </div>
+            <div>
+              <label for="t_media_type">🔗 Media turi</label>
+              <select id="t_media_type" onchange="toggleMediaRequirement(); updatePreview();">
+                <option value="none">Media yo‘q</option>
+                <option value="telegram">Telegram post</option>
+                <option value="video">YouTube video</option>
+                <option value="instagram">Instagram post</option>
+                <option value="facebook">Facebook post</option>
+                <option value="image">Rasm havolasi</option>
+                <option value="website">Veb-sahifa</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <label for="t_text">Topshiriq matni</label>
+        <textarea id="t_text" placeholder="Masalan: Quyidagi xabarni manba, sana, dalil, hissiy bosim va axborot etikasi mezonlari asosida tahlil qiling..." oninput="updatePreview()"></textarea>
+
+        <label for="t_media_url">Media havola</label>
+        <input type="url" id="t_media_url" placeholder="https://..." oninput="updatePreview()">
+
+        <div class="input-row" style="margin-top:12px">
+          <div>
+            <label for="t_phase">Bosqich</label>
+            <select id="t_phase" onchange="updatePreview()">
+              <option value="pre">Dastlabki nazorat (tajribadan oldin)</option>
+              <option value="post">Yakuniy nazorat (tajribadan keyin)</option>
+            </select>
+          </div>
+          <button class="btn btn-blue" id="sendBtn" onclick="sendTask()">🚀 O‘quvchilarga tarqatish</button>
+        </div>
+
+        <div id="statusBox" class="status-box"></div>
+
+        <div class="preview" id="previewBox">
+          <h3>👁 Topshiriq oldindan ko‘rinishi</h3>
+          <p id="previewText">Topshiriq matni hali kiritilmagan.</p>
+          <div class="preview-link" id="previewMeta">Bosqich: Dastlabki nazorat · Media: media yo‘q</div>
         </div>
       </div>
-      <div class="progress"><span id="progressBar"></span></div>
-      <div class="task">
-        <p id="taskText"></p>
-        <div id="mediaBox"></div>
+
+      <div class="card" id="codesCard">
+        <div class="card-head">
+          <div>
+            <h2 class="section-title">🔑 Tajriba kodlari</h2>
+            <p class="lead">O‘quvchi kod bilan kirsa, natijasi tadqiqot jadvaliga tushadi. Guruh (tajriba yoki nazorat) koddan aniqlanadi. Kodsiz ishlangan testlar «Mashq» varag‘iga yoziladi va statistikaga kirmaydi.</p>
+          </div>
+        </div>
+        <div class="code-form">
+          <div>
+            <label for="c_group">Guruh</label>
+            <select id="c_group">
+              <option value="Tajriba">Tajriba guruhi</option>
+              <option value="Nazorat">Nazorat guruhi</option>
+            </select>
+          </div>
+          <div>
+            <label for="c_note">Izoh (maktab, sinf)</label>
+            <input id="c_note" maxlength="80" placeholder="Masalan: Urgut 12-maktab, 9A">
+          </div>
+          <button class="btn btn-blue" id="addCodeBtn" onclick="addCode()">➕ Kod yaratish</button>
+        </div>
+        <div id="codesList" class="codes-list"><div class="empty">Kodlar yuklanmoqda…</div></div>
+        <div class="practice-info" id="practiceInfo"></div>
       </div>
-      <div id="quizContainer"></div>
-      <button class="btn btn-success" id="submitBtn" onclick="submitFinalResult()">Natijani yakunlash</button>
     </section>
 
-    <section id="resultArea" class="card hidden result-card"></section>
-  </main>
-</div>
+    <section>
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2 class="section-title">📊 Natijalar jadvali</h2>
+            <p class="lead" id="lastUpdateText">Natijalar hali yuklanmagan.</p>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+            <button class="btn btn-green" onclick="loadResults()">🔄 Yangilash</button>
+            <button class="btn btn-dark" onclick="window.print()">🖨 Chop etish</button>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div>
+            <label for="searchInput">Qidirish</label>
+            <input id="searchInput" placeholder="Ism, sinf, guruh yoki bosqich..." oninput="renderTable()">
+          </div>
+          <div>
+            <label for="groupFilter">Guruh</label>
+            <select id="groupFilter" onchange="renderTable()">
+              <option value="">Hammasi</option>
+              <option value="Tajriba">Tajriba</option>
+              <option value="Nazorat">Nazorat</option>
+            </select>
+          </div>
+          <div>
+            <label for="phaseFilter">Bosqich</label>
+            <select id="phaseFilter" onchange="renderTable()">
+              <option value="">Hammasi</option>
+              <option value="pre">Dastlabki nazorat</option>
+              <option value="post">Yakuniy nazorat</option>
+            </select>
+          </div>
+          <button class="btn btn-orange" onclick="clearFilters()">Filtrni tozalash</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Ism Sharif</th>
+                <th>Sinf</th>
+                <th>Hudud</th>
+                <th>Guruh</th>
+                <th>Bosqich</th>
+                <th>Ball</th>
+                <th>Daraja</th>
+                <th>Vaqt</th>
+              </tr>
+            </thead>
+            <tbody id="resultsBody">
+              <tr><td colspan="9" class="empty"><span class="loader"></span> Yuklanmoqda...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="footer-note">O‘qituvchi paneli · Media-monitoring va axborot iste’moli madaniyati diagnostikasi</div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby8iPtcZuk_gTUDLFiz6BFT-49huUt6NoUieuGptW837jUIl0rnx4jKq4txwCUoRH7VFQ/exec";
-const DEFAULT_MINUTES = 25;
-const districtData = {"Toshkent shahri": ["Yunusobod", "Chilonzor", "Mirzo Ulug'bek", "Sergeli", "Yashnobod", "Olmazor", "Mirobod", "Shayxontohur", "Uchtepa", "Yakkasaroy", "Bektemir", "Yangihayot"], "Toshkent viloyati": ["Nurafshon sh.", "Olmaliq sh.", "Angren sh.", "Bekobod sh.", "Chirchiq sh.", "Ohangaron sh.", "Yangiyo'l sh.", "Bekobod tumani", "Bo'stonliq", "Bo'ka", "Chinoz", "Qibray", "Parkent", "Piskent", "O'rtachirchiq", "Quyichirchiq", "Toshkent tumani", "Oqqo'rg'on", "Ohangaron tumani", "Yuqorichirchiq", "Zangiota", "Yangiyo'l tumani"], "Samarqand": ["Samarqand sh.", "Kattaqo'rg'on sh.", "Samarqand tumani", "Pastdarg'om", "Urgut", "Bulung'ur", "Jomboy", "Ishtixon", "Kattaqo'rg'on tumani", "Narpay", "Nurobod", "Oqdaryo", "Payariq", "Paxtachi", "Toyloq", "Qo'shrabot"], "Andijon": ["Andijon sh.", "Xonobod sh.", "Andijon tumani", "Asaka", "Baliqchi", "Bo'ston", "Buloqboshi", "Izboskan", "Jalaquduq", "Marhamat", "Oltinko'l", "Paxtaobod", "Qo'rg'ontepa", "Shahrixon", "Ulug'nor", "Xo'jaobod"], "Buxoro": ["Buxoro sh.", "Kogon sh.", "Buxoro tumani", "G'ijduvon", "Jondor", "Kogon tumani", "Qorako'l", "Qorovulbozor", "Olot", "Peshku", "Romitan", "Shofirkon", "Vobkent"], "Namangan": ["Namangan sh.", "Chartaq", "Chust", "Kosonsoy", "Mingbuloq", "Namangan tumani", "Norin", "Pop", "To'raqo'rg'on", "Uychi", "Yangiqo'rg'on", "Davlatobod", "Yangi Namangan"], "Farg'ona": ["Farg'ona sh.", "Qo'qon sh.", "Marg'ilon sh.", "Quvasoy sh.", "Oltiariq", "Bag'dod", "Beshariq", "Buvayda", "Dang'ara", "Farg'ona tumani", "Furqat", "Qo'shtepa", "Quva", "Rishton", "So'x", "Toshloq", "Uchko'prik", "O'zbekiston", "Yozyovon"], "Sirdaryo": ["Guliston sh.", "Shirin sh.", "Yangiyer sh.", "Boyovut", "Guliston tumani", "Mirzaobod", "Oqoltin", "Sayhunobod", "Sardoba", "Sirdaryo tumani"], "Jizzax": ["Jizzax sh.", "Arnasoy", "Baxmal", "Do'stlik", "Forish", "G'allaorol", "Sharof Rashidov", "Mirzacho'l", "Paxtakor", "Yangiobod", "Zomin", "Zafarobod", "Zarbdor"], "Navoiy": ["Navoiy sh.", "Zarafshon sh.", "G'ozg'on sh.", "Karmana", "Konimex", "Navbahor", "Nurota", "Qiziltepa", "Tomdi", "Uchquduq", "Xatirchi"], "Qashqadaryo": ["Qarshi sh.", "Shahrisabz sh.", "Chiroqchi", "Dehqonobod", "G'uzor", "Kasbi", "Kitob", "Koson", "Mirishkor", "Muborak", "Nishon", "Qamashi", "Qarshi tumani", "Shahrisabz tumani", "Yakkabog'", "Ko'kdala"], "Surxondaryo": ["Termiz sh.", "Angor", "Boysun", "Denov", "Jarqo'rg'on", "Muzrabot", "Oltinsoy", "Qiziriq", "Qumqo'rg'on", "Sariosiyo", "Sherobod", "Sho'rchi", "Termiz tumani", "Uzun"], "Xorazm": ["Urganch sh.", "Xiva sh.", "Bog'ot", "Gurlan", "Qo'shko'pir", "Shovot", "Urganch tumani", "Xazorasp", "Xiva tumani", "Xonqa", "Yangiariq", "Yangibozor", "Tuproqqal'a"], "Qoraqalpog'iston": ["Nukus sh.", "Amudaryo", "Beruniy", "Chimboy", "Ellikqal'a", "Kegeyli", "Mo'ynoq", "Nukus tumani", "Qanliko'l", "Qo'ng'irot", "Qorao'zak", "Shumanay", "Taxtako'pir", "To'rtko'l", "Xo'jayli", "Taxiatosh", "Bo'zatov"]};
 
-/* ===== I–III bosqich: 20 ta test savoli (o‘zgarmagan — eski natijalar bilan solishtirish uchun) ===== */
-const questions = [{"section": "I-BOSQICH: Kognitiv tahlil", "comp": "Kognitiv", "q": "Xabarni tekshirishda birinchi qadam nima?", "a": ["Asl manba va e’lon qilingan sanani tekshirish", "Do‘stlarga yuborish", "Izohlar soniga qarash", "Sarlavhaga ishonish"], "c": 0}, {"section": "I-BOSQICH: Kognitiv tahlil", "comp": "Kognitiv", "q": "Xabarda “Olimlar isbotladi” deyilgan, lekin tadqiqot nomi yo‘q. Bu holat qanday baholanadi?", "a": ["Ishonchli ilmiy dalil", "Noaniq va tekshirilishi kerak bo‘lgan da’vo", "Rasmiy xabar", "Ko‘ngilochar kontent"], "c": 1}, {"section": "I-BOSQICH: Kognitiv tahlil", "comp": "Kognitiv", "q": "Rasm eski voqeaga tegishli bo‘lib, yangi xabar sifatida tarqatilsa, bu nimaga misol?", "a": ["Kontekstdan uzilgan axborot", "Rasmiy e’lon", "Akademik manba", "Oddiy dizayn"], "c": 0}, {"section": "I-BOSQICH: Kognitiv tahlil", "comp": "Kognitiv", "q": "Statistik ma’lumot ishonchli bo‘lishi uchun nimalar ko‘rsatilishi kerak?", "a": ["Rangli rasm va emoji", "Tanlanma, manba, sana va usul", "Faqat foiz belgisi", "Post ostidagi layklar"], "c": 1}, {"section": "I-BOSQICH: Kognitiv tahlil", "comp": "Kognitiv", "q": "Klikbeyt sarlavhaning asosiy belgisi qaysi?", "a": ["Dalilga asoslangan xolis matn", "“SHOK!”, “DAHSHAT!”, “HAMMA KO‘RSIN!” kabi hissiy so‘zlar", "Muallif va sana ko‘rsatilishi", "Rasmiy hujjat havolasi"], "c": 1}, {"section": "I-BOSQICH: Kognitiv tahlil", "comp": "Kognitiv", "q": "Faktcheking jarayonida eng to‘g‘ri yondashuv qaysi?", "a": ["Bir nechta mustaqil va ishonchli manba bilan solishtirish", "Bitta anonim kanalga ishonish", "Ko‘p ulashilganini asos qilish", "Faqat izohlarni o‘qish"], "c": 0}, {"section": "I-BOSQICH: Kognitiv tahlil", "comp": "Kognitiv", "q": "Deepfake texnologiyasi orqali nimalar soxtalashtirilishi mumkin?", "a": ["Faqat matn", "Video, audio va tasvir", "Faqat ob-havo", "Faqat fayl nomi"], "c": 1}, {"section": "I-BOSQICH: Kognitiv tahlil", "comp": "Kognitiv", "q": "SIFT metodidagi “Investigate the source” bosqichi nimani anglatadi?", "a": ["Manbani tekshirish", "Hamma xabarni inkor etish", "Rasmni bezash", "Izoh yozish"], "c": 0}, {"section": "II-BOSQICH: Affektiv munosabat", "comp": "Affektiv", "q": "Vahimali xabarni o‘qiganda eng to‘g‘ri ichki munosabat qaysi?", "a": ["Darhol qo‘rqib tarqatish", "Tinchlanib, avval tekshirish", "Faqat sarlavhaga qarab ishonish", "Hamma guruhga yuborish"], "c": 1}, {"section": "II-BOSQICH: Affektiv munosabat", "comp": "Affektiv", "q": "Birov ustidan kuluvchi rasm guruhga tashlandi. Media madaniyatli o‘quvchi nima qiladi?", "a": ["Rasmni tarqatadi", "Mem yasaydi", "Tarqatmaydi va bunday ish noto‘g‘riligini tushuntiradi", "Kulib qo‘yadi"], "c": 2}, {"section": "II-BOSQICH: Affektiv munosabat", "comp": "Affektiv", "q": "Reklama “faqat bugun, hozir olmasangiz kech qolasiz” desa, bu qanday ta’sir?", "a": ["FOMO va shoshiltirish manipulyatsiyasi", "Rasmiy ogohlantirish", "Ilmiy xulosa", "Dars topshirig‘i"], "c": 0}, {"section": "II-BOSQICH: Affektiv munosabat", "comp": "Affektiv", "q": "Do‘stingiz feyk xabarga ishonsa, unga qanday munosabat bildirish kerak?", "a": ["Masxara qilish", "Hurmat bilan tushuntirib, birga tekshirish", "Jahl bilan gapirish", "Uni guruhdan chiqarish"], "c": 1}, {"section": "II-BOSQICH: Affektiv munosabat", "comp": "Affektiv", "q": "Nafrat uyg‘otuvchi postni ko‘rsangiz, axloqiy jihatdan to‘g‘ri harakat qaysi?", "a": ["Tarqatish", "Nafratli izoh yozish", "Shikoyat qilish va tarqatmaslik", "Ko‘proq odamga ko‘rsatish"], "c": 2}, {"section": "II-BOSQICH: Affektiv munosabat", "comp": "Affektiv", "q": "Axborotga qadriyatli munosabat nimalarni talab qiladi?", "a": ["Vijdon, hurmat, adolat va mas’uliyat", "Ko‘p layk yig‘ish", "Tez yozish", "Faqat qiziqish"], "c": 0}, {"section": "III-BOSQICH: Axloqiy-amaliy harakat", "comp": "Axloqiy-amaliy", "q": "“SMS kodni yuboring, yutuqni olasiz” degan xabar keldi. To‘g‘ri harakat qaysi?", "a": ["Kodni yuborish", "Havolaga kirish", "Kodni bermaslik va xabarni o‘chirish", "Do‘stga kodni yuborish"], "c": 2}, {"section": "III-BOSQICH: Axloqiy-amaliy harakat", "comp": "Axloqiy-amaliy", "q": "Ochiq Wi-Fi orqali bank ilovasiga kirish xavfsizmi?", "a": ["Ha, har doim xavfsiz", "Yo‘q, shaxsiy internetdan foydalanish ma’qul", "Faqat kechasi xavfsiz", "Parolni yozsa bo‘ladi"], "c": 1}, {"section": "III-BOSQICH: Axloqiy-amaliy harakat", "comp": "Axloqiy-amaliy", "q": "Notanish profil sizdan uy manzili va maktabingizni so‘radi. Nima qilasiz?", "a": ["Ma’lumot beraman", "Shaxsiy ma’lumot bermayman va profilni bloklayman", "Rasmimni ham yuboraman", "Do‘stlarim haqida yozaman"], "c": 1}, {"section": "III-BOSQICH: Axloqiy-amaliy harakat", "comp": "Axloqiy-amaliy", "q": "Internetdan olingan rasmni taqdimotga qo‘shganda nima qilish kerak?", "a": ["Manbani ko‘rsatish yoki ruxsatli rasm ishlatish", "Muallif nomini o‘chirish", "O‘zim chizgandek ko‘rsatish", "Manba kerak emas"], "c": 0}, {"section": "III-BOSQICH: Axloqiy-amaliy harakat", "comp": "Axloqiy-amaliy", "q": "Kuchli parol qanday bo‘lishi kerak?", "a": ["12345678", "Ism va tug‘ilgan yil", "Harflar, raqamlar va belgilar aralashgan, taxmin qilish qiyin parol", "Hamma akkaunt uchun bir xil"], "c": 2}, {"section": "III-BOSQICH: Axloqiy-amaliy harakat", "comp": "Axloqiy-amaliy", "q": "Zararli link kelganini bilsangiz, boshqalarni himoya qilish uchun nima qilasiz?", "a": ["Hazil uchun yuboraman", "Guruhda ogohlantiraman va linkni ochmaslikni aytaman", "O‘zim kirib ko‘raman", "Statusga joylayman"], "c": 1}];
-
-/* ===== IV bosqich: rasm tahlili (har biri: tanlov 1 ball + asoslash 1 ball) ===== */
-const imageTasks = [
-  {
-    q: "Ushbu Telegram postida qaysi belgilar uning ishonchsizligini ko‘rsatadi?",
-    a: ["Kanal obunachilari ko‘pligi", "Hissiy so‘zlar, manba yo‘qligi va “tarqating” degan chaqiriq", "Ko‘rishlar soni yuqoriligi", "Post kechqurun joylangani"], c: 1,
-    why: "Qaysi so‘z yoki jumlaga qarab shunday xulosa qildingiz?",
-    kw: ["manba","rasmiy","shok","dahshat","hissiy","tarqat","anonim","eshitdim","undov","isbot","dalil","vahima"],
-    svg: `<svg viewBox="0 0 440 310" xmlns="http://www.w3.org/2000/svg" font-family="Arial,sans-serif">
-      <rect width="440" height="310" fill="#cfe0ee"/>
-      <rect width="440" height="56" fill="#2aabee"/>
-      <circle cx="32" cy="28" r="18" fill="#ff7a45"/><text x="32" y="34" font-size="16" text-anchor="middle" fill="#fff" font-weight="bold">Y</text>
-      <text x="60" y="25" font-size="16" fill="#fff" font-weight="bold">🔥 YANGILIKLAR 24/7 🔥</text>
-      <text x="60" y="44" font-size="12" fill="#e0f2fe">128 ming obunachi</text>
-      <rect x="18" y="72" width="404" height="200" rx="16" fill="#fff"/>
-      <text x="36" y="104" font-size="18" fill="#dc2626" font-weight="bold">⚠️ SHOK!!! DAHSHAT!!!</text>
-      <text x="36" y="134" font-size="15" fill="#0f172a">Ertadan barcha maktablar 1 oyga yopilar</text>
-      <text x="36" y="156" font-size="15" fill="#0f172a">ekan! Rasmiy xabar hali yo‘q, lekin</text>
-      <text x="36" y="178" font-size="15" fill="#0f172a">ishonchli odamdan eshitdim.</text>
-      <text x="36" y="212" font-size="16" fill="#0f172a" font-weight="bold">HAMMAGA TARQATING!!! 👇👇👇</text>
-      <text x="36" y="256" font-size="12" fill="#94a3b8">👁 48.2K     ↪ 3.1K</text>
-      <text x="404" y="256" font-size="12" fill="#94a3b8" text-anchor="end">21:47</text>
-      <text x="220" y="296" font-size="11" fill="#64748b" text-anchor="middle">Namuna (o‘quv maqsadida yaratilgan)</text>
-    </svg>`
-  },
-  {
-    q: "Diagrammada qanday manipulyatsiya bor?",
-    a: ["Ranglar noto‘g‘ri tanlangan", "Y o‘qi 0 dan emas, 48 dan boshlangan — 2% farq juda katta ko‘rinadi", "Diagramma juda kichik chizilgan", "Hech qanday muammo yo‘q"], c: 1,
-    why: "Yana nimalar ko‘rsatilmagan? (manba, so‘rovda necha kishi qatnashgani va h.k.)",
-    kw: ["o'q","nol","0 dan","boshlan","farq","bo'rtt","katta ko'rin","tanlanma","manba","so'rov","necha","kishi","sana","usul","masshtab","shkala"],
-    svg: `<svg viewBox="0 0 440 310" xmlns="http://www.w3.org/2000/svg" font-family="Arial,sans-serif">
-      <rect width="440" height="310" fill="#ffffff"/>
-      <text x="220" y="28" font-size="17" text-anchor="middle" font-weight="bold" fill="#0f172a">“A” ichimlik “B” dan ancha foydali!</text>
-      <text x="220" y="48" font-size="12" text-anchor="middle" fill="#64748b">So‘rovnoma natijasi</text>
-      <g font-size="12" fill="#64748b" text-anchor="end">
-        <text x="66" y="74">52%</text><text x="66" y="124">51%</text><text x="66" y="174">50%</text><text x="66" y="224">49%</text><text x="66" y="274">48%</text>
-      </g>
-      <g stroke="#e2e8f0"><line x1="74" y1="70" x2="410" y2="70"/><line x1="74" y1="120" x2="410" y2="120"/><line x1="74" y1="170" x2="410" y2="170"/><line x1="74" y1="220" x2="410" y2="220"/></g>
-      <line x1="74" y1="62" x2="74" y2="270" stroke="#334155" stroke-width="2"/>
-      <line x1="74" y1="270" x2="410" y2="270" stroke="#334155" stroke-width="2"/>
-      <rect x="120" y="120" width="90" height="150" fill="#16a34a" rx="4"/>
-      <rect x="270" y="220" width="90" height="50" fill="#ef4444" rx="4"/>
-      <text x="165" y="112" font-size="16" text-anchor="middle" font-weight="bold" fill="#166534">51%</text>
-      <text x="315" y="212" font-size="16" text-anchor="middle" font-weight="bold" fill="#991b1b">49%</text>
-      <text x="165" y="292" font-size="14" text-anchor="middle" font-weight="bold" fill="#0f172a">A ichimlik</text>
-      <text x="315" y="292" font-size="14" text-anchor="middle" font-weight="bold" fill="#0f172a">B ichimlik</text>
-    </svg>`
-  },
-  {
-    q: "Bu SMS fishing (firibgarlik) ekanini qaysi belgi aniq ko‘rsatadi?",
-    a: ["Xabar SMS orqali kelgani", "Soxta manzil (c1ick-uz.xyz), notanish raqam va vaqt bilan qo‘rqitish", "Matnda bank nomi borligi", "Xabar o‘zbek tilida yozilgani"], c: 1,
-    why: "Bunday xabar kelsa, aniq nima qilasiz?",
-    kw: ["domen","havola","link","sayt","c1ick","xyz","notanish","raqam","shoshil","soat","qo'rqit","bosma","kirma","o'chir","blok","bank","rasmiy","qo'ng'iroq","kod"],
-    svg: `<svg viewBox="0 0 440 310" xmlns="http://www.w3.org/2000/svg" font-family="Arial,sans-serif">
-      <rect width="440" height="310" fill="#e2e8f0"/>
-      <rect x="110" y="10" width="220" height="290" rx="30" fill="#0f172a"/>
-      <rect x="122" y="24" width="196" height="262" rx="20" fill="#f8fafc"/>
-      <rect x="122" y="24" width="196" height="46" rx="20" fill="#f1f5f9"/>
-      <text x="220" y="45" font-size="12" text-anchor="middle" font-weight="bold" fill="#0f172a">+44 7911 52 03 18</text>
-      <text x="220" y="61" font-size="10" text-anchor="middle" fill="#94a3b8">SMS · Bugun 09:12</text>
-      <rect x="134" y="82" width="172" height="156" rx="14" fill="#e5e7eb"/>
-      <g font-size="11.5" fill="#0f172a">
-        <text x="144" y="102" font-weight="bold">CLICK: Kartangiz</text>
-        <text x="144" y="118">xavfsizlik sababli</text>
-        <text x="144" y="134" font-weight="bold" fill="#dc2626">BLOKLANDI!</text>
-        <text x="144" y="150">2 soat ichida tiklamasangiz</text>
-        <text x="144" y="166">mablag‘ingiz yo‘qoladi.</text>
-        <text x="144" y="188">Tiklash uchun:</text>
-        <text x="144" y="206" fill="#2563eb" text-decoration="underline">http://c1ick-uz.xyz/kod</text>
-      </g>
-      <rect x="134" y="250" width="172" height="24" rx="12" fill="#fff" stroke="#cbd5e1"/>
-      <text x="146" y="266" font-size="10" fill="#94a3b8">Xabar yozing…</text>
-    </svg>`
-  },
-  {
-    q: "Ushbu rasmli postni qanday baholaysiz?",
-    a: ["Ishonchli: rasm bor, demak bu haqiqat", "Rasm sana va joyga mos emas — eski yoki boshqa joydagi rasm bo‘lishi mumkin; teskari rasm qidiruvi bilan tekshirish kerak", "Bu rasmiy ob-havo prognozi", "Rasm chiroyli bo‘lgani uchun ishonchli"], c: 1,
-    why: "Rasmni qanday usul bilan tekshirasiz?",
-    kw: ["iyul","yoz","issiq","mos emas","kontekst","eski","teskari","qidiruv","google","lens","yandex","sana","joy","manba","boshqa"],
-    svg: `<svg viewBox="0 0 440 310" xmlns="http://www.w3.org/2000/svg" font-family="Arial,sans-serif">
-      <defs><linearGradient id="skyS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#94a3b8"/><stop offset="1" stop-color="#e2e8f0"/></linearGradient></defs>
-      <rect width="440" height="310" fill="url(#skyS)"/>
-      <rect x="40" y="120" width="110" height="110" fill="#a16207"/><polygon points="30,124 95,70 160,124" fill="#f8fafc"/>
-      <rect x="70" y="160" width="26" height="26" fill="#fde68a"/><rect x="106" y="160" width="26" height="26" fill="#fde68a"/>
-      <rect x="250" y="100" width="140" height="130" fill="#7c2d12"/><polygon points="240,104 320,50 400,104" fill="#f8fafc"/>
-      <rect x="275" y="140" width="30" height="30" fill="#fde68a"/><rect x="335" y="140" width="30" height="30" fill="#fde68a"/>
-      <polygon points="200,230 180,230 190,150" fill="#166534"/><polygon points="202,190 178,190 190,130" fill="#15803d"/><polygon points="196,150 184,150 190,118" fill="#f8fafc"/>
-      <path d="M0 220 Q110 200 220 222 T440 214 L440 310 L0 310 Z" fill="#ffffff"/>
-      <g fill="#ffffff"><circle cx="30" cy="40" r="3"/><circle cx="90" cy="30" r="2.5"/><circle cx="150" cy="54" r="3"/><circle cx="210" cy="26" r="2"/><circle cx="230" cy="80" r="3"/><circle cx="410" cy="40" r="3"/><circle cx="360" cy="24" r="2"/><circle cx="20" cy="100" r="2.5"/><circle cx="420" cy="120" r="3"/><circle cx="175" cy="96" r="2"/><circle cx="60" cy="250" r="2.5"/><circle cx="230" cy="160" r="2.5"/></g>
-      <rect x="0" y="252" width="440" height="58" fill="rgba(15,23,42,.78)"/>
-      <text x="16" y="276" font-size="15" fill="#fff" font-weight="bold">❄️ BUGUN Termizda kuchli qor yog‘di! (12-iyul)</text>
-      <text x="16" y="297" font-size="12" fill="#cbd5e1">📷 Foto: internetdan · ↪ 5.4K marta ulashildi</text>
-    </svg>`
-  }
-];
-
-/* ===== V bosqich: yozma javoblar (har biri 0–2 ball, kalit so‘zlar bo‘yicha taxminiy baholanadi) ===== */
-const openQuestions = [
-  { q: "Shubhali xabarni tarqatishdan oldin uni qanday tekshirasiz? Qadamlarini yozing.",
-    hint: "Kamida 2–3 ta qadam yozing.",
-    kw: ["manba","sana","rasmiy","sayt","solishtir","muallif","havola","tekshir","qidir","boshqa kanal","faktchek","google"] },
-  { q: "Emotsional manipulyatsiyaga bitta misol keltiring va undan qanday himoyalanish mumkinligini yozing.",
-    hint: "Masalan: qo‘rqitish, shoshiltirish, g‘azablantirish…",
-    kw: ["qo'rq","vahima","shok","hissiy","shoshil","g'azab","tinchlan","tekshir","kut","o'yla","his","emotsiya","reklama","fomo"] },
-  { q: "Shaxsiy ma’lumotlaringizni internetda himoya qilish uchun 3 ta qoida yozing.",
-    hint: "Parol, SMS-kod, manzil, notanish profillar haqida o‘ylang.",
-    kw: ["parol","kod","sms","manzil","telefon","ikki bosqich","bosqichli","blok","notanish","shaxsiy","wi-fi","wifi","havola","link"] },
-  { q: "Do‘stingiz guruhga feyk xabar tashladi. Unga nima deb yozasiz? Javobingizni xabar ko‘rinishida yozing.",
-    hint: "Hurmat bilan, dalil keltirib yozishga harakat qiling.",
-    kw: ["hurmat","tushuntir","manba","birga","tekshir","iltimos","o'chir","rasmiy","dalil","feyk","yolg'on","noto'g'ri"] },
-  { q: "Sizningcha, media madaniyatli o‘quvchi qanday bo‘ladi? Fikringizni 2–3 jumlada yozing.",
-    hint: "",
-    kw: ["tanqidiy","tekshir","mas'uliyat","hurmat","xavfsiz","manba","odob","etika","fikrla","tahlil","ishonchli","tarqatma"] }
-];
-
-let currentPhase = "Media-monitoring diagnostikasi";
-let currentTask = {
-  text: "Namuna vazifa: Telegram guruhida “Bugun kechqurun barcha plastik kartalar bloklanadi, tezda pulingizni yechib oling” degan xabar tarqaldi. Xabar manbasi noma’lum, rasmiy havola berilmagan va matn oxirida “hammaga tarqating” deyiladi.",
-  mediaType: "Telegram",
-  url: "https://example.com/namuna-xabar"
+/* Sahifada ko‘rinadigan bosqich nomlari — xohlasangiz shu yerda o‘zgartiring */
+const PHASE_LABEL = {
+  pre:  "Dastlabki nazorat",
+  post: "Yakuniy nazorat",
+  unknown: "Noma’lum"
 };
-let timer = null;
-let remainingSeconds = DEFAULT_MINUTES * 60;
-let hasSubmitted = false;
-let lastResult = null;
 
-const $ = id => document.getElementById(id);
+/* Jadvalga (Google Apps Script'ga) yuboriladigan qiymatlar.
+   O‘quvchi sahifasi eski qiymatlarni kutayotgani uchun ular o‘zgartirilmadi. */
+const PHASE_SEND_VALUE = {
+  pre:  "Dastabki-test",
+  post: "Yakuniy-test"
+};
 
-function escapeHtml(s) {
-  return String(s ?? "").replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[ch]));
+let allRows = [];
+let isLoading = false;
+let refreshTimer = null;
+let statusTimer = null;
+
+/* Jadvaldagi har xil yozilgan bosqich nomlarini bitta ko‘rinishga keltiradi:
+   Pre-test, pretest, Dastlabki-test, Dastabki-test, Oldingi ... → "pre"
+   Post-test, posttest, Yakuniy-test, Keyingi ...               → "post" */
+function normalizePhase(value){
+  const s = String(value ?? "").toLowerCase().replace(/[\s_\-‘’'`ʻʼ.]/g, "");
+  if(!s) return "unknown";
+  if(/^(pre|pretest|pretesting|1|i)$/.test(s) || /pre|dast|boshlang|oldin|kirish|diagnost/.test(s)) return "pre";
+  if(/^(post|posttest|2|ii)$/.test(s) || /post|yakun|keyin|final|chiqish|nazoratyakun/.test(s)) return "post";
+  return "unknown";
 }
 
-function updateDistricts() {
-  const r = $("s_region").value;
-  const ds = $("s_district");
-  ds.innerHTML = "";
-  if (!r || !districtData[r]) {
-    ds.innerHTML = '<option value="">Avval viloyatni tanlang</option>';
-    return;
+function phaseLabel(key){
+  return PHASE_LABEL[key] || PHASE_LABEL.unknown;
+}
+
+function normalizeGroup(value){
+  const s = String(value ?? "").toLowerCase().trim();
+  if(/tajriba|experiment|eksper/.test(s)) return "Tajriba";
+  if(/nazorat|control|kontrol/.test(s)) return "Nazorat";
+  return safeText(value);
+}
+
+function escapeHTML(v){
+  return String(v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function storageGet(key){
+  try{ return localStorage.getItem(key); }catch(e){ return null; }
+}
+function storageSet(key, value){
+  try{ localStorage.setItem(key, value); }catch(e){}
+}
+
+function showStatus(text, type="info"){
+  const sb = document.getElementById("statusBox");
+  clearTimeout(statusTimer);
+  sb.style.display = "";            /* oldingi yashirishni bekor qiladi */
+  sb.textContent = text;
+  sb.className = "status-box status-" + type;
+  if(type !== "info"){
+    statusTimer = setTimeout(() => {
+      sb.className = "status-box";
+    }, 5000);
   }
-  districtData[r].forEach(t => {
-    const o = document.createElement("option");
-    o.value = t;
-    o.textContent = t;
-    ds.appendChild(o);
-  });
 }
 
-function validateStudent() {
-  const name = $("s_name").value.trim();
-  const grade = $("s_grade_num").value;
-  const region = $("s_region").value;
-  const district = $("s_district").value;
-  const school = $("s_school").value;
-  if (name.length < 5) { alert("Iltimos, F.I.Sh ni to‘liq kiriting."); return false; }
-  if (!grade || grade < 7 || grade > 11) { alert("Iltimos, 7–11 oralig‘idagi sinfni kiriting."); return false; }
-  if (!region || !district || !school) { alert("Iltimos, hudud, tuman va maktab raqamini to‘ldiring."); return false; }
+function normalizeMediaType(type){
+  const map = {
+    none:"Media yo‘q",
+    telegram:"Telegram post",
+    video:"YouTube video",
+    instagram:"Instagram post",
+    facebook:"Facebook post",
+    image:"Rasm havolasi",
+    website:"Veb-sahifa"
+  };
+  return map[type] || type || "Media yo‘q";
+}
+
+function toggleMediaRequirement(){
+  const type = document.getElementById("t_media_type").value;
+  const url = document.getElementById("t_media_url");
+  url.placeholder = type === "none" ? "Media tanlanmagan — link shart emas" : "https://...";
+}
+
+function updatePreview(){
+  const text = document.getElementById("t_text").value.trim();
+  const mediaType = document.getElementById("t_media_type").value;
+  const phase = document.getElementById("t_phase").value;
+  const url = document.getElementById("t_media_url").value.trim();
+  document.getElementById("previewText").textContent = text || "Topshiriq matni hali kiritilmagan.";
+  document.getElementById("previewMeta").textContent =
+    "Bosqich: " + phaseLabel(phase) + " · Media: " + normalizeMediaType(mediaType) + (url ? " · Link: " + url : "");
+}
+
+function validateTask(){
+  const text = document.getElementById("t_text").value.trim();
+  const mediaType = document.getElementById("t_media_type").value;
+  const url = document.getElementById("t_media_url").value.trim();
+  const time = Number(document.getElementById("t_time_limit").value);
+  const count = Number(document.getElementById("t_q_count").value);
+
+  if(text.length < 15){
+    alert("Topshiriq matnini kamida 15 ta belgidan iborat qilib yozing.");
+    return false;
+  }
+  if(!Number.isFinite(time) || time < 1 || time > 180){
+    alert("Test vaqti 1–180 minut oralig‘ida bo‘lishi kerak.");
+    return false;
+  }
+  if(!Number.isFinite(count) || count < 5 || count > 60){
+    alert("Savollar soni 5–60 oralig‘ida bo‘lishi kerak.");
+    return false;
+  }
+  if(mediaType !== "none"){
+    if(!url){
+      alert("Media turi tanlangan. Iltimos, media havolani kiriting.");
+      return false;
+    }
+    try{
+      const u = new URL(url);
+      if(!/^https?:$/.test(u.protocol)) throw new Error();
+    }catch(e){
+      alert("Media havola to‘g‘ri URL formatida bo‘lishi kerak: https://...");
+      return false;
+    }
+  }
   return true;
 }
 
-/* ===== Rejim: mashq yoki tajriba-sinov ===== */
-let testMode = "practice";   // "practice" | "research"
-let expGroup = "Mashq";      // tadqiqotda koddan olinadi (Tajriba / Nazorat)
-let expCode = "";
+async function sendTask(){
+  if(!validateTask()) return;
 
-function selectedMode() {
-  const r = document.querySelector('input[name="s_mode"]:checked');
-  return r ? r.value : "practice";
+  const btn = document.getElementById("sendBtn");
+  btn.disabled = true;
+  showStatus("Topshiriq yuborilmoqda...", "info");
+
+  const phaseKey = document.getElementById("t_phase").value;
+  const task = {
+    text: document.getElementById("t_text").value.trim(),
+    phase: PHASE_SEND_VALUE[phaseKey],
+    phaseKey,
+    mediaType: document.getElementById("t_media_type").value,
+    mediaUrl: document.getElementById("t_media_url").value.trim(),
+    timeLimit: document.getElementById("t_time_limit").value,
+    questionCount: document.getElementById("t_q_count").value
+  };
+
+  const query = new URLSearchParams({
+    action: "saveTask",
+    text: task.text,
+    phase: task.phase,
+    m_type: task.mediaType,
+    m_url: task.mediaType === "none" ? "" : task.mediaUrl,
+    time_limit: task.timeLimit,
+    q_count: task.questionCount
+  }).toString();
+
+  try{
+    const r = await fetch(`${API_URL}?${query}&key=${encodeURIComponent(authKey)}`, { cache:"no-store" });
+    const res = await r.json();
+    if(res && res.error === "unauthorized"){ handleUnauthorized(); return; }
+    if(!res || !res.ok) throw new Error("saveTask failed");
+    storageSet("lastTeacherTask", JSON.stringify({ ...task, createdAt: new Date().toISOString() }));
+    showStatus("Topshiriq yuborildi! ✅", "success");
+    document.getElementById("t_text").value = "";
+    document.getElementById("t_media_url").value = "";
+    updatePreview();
+  }catch(e){
+    console.warn(e);
+    showStatus("Topshiriq yuborilmadi: internet yoki server bilan aloqa yo‘q. Qayta urinib ko‘ring. ❌", "error");
+  }finally{
+    btn.disabled = false;
+  }
 }
 
-function updateMode() {
-  const research = selectedMode() === "research";
-  document.querySelectorAll(".mode-opt").forEach(l => l.classList.toggle("active", l.querySelector("input").checked));
-  $("codeBox").classList.toggle("hidden", !research);
-  $("modeHelp").innerHTML = research
-    ? "<b>Tajriba-sinov:</b> natijangiz ilmiy tadqiqot uchun saqlanadi. Kodni o‘qituvchingizdan oling. Bu rejim faqat internet bilan ishlaydi."
-    : "<b>Mashq rejimi:</b> natija va sertifikat olasiz. Internet bo‘lmasa ham test namuna vazifa bilan ishlaydi.";
-  if (research) setTimeout(() => $("s_code").focus(), 50);
+function safeText(v){
+  return (v === null || v === undefined || String(v).trim() === "") ? "-" : String(v).trim();
 }
 
-function normCode(c) {
-  return String(c || "").toUpperCase().replace(/\s+/g, "");
+/* "40", "40%", "40,5" kabi qiymatlarni songa aylantiradi */
+function toScore(v){
+  if(v === null || v === undefined) return NaN;
+  const n = parseFloat(String(v).replace(",", ".").replace("%", ""));
+  return Number.isFinite(n) ? n : NaN;
 }
 
-async function fetchJSON(url) {
-  const r = await fetch(url, { cache: "no-store" });
-  if (!r.ok) throw new Error("HTTP " + r.status);
+function scoreLevel(score){
+  const n = toScore(score);
+  if(!Number.isFinite(n)) return ["—","pill-orange"];
+  if(n >= 85) return ["Yuqori","pill-green"];
+  if(n >= 60) return ["O‘rta","pill-blue"];
+  return ["Boshlang‘ich","pill-orange"];
+}
+
+function parseRow(row){
+  const phaseKey = normalizePhase(row[6]);
+  return {
+    timeRaw: row[0],
+    name: safeText(row[1]),
+    group: normalizeGroup(row[2]),
+    phaseRaw: safeText(row[6]),
+    phaseKey,
+    phase: phaseLabel(phaseKey),
+    score: toScore(row[7]),
+    /* Jadval ustunlari: A Vaqt | B Ism | C Guruh | D Viloyat | E Tuman | F Maktab | G Bosqich | H Ball | I Sinf */
+    grade: safeText(row[8]),
+    region: safeText(row[3]),
+    district: safeText(row[4]),
+    school: safeText(row[5])
+  };
+}
+
+async function loadResults(silent=false){
+  if(isLoading) return;
+  isLoading = true;
+  const body = document.getElementById("resultsBody");
+  if(!silent || !allRows.length){
+    body.innerHTML = `<tr><td colspan="9" class="empty"><span class="loader"></span> Natijalar yuklanmoqda...</td></tr>`;
+  }
+
+  try{
+    const r = await fetch(API_URL + "?type=getResults&key=" + encodeURIComponent(authKey), { cache:"no-store" });
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    const d = await r.json();
+    if(d && d.error === "unauthorized"){ isLoading = false; handleUnauthorized(); return; }
+
+    allRows = [];
+    if(Array.isArray(d) && d.length > 1){
+      for(let i = d.length - 1; i >= 1; i--){
+        if(Array.isArray(d[i]) && d[i].some(c => String(c ?? "").trim() !== "")){
+          allRows.push(parseRow(d[i]));
+        }
+      }
+      storageSet("teacherPanelResultsBackup_v2", JSON.stringify(allRows));
+    }
+
+    renderTable();
+    updateLastTime(true);
+    warnUnknownPhases();
+  }catch(e){
+    console.warn(e);
+    let cached = null;
+    try{ cached = JSON.parse(storageGet("teacherPanelResultsBackup_v2") || "null"); }catch(_){}
+    if(Array.isArray(cached) && cached.length){
+      allRows = cached;
+      renderTable();
+      updateLastTime(false, "API ulanmagan. Oxirgi saqlangan natijalar ko‘rsatildi.");
+    }else{
+      allRows = [];
+      renderTable("API ulanmagan va lokal zaxira topilmadi.");
+    }
+  }finally{
+    isLoading = false;
+  }
+}
+
+/* Bosqichi aniqlanmagan qatorlar bo‘lsa, konsolga yozadi (tekshirish uchun) */
+function warnUnknownPhases(){
+  const unknown = [...new Set(allRows.filter(r => r.phaseKey === "unknown").map(r => r.phaseRaw))];
+  if(unknown.length) console.warn("Bosqichi aniqlanmagan qiymatlar:", unknown);
+}
+
+function getFilteredRows(){
+  const q = document.getElementById("searchInput").value.toLowerCase().trim();
+  const gf = document.getElementById("groupFilter").value;
+  const pf = document.getElementById("phaseFilter").value;
+
+  return allRows.filter(row => {
+    const hay = [row.name,row.grade,row.region,row.district,row.school,row.group,row.phase,row.phaseRaw].join(" ").toLowerCase();
+    const matchQ = !q || hay.includes(q);
+    const matchG = !gf || row.group === gf;
+    const matchP = !pf || row.phaseKey === pf;
+    return matchQ && matchG && matchP;
+  });
+}
+
+function renderTable(customEmpty="Natijalar topilmadi."){
+  const rows = getFilteredRows();
+  const body = document.getElementById("resultsBody");
+  updateStats(allRows);
+
+  if(!rows.length){
+    body.innerHTML = `<tr><td colspan="9" class="empty">${escapeHTML(customEmpty)}</td></tr>`;
+    return;
+  }
+
+  body.innerHTML = rows.map((row, i) => {
+    const [level, levelClass] = scoreLevel(row.score);
+    const groupClass = row.group === "Tajriba" ? "pill-green" : row.group === "Nazorat" ? "pill-red" : "pill-orange";
+    const phaseClass = row.phaseKey === "post" ? "pill-blue" : row.phaseKey === "pre" ? "pill-orange" : "pill-red";
+    const scoreText = Number.isFinite(row.score) ? Math.round(row.score * 10) / 10 + "%" : "-";
+    const hudud = [row.region, row.district, row.school !== "-" ? row.school + "-maktab" : "-"]
+      .filter(v => v && v !== "-").join(" / ") || "-";
+
+    return `<tr>
+      <td>${i+1}</td>
+      <td><b>${escapeHTML(row.name)}</b></td>
+      <td>${escapeHTML(row.grade)}</td>
+      <td>${escapeHTML(hudud)}</td>
+      <td><span class="badge-pill ${groupClass}">${escapeHTML(row.group)}</span></td>
+      <td><span class="badge-pill ${phaseClass}" title="Jadvalda: ${escapeHTML(row.phaseRaw)}">${escapeHTML(row.phase)}</span></td>
+      <td><b style="color:var(--blue)">${scoreText}</b></td>
+      <td><span class="badge-pill ${levelClass}">${level}</span></td>
+      <td>${escapeHTML(formatTime(row.timeRaw))}</td>
+    </tr>`;
+  }).join("");
+}
+
+function formatTime(value){
+  if(!value || value === "-") return "-";
+  const d = new Date(value);
+  if(isNaN(d.getTime())) return safeText(value);
+  const pad = n => String(n).padStart(2, "0");
+  return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function updateStats(rows){
+  const st = { te:0, tx:0, ne:0, nx:0, pre:0, post:0, total:rows.length, sum:0, scored:0 };
+
+  rows.forEach(row => {
+    const g = row.group, p = row.phaseKey;
+    if(g === "Tajriba" && p === "pre")  st.te++;
+    if(g === "Tajriba" && p === "post") st.tx++;
+    if(g === "Nazorat" && p === "pre")  st.ne++;
+    if(g === "Nazorat" && p === "post") st.nx++;
+    if(p === "pre")  st.pre++;
+    if(p === "post") st.post++;
+
+    const score = toScore(row.score);
+    if(Number.isFinite(score)){
+      st.sum += score;
+      st.scored++;
+    }
+  });
+
+  document.getElementById("count_te").textContent = st.te;
+  document.getElementById("count_tx").textContent = st.tx;
+  document.getElementById("count_ne").textContent = st.ne;
+  document.getElementById("count_nx").textContent = st.nx;
+  document.getElementById("heroTotal").textContent = st.total;
+  document.getElementById("heroPre").textContent = st.pre;
+  document.getElementById("heroPost").textContent = st.post;
+}
+
+function updateLastTime(ok=true, msg=""){
+  const el = document.getElementById("lastUpdateText");
+  const d = new Date();
+  const now = String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0");
+  el.textContent = msg || (ok ? "Oxirgi yangilanish: " + now : "Lokal zaxira ko‘rsatildi: " + now);
+}
+
+function clearFilters(){
+  document.getElementById("searchInput").value = "";
+  document.getElementById("groupFilter").value = "";
+  document.getElementById("phaseFilter").value = "";
+  renderTable();
+}
+
+function exportCSV(){
+  const rows = getFilteredRows();
+  if(!rows.length){
+    alert("Eksport qilish uchun natija yo‘q.");
+    return;
+  }
+
+  const headers = ["Ism Sharif","Sinf","Hudud","Tuman","Maktab","Guruh","Bosqich","Ball","Vaqt"];
+  const csv = [
+    headers.join(","),
+    ...rows.map(r => [
+      r.name, r.grade, r.region, r.district, r.school, r.group, r.phase,
+      Number.isFinite(r.score) ? r.score : "", formatTime(r.timeRaw)
+    ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(","))
+  ].join("\r\n");
+
+  /* ﻿ — Excel o‘zbekcha harflarni to‘g‘ri ochishi uchun */
+  const blob = new Blob(["﻿" + csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "media_monitoring_natijalar.csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function scrollToTask(){
+  document.getElementById("taskCard").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function restoreLastTask(){
+  const raw = storageGet("lastTeacherTask");
+  if(!raw) return;
+  try{
+    const t = JSON.parse(raw);
+    if(!t || !t.text) return;
+    const ok = confirm("Oxirgi yuborilgan topshiriqni formaga qayta tiklaysizmi?");
+    if(!ok) return;
+    document.getElementById("t_text").value = t.text || "";
+    document.getElementById("t_phase").value = t.phaseKey || (normalizePhase(t.phase) === "post" ? "post" : "pre");
+    document.getElementById("t_media_type").value = t.mediaType || "none";
+    document.getElementById("t_media_url").value = t.mediaUrl || "";
+    document.getElementById("t_time_limit").value = t.timeLimit || 15;
+    document.getElementById("t_q_count").value = t.questionCount || 20;
+    toggleMediaRequirement();
+    updatePreview();
+  }catch(e){}
+}
+
+/* ===== Parol bilan kirish =====
+   Parol sahifa kodida saqlanmaydi. Uni Google Apps Script tekshiradi
+   (Loyiha sozlamalari → Script properties → TEACHER_PASSWORD). */
+const AUTH_STORE = "teacherPanelKey";
+let authKey = "";
+
+function getSavedKey(){
+  try{ return sessionStorage.getItem(AUTH_STORE) || localStorage.getItem(AUTH_STORE) || ""; }catch(e){ return ""; }
+}
+function saveKey(key, remember){
+  try{
+    sessionStorage.setItem(AUTH_STORE, key);
+    if(remember) localStorage.setItem(AUTH_STORE, key); else localStorage.removeItem(AUTH_STORE);
+  }catch(e){}
+}
+function forgetKey(){
+  try{ sessionStorage.removeItem(AUTH_STORE); localStorage.removeItem(AUTH_STORE); }catch(e){}
+}
+
+async function checkKey(key){
+  const r = await fetch(API_URL + "?action=checkKey&key=" + encodeURIComponent(key), { cache:"no-store" });
+  if(!r.ok) throw new Error("HTTP " + r.status);
   return r.json();
 }
 
-async function getLatestTask() {
-  const tasks = await fetchJSON(`${API_URL}?type=getTask`);
-  return Array.isArray(tasks) && tasks.length > 1 ? tasks[tasks.length - 1] : null;
+function showLoginError(msg){
+  const el = document.getElementById("loginError");
+  el.textContent = msg;
+  el.classList.toggle("show", !!msg);
 }
 
-function applyTask(t) {
-  currentTask = {
-    text: t[1] || currentTask.text,
-    mediaType: t[3] || "none",
-    url: t[4] || ""
-  };
-  return parseInt(t[5]) || DEFAULT_MINUTES;
+function togglePass(){
+  const i = document.getElementById("loginPass");
+  i.type = i.type === "password" ? "text" : "password";
 }
 
-async function startTest() {
-  if (!validateStudent()) return;
-  testMode = selectedMode();
-  const btn = $("startBtn");
-  const oldText = btn.textContent;
-  btn.disabled = true; btn.textContent = "⏳ Tayyorlanmoqda…";
-
-  try {
-    if (testMode === "research") {
-      // 1) Kodni tekshirish — guruh (Tajriba/Nazorat) koddan olinadi
-      const code = normCode($("s_code").value);
-      if (code.length < 4) { alert("Iltimos, o‘qituvchingiz bergan tajriba kodini kiriting."); return; }
-      let res;
-      try { res = await fetchJSON(`${API_URL}?action=checkCode&code=${encodeURIComponent(code)}`); }
-      catch (e) { console.warn(e); alert("Server bilan aloqa yo‘q. Tajriba-sinov rejimi faqat internet bilan ishlaydi. Internetni tekshiring yoki Mashq rejimini tanlang."); return; }
-      if (!res || !res.ok) { alert("Kod noto‘g‘ri yoki faol emas. Kodni o‘qituvchingizdan qayta so‘rang."); return; }
-      expCode = code;
-      expGroup = res.group || "Tajriba";
-
-      // 2) O‘qituvchi topshirig‘i (bosqich shundan olinadi) — tadqiqotda majburiy
-      let task;
-      try { task = await getLatestTask(); } catch (e) { console.warn(e); }
-      if (!task) { alert("O‘qituvchi topshirig‘i topilmadi. O‘qituvchingizga murojaat qiling."); return; }
-      const min = applyTask(task);
-      currentPhase = task[2] || "Media-monitoring diagnostikasi";
-      openTest(min);
-    } else {
-      // Mashq: topshiriq bo‘lsa olinadi, bo‘lmasa namuna vazifa bilan ishlaydi
-      expCode = ""; expGroup = "Mashq";
-      currentPhase = "Mashq";
-      let min = DEFAULT_MINUTES;
-      try {
-        const task = await getLatestTask();
-        if (task) min = applyTask(task);
-      } catch (e) { console.warn("Topshiriqni olib bo‘lmadi, namuna vazifa ishlatiladi.", e); }
-      openTest(min);
-    }
-  } finally {
-    btn.disabled = false; btn.textContent = oldText;
-  }
+/* ===== Tajriba kodlari ===== */
+async function apiAuth(params){
+  const q = new URLSearchParams({ ...params, key: authKey }).toString();
+  const r = await fetch(`${API_URL}?${q}`, { cache:"no-store" });
+  if(!r.ok) throw new Error("HTTP " + r.status);
+  const d = await r.json();
+  if(d && d.error === "unauthorized"){ handleUnauthorized(); throw new Error("unauthorized"); }
+  return d;
 }
 
-function openTest(minutes) {
-  hasSubmitted = false;
-  $("layout").classList.add("no-sidebar");
-  $("hero").classList.add("hidden");
-  $("testArea").classList.remove("hidden");
-  $("resultArea").classList.add("hidden");
-  const phaseName = /dast|pre/i.test(currentPhase) ? "Dastlabki nazorat" : /yakun|post/i.test(currentPhase) ? "Yakuniy nazorat" : currentPhase;
-  $("phaseTag").innerHTML = escapeHtml(testMode === "research" ? phaseName : "Mashq testi") +
-    ` <span class="mode-tag ${testMode}">${testMode === "research" ? "🔬 Tajriba-sinov · " + escapeHtml(expCode) : "📘 Mashq rejimi"}</span>`;
-  $("taskText").textContent = currentTask.text;
-  renderMedia(currentTask.mediaType, currentTask.url);
-  renderQuestions();
-  startTimer(minutes);
-  window.scrollTo({top:0, behavior:"smooth"});
-}
-
-function isImageUrl(url) {
-  return /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(url || "") || /googleusercontent\.com|drive\.google\.com\/uc/i.test(url || "");
-}
-
-function renderMedia(type, url) {
-  const box = $("mediaBox");
-  const t = String(type || "").toLowerCase().trim();
-  const hasUrl = !!url && url !== "#";
-  let cls = "fb-box", icon = "🌐 Media xabar";
-  if (t === "telegram") { cls = "tg-box"; icon = "🔹 Telegram xabari"; }
-  else if (t === "video" || t === "youtube") { cls = "yt-box"; icon = "🔴 YouTube video"; }
-  else if (t === "instagram") { cls = "ig-box"; icon = "📸 Instagram xabari"; }
-  else if (t === "facebook") { cls = "fb-box"; icon = "🔵 Facebook xabari"; }
-  else if (t === "website") { cls = "fb-box"; icon = "🌐 Veb-sahifa"; }
-
-  const safeUrl = escapeHtml(url || "#");
-  // O‘qituvchi "Rasm havolasi"ni tanlasa yoki havola rasmga olib borsa, rasm shu yerda ko‘rsatiladi
-  const showImg = hasUrl && (t === "image" || t === "rasm" || isImageUrl(url));
-  if (showImg) { cls = "img-box"; icon = "🖼 Tahlil uchun rasm"; }
-  const showBox = hasUrl && t !== "none";
-
-  box.innerHTML = `
-    ${showBox ? `<div class="media-link-box ${cls}">
-      <b>${icon}</b><br>
-      ${showImg
-        ? `<img src="${safeUrl}" alt="Tahlil uchun rasm" onclick="openLightbox(this.outerHTML)" style="cursor:zoom-in">`
-        : `<a href="${safeUrl}" target="_blank" rel="noopener" style="word-break:break-all;color:inherit;">${safeUrl}</a>`}
-    </div>` : ""}
-    <div class="manual-task">
-      <input id="manualSource" placeholder="Xabar manbasi haqida qisqa yozing">
-      <input id="manualRisk" placeholder="Siz sezgan xavf belgisi">
-      <textarea id="manualConclusion" placeholder="O‘quvchi xulosasi: bu xabarni qanday tekshirasiz?"></textarea>
-    </div>`;
-}
-
-function optionsHtml(name, answers) {
-  return answers.map((opt, i) => `
-    <label class="opt">
-      <input type="radio" name="${name}" value="${i}">
-      <span>${opt}</span>
-    </label>`).join("");
-}
-
-function renderQuestions() {
-  const container = $("quizContainer");
-  let html = "";
-  let lastSection = "";
-  let n = 0;
-
-  questions.forEach((item, idx) => {
-    if (item.section !== lastSection) {
-      lastSection = item.section;
-      html += `<div class="q-section">${item.section}</div>`;
-    }
-    n++;
-    html += `<div class="q-box" data-item><b>${n}. ${item.q}</b>${optionsHtml("q" + idx, item.a)}</div>`;
-  });
-
-  html += `<div class="q-section s-img">IV-BOSQICH: Rasm tahlili<small>Rasmni diqqat bilan ko‘ring (kattalashtirish uchun ustiga bosing), javobni tanlang va fikringizni asoslang.</small></div>`;
-  imageTasks.forEach((t, i) => {
-    n++;
-    html += `
-      <div class="q-box img-task" data-item>
-        <div class="img-frame" onclick="openLightbox(imageTasks[${i}].svg)">${t.svg}<div class="zoom-note">🔍 Kattalashtirish uchun bosing</div></div>
-        <div>
-          <b>${n}. ${t.q}</b>
-          ${optionsHtml("im" + i, t.a)}
-          <label class="sub-label" for="imj${i}">✍️ ${t.why}</label>
-          <textarea id="imj${i}" maxlength="600" placeholder="Javobingizni shu yerga yozing…" style="min-height:80px"></textarea>
-        </div>
-      </div>`;
-  });
-
-  html += `<div class="q-section s-open">V-BOSQICH: Yozma javoblar<small>Savollarga o‘z so‘zlaringiz bilan javob yozing. Javoblar o‘qituvchiga yuboriladi.</small></div>`;
-  openQuestions.forEach((o, i) => {
-    n++;
-    html += `
-      <div class="q-box" data-item>
-        <b>${n}. ${o.q}</b>
-        ${o.hint ? `<div class="hint">💡 ${o.hint}</div>` : ""}
-        <textarea id="op${i}" maxlength="800" placeholder="Javobingizni yozing…"></textarea>
-        <div class="char-count" id="opc${i}">0 / 800</div>
-      </div>`;
-  });
-
-  container.innerHTML = html;
-  container.oninput = container.onchange = (e) => {
-    const m = e.target.id && e.target.id.match(/^op(\d+)$/);
-    if (m) $("opc" + m[1]).textContent = `${e.target.value.length} / 800`;
-    updateProgress();
-  };
-  updateProgress();
-}
-
-function totalItems() {
-  return questions.length + imageTasks.length * 2 + openQuestions.length;
-}
-
-function countAnswered() {
-  let c = 0;
-  questions.forEach((_, i) => { if (document.querySelector(`input[name="q${i}"]:checked`)) c++; });
-  imageTasks.forEach((_, i) => {
-    if (document.querySelector(`input[name="im${i}"]:checked`)) c++;
-    if (($("imj" + i)?.value || "").trim().length >= 3) c++;
-  });
-  openQuestions.forEach((_, i) => { if (($("op" + i)?.value || "").trim().length >= 3) c++; });
-  return c;
-}
-
-function updateProgress() {
-  const answered = countAnswered();
-  const total = totalItems();
-  $("progressBar").style.width = Math.round(answered / total * 100) + "%";
-  $("counterBox").textContent = `Javob berildi: ${answered} / ${total}`;
-  document.querySelectorAll("#quizContainer [data-item]").forEach(box => {
-    const radioOk = !box.querySelector('input[type="radio"]') || box.querySelector('input[type="radio"]:checked');
-    const ta = box.querySelector("textarea");
-    const textOk = !ta || ta.value.trim().length >= 3;
-    box.classList.toggle("done", !!(radioOk && textOk));
-  });
-}
-
-function startTimer(min) {
-  clearInterval(timer);
-  remainingSeconds = min * 60;
-  tickTimer();
-  timer = setInterval(() => {
-    remainingSeconds--;
-    tickTimer();
-    if (remainingSeconds <= 0) {
-      clearInterval(timer);
-      submitFinalResult(true);
-    }
-  }, 1000);
-}
-
-function tickTimer() {
-  const m = Math.floor(remainingSeconds / 60);
-  const s = remainingSeconds % 60;
-  $("timerBox").textContent = `${m}:${s < 10 ? "0" + s : s}`;
-}
-
-/* Matnni kalit so‘zlar bilan solishtirish uchun normallashtirish (turli apostroflarni bitta ko‘rinishga keltiradi) */
-function normalizeText(s) {
-  return String(s || "").toLowerCase().replace(/[‘’ʻʼ`´]/g, "'").replace(/\s+/g, " ");
-}
-function keywordHits(text, kws) {
-  const t = normalizeText(text);
-  return kws.filter(k => t.includes(normalizeText(k))).length;
-}
-
-function calculateResult() {
-  let score = 0;
-  const componentScores = { "Kognitiv":0, "Affektiv":0, "Axloqiy-amaliy":0 };
-  const componentTotals = { "Kognitiv":0, "Affektiv":0, "Axloqiy-amaliy":0 };
-
-  questions.forEach((q, idx) => {
-    componentTotals[q.comp]++;
-    const selected = document.querySelector(`input[name="q${idx}"]:checked`);
-    if (selected && Number(selected.value) === q.c) {
-      score++;
-      componentScores[q.comp]++;
-    }
-  });
-
-  let imageScore = 0;
-  const imageAnswers = imageTasks.map((t, i) => {
-    const sel = document.querySelector(`input[name="im${i}"]:checked`);
-    const choice = sel ? Number(sel.value) : null;
-    const correct = choice === t.c;
-    const text = ($("imj" + i)?.value || "").trim();
-    const textPoint = text.length >= 10 && keywordHits(text, t.kw) >= 1 ? 1 : 0;
-    imageScore += (correct ? 1 : 0) + textPoint;
-    return { savol: t.q, tanlov: choice === null ? "" : t.a[choice], togri: correct, asoslash: text, ball: (correct ? 1 : 0) + textPoint };
-  });
-
-  let writtenScore = 0;
-  const openAnswers = openQuestions.map((o, i) => {
-    const text = ($("op" + i)?.value || "").trim();
-    const hits = text.length >= 10 ? keywordHits(text, o.kw) : 0;
-    const pts = hits >= 2 ? 2 : hits === 1 ? 1 : 0;
-    writtenScore += pts;
-    return { savol: o.q, javob: text, ball: pts };
-  });
-
-  const imageMax = imageTasks.length * 2;
-  const writtenMax = openQuestions.length * 2;
-  const percent = Math.round((score / questions.length) * 100);
-  const totalPercent = Math.round(((score + imageScore + writtenScore) / (questions.length + imageMax + writtenMax)) * 100);
-
-  return { score, percent, componentScores, componentTotals, imageScore, imageMax, writtenScore, writtenMax, totalPercent, imageAnswers, openAnswers };
-}
-
-async function submitFinalResult(auto=false) {
-  if (hasSubmitted) return;
-  const answered = countAnswered();
-  const total = totalItems();
-  if (!auto && answered < total) {
-    const ok = confirm(`Siz ${total} ta topshiriqdan ${answered} tasini bajardingiz. Baribir yakunlaysizmi?`);
-    if (!ok) return;
-  }
-
-  hasSubmitted = true;
-  clearInterval(timer);
-  const btn = $("submitBtn");
-  btn.disabled = true; btn.textContent = "Natija yuborilmoqda…";
-
-  const result = calculateResult();
-  lastResult = result;
-  const base = {
-    name: $("s_name").value.trim(),
-    group: expGroup,
-    code: expCode,
-    mode: testMode,
-    phase: currentPhase,
-    grade: $("s_grade_num").value + $("s_grade_char").value,
-    region: $("s_region").value,
-    district: $("s_district").value,
-    school: $("s_school").value
-  };
-
-  // 1) Asosiy natija — avvalgidek (score = 20 ta test foizi), o‘qituvchi paneli statistikasi buzilmaydi
-  const params = new URLSearchParams({
-    action: "saveResult",
-    name: base.name,
-    group: base.group,
-    code: base.code,
-    mode: base.mode,
-    phase: base.phase,
-    score: result.percent,
-    grade: base.grade,
-    region: base.region,
-    district: base.district,
-    school: base.school,
-    cognitive: result.componentScores["Kognitiv"],
-    affective: result.componentScores["Affektiv"],
-    practical: result.componentScores["Axloqiy-amaliy"],
-    imageScore: result.imageScore,
-    writtenScore: result.writtenScore,
-    totalPercent: result.totalPercent
-  });
-
-  try {
-    await fetch(`${API_URL}?${params.toString()}`, { mode: "no-cors" });
-  } catch(e) {
-    console.warn("Natijani APIga yuborib bo‘lmadi, lekin sahifada natija ko‘rsatiladi.", e);
-  }
-
-  // 2) Yozma javoblar matni — alohida POST so‘rov (uzun matn URLga sig‘maydi)
-  try {
-    const details = new URLSearchParams({
-      action: "saveAnswers",
-      ...base,
-      score: result.percent,
-      imageScore: result.imageScore,
-      writtenScore: result.writtenScore,
-      totalPercent: result.totalPercent,
-      payload: JSON.stringify({
-        vazifa: {
-          manba: ($("manualSource")?.value || "").trim(),
-          xavf: ($("manualRisk")?.value || "").trim(),
-          xulosa: ($("manualConclusion")?.value || "").trim()
-        },
-        rasmTahlili: result.imageAnswers,
-        yozmaJavoblar: result.openAnswers
-      })
-    });
-    await fetch(API_URL, { method: "POST", mode: "no-cors", body: details });
-  } catch(e) {
-    console.warn("Yozma javoblarni yuborib bo‘lmadi.", e);
-  }
-
-  showResultView(result);
-}
-
-function getLevel(percent) {
-  if (percent >= 85) return ["Yuqori", "🏆", "#16a34a", "Media-immunitet yuqori darajada shakllangan. Siz axborotni tahlil qilish, qadriyatli baholash va xavfsiz qaror qabul qilishda faol ko‘nikmaga egasiz."];
-  if (percent >= 60) return ["O‘rta", "🧐", "#2563eb", "Asosiy bilimlar mavjud. Faktcheking, manba tahlili va raqamli xavfsizlik bo‘yicha ko‘proq mashq qilish tavsiya etiladi."];
-  return ["Boshlang‘ich", "📚", "#f97316", "Sizga media savodxonlik, feyk xabarni aniqlash va shaxsiy ma’lumotni himoya qilish bo‘yicha qo‘shimcha mashg‘ulotlar tavsiya etiladi."];
-}
-
-function makeCertId(name) {
-  const d = new Date();
-  const ymd = d.getFullYear().toString() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
-  let h = 0;
-  const src = name + d.getTime();
-  for (let i = 0; i < src.length; i++) h = (h * 31 + src.charCodeAt(i)) >>> 0;
-  return `MM-${ymd}-${h.toString(36).toUpperCase().slice(-5).padStart(5, "0")}`;
-}
-
-function statCard(label, val, max, color) {
-  const p = max ? Math.round(val / max * 100) : 0;
-  return `<div class="stat"><div class="stat-top"><span>${label}</span><b style="color:${color}">${val}/${max}</b></div><div class="bar"><i style="width:${p}%;background:${color}"></i></div></div>`;
-}
-
-function showResultView(result) {
-  $("testArea").classList.add("hidden");
-  const area = $("resultArea");
-  area.classList.remove("hidden");
-
-  const [level, sticker, color, message] = getLevel(result.percent);
-  const name = escapeHtml($("s_name").value.trim());
-  const grade = escapeHtml($("s_grade_num").value + $("s_grade_char").value.toUpperCase());
-  const school = escapeHtml($("s_school").value);
-  const place = escapeHtml([$("s_district").value, $("s_region").value].filter(Boolean).join(", "));
-  const d = new Date();
-  const today = `${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}.${d.getFullYear()}`;
-  const certId = makeCertId($("s_name").value);
-  const cs = result.componentScores, ct = result.componentTotals;
-
-  area.innerHTML = `
-    <div class="result-sticker">${sticker}</div>
-    <h2 style="margin:0;color:${color}">${level} daraja</h2>
-    <div class="result-score" style="color:${color}">${result.percent}%</div>
-    <p style="font-weight:900;color:#334155;margin:4px 0">Test: ${result.score} / ${questions.length} to‘g‘ri javob · Umumiy natija (test + rasm + yozma): ${result.totalPercent}%</p>
-    <p style="font-size:17px;color:#475569;max-width:820px;margin:0 auto">${message}</p>
-
-    <div class="stats-grid">
-      ${statCard("🧠 Kognitiv", cs["Kognitiv"], ct["Kognitiv"], "#2563eb")}
-      ${statCard("💛 Affektiv", cs["Affektiv"], ct["Affektiv"], "#7c3aed")}
-      ${statCard("🛡 Axloqiy-amaliy", cs["Axloqiy-amaliy"], ct["Axloqiy-amaliy"], "#0d9488")}
-      ${statCard("🖼 Rasm tahlili", result.imageScore, result.imageMax, "#16a34a")}
-      ${statCard("✍️ Yozma javoblar", result.writtenScore, result.writtenMax, "#ea580c")}
-      ${statCard("📊 Umumiy", result.score + result.imageScore + result.writtenScore, questions.length + result.imageMax + result.writtenMax, color)}
-    </div>
-    <div class="note">ℹ️ Yozma javoblar va asoslashlar kalit so‘zlar asosida taxminiy baholandi. Yakuniy bahoni o‘qituvchi javoblaringizni o‘qib chiqib qo‘yadi.</div>
-
-    <div class="actions">
-      <button class="btn btn-gold" id="pdfBtn" onclick="downloadCertificatePDF()">📄 Sertifikatni PDF yuklab olish</button>
-      <button class="btn btn-orange" onclick="location.reload()">🔄 Qayta boshlash</button>
-      <a class="btn btn-dark" href="index.html">🏠 Bosh sahifa</a>
-    </div>
-
-    <div class="cert-viewport" id="certViewport">
-      <div class="cert-scaler" id="certScaler">
-        <div class="cert-page" id="certPage">
-          <div class="cert-glow1"></div><div class="cert-glow2"></div><div class="cert-glow3"></div>
-          <div class="cert-band"></div><div class="cert-band b"></div>
-          <div class="cert-frame"></div><div class="cert-frame2"></div>
-          <div class="cert-corner tl"></div><div class="cert-corner tr"></div><div class="cert-corner bl"></div><div class="cert-corner br"></div>
-
-          <div class="cert-body">
-            <div class="cert-kicker">Media-monitoring platformasi · Axborot iste’moli madaniyati</div>
-            <div class="cert-title">SERTIFIKAT</div>
-            <div class="cert-divider"><i></i><span>◆ ◆ ◆</span><i></i></div>
-            <p class="cert-lead">Ushbu sertifikat bilan taqdirlanadi</p>
-            <div class="cert-name">${name}</div>
-            <div class="cert-meta">${grade}-sinf  ·  ${school}-maktab  ·  ${place}</div>
-            <div class="cert-text">Axborot iste’moli madaniyati bo‘yicha diagnostik testni muvaffaqiyatli yakunlagani uchun. Feyk xabarni aniqlash, faktcheking, emotsional manipulyatsiyani anglash va raqamli xavfsizlik bo‘yicha bilim va ko‘nikmalar baholandi.</div>
-            <div class="cert-stats">
-              <div class="cert-stat primary"><b>${result.percent}%</b><span>Test natijasi</span></div>
-              <div class="cert-stat"><b>${cs["Kognitiv"]}/${ct["Kognitiv"]}</b><span>Kognitiv</span></div>
-              <div class="cert-stat"><b>${cs["Affektiv"]}/${ct["Affektiv"]}</b><span>Affektiv</span></div>
-              <div class="cert-stat"><b>${cs["Axloqiy-amaliy"]}/${ct["Axloqiy-amaliy"]}</b><span>Amaliy</span></div>
-              <div class="cert-stat"><b>${result.imageScore}/${result.imageMax}</b><span>Rasm tahlili</span></div>
-              <div class="cert-stat"><b>${result.writtenScore}/${result.writtenMax}</b><span>Yozma</span></div>
-            </div>
-            <div class="cert-level" style="background:${color}">${sticker}  ${level.toUpperCase()} DARAJA</div>
-          </div>
-
-          <div class="cert-footer">
-            <div class="cert-sign"><div class="val">${today}</div><div class="lbl">Berilgan sana</div></div>
-            <div class="cert-seal"><div class="cert-seal-in"><span class="s1">MEDIA</span><span class="s2">★</span><span class="s3">SAVODXONLIK</span></div></div>
-            <div class="cert-sign"><div class="val">${certId}</div><div class="lbl">Sertifikat raqami</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-
-  fitCertificate();
-  window.scrollTo({top:0, behavior:"smooth"});
-}
-
-/* Sertifikatni ekran kengligiga moslab kichraytirish (PDF har doim to‘liq A4 o‘lchamda chiqadi) */
-function fitCertificate() {
-  const vp = $("certViewport"), sc = $("certScaler");
-  if (!vp || !sc) return;
-  const s = Math.min(1, vp.clientWidth / 1123);
-  sc.style.transform = `scale(${s})`;
-  vp.style.height = (794 * s) + "px";
-}
-window.addEventListener("resize", fitCertificate);
-
-/* ===== PDF yuklab olish ===== */
-const PDF_LIBS = [
-  ["https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js", "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js", () => window.html2canvas],
-  ["https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js", "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js", () => window.jspdf && window.jspdf.jsPDF]
-];
-
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const s = document.createElement("script");
-    s.src = src; s.async = true;
-    s.onload = resolve; s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
-
-async function ensurePdfLibs() {
-  for (const [main, backup, ready] of PDF_LIBS) {
-    if (ready()) continue;
-    try { await loadScript(main); } catch(e) { await loadScript(backup); }
-    if (!ready()) throw new Error("Kutubxona yuklanmadi");
-  }
-}
-
-async function downloadCertificatePDF() {
-  const btn = $("pdfBtn");
-  const oldText = btn.textContent;
-  btn.disabled = true; btn.textContent = "⏳ PDF tayyorlanmoqda…";
-  const scaler = $("certScaler"), vp = $("certViewport"), page = $("certPage");
-  const savedY = window.scrollY;
-  try {
-    await ensurePdfLibs();
-    // Suratga olishda sertifikat asl o‘lchamda bo‘lishi kerak
-    window.scrollTo(0, 0);
-    scaler.style.transform = "none";
-    vp.style.overflow = "visible";
-    const canvas = await window.html2canvas(page, { scale: 2, backgroundColor: "#fffdf6", useCORS: true, logging: false, width: 1123, height: 794, windowWidth: Math.max(1200, document.documentElement.clientWidth) });
-    const pdf = new window.jspdf.jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
-    pdf.addImage(canvas.toDataURL("image/jpeg", 0.95), "JPEG", 0, 0, 297, 210);
-    const safeName = ($("s_name").value.trim() || "oquvchi").replace(/[^\p{L}\p{N}]+/gu, "_");
-    pdf.save(`Sertifikat_${safeName}.pdf`);
-  } catch (e) {
+async function loadCodes(){
+  const box = document.getElementById("codesList");
+  try{
+    const d = await apiAuth({ action:"listCodes" });
+    renderCodes(d.codes || []);
+    document.getElementById("practiceInfo").textContent =
+      `📘 Mashq rejimida ishlangan testlar: ${d.practiceCount || 0} ta (jadvaldagi «Mashq» varag‘ida).`;
+  }catch(e){
+    if(e.message === "unauthorized") return;
     console.warn(e);
-    alert("PDF kutubxonasi yuklanmadi (internetni tekshiring). Chop etish oynasi ochiladi — u yerda “PDF sifatida saqlash”ni tanlang.");
-    window.print();
-  } finally {
-    vp.style.overflow = "hidden";
-    fitCertificate();
-    window.scrollTo(0, savedY);
-    btn.disabled = false; btn.textContent = oldText;
+    box.innerHTML = `<div class="empty">Kodlarni yuklab bo‘lmadi. Apps Script yangilanganini tekshiring.</div>`;
   }
 }
 
-/* ===== Rasmni kattalashtirish ===== */
-function openLightbox(content) {
-  const lb = document.createElement("div");
-  lb.className = "lightbox";
-  lb.innerHTML = content;
-  lb.onclick = () => lb.remove();
-  document.addEventListener("keydown", function esc(e) { if (e.key === "Escape") { lb.remove(); document.removeEventListener("keydown", esc); } });
-  document.body.appendChild(lb);
+function renderCodes(codes){
+  const box = document.getElementById("codesList");
+  if(!codes.length){
+    box.innerHTML = `<div class="empty">Hali kod yaratilmagan. Yuqoridan guruhni tanlab, kod yarating.</div>`;
+    return;
+  }
+  box.innerHTML = codes.slice().reverse().map(c => {
+    const gClass = c.group === "Tajriba" ? "pill-green" : "pill-red";
+    return `<div class="code-item ${c.active ? "" : "off"}">
+      <div class="code-val">${escapeHTML(c.code)}</div>
+      <div class="code-meta">
+        <span class="badge-pill ${gClass}">${escapeHTML(c.group)}</span>
+        ${c.active ? "" : `<span class="badge-pill pill-orange">O‘chirilgan</span>`}
+        <div>${escapeHTML(c.note || "—")}</div>
+      </div>
+      <div class="code-actions">
+        <button class="btn btn-muted btn-sm" onclick="copyCode('${escapeHTML(c.code)}', this)">📋 Nusxa</button>
+        <button class="btn ${c.active ? "btn-red" : "btn-green"} btn-sm" onclick="toggleCode('${escapeHTML(c.code)}', this)">${c.active ? "O‘chirish" : "Yoqish"}</button>
+      </div>
+    </div>`;
+  }).join("");
 }
+
+async function addCode(){
+  const btn = document.getElementById("addCodeBtn");
+  btn.disabled = true;
+  try{
+    const d = await apiAuth({
+      action:"addCode",
+      group: document.getElementById("c_group").value,
+      note: document.getElementById("c_note").value.trim()
+    });
+    if(!d || !d.ok) throw new Error("addCode failed");
+    document.getElementById("c_note").value = "";
+    await loadCodes();
+  }catch(e){
+    if(e.message !== "unauthorized") alert("Kod yaratib bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring.");
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+async function toggleCode(code, btn){
+  btn.disabled = true;
+  try{
+    const d = await apiAuth({ action:"toggleCode", code });
+    if(!d || !d.ok) throw new Error("toggle failed");
+    await loadCodes();
+  }catch(e){
+    if(e.message !== "unauthorized") alert("Kod holatini o‘zgartirib bo‘lmadi.");
+    btn.disabled = false;
+  }
+}
+
+function copyCode(code, btn){
+  const done = () => { const t = btn.textContent; btn.textContent = "✅ Nusxalandi"; setTimeout(() => btn.textContent = t, 1500); };
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(code).then(done).catch(() => prompt("Kodni nusxalang:", code));
+  }else{
+    prompt("Kodni nusxalang:", code);
+  }
+}
+
+function unlockPanel(res){
+  document.body.classList.remove("locked");
+  const link = document.getElementById("sheetLink");
+  if(res && res.sheetUrl){ link.href = res.sheetUrl; link.classList.remove("hidden"); }
+  toggleMediaRequirement();
+  updatePreview();
+  loadResults();
+  loadCodes();
+  clearInterval(refreshTimer);
+  refreshTimer = setInterval(() => loadResults(true), 30000);   /* jadval sakramaydi */
+  setTimeout(restoreLastTask, 800);
+}
+
+function lockPanel(msg=""){
+  clearInterval(refreshTimer);
+  authKey = "";
+  allRows = [];
+  document.getElementById("resultsBody").innerHTML = "";
+  document.getElementById("sheetLink").classList.add("hidden");
+  document.body.classList.add("locked");
+  document.getElementById("loginPass").value = "";
+  showLoginError(msg);
+  setTimeout(() => document.getElementById("loginPass").focus(), 50);
+}
+
+async function login(ev){
+  ev.preventDefault();
+  const pass = document.getElementById("loginPass").value;
+  const btn = document.getElementById("loginBtn");
+  if(!pass) return;
+  btn.disabled = true; btn.textContent = "Tekshirilmoqda…";
+  showLoginError("");
+  try{
+    const res = await checkKey(pass);
+    if(res && res.ok){
+      authKey = pass;
+      saveKey(pass, document.getElementById("rememberMe").checked);
+      unlockPanel(res);
+    }else{
+      showLoginError("Parol noto‘g‘ri. Qayta urinib ko‘ring.");
+    }
+  }catch(e){
+    console.warn(e);
+    showLoginError("Server bilan aloqa yo‘q. Internetni tekshirib, qayta urinib ko‘ring.");
+  }finally{
+    btn.disabled = false; btn.textContent = "Kirish";
+  }
+}
+
+function logout(){
+  forgetKey();
+  /* Umumiy kompyuterda o‘quvchilar ma’lumoti qolib ketmasligi uchun zaxira ham o‘chiriladi */
+  try{ localStorage.removeItem("teacherPanelResultsBackup_v2"); }catch(e){}
+  lockPanel();
+}
+
+function handleUnauthorized(){
+  forgetKey();
+  lockPanel("Parol eskirgan yoki o‘zgartirilgan. Qayta kiring.");
+}
+
+(async function init(){
+  const saved = getSavedKey();
+  if(!saved){ lockPanel(); return; }
+  try{
+    const res = await checkKey(saved);
+    if(res && res.ok){ authKey = saved; unlockPanel(res); }
+    else { forgetKey(); lockPanel(); }
+  }catch(e){
+    console.warn(e);
+    lockPanel("Server bilan aloqa yo‘q. Internetni tekshirib, qayta urinib ko‘ring.");
+  }
+})();
 </script>
 </body>
 </html>
