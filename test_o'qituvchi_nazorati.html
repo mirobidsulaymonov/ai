@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -539,10 +537,59 @@ tbody tr:last-child td{border-bottom:0}
 @media(max-width:1180px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.eff-split{grid-template-columns:1fr}}
 @media(max-width:760px){.kpi-grid{grid-template-columns:1fr 1fr}.bar-row{grid-template-columns:100px 1fr;}.bar-row em{grid-column:2;text-align:left}}
 .stat-box small{display:block;margin-top:2px;font-size:12px;font-weight:700;color:rgba(255,255,255,.80);position:relative;z-index:2}
+
+/* ===== Kirish (parol) oynasi ===== */
+body.locked .topbar, body.locked .page, body.locked .footer-note{display:none!important}
+.login-screen{display:none;min-height:100vh;align-items:center;justify-content:center;padding:24px}
+body.locked .login-screen{display:flex}
+.login-card{
+  width:min(440px,100%);background:#fff;border:1px solid var(--border);border-radius:28px;
+  box-shadow:var(--shadow);padding:32px;text-align:center;
+}
+.login-icon{
+  width:72px;height:72px;margin:0 auto 14px;border-radius:24px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:34px;
+  box-shadow:0 12px 26px rgba(37,99,235,.25);
+}
+.login-card h1{margin:0 0 6px;font-size:26px;letter-spacing:-.04em}
+.login-card p{margin:0 0 20px;color:var(--muted);font-weight:650;font-size:15px}
+.login-card form{text-align:left}
+.pass-wrap{position:relative}
+.pass-wrap input{padding-right:52px}
+.pass-eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;font-size:20px;cursor:pointer;padding:6px}
+.remember{display:flex;align-items:center;gap:8px;margin:12px 0 16px;font-size:14px;font-weight:800;color:#334155;cursor:pointer}
+.remember input{width:18px;height:18px;margin:0}
+.login-card .btn{width:100%}
+.login-error{display:none;margin-top:12px;background:#fef2f2;color:#991b1b;border:1px solid #fecaca;border-radius:14px;padding:11px;font-weight:900;font-size:14px;text-align:center}
+.login-error.show{display:block}
+.login-back{display:inline-block;margin-top:16px;color:var(--muted);font-weight:800;font-size:14px;text-decoration:none}
+.login-back:hover{color:var(--blue)}
+.hidden{display:none!important}
 </style>
 </head>
 
-<body>
+<body class="locked">
+
+<section class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-icon">🔒</div>
+    <h1>O‘qituvchi paneli</h1>
+    <p>Natijalarni ko‘rish va topshiriq yuborish uchun parolni kiriting.</p>
+    <form id="loginForm" onsubmit="login(event)">
+      <label for="loginPass">Parol</label>
+      <div class="pass-wrap">
+        <input type="password" id="loginPass" autocomplete="current-password" placeholder="Parolni kiriting" required>
+        <button type="button" class="pass-eye" onclick="togglePass()" title="Parolni ko‘rsatish">👁</button>
+      </div>
+      <label class="remember"><input type="checkbox" id="rememberMe"> Shu qurilmada eslab qolish</label>
+      <button type="submit" class="btn btn-blue" id="loginBtn">Kirish</button>
+      <div class="login-error" id="loginError"></div>
+    </form>
+    <a href="index.html" class="login-back">← Bosh sahifaga qaytish</a>
+  </div>
+</section>
+
 <nav class="topbar">
   <div class="topbar-inner">
     <a href="index.html" class="brand">
@@ -551,8 +598,9 @@ tbody tr:last-child td{border-bottom:0}
     </a>
     <div class="nav-actions">
       <a href="index.html" class="btn btn-muted">← Bosh sahifa</a>
-      <a href="https://docs.google.com/spreadsheets/d/1Vi6vzK6UGo4173RFe7dWAN9mKWLyMFYWEThYHuOlo5Q/edit?gid=1297629121#gid=1297629121" target="_blank" rel="noopener" class="btn btn-white">📂 Jadval bazasi</a>
+      <a href="#" id="sheetLink" target="_blank" rel="noopener" class="btn btn-white hidden">📂 Jadval bazasi</a>
       <button class="btn btn-blue" onclick="loadResults()">🔄 Yangilash</button>
+      <button class="btn btn-red" onclick="logout()">🔒 Chiqish</button>
     </div>
   </div>
 </nav>
@@ -930,7 +978,10 @@ async function sendTask(){
   }).toString();
 
   try{
-    await fetch(`${API_URL}?${query}`, { method:"GET", mode:"no-cors" });
+    const r = await fetch(`${API_URL}?${query}&key=${encodeURIComponent(authKey)}`, { cache:"no-store" });
+    const res = await r.json();
+    if(res && res.error === "unauthorized"){ handleUnauthorized(); return; }
+    if(!res || !res.ok) throw new Error("saveTask failed");
     storageSet("lastTeacherTask", JSON.stringify({ ...task, createdAt: new Date().toISOString() }));
     showStatus("Topshiriq yuborildi! ✅", "success");
     document.getElementById("t_text").value = "";
@@ -990,9 +1041,10 @@ async function loadResults(silent=false){
   }
 
   try{
-    const r = await fetch(API_URL + "?type=getResults", { cache:"no-store" });
+    const r = await fetch(API_URL + "?type=getResults&key=" + encodeURIComponent(authKey), { cache:"no-store" });
     if(!r.ok) throw new Error("HTTP " + r.status);
     const d = await r.json();
+    if(d && d.error === "unauthorized"){ isLoading = false; handleUnauthorized(); return; }
 
     allRows = [];
     if(Array.isArray(d) && d.length > 1){
@@ -1177,11 +1229,114 @@ function restoreLastTask(){
   }catch(e){}
 }
 
-toggleMediaRequirement();
-updatePreview();
-loadResults();
-refreshTimer = setInterval(() => loadResults(true), 30000);   /* jadval sakramaydi */
-setTimeout(restoreLastTask, 800);
+/* ===== Parol bilan kirish =====
+   Parol sahifa kodida saqlanmaydi. Uni Google Apps Script tekshiradi
+   (Loyiha sozlamalari → Script properties → TEACHER_PASSWORD). */
+const AUTH_STORE = "teacherPanelKey";
+let authKey = "";
+
+function getSavedKey(){
+  try{ return sessionStorage.getItem(AUTH_STORE) || localStorage.getItem(AUTH_STORE) || ""; }catch(e){ return ""; }
+}
+function saveKey(key, remember){
+  try{
+    sessionStorage.setItem(AUTH_STORE, key);
+    if(remember) localStorage.setItem(AUTH_STORE, key); else localStorage.removeItem(AUTH_STORE);
+  }catch(e){}
+}
+function forgetKey(){
+  try{ sessionStorage.removeItem(AUTH_STORE); localStorage.removeItem(AUTH_STORE); }catch(e){}
+}
+
+async function checkKey(key){
+  const r = await fetch(API_URL + "?action=checkKey&key=" + encodeURIComponent(key), { cache:"no-store" });
+  if(!r.ok) throw new Error("HTTP " + r.status);
+  return r.json();
+}
+
+function showLoginError(msg){
+  const el = document.getElementById("loginError");
+  el.textContent = msg;
+  el.classList.toggle("show", !!msg);
+}
+
+function togglePass(){
+  const i = document.getElementById("loginPass");
+  i.type = i.type === "password" ? "text" : "password";
+}
+
+function unlockPanel(res){
+  document.body.classList.remove("locked");
+  const link = document.getElementById("sheetLink");
+  if(res && res.sheetUrl){ link.href = res.sheetUrl; link.classList.remove("hidden"); }
+  toggleMediaRequirement();
+  updatePreview();
+  loadResults();
+  clearInterval(refreshTimer);
+  refreshTimer = setInterval(() => loadResults(true), 30000);   /* jadval sakramaydi */
+  setTimeout(restoreLastTask, 800);
+}
+
+function lockPanel(msg=""){
+  clearInterval(refreshTimer);
+  authKey = "";
+  allRows = [];
+  document.getElementById("resultsBody").innerHTML = "";
+  document.getElementById("sheetLink").classList.add("hidden");
+  document.body.classList.add("locked");
+  document.getElementById("loginPass").value = "";
+  showLoginError(msg);
+  setTimeout(() => document.getElementById("loginPass").focus(), 50);
+}
+
+async function login(ev){
+  ev.preventDefault();
+  const pass = document.getElementById("loginPass").value;
+  const btn = document.getElementById("loginBtn");
+  if(!pass) return;
+  btn.disabled = true; btn.textContent = "Tekshirilmoqda…";
+  showLoginError("");
+  try{
+    const res = await checkKey(pass);
+    if(res && res.ok){
+      authKey = pass;
+      saveKey(pass, document.getElementById("rememberMe").checked);
+      unlockPanel(res);
+    }else{
+      showLoginError("Parol noto‘g‘ri. Qayta urinib ko‘ring.");
+    }
+  }catch(e){
+    console.warn(e);
+    showLoginError("Server bilan aloqa yo‘q. Internetni tekshirib, qayta urinib ko‘ring.");
+  }finally{
+    btn.disabled = false; btn.textContent = "Kirish";
+  }
+}
+
+function logout(){
+  forgetKey();
+  /* Umumiy kompyuterda o‘quvchilar ma’lumoti qolib ketmasligi uchun zaxira ham o‘chiriladi */
+  try{ localStorage.removeItem("teacherPanelResultsBackup_v2"); }catch(e){}
+  lockPanel();
+}
+
+function handleUnauthorized(){
+  forgetKey();
+  lockPanel("Parol eskirgan yoki o‘zgartirilgan. Qayta kiring.");
+}
+
+(async function init(){
+  const saved = getSavedKey();
+  if(!saved){ lockPanel(); return; }
+  try{
+    const res = await checkKey(saved);
+    if(res && res.ok){ authKey = saved; unlockPanel(res); }
+    else { forgetKey(); lockPanel(); }
+  }catch(e){
+    console.warn(e);
+    lockPanel("Server bilan aloqa yo‘q. Internetni tekshirib, qayta urinib ko‘ring.");
+  }
+})();
 </script>
 </body>
 </html>
