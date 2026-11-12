@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -138,6 +137,15 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
 .actions .btn{width:auto;min-width:220px}
 .help{margin-top:18px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:18px;padding:16px;color:#475569;font-size:14px;}
 .help b{color:#0f172a}
+.mode-switch{display:grid;gap:8px}
+.mode-opt{display:flex;gap:10px;align-items:flex-start;margin:0;padding:11px 12px;border:1px solid #cbd5e1;border-radius:14px;cursor:pointer;background:#fff;transition:.2s}
+.mode-opt.active{border-color:var(--blue);background:#eff6ff;box-shadow:0 0 0 3px rgba(37,99,235,.10)}
+.mode-opt input{width:18px;height:18px;margin:3px 0 0;flex:0 0 auto}
+.mode-opt b{display:block;font-size:14px;color:#0f172a}
+.mode-opt small{display:block;font-size:12px;color:#64748b;font-weight:700;line-height:1.35}
+.mode-tag{display:inline-block;letter-spacing:0;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:900}
+.mode-tag.practice{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.mode-tag.research{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
 
 /* ===== SERTIFIKAT (A4 albom: 1123×794 px) ===== */
 .cert-viewport{width:100%;overflow:hidden;margin:26px auto 0;max-width:1123px}
@@ -231,11 +239,21 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
       <input type="text" id="s_grade_char" maxlength="2" placeholder="Belgi">
     </div>
 
-    <label>Guruh</label>
-    <select id="s_group">
-      <option value="Tajriba">Tajriba guruhi</option>
-      <option value="Nazorat">Nazorat guruhi</option>
-    </select>
+    <label>Test rejimi</label>
+    <div class="mode-switch">
+      <label class="mode-opt active">
+        <input type="radio" name="s_mode" value="practice" checked onchange="updateMode()">
+        <span><b>📘 Mashq</b><small>Bilimingizni tekshirish uchun. Kod shart emas.</small></span>
+      </label>
+      <label class="mode-opt">
+        <input type="radio" name="s_mode" value="research" onchange="updateMode()">
+        <span><b>🔬 Tajriba-sinov</b><small>O‘qituvchingiz bergan kod bilan.</small></span>
+      </label>
+    </div>
+    <div id="codeBox" class="hidden">
+      <label for="s_code">Tajriba kodi</label>
+      <input type="text" id="s_code" placeholder="Masalan: MM-4K7P2Q" autocomplete="off" spellcheck="false" style="text-transform:uppercase;letter-spacing:.06em;font-weight:800">
+    </div>
 
     <label>Hudud</label>
     <select id="s_region" onchange="updateDistricts()">
@@ -253,16 +271,15 @@ textarea{resize:vertical;min-height:90px;line-height:1.5}
     <input type="text" id="s_name" placeholder="Familiya Ism Sharif">
 
     <button class="btn btn-primary" id="startBtn" onclick="startTest()" style="margin-top:16px">Testni boshlash</button>
-    <button class="btn btn-orange" onclick="startOfflineDemo()" style="margin-top:10px">Namuna vazifa bilan boshlash</button>
 
-    <div class="help">
-      <b>Eslatma:</b> API ishlamasa ham sahifa to‘xtab qolmaydi. “Namuna vazifa” orqali testni bemalol ishlatish mumkin.
+    <div class="help" id="modeHelp">
+      <b>Mashq rejimi:</b> natija va sertifikat olasiz. Internet bo‘lmasa ham test namuna vazifa bilan ishlaydi.
     </div>
   </aside>
 
   <main class="main">
     <section class="hero" id="hero">
-      <div class="badge">O‘quvchi yoshlar uchun · Kognitiv, affektiv va axloqiy-amaliy diagnostika</div>
+      <div class="badge">7–11-sinf o‘quvchilari uchun · Kognitiv, affektiv va axloqiy-amaliy diagnostika</div>
       <h1>Axborot iste’moli madaniyati bo‘yicha media-monitoring testi</h1>
       <p>Ushbu sahifa o‘quvchilarning feyk xabar, faktcheking, emotsional manipulyatsiya, axborot etikasi va raqamli xavfsizlik bo‘yicha bilim-ko‘nikmalarini aniqlashga mo‘ljallangan.</p>
       <div class="hero-features">
@@ -461,35 +478,90 @@ function validateStudent() {
   return true;
 }
 
-async function startTest() {
-  if (!validateStudent()) return;
-  try {
-    const response = await fetch(`${API_URL}?type=getTask`, { cache: "no-store" });
-    const tasks = await response.json();
-    if (Array.isArray(tasks) && tasks.length > 1) {
-      const latestTask = tasks[tasks.length - 1];
-      currentTask = {
-        text: latestTask[1] || currentTask.text,
-        mediaType: latestTask[3] || "Telegram",
-        url: latestTask[4] || "#"
-      };
-      currentPhase = latestTask[2] || "Media-monitoring diagnostikasi";
-      const min = parseInt(latestTask[5]) || DEFAULT_MINUTES;
-      openTest(min);
-    } else {
-      alert("O‘qituvchi vazifasi topilmadi. Namuna vazifa bilan test boshlanadi.");
-      openTest(DEFAULT_MINUTES);
-    }
-  } catch(e) {
-    console.warn(e);
-    alert("API ulanmagan yoki internetda muammo bor. Namuna vazifa bilan test boshlanadi.");
-    openTest(DEFAULT_MINUTES);
-  }
+/* ===== Rejim: mashq yoki tajriba-sinov ===== */
+let testMode = "practice";   // "practice" | "research"
+let expGroup = "Mashq";      // tadqiqotda koddan olinadi (Tajriba / Nazorat)
+let expCode = "";
+
+function selectedMode() {
+  const r = document.querySelector('input[name="s_mode"]:checked');
+  return r ? r.value : "practice";
 }
 
-function startOfflineDemo() {
+function updateMode() {
+  const research = selectedMode() === "research";
+  document.querySelectorAll(".mode-opt").forEach(l => l.classList.toggle("active", l.querySelector("input").checked));
+  $("codeBox").classList.toggle("hidden", !research);
+  $("modeHelp").innerHTML = research
+    ? "<b>Tajriba-sinov:</b> natijangiz ilmiy tadqiqot uchun saqlanadi. Kodni o‘qituvchingizdan oling. Bu rejim faqat internet bilan ishlaydi."
+    : "<b>Mashq rejimi:</b> natija va sertifikat olasiz. Internet bo‘lmasa ham test namuna vazifa bilan ishlaydi.";
+  if (research) setTimeout(() => $("s_code").focus(), 50);
+}
+
+function normCode(c) {
+  return String(c || "").toUpperCase().replace(/\s+/g, "");
+}
+
+async function fetchJSON(url) {
+  const r = await fetch(url, { cache: "no-store" });
+  if (!r.ok) throw new Error("HTTP " + r.status);
+  return r.json();
+}
+
+async function getLatestTask() {
+  const tasks = await fetchJSON(`${API_URL}?type=getTask`);
+  return Array.isArray(tasks) && tasks.length > 1 ? tasks[tasks.length - 1] : null;
+}
+
+function applyTask(t) {
+  currentTask = {
+    text: t[1] || currentTask.text,
+    mediaType: t[3] || "none",
+    url: t[4] || ""
+  };
+  return parseInt(t[5]) || DEFAULT_MINUTES;
+}
+
+async function startTest() {
   if (!validateStudent()) return;
-  openTest(DEFAULT_MINUTES);
+  testMode = selectedMode();
+  const btn = $("startBtn");
+  const oldText = btn.textContent;
+  btn.disabled = true; btn.textContent = "⏳ Tayyorlanmoqda…";
+
+  try {
+    if (testMode === "research") {
+      // 1) Kodni tekshirish — guruh (Tajriba/Nazorat) koddan olinadi
+      const code = normCode($("s_code").value);
+      if (code.length < 4) { alert("Iltimos, o‘qituvchingiz bergan tajriba kodini kiriting."); return; }
+      let res;
+      try { res = await fetchJSON(`${API_URL}?action=checkCode&code=${encodeURIComponent(code)}`); }
+      catch (e) { console.warn(e); alert("Server bilan aloqa yo‘q. Tajriba-sinov rejimi faqat internet bilan ishlaydi. Internetni tekshiring yoki Mashq rejimini tanlang."); return; }
+      if (!res || !res.ok) { alert("Kod noto‘g‘ri yoki faol emas. Kodni o‘qituvchingizdan qayta so‘rang."); return; }
+      expCode = code;
+      expGroup = res.group || "Tajriba";
+
+      // 2) O‘qituvchi topshirig‘i (bosqich shundan olinadi) — tadqiqotda majburiy
+      let task;
+      try { task = await getLatestTask(); } catch (e) { console.warn(e); }
+      if (!task) { alert("O‘qituvchi topshirig‘i topilmadi. O‘qituvchingizga murojaat qiling."); return; }
+      const min = applyTask(task);
+      currentPhase = task[2] || "Media-monitoring diagnostikasi";
+      openTest(min);
+    } else {
+      // Mashq: topshiriq bo‘lsa olinadi, bo‘lmasa namuna vazifa bilan ishlaydi
+      expCode = ""; expGroup = "Mashq";
+      currentPhase = "Mashq";
+      let min = DEFAULT_MINUTES;
+      try {
+        const task = await getLatestTask();
+        if (task) min = applyTask(task);
+      } catch (e) { console.warn("Topshiriqni olib bo‘lmadi, namuna vazifa ishlatiladi.", e); }
+      openTest(min);
+    }
+  } finally {
+    btn.disabled = false; btn.textContent = oldText;
+  }
 }
 
 function openTest(minutes) {
@@ -498,7 +570,9 @@ function openTest(minutes) {
   $("hero").classList.add("hidden");
   $("testArea").classList.remove("hidden");
   $("resultArea").classList.add("hidden");
-  $("phaseTag").textContent = currentPhase;
+  const phaseName = /dast|pre/i.test(currentPhase) ? "Dastlabki nazorat" : /yakun|post/i.test(currentPhase) ? "Yakuniy nazorat" : currentPhase;
+  $("phaseTag").innerHTML = escapeHtml(testMode === "research" ? phaseName : "Mashq testi") +
+    ` <span class="mode-tag ${testMode}">${testMode === "research" ? "🔬 Tajriba-sinov · " + escapeHtml(expCode) : "📘 Mashq rejimi"}</span>`;
   $("taskText").textContent = currentTask.text;
   renderMedia(currentTask.mediaType, currentTask.url);
   renderQuestions();
@@ -512,24 +586,28 @@ function isImageUrl(url) {
 
 function renderMedia(type, url) {
   const box = $("mediaBox");
-  let cls = "fb-box", icon = "🔵 Media xabar";
-  if (type === "Telegram") { cls = "tg-box"; icon = "🔹 Telegram xabari"; }
-  else if (type === "YouTube") { cls = "yt-box"; icon = "🔴 YouTube xabari"; }
-  else if (type === "Instagram") { cls = "ig-box"; icon = "📸 Instagram xabari"; }
-  else if (type === "Facebook") { cls = "fb-box"; icon = "🔵 Facebook xabari"; }
+  const t = String(type || "").toLowerCase().trim();
+  const hasUrl = !!url && url !== "#";
+  let cls = "fb-box", icon = "🌐 Media xabar";
+  if (t === "telegram") { cls = "tg-box"; icon = "🔹 Telegram xabari"; }
+  else if (t === "video" || t === "youtube") { cls = "yt-box"; icon = "🔴 YouTube video"; }
+  else if (t === "instagram") { cls = "ig-box"; icon = "📸 Instagram xabari"; }
+  else if (t === "facebook") { cls = "fb-box"; icon = "🔵 Facebook xabari"; }
+  else if (t === "website") { cls = "fb-box"; icon = "🌐 Veb-sahifa"; }
 
   const safeUrl = escapeHtml(url || "#");
-  // O‘qituvchi vazifada rasm havolasini bersa (yoki turini "Rasm" deb belgilasa), rasm shu yerda ko‘rsatiladi
-  const showImg = type === "Rasm" || isImageUrl(url);
+  // O‘qituvchi "Rasm havolasi"ni tanlasa yoki havola rasmga olib borsa, rasm shu yerda ko‘rsatiladi
+  const showImg = hasUrl && (t === "image" || t === "rasm" || isImageUrl(url));
   if (showImg) { cls = "img-box"; icon = "🖼 Tahlil uchun rasm"; }
+  const showBox = hasUrl && t !== "none";
 
   box.innerHTML = `
-    <div class="media-link-box ${cls}">
+    ${showBox ? `<div class="media-link-box ${cls}">
       <b>${icon}</b><br>
       ${showImg
         ? `<img src="${safeUrl}" alt="Tahlil uchun rasm" onclick="openLightbox(this.outerHTML)" style="cursor:zoom-in">`
         : `<a href="${safeUrl}" target="_blank" rel="noopener" style="word-break:break-all;color:inherit;">${safeUrl}</a>`}
-    </div>
+    </div>` : ""}
     <div class="manual-task">
       <input id="manualSource" placeholder="Xabar manbasi haqida qisqa yozing">
       <input id="manualRisk" placeholder="Siz sezgan xavf belgisi">
@@ -713,7 +791,9 @@ async function submitFinalResult(auto=false) {
   lastResult = result;
   const base = {
     name: $("s_name").value.trim(),
-    group: $("s_group").value,
+    group: expGroup,
+    code: expCode,
+    mode: testMode,
     phase: currentPhase,
     grade: $("s_grade_num").value + $("s_grade_char").value,
     region: $("s_region").value,
@@ -726,6 +806,8 @@ async function submitFinalResult(auto=false) {
     action: "saveResult",
     name: base.name,
     group: base.group,
+    code: base.code,
+    mode: base.mode,
     phase: base.phase,
     score: result.percent,
     grade: base.grade,
