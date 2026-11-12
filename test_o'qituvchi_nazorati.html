@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -513,6 +514,7 @@ tbody tr:last-child td{border-bottom:0}
   .table-wrap{max-height:none;border:0}
   th{background:#eee!important;color:#111!important}
 }
+.stat-box small{display:block;margin-top:2px;font-size:12px;font-weight:700;color:rgba(255,255,255,.80);position:relative;z-index:2}
 </style>
 </head>
 
@@ -535,13 +537,13 @@ tbody tr:last-child td{border-bottom:0}
   <section class="hero">
     <div class="badge">Media-monitoring · O‘qituvchi boshqaruv paneli</div>
     <h1>Topshiriq yuborish va o‘quvchilar natijalarini kuzatish</h1>
-    <p>Bu panel orqali o‘qituvchi Dastlabki-test yoki yakuniy-test vazifasini yuboradi, media havola biriktiradi, vaqt va savollar sonini belgilaydi hamda tajriba va nazorat guruhlari natijalarini real vaqtga yaqin kuzatadi.</p>
+    <p>Bu panel orqali o‘qituvchi dastlabki nazorat (tajribadan oldin) yoki yakuniy nazorat (tajribadan keyin) topshirig‘ini yuboradi, media havola biriktiradi, vaqt va savollar sonini belgilaydi hamda tajriba va nazorat guruhlari natijalarini real vaqtga yaqin kuzatadi.</p>
     <div class="hero-row">
       <div class="hero-mini">
         <div class="mini-stat"><b id="heroTotal">0</b><span>jami natija</span></div>
         <div class="mini-stat"><b id="heroAvg">0%</b><span>o‘rtacha ball</span></div>
-        <div class="mini-stat"><b id="heroPre">0</b><span>Dastlabki-test</span></div>
-        <div class="mini-stat"><b id="heroPost">0</b><span>Yakuniy-test</span></div>
+        <div class="mini-stat"><b id="heroPre">0</b><span>Dastlabki nazorat</span></div>
+        <div class="mini-stat"><b id="heroPost">0</b><span>Yakuniy nazorat</span></div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
         <button class="btn btn-white" onclick="scrollToTask()">🚀 Topshiriq yaratish</button>
@@ -551,10 +553,10 @@ tbody tr:last-child td{border-bottom:0}
   </section>
 
   <section class="stat-grid">
-    <div class="stat-box bg-te"><h2 id="count_te">0</h2><p>Tajriba guruhi · Dastlabki-test</p></div>
-    <div class="stat-box bg-tx"><h2 id="count_tx">0</h2><p>Tajriba guruhi · Yakuniy-test</p></div>
-    <div class="stat-box bg-ne"><h2 id="count_ne">0</h2><p>Nazorat guruhi · Dastlabk-test</p></div>
-    <div class="stat-box bg-nx"><h2 id="count_nx">0</h2><p>Nazorat guruhi · Yakuniy-test</p></div>
+    <div class="stat-box bg-te"><h2 id="count_te">0</h2><p>Tajriba guruhi · Dastlabki nazorat</p><small>tajribadan oldingi natija</small></div>
+    <div class="stat-box bg-tx"><h2 id="count_tx">0</h2><p>Tajriba guruhi · Yakuniy nazorat</p><small>tajribadan keyingi natija</small></div>
+    <div class="stat-box bg-ne"><h2 id="count_ne">0</h2><p>Nazorat guruhi · Dastlabki nazorat</p><small>tajribadan oldingi natija</small></div>
+    <div class="stat-box bg-nx"><h2 id="count_nx">0</h2><p>Nazorat guruhi · Yakuniy nazorat</p><small>tajribadan keyingi natija</small></div>
   </section>
 
   <div class="main-grid">
@@ -602,11 +604,11 @@ tbody tr:last-child td{border-bottom:0}
           <div>
             <label for="t_phase">Bosqich</label>
             <select id="t_phase" onchange="updatePreview()">
-              <option value="Dastabki-test">Dastabki-test</option>
-              <option value="Yakuniy-test">Yakuniy-test</option>
+              <option value="pre">Dastlabki nazorat (tajribadan oldin)</option>
+              <option value="post">Yakuniy nazorat (tajribadan keyin)</option>
             </select>
           </div>
-          <button class="btn btn-blue" onclick="sendTask()">🚀 O‘quvchilarga tarqatish</button>
+          <button class="btn btn-blue" id="sendBtn" onclick="sendTask()">🚀 O‘quvchilarga tarqatish</button>
         </div>
 
         <div id="statusBox" class="status-box"></div>
@@ -614,7 +616,7 @@ tbody tr:last-child td{border-bottom:0}
         <div class="preview" id="previewBox">
           <h3>👁 Topshiriq oldindan ko‘rinishi</h3>
           <p id="previewText">Topshiriq matni hali kiritilmagan.</p>
-          <div class="preview-link" id="previewMeta">Bosqich: Dastlabki-test · Media: media yo‘q</div>
+          <div class="preview-link" id="previewMeta">Bosqich: Dastlabki nazorat · Media: media yo‘q</div>
         </div>
       </div>
     </section>
@@ -649,8 +651,8 @@ tbody tr:last-child td{border-bottom:0}
             <label for="phaseFilter">Bosqich</label>
             <select id="phaseFilter" onchange="renderTable()">
               <option value="">Hammasi</option>
-              <option value="Dastabki-test">Dastoabki-test</option>
-              <option value="Yakuniy-test">Yakuniy-test</option>
+              <option value="pre">Dastlabki nazorat</option>
+              <option value="post">Yakuniy nazorat</option>
             </select>
           </div>
           <button class="btn btn-orange" onclick="clearFilters()">Filtrni tozalash</button>
@@ -686,17 +688,66 @@ tbody tr:last-child td{border-bottom:0}
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby8iPtcZuk_gTUDLFiz6BFT-49huUt6NoUieuGptW837jUIl0rnx4jKq4txwCUoRH7VFQ/exec";
 
+/* Sahifada ko‘rinadigan bosqich nomlari — xohlasangiz shu yerda o‘zgartiring */
+const PHASE_LABEL = {
+  pre:  "Dastlabki nazorat",
+  post: "Yakuniy nazorat",
+  unknown: "Noma’lum"
+};
+
+/* Jadvalga (Google Apps Script'ga) yuboriladigan qiymatlar.
+   O‘quvchi sahifasi eski qiymatlarni kutayotgani uchun ular o‘zgartirilmadi. */
+const PHASE_SEND_VALUE = {
+  pre:  "Dastabki-test",
+  post: "Yakuniy-test"
+};
+
 let allRows = [];
 let isLoading = false;
 let refreshTimer = null;
+let statusTimer = null;
+
+/* Jadvaldagi har xil yozilgan bosqich nomlarini bitta ko‘rinishga keltiradi:
+   Pre-test, pretest, Dastlabki-test, Dastabki-test, Oldingi ... → "pre"
+   Post-test, posttest, Yakuniy-test, Keyingi ...               → "post" */
+function normalizePhase(value){
+  const s = String(value ?? "").toLowerCase().replace(/[\s_\-‘’'`ʻʼ.]/g, "");
+  if(!s) return "unknown";
+  if(/^(pre|pretest|pretesting|1|i)$/.test(s) || /pre|dast|boshlang|oldin|kirish|diagnost/.test(s)) return "pre";
+  if(/^(post|posttest|2|ii)$/.test(s) || /post|yakun|keyin|final|chiqish|nazoratyakun/.test(s)) return "post";
+  return "unknown";
+}
+
+function phaseLabel(key){
+  return PHASE_LABEL[key] || PHASE_LABEL.unknown;
+}
+
+function normalizeGroup(value){
+  const s = String(value ?? "").toLowerCase().trim();
+  if(/tajriba|experiment|eksper/.test(s)) return "Tajriba";
+  if(/nazorat|control|kontrol/.test(s)) return "Nazorat";
+  return safeText(value);
+}
+
+function escapeHTML(v){
+  return String(v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function storageGet(key){
+  try{ return localStorage.getItem(key); }catch(e){ return null; }
+}
+function storageSet(key, value){
+  try{ localStorage.setItem(key, value); }catch(e){}
+}
 
 function showStatus(text, type="info"){
   const sb = document.getElementById("statusBox");
+  clearTimeout(statusTimer);
+  sb.style.display = "";            /* oldingi yashirishni bekor qiladi */
   sb.textContent = text;
   sb.className = "status-box status-" + type;
   if(type !== "info"){
-    setTimeout(() => {
-      sb.style.display = "none";
+    statusTimer = setTimeout(() => {
       sb.className = "status-box";
     }, 5000);
   }
@@ -718,11 +769,7 @@ function normalizeMediaType(type){
 function toggleMediaRequirement(){
   const type = document.getElementById("t_media_type").value;
   const url = document.getElementById("t_media_url");
-  if(type === "none"){
-    url.placeholder = "Media tanlanmagan — link shart emas";
-  }else{
-    url.placeholder = "https://...";
-  }
+  url.placeholder = type === "none" ? "Media tanlanmagan — link shart emas" : "https://...";
 }
 
 function updatePreview(){
@@ -732,7 +779,7 @@ function updatePreview(){
   const url = document.getElementById("t_media_url").value.trim();
   document.getElementById("previewText").textContent = text || "Topshiriq matni hali kiritilmagan.";
   document.getElementById("previewMeta").textContent =
-    "Bosqich: " + phase + " · Media: " + normalizeMediaType(mediaType) + (url ? " · Link: " + url : "");
+    "Bosqich: " + phaseLabel(phase) + " · Media: " + normalizeMediaType(mediaType) + (url ? " · Link: " + url : "");
 }
 
 function validateTask(){
@@ -760,7 +807,8 @@ function validateTask(){
       return false;
     }
     try{
-      new URL(url);
+      const u = new URL(url);
+      if(!/^https?:$/.test(u.protocol)) throw new Error();
     }catch(e){
       alert("Media havola to‘g‘ri URL formatida bo‘lishi kerak: https://...");
       return false;
@@ -772,105 +820,130 @@ function validateTask(){
 async function sendTask(){
   if(!validateTask()) return;
 
+  const btn = document.getElementById("sendBtn");
+  btn.disabled = true;
   showStatus("Topshiriq yuborilmoqda...", "info");
+
+  const phaseKey = document.getElementById("t_phase").value;
+  const task = {
+    text: document.getElementById("t_text").value.trim(),
+    phase: PHASE_SEND_VALUE[phaseKey],
+    phaseKey,
+    mediaType: document.getElementById("t_media_type").value,
+    mediaUrl: document.getElementById("t_media_url").value.trim(),
+    timeLimit: document.getElementById("t_time_limit").value,
+    questionCount: document.getElementById("t_q_count").value
+  };
 
   const query = new URLSearchParams({
     action: "saveTask",
-    text: document.getElementById("t_text").value.trim(),
-    phase: document.getElementById("t_phase").value,
-    m_type: document.getElementById("t_media_type").value,
-    m_url: document.getElementById("t_media_url").value.trim(),
-    time_limit: document.getElementById("t_time_limit").value,
-    q_count: document.getElementById("t_q_count").value
+    text: task.text,
+    phase: task.phase,
+    m_type: task.mediaType,
+    m_url: task.mediaType === "none" ? "" : task.mediaUrl,
+    time_limit: task.timeLimit,
+    q_count: task.questionCount
   }).toString();
 
   try{
     await fetch(`${API_URL}?${query}`, { method:"GET", mode:"no-cors" });
-
-    localStorage.setItem("lastTeacherTask", JSON.stringify({
-      text: document.getElementById("t_text").value.trim(),
-      phase: document.getElementById("t_phase").value,
-      mediaType: document.getElementById("t_media_type").value,
-      mediaUrl: document.getElementById("t_media_url").value.trim(),
-      timeLimit: document.getElementById("t_time_limit").value,
-      questionCount: document.getElementById("t_q_count").value,
-      createdAt: new Date().toISOString()
-    }));
-
+    storageSet("lastTeacherTask", JSON.stringify({ ...task, createdAt: new Date().toISOString() }));
     showStatus("Topshiriq yuborildi! ✅", "success");
     document.getElementById("t_text").value = "";
     document.getElementById("t_media_url").value = "";
     updatePreview();
   }catch(e){
     console.warn(e);
-    showStatus("Topshiriq yuborilgan bo‘lishi mumkin, ammo aloqa javobi olinmadi. Jadvalni tekshiring. ✅", "success");
+    showStatus("Topshiriq yuborilmadi: internet yoki server bilan aloqa yo‘q. Qayta urinib ko‘ring. ❌", "error");
+  }finally{
+    btn.disabled = false;
   }
 }
 
 function safeText(v){
-  return (v === null || v === undefined || v === "") ? "-" : String(v);
+  return (v === null || v === undefined || String(v).trim() === "") ? "-" : String(v).trim();
+}
+
+/* "40", "40%", "40,5" kabi qiymatlarni songa aylantiradi */
+function toScore(v){
+  if(v === null || v === undefined) return NaN;
+  const n = parseFloat(String(v).replace(",", ".").replace("%", ""));
+  return Number.isFinite(n) ? n : NaN;
 }
 
 function scoreLevel(score){
-  const n = Number(score);
+  const n = toScore(score);
   if(!Number.isFinite(n)) return ["—","pill-orange"];
   if(n >= 85) return ["Yuqori","pill-green"];
   if(n >= 60) return ["O‘rta","pill-blue"];
   return ["Boshlang‘ich","pill-orange"];
 }
 
-function parseRow(row, index){
+function parseRow(row){
+  const phaseKey = normalizePhase(row[6]);
   return {
-    index,
     timeRaw: row[0],
     name: safeText(row[1]),
-    group: safeText(row[2]),
-    phase: safeText(row[6]),
-    score: safeText(row[7]),
-    grade: safeText(row[9]),
-    region: safeText(row[10] || row[3]),
-    district: safeText(row[11] || row[4]),
-    school: safeText(row[12] || row[5])
+    group: normalizeGroup(row[2]),
+    phaseRaw: safeText(row[6]),
+    phaseKey,
+    phase: phaseLabel(phaseKey),
+    score: toScore(row[7]),
+    /* Jadval ustunlari: A Vaqt | B Ism | C Guruh | D Viloyat | E Tuman | F Maktab | G Bosqich | H Ball | I Sinf */
+    grade: safeText(row[8]),
+    region: safeText(row[3]),
+    district: safeText(row[4]),
+    school: safeText(row[5])
   };
 }
 
-async function loadResults(){
+async function loadResults(silent=false){
   if(isLoading) return;
   isLoading = true;
   const body = document.getElementById("resultsBody");
-  body.innerHTML = `<tr><td colspan="9" class="empty"><span class="loader"></span> Natijalar yuklanmoqda...</td></tr>`;
+  if(!silent || !allRows.length){
+    body.innerHTML = `<tr><td colspan="9" class="empty"><span class="loader"></span> Natijalar yuklanmoqda...</td></tr>`;
+  }
 
   try{
     const r = await fetch(API_URL + "?type=getResults", { cache:"no-store" });
+    if(!r.ok) throw new Error("HTTP " + r.status);
     const d = await r.json();
 
+    allRows = [];
     if(Array.isArray(d) && d.length > 1){
-      allRows = [];
       for(let i = d.length - 1; i >= 1; i--){
-        allRows.push(parseRow(d[i], d.length - i));
+        if(Array.isArray(d[i]) && d[i].some(c => String(c ?? "").trim() !== "")){
+          allRows.push(parseRow(d[i]));
+        }
       }
-      localStorage.setItem("teacherPanelResultsBackup", JSON.stringify(allRows));
-    }else{
-      allRows = [];
+      storageSet("teacherPanelResultsBackup_v2", JSON.stringify(allRows));
     }
 
     renderTable();
     updateLastTime(true);
+    warnUnknownPhases();
   }catch(e){
     console.warn(e);
-    const cached = localStorage.getItem("teacherPanelResultsBackup");
-    if(cached){
-      allRows = JSON.parse(cached);
+    let cached = null;
+    try{ cached = JSON.parse(storageGet("teacherPanelResultsBackup_v2") || "null"); }catch(_){}
+    if(Array.isArray(cached) && cached.length){
+      allRows = cached;
       renderTable();
       updateLastTime(false, "API ulanmagan. Oxirgi saqlangan natijalar ko‘rsatildi.");
     }else{
       allRows = [];
       renderTable("API ulanmagan va lokal zaxira topilmadi.");
-      updateStats([]);
     }
   }finally{
     isLoading = false;
   }
+}
+
+/* Bosqichi aniqlanmagan qatorlar bo‘lsa, konsolga yozadi (tekshirish uchun) */
+function warnUnknownPhases(){
+  const unknown = [...new Set(allRows.filter(r => r.phaseKey === "unknown").map(r => r.phaseRaw))];
+  if(unknown.length) console.warn("Bosqichi aniqlanmagan qiymatlar:", unknown);
 }
 
 function getFilteredRows(){
@@ -879,9 +952,10 @@ function getFilteredRows(){
   const pf = document.getElementById("phaseFilter").value;
 
   return allRows.filter(row => {
-    const matchQ = !q || Object.values(row).join(" ").toLowerCase().includes(q);
+    const hay = [row.name,row.grade,row.region,row.district,row.school,row.group,row.phase,row.phaseRaw].join(" ").toLowerCase();
+    const matchQ = !q || hay.includes(q);
     const matchG = !gf || row.group === gf;
-    const matchP = !pf || row.phase === pf;
+    const matchP = !pf || row.phaseKey === pf;
     return matchQ && matchG && matchP;
   });
 }
@@ -889,56 +963,56 @@ function getFilteredRows(){
 function renderTable(customEmpty="Natijalar topilmadi."){
   const rows = getFilteredRows();
   const body = document.getElementById("resultsBody");
+  updateStats(allRows);
 
   if(!rows.length){
-    body.innerHTML = `<tr><td colspan="9" class="empty">${customEmpty}</td></tr>`;
-    updateStats(allRows);
+    body.innerHTML = `<tr><td colspan="9" class="empty">${escapeHTML(customEmpty)}</td></tr>`;
     return;
   }
 
   body.innerHTML = rows.map((row, i) => {
     const [level, levelClass] = scoreLevel(row.score);
     const groupClass = row.group === "Tajriba" ? "pill-green" : row.group === "Nazorat" ? "pill-red" : "pill-orange";
-    const phaseClass = row.phase === "Yakuniy-test" ? "pill-blue" : "pill-orange";
+    const phaseClass = row.phaseKey === "post" ? "pill-blue" : row.phaseKey === "pre" ? "pill-orange" : "pill-red";
+    const scoreText = Number.isFinite(row.score) ? Math.round(row.score * 10) / 10 + "%" : "-";
+    const hudud = [row.region, row.district, row.school !== "-" ? row.school + "-maktab" : "-"]
+      .filter(v => v && v !== "-").join(" / ") || "-";
 
     return `<tr>
       <td>${i+1}</td>
-      <td><b>${row.name}</b></td>
-      <td>${row.grade}</td>
-      <td>${row.region}${row.district !== "-" ? " / " + row.district : ""}</td>
-      <td><span class="badge-pill ${groupClass}">${row.group}</span></td>
-      <td><span class="badge-pill ${phaseClass}">${row.phase}</span></td>
-      <td><b style="color:var(--blue)">${row.score}%</b></td>
+      <td><b>${escapeHTML(row.name)}</b></td>
+      <td>${escapeHTML(row.grade)}</td>
+      <td>${escapeHTML(hudud)}</td>
+      <td><span class="badge-pill ${groupClass}">${escapeHTML(row.group)}</span></td>
+      <td><span class="badge-pill ${phaseClass}" title="Jadvalda: ${escapeHTML(row.phaseRaw)}">${escapeHTML(row.phase)}</span></td>
+      <td><b style="color:var(--blue)">${scoreText}</b></td>
       <td><span class="badge-pill ${levelClass}">${level}</span></td>
-      <td>${formatTime(row.timeRaw)}</td>
+      <td>${escapeHTML(formatTime(row.timeRaw))}</td>
     </tr>`;
   }).join("");
-
-  updateStats(allRows);
 }
 
 function formatTime(value){
   if(!value || value === "-") return "-";
   const d = new Date(value);
   if(isNaN(d.getTime())) return safeText(value);
-  return d.toLocaleDateString("uz-UZ") + " " + d.toLocaleTimeString("uz-UZ", {hour:"2-digit", minute:"2-digit"});
+  const pad = n => String(n).padStart(2, "0");
+  return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 function updateStats(rows){
   const st = { te:0, tx:0, ne:0, nx:0, pre:0, post:0, total:rows.length, sum:0, scored:0 };
 
   rows.forEach(row => {
-    const group = row.group;
-    const phase = row.phase;
+    const g = row.group, p = row.phaseKey;
+    if(g === "Tajriba" && p === "pre")  st.te++;
+    if(g === "Tajriba" && p === "post") st.tx++;
+    if(g === "Nazorat" && p === "pre")  st.ne++;
+    if(g === "Nazorat" && p === "post") st.nx++;
+    if(p === "pre")  st.pre++;
+    if(p === "post") st.post++;
 
-    if(group === "Tajriba" && phase === "Dastabki-test") st.te++;
-    if(group === "Tajriba" && phase === "Yakuniy-test") st.tx++;
-    if(group === "Nazorat" && phase === "Dastabki-test") st.ne++;
-    if(group === "Nazorat" && phase === "Yakuniy-test") st.nx++;
-    if(phase === "Dastabki-test") st.pre++;
-    if(phase === "Yakuniy-test") st.post++;
-
-    const score = Number(row.score);
+    const score = toScore(row.score);
     if(Number.isFinite(score)){
       st.sum += score;
       st.scored++;
@@ -957,7 +1031,8 @@ function updateStats(rows){
 
 function updateLastTime(ok=true, msg=""){
   const el = document.getElementById("lastUpdateText");
-  const now = new Date().toLocaleTimeString("uz-UZ", {hour:"2-digit", minute:"2-digit"});
+  const d = new Date();
+  const now = String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0");
   el.textContent = msg || (ok ? "Oxirgi yangilanish: " + now : "Lokal zaxira ko‘rsatildi: " + now);
 }
 
@@ -979,11 +1054,13 @@ function exportCSV(){
   const csv = [
     headers.join(","),
     ...rows.map(r => [
-      r.name,r.grade,r.region,r.district,r.school,r.group,r.phase,r.score,formatTime(r.timeRaw)
-    ].map(v => `"${String(v).replaceAll('"','""')}"`).join(","))
-  ].join("\n");
+      r.name, r.grade, r.region, r.district, r.school, r.group, r.phase,
+      Number.isFinite(r.score) ? r.score : "", formatTime(r.timeRaw)
+    ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(","))
+  ].join("\r\n");
 
-  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  /* ﻿ — Excel o‘zbekcha harflarni to‘g‘ri ochishi uchun */
+  const blob = new Blob(["﻿" + csv], {type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -991,7 +1068,7 @@ function exportCSV(){
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function scrollToTask(){
@@ -999,7 +1076,7 @@ function scrollToTask(){
 }
 
 function restoreLastTask(){
-  const raw = localStorage.getItem("lastTeacherTask");
+  const raw = storageGet("lastTeacherTask");
   if(!raw) return;
   try{
     const t = JSON.parse(raw);
@@ -1007,7 +1084,7 @@ function restoreLastTask(){
     const ok = confirm("Oxirgi yuborilgan topshiriqni formaga qayta tiklaysizmi?");
     if(!ok) return;
     document.getElementById("t_text").value = t.text || "";
-    document.getElementById("t_phase").value = t.phase || "Dastabki-test";
+    document.getElementById("t_phase").value = t.phaseKey || (normalizePhase(t.phase) === "post" ? "post" : "pre");
     document.getElementById("t_media_type").value = t.mediaType || "none";
     document.getElementById("t_media_url").value = t.mediaUrl || "";
     document.getElementById("t_time_limit").value = t.timeLimit || 15;
@@ -1020,7 +1097,7 @@ function restoreLastTask(){
 toggleMediaRequirement();
 updatePreview();
 loadResults();
-refreshTimer = setInterval(loadResults, 30000);
+refreshTimer = setInterval(() => loadResults(true), 30000);   /* jadval sakramaydi */
 setTimeout(restoreLastTask, 800);
 </script>
 </body>
