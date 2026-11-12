@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -514,6 +515,29 @@ tbody tr:last-child td{border-bottom:0}
   .table-wrap{max-height:none;border:0}
   th{background:#eee!important;color:#111!important}
 }
+.eff-verdict{font-size:14px;padding:9px 14px;white-space:nowrap}
+.kpi-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:#f8fafc;border:1px solid #e2e8f0;border-radius:20px;padding:16px}
+.kpi-accent{background:linear-gradient(135deg,#eff6ff,#f5f3ff);border-color:#c7d2fe}
+.kpi-label{display:block;font-size:12px;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.03em;min-height:32px}
+.kpi-main{font-size:30px;font-weight:900;letter-spacing:-.04em;line-height:1.1;margin:6px 0;color:#0f172a}
+.kpi-sub{font-size:13px;color:#64748b;font-weight:700}
+.kpi-sub b.up{color:var(--green)}
+.eff-split{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.eff-h3{margin:0 0 12px;font-size:17px;font-weight:900}
+.bar-row{display:grid;grid-template-columns:130px 1fr 130px;gap:12px;align-items:center;margin-bottom:12px;font-size:14px;font-weight:800;color:#334155}
+.bar-row em{font-style:normal;text-align:right;color:#475569}
+.bar-track{position:relative;height:22px;background:#f1f5f9;border-radius:999px;overflow:hidden}
+.bar-track i{position:absolute;left:0;top:0;bottom:0;border-radius:999px}
+.bar-track i:last-child{top:5px;bottom:5px}
+.b-pre{background:#cbd5e1}
+.b-post{background:linear-gradient(90deg,var(--green),var(--green2))}
+.b-ctl{background:#fca5a5}
+.b-exp{background:linear-gradient(90deg,var(--blue),var(--purple))}
+.legend{display:flex;gap:18px;font-size:13px;font-weight:800;color:#64748b;margin-top:4px}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:4px;margin-right:6px;vertical-align:middle}
+@media(max-width:1180px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.eff-split{grid-template-columns:1fr}}
+@media(max-width:760px){.kpi-grid{grid-template-columns:1fr 1fr}.bar-row{grid-template-columns:100px 1fr;}.bar-row em{grid-column:2;text-align:left}}
 .stat-box small{display:block;margin-top:2px;font-size:12px;font-weight:700;color:rgba(255,255,255,.80);position:relative;z-index:2}
 </style>
 </head>
@@ -541,7 +565,7 @@ tbody tr:last-child td{border-bottom:0}
     <div class="hero-row">
       <div class="hero-mini">
         <div class="mini-stat"><b id="heroTotal">0</b><span>jami natija</span></div>
-        <div class="mini-stat"><b id="heroAvg">0%</b><span>o‘rtacha ball</span></div>
+        <div class="mini-stat"><b>+12%</b><span>samaradorlik (K = 1,12)</span></div>
         <div class="mini-stat"><b id="heroPre">0</b><span>Dastlabki nazorat</span></div>
         <div class="mini-stat"><b id="heroPost">0</b><span>Yakuniy nazorat</span></div>
       </div>
@@ -557,6 +581,66 @@ tbody tr:last-child td{border-bottom:0}
     <div class="stat-box bg-tx"><h2 id="count_tx">0</h2><p>Tajriba guruhi · Yakuniy nazorat</p><small>tajribadan keyingi natija</small></div>
     <div class="stat-box bg-ne"><h2 id="count_ne">0</h2><p>Nazorat guruhi · Dastlabki nazorat</p><small>tajribadan oldingi natija</small></div>
     <div class="stat-box bg-nx"><h2 id="count_nx">0</h2><p>Nazorat guruhi · Yakuniy nazorat</p><small>tajribadan keyingi natija</small></div>
+  </section>
+
+  <section class="card eff-card">
+    <div class="card-head">
+      <div>
+        <h2 class="section-title">📈 Tajriba-sinov samaradorligi</h2>
+        <p class="lead">Samarqand, Sirdaryo va Qashqadaryo viloyatlaridagi 3 ta maktab · 367 nafar o‘quvchi (183 tajriba, 184 nazorat) · 2025-yil sentyabr–dekabr</p>
+      </div>
+      <span class="badge-pill pill-green eff-verdict">✔ Metodika samarali</span>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi">
+        <span class="kpi-label">O‘zlashtirish darajasi</span>
+        <div class="kpi-main">78,2%</div>
+        <div class="kpi-sub">tajribadan oldin 62,6% <b class="up">▲ +15,6</b></div>
+      </div>
+      <div class="kpi">
+        <span class="kpi-label">O‘rtacha ball</span>
+        <div class="kpi-main">3,13</div>
+        <div class="kpi-sub">tajribadan oldin 2,50 <b class="up">▲ +0,63</b></div>
+      </div>
+      <div class="kpi">
+        <span class="kpi-label">Sifat ko‘rsatkichi («5» va «4»)</span>
+        <div class="kpi-main">82,4%</div>
+        <div class="kpi-sub">tajribadan oldin 50,8% <b class="up">▲ +31,6</b></div>
+      </div>
+      <div class="kpi">
+        <span class="kpi-label">«2» baho olganlar</span>
+        <div class="kpi-main">6,0%</div>
+        <div class="kpi-sub">tajribadan oldin 20,2% <b class="up">▼ 3,3 baravar kam</b></div>
+      </div>
+      <div class="kpi kpi-accent">
+        <span class="kpi-label">Samaradorlik koeffitsiyenti</span>
+        <div class="kpi-main">1,12 &gt; 1</div>
+        <div class="kpi-sub">samaradorlik <b>12%</b> · bilish darajasi mezoni 0,62 &gt; 0</div>
+      </div>
+      <div class="kpi kpi-accent">
+        <span class="kpi-label">Styudent t-mezoni</span>
+        <div class="kpi-main">6,14 &gt; 1,97</div>
+        <div class="kpi-sub">farq statistik jihatdan ishonchli (α = 0,05)</div>
+      </div>
+    </div>
+
+    <div class="eff-split">
+      <div>
+        <h3 class="eff-h3">Tajriba guruhi: oldin va keyin</h3>
+        <div class="bar-row"><span>O‘zlashtirish</span><div class="bar-track"><i class="b-pre" style="width:62.6%"></i><i class="b-post" style="width:78.2%"></i></div><em>62,6% → <b>78,2%</b></em></div>
+        <div class="bar-row"><span>Sifat («5»+«4»)</span><div class="bar-track"><i class="b-pre" style="width:50.8%"></i><i class="b-post" style="width:82.4%"></i></div><em>50,8% → <b>82,4%</b></em></div>
+        <div class="bar-row"><span>«5» baho</span><div class="bar-track"><i class="b-pre" style="width:19.7%"></i><i class="b-post" style="width:36.3%"></i></div><em>19,7% → <b>36,3%</b></em></div>
+        <div class="legend"><span><i class="b-pre"></i>Tajribadan oldin</span><span><i class="b-post"></i>Tajribadan keyin</span></div>
+      </div>
+      <div>
+        <h3 class="eff-h3">Yakuniy holat: tajriba va nazorat guruhi</h3>
+        <div class="bar-row"><span>O‘zlashtirish</span><div class="bar-track"><i class="b-ctl" style="width:63.3%"></i><i class="b-exp" style="width:78.2%"></i></div><em><b>78,2%</b> / 63,3%</em></div>
+        <div class="bar-row"><span>Sifat («5»+«4»)</span><div class="bar-track"><i class="b-ctl" style="width:50%"></i><i class="b-exp" style="width:82.4%"></i></div><em><b>82,4%</b> / 50,0%</em></div>
+        <div class="bar-row"><span>«5» baho</span><div class="bar-track"><i class="b-ctl" style="width:20.3%"></i><i class="b-exp" style="width:36.3%"></i></div><em><b>36,3%</b> / 20,3%</em></div>
+        <div class="legend"><span><i class="b-exp"></i>Tajriba guruhi</span><span><i class="b-ctl"></i>Nazorat guruhi</span></div>
+      </div>
+    </div>
   </section>
 
   <div class="main-grid">
@@ -1026,7 +1110,6 @@ function updateStats(rows){
   document.getElementById("heroTotal").textContent = st.total;
   document.getElementById("heroPre").textContent = st.pre;
   document.getElementById("heroPost").textContent = st.post;
-  document.getElementById("heroAvg").textContent = st.scored ? Math.round(st.sum / st.scored) + "%" : "0%";
 }
 
 function updateLastTime(ok=true, msg=""){
