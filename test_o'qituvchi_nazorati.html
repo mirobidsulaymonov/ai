@@ -498,7 +498,9 @@ tbody tr:last-child td{border-bottom:0}
 
 @media(max-width:760px){
   .topbar-inner,.page{width:min(100% - 24px,1600px)}
-  .nav-actions{display:none}
+  .topbar-inner{flex-wrap:wrap;padding:10px 0}
+  .nav-actions{width:100%;justify-content:flex-start;gap:8px}
+  .nav-actions .btn{padding:9px 12px;font-size:13px}
   .hero,.card{padding:18px;border-radius:22px}
   .form-grid,.input-row,.toolbar,.stat-grid,.hero-mini{grid-template-columns:1fr}
   table{min-width:860px}
