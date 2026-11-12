@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -148,7 +147,7 @@ body{
 }
 .visual-card b{display:block;font-size:44px;line-height:1;margin-bottom:10px;filter:saturate(1.2)}
 .visual-card span{color:#e0f2fe;font-weight:800;font-size:14px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:0 0 22px}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:0 0 22px}
 .stat{
   background:#fff;border:1px solid var(--line);border-radius:22px;
   padding:18px;box-shadow:0 8px 22px rgba(15,23,42,.06);
@@ -253,7 +252,7 @@ body{
 .footer p{margin:0;color:#cbd5e1}
 @media(max-width:1080px){
   .hero-shell{grid-template-columns:1fr;min-height:auto}
-  .stats,.grid.comp{grid-template-columns:repeat(2,1fr)}
+  .stats{grid-template-columns:repeat(3,1fr)}.grid.comp{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:780px){
   .nav-toggle{display:flex;align-items:center;justify-content:center}
@@ -266,11 +265,55 @@ body{
   .nav-links.show{display:flex}
   .nav-links a{padding:12px}
   .hero-shell{padding:26px 20px;border-radius:24px}
-  .school-visual,.stats,.grid.comp{grid-template-columns:1fr}
+  .school-visual,.grid.comp{grid-template-columns:1fr}
   .section{padding:20px;border-radius:24px}
   .section-head{flex-direction:column}
   .badge{white-space:normal}
 }
+
+/* ===== Rasmlar o‘lchami (oldin cheklanmagan edi) ===== */
+.brand-icon{overflow:hidden}
+.brand-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.visual-card b img{width:60px;height:60px;object-fit:contain;display:block}
+.stat-icon img{width:44px;height:44px;object-fit:contain;display:block}
+.icon img{width:54px;height:54px;object-fit:contain;border-radius:14px;display:block}
+/* ===== Rol kartalari ===== */
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:0 0 22px}
+.role{
+  position:relative;overflow:hidden;border-radius:26px;padding:24px;text-decoration:none;color:#fff;
+  min-height:200px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow);transition:.2s;
+}
+.role:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(15,23,42,.18)}
+.role::after{content:"";position:absolute;right:-50px;bottom:-50px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.14)}
+.role-student{background:linear-gradient(135deg,#2563eb,#0ea5e9)}
+.role-teacher{background:linear-gradient(135deg,#059669,#22c55e)}
+.role-research{background:linear-gradient(135deg,#4338ca,#7c3aed)}
+.role-emoji{font-size:40px;line-height:1}
+.role h3{margin:4px 0 0;font-size:22px;letter-spacing:-.03em}
+.role p{margin:0;color:rgba(255,255,255,.9);font-size:14px;font-weight:650;flex:1;position:relative;z-index:2}
+.role-go{font-weight:900;font-size:15px;position:relative;z-index:2}
+/* ===== Qadamlar va tadqiqot ===== */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.step{background:#f8fafc;border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;gap:12px;align-items:flex-start}
+.step b{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px}
+.step span{font-size:14px;font-weight:700;color:#334155}
+.sub-h{margin:22px 0 12px;font-size:18px;letter-spacing:-.02em}
+.res-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:6px}
+.res-kpi{background:linear-gradient(135deg,#eef2ff,#f8fafc);border:1px solid #c7d2fe;border-radius:20px;padding:16px}
+.res-kpi strong{display:block;font-size:26px;line-height:1.1;font-weight:900;color:#3730a3}
+.res-kpi span{font-size:13px;color:var(--muted);font-weight:800}
+.note-box{margin-top:18px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:18px;padding:14px 16px;font-size:14px;font-weight:700}
+/* ===== Tashriflar ===== */
+.stat.visits .stat-icon{background:linear-gradient(135deg,#dcfce7,#f0fdf4);color:var(--green)}
+.footer-contacts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:16px 0}
+.footer-contact{color:#e2e8f0;text-decoration:none;font-weight:800;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 14px;transition:.2s}
+.footer-contact:hover{background:rgba(255,255,255,.16);color:#fff}
+.footer-visits{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;color:#94a3b8;font-size:13px;font-weight:800;margin-bottom:8px}
+.footer-visits b{color:#e2e8f0}
+.footer-copy{color:#94a3b8;font-size:13px}
+@media(max-width:1080px){.roles,.steps{grid-template-columns:1fr}.res-kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:780px){.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.stats,.res-kpis{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -278,17 +321,17 @@ body{
 <nav class="navbar">
   <div class="nav-inner">
     <a class="brand" href="index.html">
-      <span class="brand-icon"><img src="1.jpg"></span>
+      <span class="brand-icon"><img src="1.jpg" alt=""></span>
       <span>Axborot madaniyati<small>Metodik-didaktik platforma</small></span>
     </a>
-    <button class="nav-toggle" id="navToggle" type="button">☰</button>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Menyu">☰</button>
     <div class="nav-links" id="navLinks">
-      <a href="#ilmiy">Ilmiy asos</a>
       <a href="#darslar">Darslar</a>
       <a href="#keyslar">Keyslar</a>
       <a href="#simulyatorlar">Simulyatorlar</a>
-      <a href="#diagnostika">Diagnostika</a>
-      <a href="#vositalar">Ilmiy vositalar</a>
+      <a href="#oquvchi">Test</a>
+      <a href="#oqituvchi">O‘qituvchilarga</a>
+      <a href="#tadqiqot">Tadqiqot</a>
       <a href="qo'shimcha manbalar.html">Manbalar</a>
     </div>
   </div>
@@ -298,71 +341,52 @@ body{
   <div class="container">
     <div class="hero-shell">
       <div class="hero-content">
-        <div class="eyebrow">O'quvchi yoshlarni axborot istemoli madaniyatini rivojlantirish uchun interaktiv platforma</div>
+        <div class="eyebrow">O‘quvchi yoshlarning axborot iste’moli madaniyatini rivojlantirish uchun interaktiv platforma</div>
         <h1>Axborotni ongli <span class="gradient-text">qabul qilish, saralash va baholash</span>ni o‘rganamiz</h1>
-        <p>Platforma o'quvchi yoshlarda manba ishonchliligini tekshirish, feyk xabarni aniqlash, axborot etikasi va xavfsiz raqamli xulq-atvor ko‘nikmalarini rivojlantirishga xizmat qiladi.</p>
+        <p>Platforma o‘quvchi yoshlarda manba ishonchliligini tekshirish, feyk xabarni aniqlash, axborot etikasi va xavfsiz raqamli xulq-atvor ko‘nikmalarini rivojlantirishga xizmat qiladi.</p>
         <div class="hero-actions">
           <a class="btn btn-white" href="#darslar">▶ Modulni boshlash</a>
-          <a class="btn btn-glass" href="#diagnostika">☑ Bilimni tekshirish</a>
+          <a class="btn btn-glass" href="#oquvchi">☑ Bilimni tekshirish</a>
         </div>
       </div>
       <div class="school-visual">
-        <div class="visual-card"><b><img src="2.png"></b><span>16 ta dars moduli</span></div>
-        <div class="visual-card"><b><img src="3.png"></b><span>Keys va ssenariylar</span></div>
-        <div class="visual-card"><b><img src="3.gif"></b><span>Interaktiv simulyatorlar</span></div>
-        <div class="visual-card"><b><img src="4.GIF"></b><span>Test va sertifikat</span></div>
+        <div class="visual-card"><b><img src="2.png" alt=""></b><span>16 ta dars moduli</span></div>
+        <div class="visual-card"><b><img src="3.png" alt=""></b><span>Keys va ssenariylar</span></div>
+        <div class="visual-card"><b><img src="3.gif" alt=""></b><span>Interaktiv simulyatorlar</span></div>
+        <div class="visual-card"><b><img src="4.GIF" alt=""></b><span>Test va sertifikat</span></div>
       </div>
     </div>
   </div>
 </header>
 
 <main class="container">
-  <section class="stats">
-    <div class="stat"><div class="stat-icon"><img src="7.gif"></div><div><strong>3</strong><span>Ilmiy komponent</span></div></div>
-    <div class="stat"><div class="stat-icon"><img src="8.gif"></div><div><strong>16</strong><span>O‘quv moduli</span></div></div>
-    <div class="stat"><div class="stat-icon"><img src="9.gif"></div><div><strong>15</strong><span>Ssenariy va keys</span></div></div>
-    <div class="stat"><div class="stat-icon"><img src="5.gif"></div><div><strong>6</strong><span>Simulyator</span></div></div>
+  <section class="roles" aria-label="Kim uchun">
+    <a class="role role-student" href="#darslar">
+      <span class="role-emoji">🎒</span>
+      <h3>Men o‘quvchiman</h3>
+      <p>Darslarni o‘qing, keys va simulyatorlarda mashq qiling, test ishlab sertifikat oling.</p>
+      <span class="role-go">O‘rganishni boshlash →</span>
+    </a>
+    <a class="role role-teacher" href="#oqituvchi">
+      <span class="role-emoji">👨‍🏫</span>
+      <h3>Men o‘qituvchiman</h3>
+      <p>Darslarda foydalaning, o‘quvchilarga topshiriq yuboring va natijalarni kuzating.</p>
+      <span class="role-go">O‘qituvchi bo‘limi →</span>
+    </a>
+    <a class="role role-research" href="#tadqiqot">
+      <span class="role-emoji">🔬</span>
+      <h3>Tadqiqot haqida</h3>
+      <p>Platformaning ilmiy asosi, tajriba-sinov natijalari va statistik tahlil.</p>
+      <span class="role-go">Ilmiy natijalar →</span>
+    </a>
   </section>
 
-  <section id="ilmiy" class="section">
-    <div class="section-head">
-      <div>
-        <div class="kicker">🔬 Dissertatsiya asosidagi model</div>
-        <h2>Ilmiy-metodik komponentlar</h2>
-        <p class="section-desc">Bu bo‘lim platformaning nazariy asosini ko‘rsatadi: kognitiv, affektiv va axloqiy-amaliy komponentlar orqali o‘quvchi axborotni tushunadi, qadriyatli baholaydi va xavfsiz amaliy qaror qabul qiladi.</p>
-      </div>
-      <span class="badge">3 ta asosiy komponent</span>
-    </div>
-    <div class="grid comp">
-      
-    <a class="card component" href="Ilmiy_kognitiv_komponent_alohida_sahifa.html">
-      <div class="card-top">
-        <span class="icon">🧠</span>
-        <span class="num">01</span>
-      </div>
-      <h3>Kognitiv komponent</h3>
-      <p>Axborotni izlash, tahlil qilish va dalilga asoslangan xulosa chiqarish.</p>
-      <div class="open">Ochish <span>→</span></div>
-    </a>
-    <a class="card component" href="Ilmiy_affektiv_komponent_alohida_sahifa.html">
-      <div class="card-top">
-        <span class="icon">🧡</span>
-        <span class="num">02</span>
-      </div>
-      <h3>Affektiv komponent</h3>
-      <p>Axborotga nisbatan qadriyatli munosabat, vijdon va hurmatni shakllantirish.</p>
-      <div class="open">Ochish <span>→</span></div>
-    </a>
-    <a class="card component" href="Ilmiy_axloqiy_amaliy_komponent_alohida_sahifa.html">
-      <div class="card-top">
-        <span class="icon">✅</span>
-        <span class="num">03</span>
-      </div>
-      <h3>Axloqiy-amaliy komponent</h3>
-      <p>Raqamli muhitda to‘g‘ri qaror qabul qilish va xavfsiz harakat qilish.</p>
-      <div class="open">Ochish <span>→</span></div>
-    </a>
-    </div>
+  <section class="stats">
+    <div class="stat"><div class="stat-icon"><img src="8.gif" alt=""></div><div><strong>16</strong><span>O‘quv moduli</span></div></div>
+    <div class="stat"><div class="stat-icon"><img src="9.gif" alt=""></div><div><strong>15</strong><span>Ssenariy va keys</span></div></div>
+    <div class="stat"><div class="stat-icon"><img src="5.gif" alt=""></div><div><strong>6</strong><span>Simulyator</span></div></div>
+    <div class="stat"><div class="stat-icon"><img src="7.gif" alt=""></div><div><strong>3</strong><span>Ilmiy komponent</span></div></div>
+    <div class="stat visits"><div class="stat-icon">👥</div><div><strong data-visits="unique">—</strong><span>Foydalanuvchi</span></div></div>
   </section>
 
   <section id="darslar" class="section">
@@ -741,33 +765,23 @@ body{
     </div>
   </section>
 
-  <section id="diagnostika" class="section">
+  <section id="oquvchi" class="section"><span id="diagnostika"></span>
     <div class="section-head">
       <div>
-        <div class="kicker">🎓 Baholash va monitoring</div>
-        <h2>Diagnostika, test va nazorat</h2>
-        <p class="section-desc">Bu bo‘limda o‘quvchilar test ishlaydi, sertifikat oladi, o‘qituvchi esa natijalarni nazorat qilishi mumkin.</p>
+        <div class="kicker">O‘quvchilar uchun</div>
+        <h2>Bilimingizni sinab ko‘ring</h2>
+        <p class="section-desc">Testni mashq rejimida istalgan vaqtda ishlashingiz mumkin. Agar maktabingiz tajriba-sinovda qatnashayotgan bo‘lsa, o‘qituvchingiz bergan kod bilan kiring.</p>
       </div>
-      <span class="badge">Test + nazorat + sertifikat</span>
+      <span class="badge">Test + sertifikat</span>
     </div>
     <div class="grid">
-      
     <a class="card diag" href="test_o'quvchilar_uchun.html">
       <div class="card-top">
         <span class="icon"><img src="20.gif"></span>
         <span class="num">D1</span>
       </div>
       <h3>O‘quvchilar uchun test</h3>
-      <p>O‘quvchilar axborot iste’moli madaniyati bo‘yicha bilimini tekshiradi.</p>
-      <div class="open">Ochish <span>→</span></div>
-    </a>
-    <a class="card diag" href="test_o'qituvchi_nazorati.html">
-      <div class="card-top">
-        <span class="icon"><img src="21.gif"></span>
-        <span class="num">D2</span>
-      </div>
-      <h3>O‘qituvchi nazorati</h3>
-      <p>O‘qituvchi topshiriq berish va natijalarni nazorat qilish paneli.</p>
+      <p>Mashq yoki tajriba-sinov rejimi: 20 ta test, rasm tahlili, yozma javoblar va PDF sertifikat.</p>
       <div class="open">Ochish <span>→</span></div>
     </a>
     <a class="card diag" href="test_diagnostika_sertifikat_uchun.html">
@@ -777,6 +791,15 @@ body{
       </div>
       <h3>Diagnostika va sertifikat</h3>
       <p>Test yakunida natija va sertifikat hosil qilinadi.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card diag" href="kundalik.html">
+      <div class="card-top">
+        <span class="icon" style="color:#4338ca"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h11a2 2 0 0 1 2 2v16H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM8 8h7M8 12h7M8 16h4"/></svg></span>
+        <span class="num">T3</span>
+      </div>
+      <h3>Axborot iste’moli kundaligi</h3>
+      <p>Kunlik axborot odatlarini qayd etish va o‘z-o‘zini baholash.</p>
       <div class="open">Ochish <span>→</span></div>
     </a>
     <a class="card diag" href="qo'shimcha manbalar.html">
@@ -791,23 +814,28 @@ body{
     </div>
   </section>
 
-  <section id="vositalar" class="section">
+  <section id="oqituvchi" class="section"><span id="vositalar"></span>
     <div class="section-head">
       <div>
-        <div class="kicker">Tadqiqotchi va o‘qituvchi uchun</div>
-        <h2>Ilmiy-metodik vositalar</h2>
-        <p class="section-desc">Dissertatsiya natijalarini ko‘rish, o‘z tajribangizni statistik tahlil qilish va o‘quvchilarda refleksiyani rivojlantirish.</p>
+        <div class="kicker">O‘qituvchilar uchun</div>
+        <h2>Darsda foydalanish va natijalarni kuzatish</h2>
+        <p class="section-desc">O‘qituvchi paneli parol bilan himoyalangan. O‘quvchilar natijasi faqat o‘qituvchiga ko‘rinadi.</p>
       </div>
-      <span class="badge">Yangi</span>
+      <span class="badge">Panel + vositalar</span>
+    </div>
+    <div class="steps">
+      <div class="step"><b>1</b><span>O‘qituvchi paneliga parol bilan kiring.</span></div>
+      <div class="step"><b>2</b><span>Sinf uchun tajriba kodi yarating va topshiriq yuboring.</span></div>
+      <div class="step"><b>3</b><span>O‘quvchilar kod bilan test ishlaydi, natijalar panelda ko‘rinadi.</span></div>
     </div>
     <div class="grid">
-    <a class="card diag" href="ilmiy-natijalar.html">
+    <a class="card diag" href="test_o'qituvchi_nazorati.html">
       <div class="card-top">
-        <span class="icon" style="color:#4338ca"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V4M4 20h16M8 16v-5M12 16V8M16 16v-3"/></svg></span>
-        <span class="num">T1</span>
+        <span class="icon"><img src="21.gif"></span>
+        <span class="num">🔒</span>
       </div>
-      <h3>Ilmiy natijalar</h3>
-      <p>Tadqiqot modeli, tajriba-sinov natijalari va diagrammalar.</p>
+      <h3>O‘qituvchi nazorati</h3>
+      <p>Parol bilan kiriladi: topshiriq yuborish, tajriba kodlarini yaratish va natijalarni kuzatish.</p>
       <div class="open">Ochish <span>→</span></div>
     </a>
     <a class="card diag" href="statistika.html">
@@ -817,15 +845,6 @@ body{
       </div>
       <h3>Statistik tahlil kalkulyatori</h3>
       <p>Sinf natijalarini Styudent, χ² va Koen mezonlari bilan hisoblash.</p>
-      <div class="open">Ochish <span>→</span></div>
-    </a>
-    <a class="card diag" href="kundalik.html">
-      <div class="card-top">
-        <span class="icon" style="color:#4338ca"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h11a2 2 0 0 1 2 2v16H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM8 8h7M8 12h7M8 16h4"/></svg></span>
-        <span class="num">T3</span>
-      </div>
-      <h3>Axborot iste’moli kundaligi</h3>
-      <p>Kunlik axborot odatlarini qayd etish va o‘z-o‘zini baholash.</p>
       <div class="open">Ochish <span>→</span></div>
     </a>
     <a class="card diag" href="affektiv-axloqiy.html">
@@ -838,6 +857,67 @@ body{
       <div class="open">Ochish <span>→</span></div>
     </a>
     </div>
+  </section>
+
+  <section id="tadqiqot" class="section"><span id="ilmiy"></span>
+    <div class="section-head">
+      <div>
+        <div class="kicker">🔬 Dissertatsiya asosidagi model</div>
+        <h2>Tadqiqot haqida</h2>
+        <p class="section-desc">Platforma kognitiv, affektiv va axloqiy-amaliy komponentlarga asoslangan: o‘quvchi axborotni tushunadi, qadriyatli baholaydi va xavfsiz amaliy qaror qabul qiladi.</p>
+      </div>
+      <span class="badge">Ilmiy asos</span>
+    </div>
+    <!-- Dissertatsiya mavzusi, ilmiy rahbar va muassasa nomini shu yerga qo‘shish mumkin -->
+    <div class="grid comp">
+      
+    <a class="card component" href="Ilmiy_kognitiv_komponent_alohida_sahifa.html">
+      <div class="card-top">
+        <span class="icon">🧠</span>
+        <span class="num">01</span>
+      </div>
+      <h3>Kognitiv komponent</h3>
+      <p>Axborotni izlash, tahlil qilish va dalilga asoslangan xulosa chiqarish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card component" href="Ilmiy_affektiv_komponent_alohida_sahifa.html">
+      <div class="card-top">
+        <span class="icon">🧡</span>
+        <span class="num">02</span>
+      </div>
+      <h3>Affektiv komponent</h3>
+      <p>Axborotga nisbatan qadriyatli munosabat, vijdon va hurmatni shakllantirish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    <a class="card component" href="Ilmiy_axloqiy_amaliy_komponent_alohida_sahifa.html">
+      <div class="card-top">
+        <span class="icon">✅</span>
+        <span class="num">03</span>
+      </div>
+      <h3>Axloqiy-amaliy komponent</h3>
+      <p>Raqamli muhitda to‘g‘ri qaror qabul qilish va xavfsiz harakat qilish.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    </div>
+    <h3 class="sub-h">📈 Tajriba-sinov natijalari</h3>
+    <div class="res-kpis">
+      <div class="res-kpi"><strong>367</strong><span>o‘quvchi · 3 viloyat, 3 maktab</span></div>
+      <div class="res-kpi"><strong>62,6% → 78,2%</strong><span>tajriba guruhida o‘zlashtirish</span></div>
+      <div class="res-kpi"><strong>K = 1,12</strong><span>samaradorlik koeffitsiyenti</span></div>
+      <div class="res-kpi"><strong>t = 6,14 &gt; 1,97</strong><span>farq ishonchli (α = 0,05)</span></div>
+    </div>
+    <div class="grid" style="margin-top:16px">
+    <a class="card diag" href="ilmiy-natijalar.html">
+      <div class="card-top">
+        <span class="icon" style="color:#4338ca"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V4M4 20h16M8 16v-5M12 16V8M16 16v-3"/></svg></span>
+        <span class="num">T1</span>
+      </div>
+      <h3>Ilmiy natijalar</h3>
+      <p>Tadqiqot modeli, tajriba-sinov natijalari va diagrammalar.</p>
+      <div class="open">Ochish <span>→</span></div>
+    </a>
+    </div>
+    <div class="note-box">🔐 Ma’lumotlar haqida: tajriba-sinov rejimidagi test natijalari faqat ilmiy tadqiqot maqsadida, umumlashtirilgan holda foydalaniladi. Mashq rejimi natijalari statistikaga kirmaydi. Saytga tashriflar hisoblanganda shaxsiy ma’lumot saqlanmaydi.</div>
   </section>
 
 </main>
@@ -854,7 +934,12 @@ body{
         <a href="https://t.me/mirobid30" target="_blank" rel="noopener" class="footer-contact">✈️ @mirobid30</a>
       </div>
 
-      <div class="footer-copy">© 2025 MDIM | Axborot iste’moli madaniyati metodik-didaktik platformasi.</div>
+      <div class="footer-visits">
+        <span>👥 Foydalanuvchilar: <b data-visits="unique">—</b></span>
+        <span>👁 Jami tashriflar: <b data-visits="total">—</b></span>
+        <span>📅 Bugun: <b data-visits="today">—</b></span>
+      </div>
+      <div class="footer-copy">© 2025–2026 MDIM | Axborot iste’moli madaniyati metodik-didaktik platformasi.</div>
     </div>
   </div>
 </footer>
@@ -871,6 +956,7 @@ navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
   navToggle.textContent = '☰';
 }));
 </script>
+<script src="counter.js" defer></script>
 
 </body>
 </html>
