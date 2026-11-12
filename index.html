@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -243,18 +244,6 @@ body{
   justify-content:center;
   background:#eff6ff;
 }
-.quick-panel{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
-}
-.quick{
-  background:linear-gradient(135deg,#f8fafc,#ffffff);
-  border:1px solid var(--line);border-radius:22px;
-  padding:18px;text-decoration:none;color:inherit;transition:.2s;
-}
-.quick:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(15,23,42,.08)}
-.quick b{display:block;font-size:38px;margin-bottom:10px;filter:saturate(1.18)}
-.quick h3{margin:0 0 6px;font-size:17px}
-.quick p{margin:0;color:var(--muted);font-size:13px;font-weight:700}
 .footer{padding:0 0 28px}
 .footer-shell{
   background:linear-gradient(135deg,#0f172a,#1e293b);
@@ -264,7 +253,7 @@ body{
 .footer p{margin:0;color:#cbd5e1}
 @media(max-width:1080px){
   .hero-shell{grid-template-columns:1fr;min-height:auto}
-  .stats,.quick-panel,.grid.comp{grid-template-columns:repeat(2,1fr)}
+  .stats,.grid.comp{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:780px){
   .nav-toggle{display:flex;align-items:center;justify-content:center}
@@ -277,7 +266,7 @@ body{
   .nav-links.show{display:flex}
   .nav-links a{padding:12px}
   .hero-shell{padding:26px 20px;border-radius:24px}
-  .school-visual,.stats,.quick-panel,.grid.comp{grid-template-columns:1fr}
+  .school-visual,.stats,.grid.comp{grid-template-columns:1fr}
   .section{padding:20px;border-radius:24px}
   .section-head{flex-direction:column}
   .badge{white-space:normal}
@@ -373,20 +362,6 @@ body{
       <p>Raqamli muhitda to‘g‘ri qaror qabul qilish va xavfsiz harakat qilish.</p>
       <div class="open">Ochish <span>→</span></div>
     </a>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-head">
-      <div>
-        <div class="kicker">⚡ Tezkor bo‘limlar</div>
-        <h2>Platforma boshqaruv nuqtalari</h2>
-        <p class="section-desc">O‘quvchi, o‘qituvchi va qo‘shimcha materiallarga tez o‘tish uchun asosiy havolalar.</p>
-      </div>
-      <span class="badge">Tayyor havolalar</span>
-    </div>
-    <div class="quick-panel">
-      <a class="quick" href="test_o'quvchilar_uchun.html"><b><img src="10.gif"></b><h3>O‘quvchilar uchun test</h3><p>O‘quvchilar axborot iste’moli madaniyati bo‘yicha bilimini tekshiradi.</p></a><a class="quick" href="test_o'qituvchi_nazorati.html"><b><img src="11.gif"></b><h3>O‘qituvchi nazorati</h3><p>O‘qituvchi topshiriq berish va natijalarni nazorat qilish paneli.</p></a><a class="quick" href="test_diagnostika_sertifikat_uchun.html"><b><img src="12.jpg"></b><h3>Diagnostika va sertifikat</h3><p>Test yakunida natija va sertifikat hosil qilinadi.</p></a><a class="quick" href="qo'shimcha manbalar.html"><b><img src="13.JPG"></b><h3>Qo‘shimcha manbalar</h3><p>Dars jarayonida foydalanish uchun qo‘shimcha materiallar.</p></a>
     </div>
   </section>
 
