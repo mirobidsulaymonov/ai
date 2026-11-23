@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Krossvord — Axborot madaniyati platformasi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+:root{--bg:#060a19;--bg2:#0b1430;--panel:rgba(255,255,255,.055);--panel2:rgba(255,255,255,.09);--line:rgba(148,163,255,.18);
+--ink:#e8ecff;--muted:#9aa6cc;--c1:#22d3ee;--c2:#a78bfa;--c3:#f472b6;--ok:#34d399;--bad:#fb7185;--gold:#fbbf24;
+--t1:#38bdf8;--t2:#f472b6;--t3:#34d399;--t4:#fbbf24;--r:20px;font-size:clamp(15px,1.12vw,21px)}
+html,body{min-height:100%}
+body{font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif;color:var(--ink);background:
+radial-gradient(900px 500px at 0% -10%,rgba(34,211,238,.16),transparent 60%),
+radial-gradient(900px 600px at 110% 110%,rgba(167,139,250,.18),transparent 60%),
+linear-gradient(rgba(148,163,255,.05) 1px,transparent 1px) 0 0/40px 40px,
+linear-gradient(90deg,rgba(148,163,255,.05) 1px,transparent 1px) 0 0/40px 40px,var(--bg);
+display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--c1);outline-offset:3px}
+a{color:var(--c1)}
+.top{display:flex;align-items:center;gap:1rem;padding:.6rem 1.2rem;background:rgba(6,10,25,.75);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+.top .ttl{flex:1;text-align:center;min-width:0}
+.gname{font-weight:900;font-size:1.3rem;letter-spacing:.3px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3));-webkit-background-clip:text;background-clip:text;color:transparent}
+.gsub{color:var(--muted);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:.5rem .85rem;font-weight:700;text-decoration:none;color:var(--ink);font-size:.9rem;min-height:2.4rem}
+.tb:hover{background:var(--panel2)}
+.tools{display:flex;gap:.5rem}
+main{flex:1;width:100%;max-width:1600px;margin:0 auto;padding:1rem 1.2rem 1.4rem;display:flex;flex-direction:column}
+.screen{display:none;flex:1;flex-direction:column;gap:1rem;animation:fade .35s ease}
+.screen.on{display:flex}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.glass{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 20px 50px rgba(0,0,0,.35);backdrop-filter:blur(8px)}
+.pad{padding:1.3rem 1.5rem}
+.setup{display:grid;grid-template-columns:1.15fr 1fr;gap:1.2rem;align-items:start}
+.setup h2{font-size:1.45rem;margin-bottom:.9rem;display:flex;gap:.5rem;align-items:center}
+.rules{list-style:none;display:grid;gap:.6rem}
+.rules li{display:flex;gap:.75rem;align-items:flex-start;line-height:1.45;color:#cfd6f3}
+.rules li b.n{flex:none;width:1.9rem;height:1.9rem;border-radius:10px;display:grid;place-items:center;font-size:.85rem;background:linear-gradient(135deg,rgba(34,211,238,.25),rgba(167,139,250,.25));color:#fff;border:1px solid var(--line)}
+.hero-ico{font-size:3.2rem;text-align:center;filter:drop-shadow(0 8px 20px rgba(34,211,238,.35))}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border:0;border-radius:14px;padding:.8rem 1.3rem;font-weight:800;color:#061021;
+background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 8px 24px rgba(34,211,238,.25);transition:transform .1s,filter .15s;min-height:2.9rem;text-decoration:none}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:translateY(2px)}
+.btn.big{font-size:1.3rem;padding:1rem 2rem;border-radius:18px;width:100%}
+.btn.ghost{background:var(--panel2);color:var(--ink);box-shadow:none;border:1px solid var(--line)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.pulse{animation:pulse 2.2s infinite}
+@keyframes pulse{50%{box-shadow:0 8px 24px rgba(34,211,238,.25),0 0 0 10px rgba(34,211,238,.12)}}
+.field{display:grid;gap:.35rem;margin-bottom:.85rem}
+.field label{font-weight:700;font-size:.9rem;color:var(--muted)}
+.field input,.field select{border:1px solid var(--line);border-radius:12px;padding:.65rem .9rem;background:rgba(255,255,255,.06);width:100%}
+.field select option{background:#0b1430}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.cfg{margin-top:1rem;padding-top:1rem;border-top:1px dashed var(--line)}
+.hint{color:var(--muted);font-size:.85rem}
+.dot{display:inline-block;width:.8rem;height:.8rem;border-radius:50%;margin-right:.35rem;vertical-align:middle}
+.qtext{font-size:clamp(1.25rem,2vw,2.1rem);font-weight:800;line-height:1.3;overflow-wrap:anywhere}
+.qtext.sm{font-size:clamp(1.02rem,1.5vw,1.55rem)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1rem}
+.opts.sm{gap:.55rem;margin-top:.7rem}
+.opt{display:flex;align-items:center;gap:.8rem;text-align:left;border:1px solid var(--line);background:rgba(255,255,255,.05);border-radius:14px;padding:.8rem 1rem;font-size:clamp(1rem,1.35vw,1.45rem);font-weight:650;min-height:3.4rem;transition:.15s;overflow-wrap:anywhere}
+.opts.sm .opt{font-size:clamp(.92rem,1.15vw,1.25rem);min-height:3rem;padding:.6rem .8rem}
+.opt b{flex:none;width:2.1rem;height:2.1rem;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--c1)}
+.opt:hover:not([disabled]){border-color:var(--c1);background:rgba(34,211,238,.08);transform:translateY(-1px)}
+.opt[disabled]{cursor:default}
+.opt.right{border-color:var(--ok);background:rgba(52,211,153,.16)}.opt.right b{background:var(--ok);color:#052}
+.opt.wrong{border-color:var(--bad);background:rgba(251,113,133,.16)}.opt.wrong b{background:var(--bad);color:#300}
+.opt.dim{opacity:.45}
+.fb{display:none;margin-top:1rem;border-radius:14px;padding:.85rem 1rem;line-height:1.5;border-left:5px solid}
+.fb.on{display:block;animation:fade .3s}
+.fb.ok{background:rgba(52,211,153,.12);border-color:var(--ok)}
+.fb.bad{background:rgba(251,113,133,.12);border-color:var(--bad)}
+.fb.info{background:rgba(167,139,250,.12);border-color:var(--c2)}
+.why{margin-top:.35rem;color:#cfd6f3}
+.ref{display:inline-block;margin-left:.3rem;font-weight:800;text-decoration:none;font-size:.85em;padding:.05rem .5rem;border-radius:999px;background:rgba(34,211,238,.14)}
+.ans{margin-top:1rem;background:rgba(255,255,255,.05);border:1px dashed var(--line);border-radius:14px;padding:.85rem 1rem;line-height:1.5}
+.grade{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.gbtn{border:1px solid var(--line);border-radius:12px;padding:.65rem 1rem;font-weight:800;background:var(--panel2)}
+.gbtn.ok{background:rgba(52,211,153,.2);border-color:var(--ok)}.gbtn.bad{background:rgba(251,113,133,.2);border-color:var(--bad)}.gbtn.gold{background:rgba(251,191,36,.2);border-color:var(--gold)}
+.gbtn[disabled]{opacity:.45;cursor:default}
+.ring{--p:1;--c:var(--c1);width:4rem;height:4rem;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:1.25rem;flex:none;background:conic-gradient(var(--c) calc(var(--p)*360deg),rgba(255,255,255,.08) 0);position:relative}
+.ring::before{content:"";position:absolute;inset:5px;border-radius:50%;background:#0b1430}
+.ring span{position:relative}
+.ring.warn{--c:var(--bad);animation:beat .5s infinite alternate}
+.ring.inf{--p:0}
+@keyframes beat{to{transform:scale(1.08)}}
+.overlay{position:fixed;inset:0;background:rgba(2,4,12,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:50;padding:1.2rem}
+.overlay.on{display:flex;animation:fade .25s}
+.modal{width:min(1100px,100%);max-height:calc(100vh - 2.4rem);overflow:auto;padding:1.4rem 1.6rem}
+.mhead{display:flex;align-items:center;gap:1rem;margin-bottom:.9rem}
+.mhead .t{flex:1;font-weight:800;font-size:1.15rem}
+.chip{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .75rem;border-radius:999px;font-weight:800;font-size:.82rem;background:rgba(34,211,238,.14);color:var(--c1)}
+.result{align-items:center;justify-content:center;text-align:center}
+.result .glass{width:min(900px,100%)}
+.trophy{font-size:5rem;filter:drop-shadow(0 10px 30px rgba(251,191,36,.45));animation:float 3s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px)}}
+.result h2{font-size:clamp(1.8rem,3.3vw,3rem);margin:.3rem 0}
+.result .sub{color:var(--muted);font-size:1.1rem}
+.rtable{margin:1.2rem auto;border-collapse:collapse;min-width:min(620px,100%)}
+.rtable th,.rtable td{padding:.6rem 1rem;border-bottom:1px solid var(--line);text-align:left}
+.rtable th{color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.5px}
+.rtable tr.win td{font-weight:900;background:rgba(251,191,36,.08)}
+.actions{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-top:.6rem}
+.actions .btn{width:auto}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:80}
+.banner{position:fixed;left:50%;top:24%;transform:translate(-50%,-50%) scale(.85);background:rgba(11,20,48,.95);border:2px solid var(--c1);border-radius:22px;padding:1rem 2rem;font-size:1.6rem;font-weight:900;z-index:70;opacity:0;pointer-events:none;transition:.3s;text-align:center;box-shadow:0 0 40px rgba(34,211,238,.35)}
+.banner.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.kbd{display:inline-block;border:1px solid var(--line);border-bottom-width:3px;border-radius:6px;padding:0 .4rem;font-size:.8em;background:rgba(255,255,255,.06)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:1rem;flex:1}
+.pp{padding:1rem 1.1rem;border-top:5px solid var(--pc);display:flex;flex-direction:column;gap:.5rem;min-width:0}
+.pp .ph{display:flex;align-items:center;gap:.7rem}
+.pp .pn{flex:1;font-weight:900;font-size:1.1rem;color:var(--pc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp .ps{font-weight:900;font-size:1.25rem;color:var(--pc)}
+.pp .ring{--c:var(--pc);width:3.3rem;height:3.3rem;font-size:1.05rem}
+.dfb{min-height:2.4em;font-weight:700;line-height:1.35;padding:.45rem .75rem;border-radius:10px;font-size:.95rem;color:var(--muted)}
+.dfb.ok{background:rgba(52,211,153,.14);color:var(--ok)}.dfb.bad{background:rgba(251,113,133,.14);color:var(--bad)}
+.keys{font-size:.8rem;color:var(--muted)}
+.wait{text-align:center;color:var(--muted)}
+@media (max-width:900px){.setup,.duo{grid-template-columns:1fr}.opts{grid-template-columns:1fr}.gsub{white-space:normal}.tb .lbl{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.cwbar{display:flex;align-items:center;gap:.6rem;padding:.6rem .9rem;flex-wrap:wrap}
+.cwbar .sp{flex:1}
+.clock{font-weight:900;font-size:1.35rem;font-variant-numeric:tabular-nums;padding:.3rem .8rem;border-radius:12px;background:rgba(255,255,255,.06)}
+.clock.warn{color:var(--bad)}
+.stat{font-weight:800;color:var(--muted)}
+.stat b{color:var(--ink)}
+.cwgrid{display:grid;grid-template-columns:auto minmax(280px,1fr);gap:1.2rem;align-items:start;flex:1}
+.board{padding:1rem;overflow:auto}
+.cw{display:grid;gap:3px;--cs:clamp(24px,min(2.9vw,4.6vh),46px);grid-template-columns:repeat(var(--w),var(--cs));grid-auto-rows:var(--cs);user-select:none;margin:auto}
+.cell{position:relative;border-radius:6px;background:#eef2ff;color:#0b1430;display:grid;place-items:center;font-weight:900;font-size:calc(var(--cs)*.55);cursor:pointer;transition:background .12s;box-shadow:inset 0 -3px 0 rgba(11,20,48,.12)}
+.cell.blk{background:transparent;box-shadow:none;cursor:default}
+.cell .no{position:absolute;left:3px;top:1px;font-size:calc(var(--cs)*.26);font-weight:800;color:#475569;line-height:1}
+.cell.word{background:#bae6fd}
+.cell.cur{background:#22d3ee;box-shadow:0 0 0 3px #fff,0 0 18px rgba(34,211,238,.8)}
+.cell.good{background:#a7f3d0}.cell.bad{background:#fecaca;color:#b91c1c}
+.cell.rev{color:#7c3aed}
+.cell.solved{background:#86efac}
+.clues{display:flex;flex-direction:column;gap:1rem;max-height:calc(100vh - 25rem);min-height:14rem;overflow:auto;padding:1rem 1.1rem}
+.rcol{display:flex;flex-direction:column;gap:.8rem;min-width:0}
+.clues h3{font-size:1rem;color:var(--c1);text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem}
+.clue{display:flex;gap:.6rem;padding:.45rem .6rem;border-radius:10px;cursor:pointer;line-height:1.35;border:1px solid transparent}
+.clue:hover{background:rgba(255,255,255,.05)}
+.clue.on{background:rgba(34,211,238,.14);border-color:rgba(34,211,238,.5)}
+.clue.ok{opacity:.55}.clue.ok .t::after{content:" ✓";color:var(--ok);font-weight:900}
+.clue b{flex:none;min-width:1.6rem;color:var(--c2)}
+.clue .ln{color:var(--muted);font-size:.8rem;white-space:nowrap}
+.curclue{padding:.75rem 1rem;font-weight:700;font-size:clamp(1rem,1.3vw,1.3rem);min-height:3.2rem}
+.curclue b{color:var(--c1)}
+.kb{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;padding:.7rem}
+.kb button{border:1px solid var(--line);background:rgba(255,255,255,.07);border-radius:8px;padding:.55rem 0;font-weight:800;min-height:2.6rem}
+.kb button:active{background:var(--c1);color:#061021}
+.kb .wide{grid-column:span 3}
+.btn.sm{padding:.5rem .8rem;min-height:2.3rem;font-size:.9rem}
+@media (max-width:1000px){.cwgrid{grid-template-columns:minmax(0,1fr)}.clues{max-height:none}.rcol{display:contents}.clues{order:2}}
+@media print{
+ body{background:#fff!important;color:#000}
+ .top,.cwbar,.kb,.curclue,#setup,#result,.banner,#confetti{display:none!important}
+ #play{display:flex!important}
+ .glass{background:#fff!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important}
+ .cwgrid{grid-template-columns:1fr}
+ .cw{--cs:30px}
+ .cell{background:#fff!important;border:1.5px solid #000;box-shadow:none!important;color:transparent!important}
+ .cell .no{color:#000!important}
+ .cell.blk{border:0}
+ .clues{max-height:none;overflow:visible;color:#000;columns:2}
+ .clues h3{color:#000}.clue b{color:#000}.clue .ln{color:#333}.clue.ok{opacity:1}.clue.ok .t::after{content:""}
+ .ref,.rcol .kb{display:none!important}.clue.on{background:none!important;border-color:transparent!important}
+ .print-title{display:block!important;font-size:20px;font-weight:800;margin-bottom:8px;color:#000}
+}
+.print-title{display:none}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="tb" href="index.html#simulyatorlar">← <span class="lbl">Bosh sahifa</span></a>
+  <div class="ttl"><div class="gname">🧩 Krossvord</div><div class="gsub">14 ta asosiy tushuncha — axborot madaniyati krossvordi</div></div>
+  <div class="tools"><button class="tb" id="sndBtn">🔊</button><button class="tb" id="fsBtn">⛶ <span class="lbl">To‘liq ekran</span></button></div>
+</header>
+<main>
+<section class="screen on" id="setup">
+  <div class="setup">
+    <div class="glass pad"><h2>📜 O‘yin qoidalari</h2><ul class="rules"><li><b class="n">1</b><span>Katakni bosing yoki o‘ngdagi savolni tanlang — so‘z yoritiladi.</span></li><li><b class="n">2</b><span>Harflarni klaviaturadan yoki ekrandagi tugmalardan kiriting. Bir katakni ikki marta bosish (yoki <span class="kbd">Probel</span>) yo‘nalishni almashtiradi.</span></li><li><b class="n">3</b><span><b>✓ Tekshirish</b> to‘g‘ri harflarni yashil, xatolarini qizil qiladi.</span></li><li><b class="n">4</b><span>Qiyin bo‘lsa — <b>💡 Harf</b> (−2 ball) yoki <b>📖 So‘z</b> (−5 ball) ochish mumkin. Har bir so‘z — 10 ball.</span></li><li><b class="n">5</b><span><b>🖨 Varaqa</b> — bo‘sh krossvordni savollari bilan chop etadi (uyga vazifa yoki tarqatma uchun).</span></li></ul></div>
+    <form class="glass pad" id="form">
+      <div class="hero-ico">🧩</div>
+      <h2 style="justify-content:center">Tayyormisiz?</h2>
+      <p class="hint" style="text-align:center;margin-bottom:1rem">Standart sozlamalar bilan darhol boshlash mumkin. Ismlarni kiritish shart emas.</p>
+      <button class="btn big pulse" type="submit">▶ Krossvordni ochish</button>
+      <button class="btn ghost" type="button" id="cfgBtn" style="width:100%;margin-top:.7rem">⚙️ Sozlamalar</button>
+      <div class="cfg" id="cfg" hidden>
+<div class="field"><label for="lim">Vaqt chegarasi</label><select id="lim"><option value="0" selected>Cheklanmagan (sekundomer)</option><option value="600">10 daqiqa</option><option value="900">15 daqiqa</option><option value="1200">20 daqiqa</option></select></div>
+<div class="field"><label for="inst">Harflarni tekshirish</label><select id="inst"><option value="0" selected>Faqat “Tekshirish” tugmasi bosilganda</option><option value="1">Har bir harf yozilganda darhol</option></select></div>
+</div>
+    </form>
+  </div>
+</section>
+<section class="screen" id="play">
+<div class="glass cwbar">
+  <span class="clock" id="clock">00:00</span><span class="stat">Topildi: <b id="found">0</b> / <b id="total">0</b></span><span class="stat">Yordam: <b id="hints">0</b></span><span class="sp"></span>
+  <button class="btn sm" id="chkBtn">✓ Tekshirish</button>
+  <button class="btn sm ghost" id="letBtn">💡 Harf</button>
+  <button class="btn sm ghost" id="wordBtn">📖 So‘z</button>
+  <button class="btn sm ghost" id="clrBtn">🧹 Tozalash</button>
+  <button class="btn sm ghost" id="prBtn">🖨 Varaqa</button>
+  <button class="btn sm ghost" id="endBtn">🏁 Yakunlash</button>
+</div>
+<div class="cwgrid">
+  <div style="display:flex;flex-direction:column;gap:.8rem;min-width:0">
+    <div class="glass curclue" id="curclue">Katakni yoki savolni tanlang</div>
+    <div class="glass board"><div class="print-title">Krossvord: Axborot madaniyati — ism: ____________________</div><div class="cw" id="cw"></div></div>
+  </div>
+  <div class="rcol"><div class="glass clues" id="clues"></div><div class="glass kb" id="kb"></div></div>
+</div>
+</section>
+<section class="screen result" id="result">
+  <div class="glass pad">
+    <div class="trophy">🏆</div>
+    <h2 id="rTitle"></h2><p class="sub" id="rSub"></p>
+    <table class="rtable"><thead><tr><th>Ko‘rsatkich</th><th>Natija</th></tr></thead><tbody id="rBody"></tbody></table>
+    <div class="actions"><button class="btn" id="againBtn">↻ Qayta o‘ynash</button><a class="btn ghost" href="index.html#simulyatorlar">⌂ Bosh sahifa</a></div>
+  </div>
+</section>
+</main>
+<div class="banner" id="banner" role="status" aria-live="polite"></div>
+<canvas id="confetti"></canvas>
+<script>
+/* ===== SAVOLLAR — o‘qituvchi shu qismni tahrirlashi mumkin ===== */
+/* Krossvord to‘ri avtomatik tuzilgan: r — qator, c — ustun, d: "a" — gorizontal, "d" — vertikal.
+   Izohlarni (clue) bemalol tahrirlash mumkin. So‘zlarni o‘zgartirish uchun to‘rni qayta tuzish kerak. */
+const CW = {
+ "w": 17,
+ "h": 13,
+ "words": [
+  {
+   "word": "REFLEKSIYA",
+   "r": 6,
+   "c": 7,
+   "d": "a",
+   "clue": "O‘z bilim va faoliyatini tahlil qilish",
+   "dars": 16
+  },
+  {
+   "word": "AUDITORIYA",
+   "r": 0,
+   "c": 7,
+   "d": "d",
+   "clue": "Xabar mo‘ljallangan odamlar guruhi",
+   "dars": 7
+  },
+  {
+   "word": "ALGORITM",
+   "r": 5,
+   "c": 10,
+   "d": "d",
+   "clue": "Lentada nima chiqishini hal qiluvchi qoidalar to‘plami; nomi Al-Xorazmiydan",
+   "dars": 14
+  },
+  {
+   "word": "KONTEKST",
+   "r": 11,
+   "c": 7,
+   "d": "a",
+   "clue": "Tasvir yoki xabar qachon, qayerda, qanday sharoitda paydo bo‘lgani",
+   "dars": 9
+  },
+  {
+   "word": "KLIKBEYT",
+   "r": 4,
+   "c": 14,
+   "d": "d",
+   "clue": "Bosishga undovchi, mazmundan ko‘ra ko‘p va’da beruvchi sarlavha",
+   "dars": 1
+  },
+  {
+   "word": "DEEPFAKE",
+   "r": 0,
+   "c": 2,
+   "d": "a",
+   "clue": "Sun’iy intellekt yaratgan, haqiqiydek ko‘rinadigan soxta video yoki ovoz",
+   "dars": 15
+  },
+  {
+   "word": "NETIKET",
+   "r": 2,
+   "c": 12,
+   "d": "d",
+   "clue": "Internetdagi muomala odobi qoidalari",
+   "dars": 2
+  },
+  {
+   "word": "FISHING",
+   "r": 3,
+   "c": 3,
+   "d": "a",
+   "clue": "Soxta xabar yoki sayt orqali parol va karta ma’lumotini o‘g‘irlash",
+   "dars": 6
+  },
+  {
+   "word": "RUBRIKA",
+   "r": 0,
+   "c": 16,
+   "d": "d",
+   "clue": "Loyihani baholash mezonlari jadvali",
+   "dars": 16
+  },
+  {
+   "word": "PLAGIAT",
+   "r": 9,
+   "c": 2,
+   "d": "a",
+   "clue": "Birovning matnini manbasiz o‘ziniki qilib ko‘rsatish",
+   "dars": 8
+  },
+  {
+   "word": "DALIL",
+   "r": 8,
+   "c": 4,
+   "d": "d",
+   "clue": "Da’voni tasdiqlovchi yoki inkor etuvchi aniq ma’lumot",
+   "dars": 4
+  },
+  {
+   "word": "MANBA",
+   "r": 2,
+   "c": 10,
+   "d": "a",
+   "clue": "Xabar qayerdan va kimdan olingani",
+   "dars": 1
+  },
+  {
+   "word": "TROL",
+   "r": 9,
+   "c": 8,
+   "d": "d",
+   "clue": "Ataylab janjal chiqarish uchun izoh yozuvchi foydalanuvchi",
+   "dars": 10
+  },
+  {
+   "word": "COOKIE",
+   "r": 11,
+   "c": 0,
+   "d": "a",
+   "clue": "Saytlar brauzeringizda saqlaydigan, sizni “eslab qoladigan” kichik fayl",
+   "dars": 11
+  }
+ ]
+};
+
+</script>
+<script>
+"use strict";
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function show(id){$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));scrollTo(0,0)}
+function clean(v,d){v=(v||'').trim().replace(/\s+/g,' ');return v?v.slice(0,24):d}
+const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* Ovoz — brauzerning o‘zida hosil qilinadi */
+const Snd={on:store.get('am_sound',true),ctx:null,
+  t(f,d=.15,type='sine',v=.14,delay=0){if(!this.on)return;try{this.ctx=this.ctx||new(window.AudioContext||window.webkitAudioContext)();const c=this.ctx;if(c.state==='suspended')c.resume();
+    const o=c.createOscillator(),g=c.createGain(),s=c.currentTime+delay;o.type=type;o.frequency.setValueAtTime(f,s);g.gain.setValueAtTime(v,s);g.gain.exponentialRampToValueAtTime(.0008,s+d);o.connect(g);g.connect(c.destination);o.start(s);o.stop(s+d+.03)}catch(e){}},
+  click(){this.t(600,.05,'triangle',.06)},
+  ok(){this.t(740,.12,'triangle',.15);this.t(1110,.22,'triangle',.14,.1)},
+  bad(){this.t(180,.3,'sawtooth',.06)},
+  tick(){this.t(1300,.04,'square',.03)},
+  whoosh(){[300,420,560,720].forEach((f,i)=>this.t(f,.08,'sine',.06,i*.04))},
+  win(){[523,659,784,1047,1319].forEach((f,i)=>this.t(f,.3,'triangle',.14,i*.12))}};
+
+class Ring{constructor(el){this.el=el;this.id=0}
+  start(sec,cb){this.stop();if(!sec){this.el.classList.add('inf');this.el.innerHTML='<span>∞</span>';return}
+    this.el.classList.remove('inf');this.left=sec;this.total=sec;this.cb=cb;this.draw();
+    this.id=setInterval(()=>{this.left--;this.draw();if(this.left>0&&this.left<=5)Snd.tick();
+      if(this.left<=0){this.stop();const f=this.cb;this.cb=null;f&&f()}},1000)}
+  stop(){clearInterval(this.id);this.id=0;this.el.classList.remove('warn')}
+  draw(){this.el.innerHTML='<span>'+Math.max(0,this.left)+'</span>';this.el.style.setProperty('--p',Math.max(0,this.left)/this.total);this.el.classList.toggle('warn',this.left<=5&&this.left>0)}}
+
+function banner(h,ms){const b=$('#banner');b.innerHTML=h;b.classList.add('on');clearTimeout(b._t);b._t=setTimeout(()=>b.classList.remove('on'),ms||1700)}
+function countdown(cb){let n=3;const st=()=>{if(n>0){banner('<span style="font-size:3.4rem">'+n+'</span>',800);Snd.tick();n--;setTimeout(st,900)}else{banner('🚀 Boshladik!',700);Snd.ok();cb()}};st()}
+function confetti(){const c=$('#confetti'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+  const cols=['#22d3ee','#a78bfa','#f472b6','#34d399','#fbbf24','#38bdf8'];
+  const P=Array.from({length:180},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.5,r:4+Math.random()*6,c:cols[Math.random()*6|0],vy:2+Math.random()*3.5,vx:-1.5+Math.random()*3,a:Math.random()*6,va:-.2+Math.random()*.4}));
+  let t=0;(function f(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});
+    if(++t<260)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
+
+/* Savol: type mcq | open | task. q.answer — to‘g‘ri variant indeksi */
+window.KEYH=null;
+function refLink(d){return d?' <a class="ref" href="'+d+'-dars.html" target="_blank" rel="noopener">📘 '+d+'-dars</a>':''}
+function renderQ(box,q,opt){opt=opt||{};let done=false;const L='ABCD';
+  let h='<div class="qtext">'+esc(q.q)+'</div>';
+  if(q.type==='mcq'){const ord=shuffle(q.options.map((_,i)=>i));
+    h+='<div class="opts">'+ord.map((oi,k)=>'<button class="opt" data-i="'+oi+'"><b>'+L[k]+'</b><span>'+esc(q.options[oi])+'</span></button>').join('')+'</div>';}
+  else{h+='<div class="ans" hidden><b>'+(q.type==='task'?'Baholash mezoni':'Namunaviy javob')+':</b> '+esc(q.answerText)+'</div><div class="grade"><button class="gbtn" data-show>👁 '+(q.type==='task'?'Mezonni ko‘rsatish':'Javobni ko‘rsatish')+'</button>'+
+    (q.type==='open'?'<button class="gbtn ok" data-g="1">✓ To‘g‘ri</button><button class="gbtn bad" data-g="0">✗ Noto‘g‘ri</button>'
+      :'<button class="gbtn bad" data-p="0">Bajarilmadi · 0</button><button class="gbtn ok" data-p="'+q.points+'">Bajarildi · '+q.points+'</button><button class="gbtn gold" data-p="'+(q.points+q.bonus)+'">A’lo · '+q.points+' + '+q.bonus+' bonus</button>')+
+    '</div><p class="hint" style="margin-top:.5rem">'+(q.type==='task'?'Topshiriqni o‘qituvchi mezon asosida baholaydi.':'Javobni o‘qituvchi tekshiradi.')+'</p>';}
+  h+='<div class="fb"></div>';box.innerHTML=h;const fb=$('.fb',box);
+  function fin(r){if(done)return;done=true;window.KEYH=null;
+    $$('button',box).forEach(b=>{if(!('show' in b.dataset))b.disabled=true});
+    if(q.type==='mcq')$$('.opt',box).forEach(b=>{const i=+b.dataset.i;b.classList.add(i===q.answer?'right':(i===r.chosen?'wrong':'dim'))});
+    else $('.ans',box).hidden=false;
+    const why=q.why?'<div class="why">'+esc(q.why)+refLink(q.dars)+'</div>':'';
+    let cls,head;
+    if(r.timeout){cls='bad';head='⏰ Vaqt tugadi!'+(q.type==='mcq'?' To‘g‘ri javob: '+esc(q.options[q.answer]):'')}
+    else if(q.type==='task'){cls=r.points>0?'ok':'bad';head=r.points>0?'✓ Baholandi: +'+r.points+' ball':'✗ Topshiriq bajarilmadi'}
+    else if(r.correct){cls='ok';head='✓ To‘g‘ri!'}
+    else{cls='bad';head='✗ Noto‘g‘ri.'+(q.type==='mcq'?' To‘g‘ri javob: '+esc(q.options[q.answer]):'')}
+    fb.className='fb on '+cls;fb.innerHTML='<b>'+head+'</b>'+why;cls==='ok'?Snd.ok():Snd.bad();
+    if(r.correct===undefined)r.correct=(r.points||0)>0;opt.onDone&&opt.onDone(r)}
+  if(q.type==='mcq'){$$('.opt',box).forEach(b=>b.onclick=()=>fin({correct:+b.dataset.i===q.answer,chosen:+b.dataset.i}));
+    window.KEYH=e=>{const n='1234'.indexOf(e.key);const bs=$$('.opt',box);if(n>=0&&bs[n]&&!bs[n].disabled){e.preventDefault();bs[n].click()}}}
+  else{$('[data-show]',box).onclick=e=>{$('.ans',box).hidden=false;e.currentTarget.disabled=true};
+    $$('[data-g]',box).forEach(b=>b.onclick=()=>fin({correct:b.dataset.g==='1'}));
+    $$('[data-p]',box).forEach(b=>b.onclick=()=>fin({points:+b.dataset.p}))}
+  return{timeout(){if(done)return;if(q.type==='mcq')fin({correct:false,timeout:true});else{$('.ans',box).hidden=false;fb.className='fb on info';fb.innerHTML='<b>⏰ Vaqt tugadi — endi javobni baholang.</b>'}},get done(){return done}}}
+
+/* Ikki o‘quvchi bir vaqtda o‘ynaydigan dvigatel */
+function Duel(c){const n=c.list.length,o0=shuffle(c.list),h=n>>1,orders=[o0,o0.slice(h).concat(o0.slice(0,h))];
+  const S={idx:[0,0],good:[0,0],bad:[0,0],t:[0,0],cur:[null,null],tm:[0,0],fin:[false,false],over:false,rings:[new Ring(c.rings[0]),new Ring(c.rings[1])]};
+  const fbset=(i,cls,html)=>{const e=c.fbs[i];e.className='dfb '+cls;e.innerHTML=html};
+  function ask(i){if(S.over)return;
+    if(S.idx[i]>=n){S.fin[i]=true;S.cur[i]=null;c.boxes[i].innerHTML='<div class="qtext sm wait">✓ Savollar tugadi.<br>Raqibni kuting…</div>';fbset(i,'','Jami: '+S.good[i]+' ta to‘g‘ri, '+S.bad[i]+' ta xato');
+      if(S.fin[0]&&S.fin[1]){S.over=true;c.onAllDone()}return}
+    const q=orders[i][S.idx[i]++],t0=performance.now(),K=c.keys[i],ord=shuffle(q.options.map((_,k)=>k));
+    c.boxes[i].innerHTML='<div class="qtext sm">'+esc(q.q)+'</div><div class="opts sm">'+ord.map((oi,k)=>'<button class="opt" data-i="'+oi+'"><b>'+K[k]+'</b><span>'+esc(q.options[oi])+'</span></button>').join('')+'</div>';
+    let done=false;const bs=$$('.opt',c.boxes[i]);
+    const fin=(ch,to)=>{if(done||S.over)return;done=true;S.rings[i].stop();S.t[i]+=(performance.now()-t0)/1000;
+      bs.forEach(b=>{b.disabled=true;const k=+b.dataset.i;b.classList.add(k===q.answer?'right':(k===ch?'wrong':'dim'))});
+      if(!to&&ch===q.answer){S.good[i]++;Snd.ok();fbset(i,'ok','✓ To‘g‘ri! '+esc(q.why||''));c.onCorrect(i);if(S.over)return;S.tm[i]=setTimeout(()=>ask(i),1200)}
+      else{S.bad[i]++;Snd.bad();fbset(i,'bad',(to?'⏰ Vaqt tugadi. ':'✗ Xato. ')+'To‘g‘ri: <b>'+esc(q.options[q.answer])+'</b>'+(c.pen?' · jarima '+c.pen+' s':''));S.tm[i]=setTimeout(()=>ask(i),1700+c.pen*1000)}
+      c.onUpdate&&c.onUpdate()};
+    bs.forEach(b=>b.onclick=()=>fin(+b.dataset.i,false));
+    S.cur[i]={key:k=>{const p=K.indexOf(k);if(p>=0&&bs[p]&&!done)bs[p].click()}};
+    fbset(i,'','Savol '+S.idx[i]+' / '+n);S.rings[i].start(c.time,()=>fin(-1,true))}
+  S.start=()=>{ask(0);ask(1)};
+  S.stop=()=>{S.over=true;[0,1].forEach(i=>{clearTimeout(S.tm[i]);S.rings[i].stop();if(c.boxes[i])$$('.opt',c.boxes[i]).forEach(b=>b.disabled=true)})};
+  S.key=k=>{if(S.over)return;[0,1].forEach(i=>{if(c.keys[i].includes(k)&&S.cur[i])S.cur[i].key(k)})};
+  S.avg=i=>{const a=S.good[i]+S.bad[i];return a?(S.t[i]/a).toFixed(1)+' s':'—'};
+  return S}
+
+document.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;if(window.KEYH)window.KEYH(e);else if(window.onKey)window.onKey(e)});
+
+function initChrome(){const sb=$('#sndBtn');const u=()=>{sb.innerHTML=Snd.on?'🔊 <span class="lbl">Ovoz</span>':'🔇 <span class="lbl">Ovozsiz</span>'};u();
+  sb.onclick=()=>{Snd.on=!Snd.on;store.set('am_sound',Snd.on);u()};
+  $('#fsBtn').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
+  const cb=$('#cfgBtn');if(cb)cb.onclick=()=>{const c=$('#cfg');c.hidden=!c.hidden;cb.textContent=c.hidden?'⚙️ Sozlamalar':'✕ Sozlamalarni yopish'};
+  document.addEventListener('keydown',e=>{if(e.key==='Enter'&&$('#setup').classList.contains('on')&&!e.target.matches('input,select,textarea,button')){e.preventDefault();$('#form').requestSubmit()}})}
+</script>
+<script>
+const W=CW.w,H=CW.h;let G=null,cells={},sel=null,dir='a',timer=0,el=0,hints=0;
+const key=(r,c)=>r+','+c;
+(function prep(){const st={};CW.words.forEach(w=>{const k=key(w.r,w.c);st[k]=st[k]||[];st[k].push(w)});
+  const starts=Object.keys(st).map(k=>k.split(',').map(Number)).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+  starts.forEach((p,i)=>st[key(p[0],p[1])].forEach(w=>w.no=i+1));
+  CW.words.forEach(w=>{w.cells=[...w.word].map((ch,i)=>{const r=w.r+(w.d==='d'?i:0),c=w.c+(w.d==='a'?i:0);const k=key(r,c);
+    cells[k]=cells[k]||{r,c,ch,ws:{}};cells[k].ws[w.d]=w;return k})})})();
+function buildBoard(){const cw=$('#cw');cw.style.setProperty('--w',W);let h='';
+  for(let r=0;r<H;r++)for(let c=0;c<W;c++){const k=key(r,c),x=cells[k];
+    if(!x){h+='<div class="cell blk"></div>';continue}
+    const no=Object.values(x.ws).find(w=>w.r===r&&w.c===c);
+    h+='<div class="cell" data-k="'+k+'">'+(no?'<span class="no">'+no.no+'</span>':'')+'<span class="v"></span></div>'}
+  cw.innerHTML=h;$$('.cell[data-k]').forEach(e=>{cells[e.dataset.k].el=e;e.onclick=()=>pick(e.dataset.k,true)});
+  const list=d=>CW.words.filter(w=>w.d===d).sort((a,b)=>a.no-b.no).map(w=>'<div class="clue" data-id="'+w.no+w.d+'"><b>'+w.no+'.</b><span class="t">'+esc(w.clue)+' <span class="ln">('+w.word.length+' harf)</span>'+refLink(w.dars)+'</span></div>').join('');
+  $('#clues').innerHTML='<div><h3>→ Gorizontal</h3>'+list('a')+'</div><div><h3>↓ Vertikal</h3>'+list('d')+'</div>';
+  $$('.clue').forEach(e=>e.onclick=ev=>{if(ev.target.closest('a'))return;const w=CW.words.find(w=>w.no+w.d===e.dataset.id);dir=w.d;
+    pick(w.cells.find(k=>!G.v[k])||w.cells[0],false)});
+  $('#total').textContent=CW.words.length;
+  $('#kb').innerHTML=[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].map(ch=>'<button data-ch="'+ch+'">'+ch+'</button>').join('')+
+    '<button data-ch="⌫" aria-label="O‘chirish">⌫</button><button class="wide" data-ch="←">◀ Oldingi</button><button class="wide" data-ch="⇄">⇄ Yo‘nalish</button><button class="wide" data-ch="→">Keyingi ▶</button>';
+  $$('#kb button').forEach(b=>b.onclick=()=>input(b.dataset.ch))}
+function word(){const x=sel&&cells[sel];if(!x)return null;return x.ws[dir]||Object.values(x.ws)[0]}
+function pick(k,click){const x=cells[k];if(click&&sel===k&&x.ws.a&&x.ws.d)dir=dir==='a'?'d':'a';
+  else if(!x.ws[dir])dir=x.ws.a?'a':'d';sel=k;Snd.click();paint()}
+function paint(){const w=word();$$('.cell[data-k]').forEach(e=>e.classList.remove('cur','word'));
+  if(w){w.cells.forEach(k=>cells[k].el.classList.add('word'));cells[sel].el.classList.add('cur');
+    $('#curclue').innerHTML='<b>'+w.no+(w.d==='a'?' →':' ↓')+'</b> '+esc(w.clue)+' <span class="hint">('+w.word.length+' harf)</span>'}
+  $$('.clue').forEach(e=>e.classList.toggle('on',!!w&&e.dataset.id===w.no+w.d))}
+function setV(k,ch,rev){G.v[k]=ch;const x=cells[k];$('.v',x.el).textContent=ch;x.el.classList.remove('good','bad');x.el.classList.toggle('rev',!!rev);
+  if(G.inst&&ch)x.el.classList.add(ch===x.ch?'good':'bad');updSolved()}
+function move(step){const w=word();if(!w)return;const i=w.cells.indexOf(sel),j=i+step;if(j>=0&&j<w.cells.length){sel=w.cells[j];paint()}}
+function input(ch){if(!G||G.over)return;if(ch==='⇄'){const x=cells[sel];if(x&&x.ws.a&&x.ws.d){dir=dir==='a'?'d':'a';paint()}return}
+  if(ch==='←'){move(-1);return}if(ch==='→'){move(1);return}
+  if(!sel){const w=CW.words[0];dir=w.d;sel=w.cells[0];paint()}
+  if(ch==='⌫'){if(G.v[sel])setV(sel,'');else{move(-1);setV(sel,'')}paint();return}
+  setV(sel,ch);Snd.click();move(1);checkDone()}
+function updSolved(){let n=0;CW.words.forEach(w=>{const ok=w.cells.every(k=>G.v[k]===cells[k].ch);if(ok){n++;if(G.inst)G.shown.add(w.no+w.d)}
+  const e=$('.clue[data-id="'+w.no+w.d+'"]');if(e)e.classList.toggle('ok',ok&&G.shown.has(w.no+w.d))});$('#found').textContent=G.shownCount();return n}
+function checkDone(){if(Object.keys(cells).every(k=>G.v[k]===cells[k].ch)){CW.words.forEach(w=>G.shown.add(w.no+w.d));updSolved();
+  $$('.cell[data-k]').forEach(e=>e.classList.add('solved'));setTimeout(()=>finish(true),900)}}
+function check(){let bad=0;Object.keys(cells).forEach(k=>{const x=cells[k];x.el.classList.remove('good','bad');if(G.v[k]){if(G.v[k]===x.ch)x.el.classList.add('good');else{x.el.classList.add('bad');bad++}}});
+  CW.words.forEach(w=>{if(w.cells.every(k=>G.v[k]===cells[k].ch))G.shown.add(w.no+w.d)});updSolved();
+  const f=G.shownCount();bad?(Snd.bad(),banner('Topilgan so‘zlar: '+f+' · Xato harflar: '+bad,1800)):(Snd.ok(),banner('✓ Xato yo‘q! Topildi: '+f+' / '+CW.words.length,1600));checkDone()}
+function hint(all){if(!sel){banner('Avval katakni tanlang',1200);return}const w=word();const ks=all?w.cells:[sel];
+  ks.forEach(k=>{if(G.v[k]!==cells[k].ch){setV(k,cells[k].ch,true)}});if(all){G.hw++;G.shown.add(w.no+w.d)}else{G.hl++;move(1)}
+  hints=G.hl+G.hw;$('#hints').textContent=hints;updSolved();Snd.whoosh();checkDone()}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function tick(){el++;const lim=G.lim,c=$('#clock');if(lim){const l=lim-el;c.textContent=fmt(Math.max(0,l));c.classList.toggle('warn',l<=60);if(l<=0){check();finish(false)}}else c.textContent=fmt(el)}
+$('#form').onsubmit=e=>{e.preventDefault();start()};
+$('#againBtn').onclick=()=>show('setup');
+function start(){G={v:{},hl:0,hw:0,over:false,lim:+$('#lim').value,inst:$('#inst').value==='1',shown:new Set()};G.shownCount=()=>G.shown.size;
+  el=0;hints=0;sel=null;dir='a';$('#hints').textContent='0';$('#found').textContent='0';buildBoard();clearInterval(timer);
+  $('#clock').textContent=G.lim?fmt(G.lim):'00:00';timer=setInterval(tick,1000);show('play');
+  const w=CW.words.slice().sort((a,b)=>a.no-b.no)[0];dir=w.d;sel=w.cells[0];paint()}
+$('#chkBtn').onclick=check;$('#letBtn').onclick=()=>hint(false);$('#wordBtn').onclick=()=>hint(true);
+$('#clrBtn').onclick=()=>{if(!confirm('Barcha harflar o‘chirilsinmi?'))return;Object.keys(cells).forEach(k=>{setV(k,'');cells[k].el.classList.remove('good','bad','rev','solved')});G.shown.clear();updSolved()};
+$('#prBtn').onclick=()=>window.print();
+$('#endBtn').onclick=()=>{if(confirm('O‘yinni yakunlab, natijani ko‘rasizmi?')){check();finish(false)}};
+window.onKey=e=>{if(!G||G.over||!$('#play').classList.contains('on'))return;const k=e.key;
+  if(/^[a-zA-Z]$/.test(k)){e.preventDefault();input(k.toUpperCase())}
+  else if(k==='Backspace'||k==='Delete'){e.preventDefault();input('⌫')}
+  else if(k==='Tab'){e.preventDefault();const ws=CW.words.slice().sort((a,b)=>(a.d===b.d?a.no-b.no:a.d==='a'?-1:1));const w=word();let i=w?ws.indexOf(w):-1;const n=ws[(i+(e.shiftKey?-1:1)+ws.length)%ws.length];dir=n.d;sel=n.cells[0];paint()}
+  else if(k.startsWith('Arrow')){e.preventDefault();const [dr,dc]={ArrowUp:[-1,0],ArrowDown:[1,0],ArrowLeft:[0,-1],ArrowRight:[0,1]}[k];
+    const want=dr?'d':'a';if(sel&&cells[sel].ws[want]&&dir!==want){dir=want;paint();return}
+    if(!sel)return;let [r,c]=sel.split(',').map(Number);for(let s=0;s<Math.max(W,H);s++){r+=dr;c+=dc;if(r<0||c<0||r>=H||c>=W)break;const nk=key(r,c);if(cells[nk]){sel=nk;if(!cells[nk].ws[dir])dir=want;paint();break}}}
+  else if(k===' '){e.preventDefault();input('⇄')}};
+function finish(all){if(G.over)return;G.over=true;clearInterval(timer);const f=G.shownCount(),n=CW.words.length;
+  const score=Math.max(0,f*10-G.hl*2-G.hw*5);
+  $('#rTitle').textContent=all?'🎉 Krossvord yechildi!':'Natija: '+f+' / '+n+' so‘z';
+  $('#rSub').textContent=all?(G.hl+G.hw===0?'Hech qanday yordamsiz — ajoyib!':'Barcha so‘zlar topildi.'):'Topilmagan so‘zlar bo‘yicha darslarni takrorlang.';
+  const rows=[['⏱ Sarflangan vaqt',fmt(el)],['✓ Topilgan so‘zlar',f+' / '+n],['💡 Ochilgan harflar',G.hl+' (−2 balldan)'],['📖 Ochilgan so‘zlar',G.hw+' (−5 balldan)'],['🏆 Yakuniy ball','<b>'+score+'</b> / '+n*10]];
+  $('#rBody').innerHTML=rows.map((r,i)=>'<tr class="'+(i===4?'win':'')+'"><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>').join('');
+  show('result');Snd.win();if(f>=n*.7)confetti()}
+
+initChrome();
+</script>
+</body>
+</html>

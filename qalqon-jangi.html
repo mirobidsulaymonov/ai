@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Qalqon jangi — Axborot madaniyati platformasi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+:root{--bg:#060a19;--bg2:#0b1430;--panel:rgba(255,255,255,.055);--panel2:rgba(255,255,255,.09);--line:rgba(148,163,255,.18);
+--ink:#e8ecff;--muted:#9aa6cc;--c1:#22d3ee;--c2:#a78bfa;--c3:#f472b6;--ok:#34d399;--bad:#fb7185;--gold:#fbbf24;
+--t1:#38bdf8;--t2:#f472b6;--t3:#34d399;--t4:#fbbf24;--r:20px;font-size:clamp(15px,1.12vw,21px)}
+html,body{min-height:100%}
+body{font-family:'Inter','Segoe UI',system-ui,Arial,sans-serif;color:var(--ink);background:
+radial-gradient(900px 500px at 0% -10%,rgba(34,211,238,.16),transparent 60%),
+radial-gradient(900px 600px at 110% 110%,rgba(167,139,250,.18),transparent 60%),
+linear-gradient(rgba(148,163,255,.05) 1px,transparent 1px) 0 0/40px 40px,
+linear-gradient(90deg,rgba(148,163,255,.05) 1px,transparent 1px) 0 0/40px 40px,var(--bg);
+display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--c1);outline-offset:3px}
+a{color:var(--c1)}
+.top{display:flex;align-items:center;gap:1rem;padding:.6rem 1.2rem;background:rgba(6,10,25,.75);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+.top .ttl{flex:1;text-align:center;min-width:0}
+.gname{font-weight:900;font-size:1.3rem;letter-spacing:.3px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3));-webkit-background-clip:text;background-clip:text;color:transparent}
+.gsub{color:var(--muted);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:.5rem .85rem;font-weight:700;text-decoration:none;color:var(--ink);font-size:.9rem;min-height:2.4rem}
+.tb:hover{background:var(--panel2)}
+.tools{display:flex;gap:.5rem}
+main{flex:1;width:100%;max-width:1600px;margin:0 auto;padding:1rem 1.2rem 1.4rem;display:flex;flex-direction:column}
+.screen{display:none;flex:1;flex-direction:column;gap:1rem;animation:fade .35s ease}
+.screen.on{display:flex}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.glass{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 20px 50px rgba(0,0,0,.35);backdrop-filter:blur(8px)}
+.pad{padding:1.3rem 1.5rem}
+.setup{display:grid;grid-template-columns:1.15fr 1fr;gap:1.2rem;align-items:start}
+.setup h2{font-size:1.45rem;margin-bottom:.9rem;display:flex;gap:.5rem;align-items:center}
+.rules{list-style:none;display:grid;gap:.6rem}
+.rules li{display:flex;gap:.75rem;align-items:flex-start;line-height:1.45;color:#cfd6f3}
+.rules li b.n{flex:none;width:1.9rem;height:1.9rem;border-radius:10px;display:grid;place-items:center;font-size:.85rem;background:linear-gradient(135deg,rgba(34,211,238,.25),rgba(167,139,250,.25));color:#fff;border:1px solid var(--line)}
+.hero-ico{font-size:3.2rem;text-align:center;filter:drop-shadow(0 8px 20px rgba(34,211,238,.35))}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border:0;border-radius:14px;padding:.8rem 1.3rem;font-weight:800;color:#061021;
+background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 8px 24px rgba(34,211,238,.25);transition:transform .1s,filter .15s;min-height:2.9rem;text-decoration:none}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:translateY(2px)}
+.btn.big{font-size:1.3rem;padding:1rem 2rem;border-radius:18px;width:100%}
+.btn.ghost{background:var(--panel2);color:var(--ink);box-shadow:none;border:1px solid var(--line)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.pulse{animation:pulse 2.2s infinite}
+@keyframes pulse{50%{box-shadow:0 8px 24px rgba(34,211,238,.25),0 0 0 10px rgba(34,211,238,.12)}}
+.field{display:grid;gap:.35rem;margin-bottom:.85rem}
+.field label{font-weight:700;font-size:.9rem;color:var(--muted)}
+.field input,.field select{border:1px solid var(--line);border-radius:12px;padding:.65rem .9rem;background:rgba(255,255,255,.06);width:100%}
+.field select option{background:#0b1430}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.cfg{margin-top:1rem;padding-top:1rem;border-top:1px dashed var(--line)}
+.hint{color:var(--muted);font-size:.85rem}
+.dot{display:inline-block;width:.8rem;height:.8rem;border-radius:50%;margin-right:.35rem;vertical-align:middle}
+.qtext{font-size:clamp(1.25rem,2vw,2.1rem);font-weight:800;line-height:1.3;overflow-wrap:anywhere}
+.qtext.sm{font-size:clamp(1.02rem,1.5vw,1.55rem)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1rem}
+.opts.sm{gap:.55rem;margin-top:.7rem}
+.opt{display:flex;align-items:center;gap:.8rem;text-align:left;border:1px solid var(--line);background:rgba(255,255,255,.05);border-radius:14px;padding:.8rem 1rem;font-size:clamp(1rem,1.35vw,1.45rem);font-weight:650;min-height:3.4rem;transition:.15s;overflow-wrap:anywhere}
+.opts.sm .opt{font-size:clamp(.92rem,1.15vw,1.25rem);min-height:3rem;padding:.6rem .8rem}
+.opt b{flex:none;width:2.1rem;height:2.1rem;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--c1)}
+.opt:hover:not([disabled]){border-color:var(--c1);background:rgba(34,211,238,.08);transform:translateY(-1px)}
+.opt[disabled]{cursor:default}
+.opt.right{border-color:var(--ok);background:rgba(52,211,153,.16)}.opt.right b{background:var(--ok);color:#052}
+.opt.wrong{border-color:var(--bad);background:rgba(251,113,133,.16)}.opt.wrong b{background:var(--bad);color:#300}
+.opt.dim{opacity:.45}
+.fb{display:none;margin-top:1rem;border-radius:14px;padding:.85rem 1rem;line-height:1.5;border-left:5px solid}
+.fb.on{display:block;animation:fade .3s}
+.fb.ok{background:rgba(52,211,153,.12);border-color:var(--ok)}
+.fb.bad{background:rgba(251,113,133,.12);border-color:var(--bad)}
+.fb.info{background:rgba(167,139,250,.12);border-color:var(--c2)}
+.why{margin-top:.35rem;color:#cfd6f3}
+.ref{display:inline-block;margin-left:.3rem;font-weight:800;text-decoration:none;font-size:.85em;padding:.05rem .5rem;border-radius:999px;background:rgba(34,211,238,.14)}
+.ans{margin-top:1rem;background:rgba(255,255,255,.05);border:1px dashed var(--line);border-radius:14px;padding:.85rem 1rem;line-height:1.5}
+.grade{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.gbtn{border:1px solid var(--line);border-radius:12px;padding:.65rem 1rem;font-weight:800;background:var(--panel2)}
+.gbtn.ok{background:rgba(52,211,153,.2);border-color:var(--ok)}.gbtn.bad{background:rgba(251,113,133,.2);border-color:var(--bad)}.gbtn.gold{background:rgba(251,191,36,.2);border-color:var(--gold)}
+.gbtn[disabled]{opacity:.45;cursor:default}
+.ring{--p:1;--c:var(--c1);width:4rem;height:4rem;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:1.25rem;flex:none;background:conic-gradient(var(--c) calc(var(--p)*360deg),rgba(255,255,255,.08) 0);position:relative}
+.ring::before{content:"";position:absolute;inset:5px;border-radius:50%;background:#0b1430}
+.ring span{position:relative}
+.ring.warn{--c:var(--bad);animation:beat .5s infinite alternate}
+.ring.inf{--p:0}
+@keyframes beat{to{transform:scale(1.08)}}
+.overlay{position:fixed;inset:0;background:rgba(2,4,12,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:50;padding:1.2rem}
+.overlay.on{display:flex;animation:fade .25s}
+.modal{width:min(1100px,100%);max-height:calc(100vh - 2.4rem);overflow:auto;padding:1.4rem 1.6rem}
+.mhead{display:flex;align-items:center;gap:1rem;margin-bottom:.9rem}
+.mhead .t{flex:1;font-weight:800;font-size:1.15rem}
+.chip{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .75rem;border-radius:999px;font-weight:800;font-size:.82rem;background:rgba(34,211,238,.14);color:var(--c1)}
+.result{align-items:center;justify-content:center;text-align:center}
+.result .glass{width:min(900px,100%)}
+.trophy{font-size:5rem;filter:drop-shadow(0 10px 30px rgba(251,191,36,.45));animation:float 3s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px)}}
+.result h2{font-size:clamp(1.8rem,3.3vw,3rem);margin:.3rem 0}
+.result .sub{color:var(--muted);font-size:1.1rem}
+.rtable{margin:1.2rem auto;border-collapse:collapse;min-width:min(620px,100%)}
+.rtable th,.rtable td{padding:.6rem 1rem;border-bottom:1px solid var(--line);text-align:left}
+.rtable th{color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.5px}
+.rtable tr.win td{font-weight:900;background:rgba(251,191,36,.08)}
+.actions{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-top:.6rem}
+.actions .btn{width:auto}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:80}
+.banner{position:fixed;left:50%;top:24%;transform:translate(-50%,-50%) scale(.85);background:rgba(11,20,48,.95);border:2px solid var(--c1);border-radius:22px;padding:1rem 2rem;font-size:1.6rem;font-weight:900;z-index:70;opacity:0;pointer-events:none;transition:.3s;text-align:center;box-shadow:0 0 40px rgba(34,211,238,.35)}
+.banner.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.kbd{display:inline-block;border:1px solid var(--line);border-bottom-width:3px;border-radius:6px;padding:0 .4rem;font-size:.8em;background:rgba(255,255,255,.06)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:1rem;flex:1}
+.pp{padding:1rem 1.1rem;border-top:5px solid var(--pc);display:flex;flex-direction:column;gap:.5rem;min-width:0}
+.pp .ph{display:flex;align-items:center;gap:.7rem}
+.pp .pn{flex:1;font-weight:900;font-size:1.1rem;color:var(--pc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp .ps{font-weight:900;font-size:1.25rem;color:var(--pc)}
+.pp .ring{--c:var(--pc);width:3.3rem;height:3.3rem;font-size:1.05rem}
+.dfb{min-height:2.4em;font-weight:700;line-height:1.35;padding:.45rem .75rem;border-radius:10px;font-size:.95rem;color:var(--muted)}
+.dfb.ok{background:rgba(52,211,153,.14);color:var(--ok)}.dfb.bad{background:rgba(251,113,133,.14);color:var(--bad)}
+.keys{font-size:.8rem;color:var(--muted)}
+.wait{text-align:center;color:var(--muted)}
+@media (max-width:900px){.setup,.duo{grid-template-columns:1fr}.opts{grid-template-columns:1fr}.gsub{white-space:normal}.tb .lbl{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.arena{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:.6rem;padding:1rem 1.2rem;position:relative;overflow:hidden}
+.shield{width:clamp(70px,9vw,130px);transition:transform .3s}
+.shield svg{width:100%;height:auto;display:block;filter:drop-shadow(0 0 18px var(--sc))}
+.shield.hit{animation:shake .45s}
+@keyframes shake{20%{transform:translateX(-8px) rotate(-4deg)}40%{transform:translateX(8px) rotate(3deg)}60%{transform:translateX(-5px)}80%{transform:translateX(4px)}}
+.shield .crack{opacity:0;transition:opacity .3s}
+.shield.dmg1 .c1,.shield.dmg2 .c1,.shield.dmg2 .c2,.shield.broken .crack{opacity:1}
+.shield.broken{animation:breakS 1s forwards}
+@keyframes breakS{30%{transform:scale(1.12) rotate(-6deg)}100%{transform:scale(.8) rotate(18deg) translateY(30px);opacity:.25;filter:grayscale(1)}}
+.track{position:relative;height:clamp(70px,9vw,110px)}
+.beam{position:absolute;top:50%;height:22px;margin-top:-11px;transition:width .7s cubic-bezier(.3,1.4,.5,1);border-radius:12px;
+background:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 8px,transparent 8px 26px),linear-gradient(var(--bc),var(--bc));background-size:52px 100%,100% 100%;animation:flow .6s linear infinite;box-shadow:0 0 22px var(--bc),0 0 50px var(--bc)}
+.beam.b1{left:0;--bc:var(--t1)}
+.beam.b2{right:0;--bc:var(--t2);animation-direction:reverse}
+@keyframes flow{to{background-position:52px 0,0 0}}
+.clash{position:absolute;top:50%;width:clamp(48px,5vw,70px);aspect-ratio:1;transform:translate(-50%,-50%);transition:left .7s cubic-bezier(.3,1.4,.5,1);border-radius:50%;
+background:radial-gradient(circle,#fff 0 18%,#fef3c7 30%,rgba(251,191,36,.7) 50%,transparent 70%);animation:glow .4s infinite alternate;z-index:2}
+@keyframes glow{to{transform:translate(-50%,-50%) scale(1.25);filter:brightness(1.3)}}
+.marks{position:absolute;inset:auto 0 -2px 0;display:flex;justify-content:space-between;pointer-events:none}
+.marks i{width:2px;height:12px;background:rgba(255,255,255,.25)}
+.marks i.mid{height:20px;background:var(--gold)}
+.alabel{position:absolute;left:50%;top:.5rem;transform:translateX(-50%);font-weight:800;color:var(--muted);font-size:.85rem;white-space:nowrap}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="tb" href="index.html#simulyatorlar">← <span class="lbl">Bosh sahifa</span></a>
+  <div class="ttl"><div class="gname">🛡️ Qalqon jangi</div><div class="gsub">Ikki o‘quvchi bilim nurlari bilan bellashadi</div></div>
+  <div class="tools"><button class="tb" id="sndBtn">🔊</button><button class="tb" id="fsBtn">⛶ <span class="lbl">To‘liq ekran</span></button></div>
+</header>
+<main>
+<section class="screen on" id="setup">
+  <div class="setup">
+    <div class="glass pad"><h2>📜 O‘yin qoidalari</h2><ul class="rules"><li><b class="n">1</b><span>Ikki o‘quvchi <b>bir vaqtda</b> o‘ynaydi: chap tomon — <span class="kbd">1</span>–<span class="kbd">4</span>, o‘ng tomon — <span class="kbd">7</span> <span class="kbd">8</span> <span class="kbd">9</span> <span class="kbd">0</span>. Sensorli ekranda bosish ham mumkin.</span></li><li><b class="n">2</b><span>Har bir to‘g‘ri javob energiya nurini raqib tomonga <b>bir qadam</b> suradi.</span></li><li><b class="n">3</b><span>To‘qnashuv nuqtasi raqib qalqoniga yetib borsa — <b>qalqon yoriladi</b> va o‘yin tugaydi.</span></li><li><b class="n">4</b><span>Xato javobdan keyin bir necha soniya kutiladi (jarima). Shoshilmang — o‘ylab javob bering!</span></li><li><b class="n">5</b><span>Savollar tugasa, ustunlikka, keyin to‘g‘ri javoblar soni va tezlikka qaraladi.</span></li></ul></div>
+    <form class="glass pad" id="form">
+      <div class="hero-ico">🛡️</div>
+      <h2 style="justify-content:center">Tayyormisiz?</h2>
+      <p class="hint" style="text-align:center;margin-bottom:1rem">Standart sozlamalar bilan darhol boshlash mumkin. Ismlarni kiritish shart emas.</p>
+      <button class="btn big pulse" type="submit">▶ Jangni boshlash</button>
+      <button class="btn ghost" type="button" id="cfgBtn" style="width:100%;margin-top:.7rem">⚙️ Sozlamalar</button>
+      <div class="cfg" id="cfg" hidden>
+<div class="row2"><div class="field"><label for="n1"><span class="dot" style="background:var(--t1)"></span>Chap o‘yinchi</label><input id="n1" placeholder="1-o‘yinchi" maxlength="24"></div>
+<div class="field"><label for="n2"><span class="dot" style="background:var(--t2)"></span>O‘ng o‘yinchi</label><input id="n2" placeholder="2-o‘yinchi" maxlength="24"></div></div>
+<div class="row2"><div class="field"><label for="rng">Darslar</label><select id="rng"><option value="1-16" selected>Barcha darslar (1–16)</option><option value="1-4">1–4-darslar</option><option value="5-8">5–8-darslar</option><option value="9-12">9–12-darslar</option><option value="13-16">13–16-darslar</option></select></div>
+<div class="field"><label for="cnt">Har biriga savollar</label><select id="cnt"><option>8</option><option selected>10</option><option>12</option></select></div></div>
+<div class="row2"><div class="field"><label for="tm">Savol uchun vaqt</label><select id="tm"><option value="15">15 soniya</option><option value="20" selected>20 soniya</option><option value="30">30 soniya</option></select></div>
+<div class="field"><label for="pen">Xato uchun jarima</label><select id="pen"><option value="0">Yo‘q</option><option value="2" selected>2 soniya kutish</option><option value="3">3 soniya kutish</option></select></div></div>
+<div class="field"><label for="lim">Qalqonni yorish uchun ustunlik</label><select id="lim"><option value="2">2 ta zarba (tez o‘yin)</option><option value="3" selected>3 ta zarba</option><option value="4">4 ta zarba</option></select></div><p class="hint">Bir darslar oralig‘ida 12 ta savol bor. Ikkala o‘yinchi bir xil savollarni boshqa tartibda oladi.</p></div>
+    </form>
+  </div>
+</section>
+<section class="screen" id="play">
+<div class="glass arena">
+  <div class="shield" id="sh0" style="--sc:var(--t1)"><svg viewBox="0 0 100 120" aria-hidden="true"><defs><linearGradient id="sg0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".5" stop-color="var(--t1)" stop-opacity=".9" style="stop-color:var(--t1)"/><stop offset="1" stop-color="#0b1430"/></linearGradient></defs>
+<path d="M50 4 L92 18 V58 C92 86 72 104 50 116 C28 104 8 86 8 58 V18 Z" fill="url(#sg0)" stroke="#fff" stroke-opacity=".7" stroke-width="3"/>
+<path d="M50 18 L78 28 V58 C78 78 64 92 50 100 C36 92 22 78 22 58 V28 Z" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2"/>
+<path d="M50 36 l7 14 15 2 -11 10 3 15 -14 -7 -14 7 3 -15 -11 -10 15 -2z" fill="#fff" fill-opacity=".85"/>
+<g class="crack c1" stroke="#0b1430" stroke-width="3" fill="none"><path d="M30 14 L40 40 L32 56 L44 72"/></g>
+<g class="crack c2" stroke="#0b1430" stroke-width="3" fill="none"><path d="M72 20 L60 46 L70 64 L58 88"/></g>
+<g class="crack c3" stroke="#0b1430" stroke-width="3" fill="none"><path d="M50 4 L48 30 L56 52 L46 76 L52 116"/></g></svg></div>
+  <div class="track"><div class="alabel" id="alabel">Energiya to‘qnashuvi — o‘rtada</div><div class="beam b1" id="b1"></div><div class="beam b2" id="b2"></div><div class="clash" id="clash"></div><div class="marks" id="marks"></div></div>
+  <div class="shield" id="sh1" style="--sc:var(--t2)"><svg viewBox="0 0 100 120" aria-hidden="true"><defs><linearGradient id="sg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".5" stop-color="var(--t2)" stop-opacity=".9" style="stop-color:var(--t2)"/><stop offset="1" stop-color="#0b1430"/></linearGradient></defs>
+<path d="M50 4 L92 18 V58 C92 86 72 104 50 116 C28 104 8 86 8 58 V18 Z" fill="url(#sg1)" stroke="#fff" stroke-opacity=".7" stroke-width="3"/>
+<path d="M50 18 L78 28 V58 C78 78 64 92 50 100 C36 92 22 78 22 58 V28 Z" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2"/>
+<path d="M50 36 l7 14 15 2 -11 10 3 15 -14 -7 -14 7 3 -15 -11 -10 15 -2z" fill="#fff" fill-opacity=".85"/>
+<g class="crack c1" stroke="#0b1430" stroke-width="3" fill="none"><path d="M30 14 L40 40 L32 56 L44 72"/></g>
+<g class="crack c2" stroke="#0b1430" stroke-width="3" fill="none"><path d="M72 20 L60 46 L70 64 L58 88"/></g>
+<g class="crack c3" stroke="#0b1430" stroke-width="3" fill="none"><path d="M50 4 L48 30 L56 52 L46 76 L52 116"/></g></svg></div>
+</div>
+<div class="duo"><div class="glass pp" style="--pc:var(--t1)"><div class="ph"><span class="pn" id="pn0"></span><span class="ps" id="s0">0</span><div class="ring" id="r0"></div></div>
+<div class="keys">Klaviatura: <span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span> <span class="kbd">4</span> yoki sichqoncha / sensorli ekran</div><div id="q0"></div><div class="dfb" id="f0"></div></div> <div class="glass pp" style="--pc:var(--t2)"><div class="ph"><span class="pn" id="pn1"></span><span class="ps" id="s1">0</span><div class="ring" id="r1"></div></div>
+<div class="keys">Klaviatura: <span class="kbd">7</span> <span class="kbd">8</span> <span class="kbd">9</span> <span class="kbd">0</span> yoki sichqoncha / sensorli ekran</div><div id="q1"></div><div class="dfb" id="f1"></div></div></div>
+</section>
+<section class="screen result" id="result">
+  <div class="glass pad">
+    <div class="trophy">🏆</div>
+    <h2 id="rTitle"></h2><p class="sub" id="rSub"></p>
+    <table class="rtable"><thead><tr><th>O‘yinchi</th><th>To‘g‘ri</th><th>Xato</th><th>O‘rtacha vaqt</th></tr></thead><tbody id="rBody"></tbody></table>
+    <div class="actions"><button class="btn" id="againBtn">↻ Qayta o‘ynash</button><a class="btn ghost" href="index.html#simulyatorlar">⌂ Bosh sahifa</a></div>
+  </div>
+</section>
+</main>
+<div class="banner" id="banner" role="status" aria-live="polite"></div>
+<canvas id="confetti"></canvas>
+<script>
+/* ===== SAVOLLAR — o‘qituvchi shu qismni tahrirlashi mumkin ===== */
+/* options — birinchi variant to‘g‘ri (answer: 0); o‘yin variantlarni o‘zi aralashtiradi.
+   dars — savol qaysi darsga tegishli (darslar oralig‘i shu bo‘yicha tanlanadi). */
+const QUESTIONS = [
+ {
+  "type": "mcq",
+  "q": "Xabarni ulashishdan oldin “5 qadamli qoida”ning birinchi qadami qaysi?",
+  "options": [
+   "Ko‘r — xabarni oxirigacha o‘qi",
+   "Darhol do‘stlarga ulash",
+   "Faqat sarlavhaga qara",
+   "Izohlarni o‘qib chiq"
+  ],
+  "answer": 0,
+  "why": "Ko‘r → Tekshir → Solishtir → O‘yla → Xulosa qil.",
+  "dars": 1
+ },
+ {
+  "type": "mcq",
+  "q": "Ataylab to‘qib chiqarilgan yolg‘on xabar qanday ataladi?",
+  "options": [
+   "Dezinformatsiya",
+   "Misinformatsiya",
+   "Malinformatsiya",
+   "Klikbeyt"
+  ],
+  "answer": 0,
+  "why": "Dezinformatsiyaning belgisi — ataylab aldash niyati.",
+  "dars": 1
+ },
+ {
+  "type": "mcq",
+  "q": "“Buni ko‘rib hayratdan qotib qolasiz!” — bu qanday sarlavha?",
+  "options": [
+   "Klikbeyt",
+   "Xolis sarlavha",
+   "Rasmiy e’lon",
+   "Ilmiy xulosa"
+  ],
+  "answer": 0,
+  "why": "Klikbeyt mazmundan ko‘ra ko‘proq va’da berib, bosishga undaydi.",
+  "dars": 1
+ },
+ {
+  "type": "mcq",
+  "q": "Qidiruvni faqat .uz saytlari bilan cheklaydigan operator?",
+  "options": [
+   "site:uz",
+   "-uz",
+   "filetype:uz",
+   "#uz"
+  ],
+  "answer": 0,
+  "why": "“site:” qidiruvni ma’lum sayt yoki domen bilan cheklaydi.",
+  "dars": 2
+ },
+ {
+  "type": "mcq",
+  "q": "Birovning matnini manba ko‘rsatmasdan o‘ziniki qilish nima?",
+  "options": [
+   "Plagiat",
+   "Iqtibos",
+   "Tarjima",
+   "Sharh"
+  ],
+  "answer": 0,
+  "why": "Manba ko‘rsatilsa — iqtibos, ko‘rsatilmasa — plagiat.",
+  "dars": 2
+ },
+ {
+  "type": "mcq",
+  "q": "Internetdagi muomala odobi qoidalari qanday ataladi?",
+  "options": [
+   "Netiket",
+   "Algoritm",
+   "Brauzer",
+   "Domen"
+  ],
+  "answer": 0,
+  "why": "“Net” (tarmoq) + “etiket” (odob).",
+  "dars": 2
+ },
+ {
+  "type": "mcq",
+  "q": "Vazirlik qarorining rasmiy matni qanday manba?",
+  "options": [
+   "Birlamchi manba",
+   "Ikkilamchi manba",
+   "“Uchinchi qo‘l” manba",
+   "Anonim manba"
+  ],
+  "answer": 0,
+  "why": "Hujjatning o‘zi — birlamchi; u haqidagi maqola — ikkilamchi.",
+  "dars": 3
+ },
+ {
+  "type": "mcq",
+  "q": "Notanish sayt haqida yangi oynada boshqalar nima deyishini qidirish nima deyiladi?",
+  "options": [
+   "Yonlama o‘qish",
+   "Tezkor o‘qish",
+   "Sarlavha o‘qish",
+   "Skanerlash"
+  ],
+  "answer": 0,
+  "why": "Faktcheckerlar sayt o‘zini qanday maqtashiga emas, boshqalar u haqida nima deyishiga qaraydi.",
+  "dars": 3
+ },
+ {
+  "type": "mcq",
+  "q": "O‘zbekiston davlat organlari saytlari qaysi domen bilan tugaydi?",
+  "options": [
+   ".gov.uz",
+   ".com",
+   ".info",
+   ".top"
+  ],
+  "answer": 0,
+  "why": "Lekin ehtiyot bo‘ling: firibgarlar o‘xshash manzil yasashi mumkin.",
+  "dars": 3
+ },
+ {
+  "type": "mcq",
+  "q": "Fakt-checkingning birinchi qadami qaysi?",
+  "options": [
+   "Da’voni aniqlash",
+   "Hukm chiqarish",
+   "Xabarni ulashish",
+   "Izoh yozish"
+  ],
+  "answer": 0,
+  "why": "Nimani tekshirayotganingizni bilmasangiz, tekshirib bo‘lmaydi.",
+  "dars": 4
+ },
+ {
+  "type": "mcq",
+  "q": "Rasm boshqa voqeaga tegishli ekanini qanday aniqlash mumkin?",
+  "options": [
+   "Teskari rasm qidiruvi",
+   "Rasmni kattalashtirish",
+   "Izohlarni o‘qish",
+   "Ranglarini tekshirish"
+  ],
+  "answer": 0,
+  "why": "Google Lens yoki TinEye rasm birinchi qachon va qayerda chiqqanini ko‘rsatadi.",
+  "dars": 4
+ },
+ {
+  "type": "mcq",
+  "q": "Haqiqiy video boshqa voqeaga yopishtirilgan. Qaysi hukm to‘g‘ri?",
+  "options": [
+   "Kontekstdan uzilgan",
+   "Rost",
+   "Qisman rost",
+   "Tasdiqlangan"
+  ],
+  "answer": 0,
+  "why": "Video haqiqiy, lekin boshqa voqea haqida — bu kontekstdan uzish.",
+  "dars": 4
+ },
+ {
+  "type": "mcq",
+  "q": "“Mashhur olim aytdi” (ismi va manbasi yo‘q) — bu qaysi usul?",
+  "options": [
+   "Soxta avtoritet",
+   "Soxta ko‘pchilik",
+   "Shoshiltirish",
+   "Qo‘rquv uyg‘otish"
+  ],
+  "answer": 0,
+  "why": "Ismsiz, havolasiz “mutaxassis” — soxta avtoritet.",
+  "dars": 5
+ },
+ {
+  "type": "mcq",
+  "q": "Bir gapni ko‘p eshitsak, u “rostroq” tuyuladi. Bu nima?",
+  "options": [
+   "Takror ta’siri",
+   "Langar effekti",
+   "Freymlash",
+   "Fishing"
+  ],
+  "answer": 0,
+  "why": "Miya tanishlikni haqiqat bilan adashtiradi.",
+  "dars": 5
+ },
+ {
+  "type": "mcq",
+  "q": "Manipulyatsiya usullarini oldindan o‘rganib, ularni tez tanish nima deyiladi?",
+  "options": [
+   "Oldindan emlash",
+   "Algoritm",
+   "Bloklash",
+   "Filtrlash"
+  ],
+  "answer": 0,
+  "why": "Usulni oldindan bilgan odam unga kamroq aldanadi.",
+  "dars": 5
+ },
+ {
+  "type": "mcq",
+  "q": "Qaysi parol eng kuchli?",
+  "options": [
+   "Qovun-Velosiped-Yomg‘ir-42",
+   "ali2010",
+   "qwerty123",
+   "12345678"
+  ],
+  "answer": 0,
+  "why": "Uzun, bog‘liq bo‘lmagan so‘zlardan iborat ibora — eslash oson, topish qiyin.",
+  "dars": 6
+ },
+ {
+  "type": "mcq",
+  "q": "Soxta sayt orqali parol va karta ma’lumotini o‘g‘irlash nima?",
+  "options": [
+   "Fishing",
+   "Deepfake",
+   "Spam",
+   "Cookie"
+  ],
+  "answer": 0,
+  "why": "Fishing — “qarmoq tashlab” ma’lumotni ilintirish.",
+  "dars": 6
+ },
+ {
+  "type": "mcq",
+  "q": "“Do‘stingiz” yangi raqamdan yozib, sizga kelgan SMS kodni so‘rayapti. To‘g‘ri harakat?",
+  "options": [
+   "Bermayman, boshqa yo‘l bilan tekshiraman",
+   "Darhol yuboraman",
+   "Yarmini yuboraman",
+   "Guruhga tashlayman"
+  ],
+  "answer": 0,
+  "why": "SMS kod — akkauntingiz kaliti. Bu ijtimoiy muhandislik.",
+  "dars": 6
+ },
+ {
+  "type": "mcq",
+  "q": "Xabar kimlarga mo‘ljallanganini bildiruvchi tushuncha?",
+  "options": [
+   "Auditoriya",
+   "Freym",
+   "Lid",
+   "Brend"
+  ],
+  "answer": 0,
+  "why": "Auditoriya — xabar qaratilgan odamlar guruhi.",
+  "dars": 7
+ },
+ {
+  "type": "mcq",
+  "q": "“90% kirdi” va “har o‘ninchisi kira olmadi” sarlavhalari nimaga misol?",
+  "options": [
+   "Freymlash",
+   "Plagiat",
+   "Fishing",
+   "Trol"
+  ],
+  "answer": 0,
+  "why": "Bir fakt — turli “ramka”, turli his-tuyg‘u.",
+  "dars": 7
+ },
+ {
+  "type": "mcq",
+  "q": "Tavsifida “hamkorlikda” yozilgan bloger posti qanday material?",
+  "options": [
+   "Homiylik materiali (reklama)",
+   "Xolis sharh",
+   "Yangilik",
+   "Ijtimoiy reklama"
+  ],
+  "answer": 0,
+  "why": "Muallif bu post uchun haq olgan bo‘lishi mumkin.",
+  "dars": 7
+ },
+ {
+  "type": "mcq",
+  "q": "CC BY-NC litsenziyali rasmni qayerda ishlatib bo‘lmaydi?",
+  "options": [
+   "Do‘kon reklamasida",
+   "Maktab loyihasida",
+   "Sinf gazetasida",
+   "Referatda"
+  ],
+  "answer": 0,
+  "why": "NC — notijorat: pul ishlash maqsadida ishlatish mumkin emas.",
+  "dars": 8
+ },
+ {
+  "type": "mcq",
+  "q": "Kiberbullingga guvoh bo‘lsangiz, qaysi harakat NOTO‘G‘RI?",
+  "options": [
+   "Postga “kulgili” deb layk bosish",
+   "Shikoyat qilish",
+   "Jabrlanuvchini qo‘llab-quvvatlash",
+   "Kattalarga aytish"
+  ],
+  "answer": 0,
+  "why": "Har bir layk va ulashish bullingni kuchaytiradi.",
+  "dars": 8
+ },
+ {
+  "type": "mcq",
+  "q": "Mualliflik huquqi qachon paydo bo‘ladi?",
+  "options": [
+   "Asar yaratilganda avtomatik",
+   "Ro‘yxatdan o‘tgandan keyin",
+   "1000 ta layk olganda",
+   "Asar sotilganda"
+  ],
+  "answer": 0,
+  "why": "Huquq asar bilan birga tug‘iladi.",
+  "dars": 8
+ },
+ {
+  "type": "mcq",
+  "q": "Ustunli diagrammada farq juda katta ko‘rinsa, birinchi nimani tekshirasiz?",
+  "options": [
+   "Y o‘qi 0 dan boshlanadimi",
+   "Ustunlar rangini",
+   "Sarlavha shriftini",
+   "Fon rangini"
+  ],
+  "answer": 0,
+  "why": "Kesilgan o‘q kichik farqni ulkan qilib ko‘rsatadi.",
+  "dars": 9
+ },
+ {
+  "type": "mcq",
+  "q": "Odam pastdan suratga olinsa, qanday ko‘rinadi?",
+  "options": [
+   "Kuchli va ulug‘vor",
+   "Kichik va zaif",
+   "O‘zgarishsiz",
+   "Xira"
+  ],
+  "answer": 0,
+  "why": "Rakurs tomoshabin munosabatini shakllantiradi.",
+  "dars": 9
+ },
+ {
+  "type": "mcq",
+  "q": "Suratning bir qismini kesib, noto‘g‘ri taglavha bilan tarqatish nima?",
+  "options": [
+   "Vizual manipulyatsiya",
+   "Xolis tahlil",
+   "Infografika",
+   "Ramz"
+  ],
+  "answer": 0,
+  "why": "Kesilgan kadrda yolg‘on yo‘q, lekin taassurot yolg‘on.",
+  "dars": 9
+ },
+ {
+  "type": "mcq",
+  "q": "“O‘YLA” filtridagi “M” harfi qaysi savolni bildiradi?",
+  "options": [
+   "Mehribonmi?",
+   "Mashhurmi?",
+   "Mumkinmi?",
+   "Mazalimi?"
+  ],
+  "answer": 0,
+  "why": "Rostmi? Foydalimi? Ilhomlantiradimi? Zarurmi? Mehribonmi?",
+  "dars": 10
+ },
+ {
+  "type": "mcq",
+  "q": "Izohda KATTA HARFLAR bilan yozish nimani bildiradi?",
+  "options": [
+   "Baqirishni",
+   "Hurmatni",
+   "Hazilni",
+   "Muhimlikni"
+  ],
+  "answer": 0,
+  "why": "Onlayn muloqotda katta harf — baqirish.",
+  "dars": 10
+ },
+ {
+  "type": "mcq",
+  "q": "Trol ataylab janjal chiqaryapti. Eng to‘g‘ri yo‘l?",
+  "options": [
+   "E’tibor bermaslik, kerak bo‘lsa bloklash",
+   "Uzoq tortishish",
+   "Uni masxara qilish",
+   "Javobini kutib o‘tirish"
+  ],
+  "answer": 0,
+  "why": "E’tibor — trolning “ozuqasi”.",
+  "dars": 10
+ },
+ {
+  "type": "mcq",
+  "q": "Qaysi biri passiv raqamli izga misol?",
+  "options": [
+   "Qidiruv tarixi",
+   "O‘zingiz joylagan rasm",
+   "Yozgan izohingiz",
+   "Profil ma’lumoti"
+  ],
+  "answer": 0,
+  "why": "Passiv iz siz sezmagan holda avtomatik yig‘iladi.",
+  "dars": 11
+ },
+ {
+  "type": "mcq",
+  "q": "Saytlar brauzeringizda saqlaydigan kichik fayllar?",
+  "options": [
+   "Cookie",
+   "Piksel",
+   "Teg",
+   "Domen"
+  ],
+  "answer": 0,
+  "why": "Shuning uchun bir marta ko‘rgan reklama sizga “ergashib” yuradi.",
+  "dars": 11
+ },
+ {
+  "type": "mcq",
+  "q": "Stories’da real vaqtda joylashuvni belgilash qanday xavf tug‘diradi?",
+  "options": [
+   "Kun tartibi va manzil ochiladi",
+   "Telefon qizib ketadi",
+   "Internet sekinlashadi",
+   "Hech qanday xavf yo‘q"
+  ],
+  "answer": 0,
+  "why": "Alohida postlar birgalikda to‘liq portret beradi.",
+  "dars": 11
+ },
+ {
+  "type": "mcq",
+  "q": "Argumentning uch qismi qaysilar?",
+  "options": [
+   "Da’vo, dalil, izoh",
+   "Sarlavha, matn, rasm",
+   "Savol, javob, baho",
+   "Boshi, o‘rtasi, oxiri"
+  ],
+  "answer": 0,
+  "why": "Dalil va izohsiz da’vo — shunchaki fikr.",
+  "dars": 12
+ },
+ {
+  "type": "mcq",
+  "q": "“U hali yosh, uning fikri muhim emas” — bu qaysi mantiqiy xato?",
+  "options": [
+   "Shaxsga hujum",
+   "Soxta dilemma",
+   "Somon odam",
+   "Sirpanchiq qiyalik"
+  ],
+  "answer": 0,
+  "why": "Fikrga emas, odamga hujum qilinmoqda.",
+  "dars": 12
+ },
+ {
+  "type": "mcq",
+  "q": "“Yo biz bilan, yo bizga qarshi” — bu qaysi mantiqiy xato?",
+  "options": [
+   "Soxta dilemma",
+   "Shaxsga hujum",
+   "Noto‘g‘ri avtoritet",
+   "Shoshilinch umumlashtirish"
+  ],
+  "answer": 0,
+  "why": "Aslida ikki variantdan ko‘p imkoniyat bor.",
+  "dars": 12
+ },
+ {
+  "type": "mcq",
+  "q": "Nega 9 990 so‘m 10 000 dan ancha arzon tuyuladi?",
+  "options": [
+   "Ko‘z birinchi raqamni o‘qiydi",
+   "Haqiqatan ham ancha arzon",
+   "9 — omadli raqam",
+   "Unda soliq yo‘q"
+  ],
+  "answer": 0,
+  "why": "Farq atigi 10 so‘m.",
+  "dars": 13
+ },
+ {
+  "type": "mcq",
+  "q": "“Bepul sinov”dan keyin kartadan avtomatik pul yechilishi nima?",
+  "options": [
+   "Qorong‘i naqsh",
+   "Ijtimoiy reklama",
+   "Brend",
+   "Trend"
+  ],
+  "answer": 0,
+  "why": "Shartlar mayda harfda yashiriladi.",
+  "dars": 13
+ },
+ {
+  "type": "mcq",
+  "q": "Reklamani ko‘rib biror narsa olmoqchi bo‘lsangiz, qaysi qoida yordam beradi?",
+  "options": [
+   "24 soat qoidasi",
+   "5 soniya qoidasi",
+   "3 marta qoidasi",
+   "“Hamma oldi” qoidasi"
+  ],
+  "answer": 0,
+  "why": "Bir kundan keyin impulsiv istak ko‘pincha so‘nadi.",
+  "dars": 13
+ },
+ {
+  "type": "mcq",
+  "q": "Zararli axborotga nisbatan ichki barqarorlik nima deyiladi?",
+  "options": [
+   "Ma’naviy immunitet",
+   "Trend",
+   "Auditoriya",
+   "Algoritm"
+  ],
+  "answer": 0,
+  "why": "U tanqidiy fikr va qadriyatlarga tayanadi.",
+  "dars": 14
+ },
+ {
+  "type": "mcq",
+  "q": "“Algoritm” so‘zi qaysi olim nomidan kelib chiqqan?",
+  "options": [
+   "Al-Xorazmiy",
+   "Ibn Sino",
+   "Alisher Navoiy",
+   "Mirzo Ulug‘bek"
+  ],
+  "answer": 0,
+  "why": "Uning nomi lotincha “Algoritmi” deb yozilgan.",
+  "dars": 14
+ },
+ {
+  "type": "mcq",
+  "q": "Boshqa madaniyat va qarashlarni hurmat qilish nima deyiladi?",
+  "options": [
+   "Bag‘rikenglik",
+   "Loqaydlik",
+   "Taqlid",
+   "Raqobat"
+  ],
+  "answer": 0,
+  "why": "O‘z qadriyatlarini asrash boshqalarni kamsitish degani emas.",
+  "dars": 14
+ },
+ {
+  "type": "mcq",
+  "q": "TO‘X-TA usulining birinchi qadami?",
+  "options": [
+   "To‘xta",
+   "Tasdiq izla",
+   "Aslini top",
+   "Xabarchini tekshir"
+  ],
+  "answer": 0,
+  "why": "To‘xta → Xabarchini tekshir → Tasdiq izla → Aslini top.",
+  "dars": 15
+ },
+ {
+  "type": "mcq",
+  "q": "Chatbot mavjud bo‘lmagan manbani “to‘qib chiqarishi” nima deyiladi?",
+  "options": [
+   "Gallyutsinatsiya",
+   "Verifikatsiya",
+   "Metama’lumot",
+   "Freymlash"
+  ],
+  "answer": 0,
+  "why": "Sun’iy intellekt bergan muhim faktlarni tekshiring.",
+  "dars": 15
+ },
+ {
+  "type": "mcq",
+  "q": "Ovozli firibgarlikdan himoyalanishning eng yaxshi usuli?",
+  "options": [
+   "Oila kod so‘zi",
+   "Ovozni balandlatish",
+   "Tezroq pul o‘tkazish",
+   "Telefonni o‘chirib qo‘yish"
+  ],
+  "answer": 0,
+  "why": "Firibgar ovozni nusxalay oladi, lekin kod so‘zini bilmaydi.",
+  "dars": 15
+ },
+ {
+  "type": "mcq",
+  "q": "O‘z bilim va faoliyatini tahlil qilish nima deyiladi?",
+  "options": [
+   "Refleksiya",
+   "Rubrika",
+   "Portfolio",
+   "Freym"
+  ],
+  "answer": 0,
+  "why": "“Nimani o‘rgandim, nima o‘zgardi, keyin nima qilaman?”",
+  "dars": 16
+ },
+ {
+  "type": "mcq",
+  "q": "Loyihani baholash mezonlari jadvali qanday ataladi?",
+  "options": [
+   "Rubrika",
+   "Portfolio",
+   "Infografika",
+   "Lid"
+  ],
+  "answer": 0,
+  "why": "Rubrika baholashni shaffof qiladi.",
+  "dars": 16
+ },
+ {
+  "type": "mcq",
+  "q": "“Lift nutqi” qanday tuzilishga ega?",
+  "options": [
+   "Muammo — dalil — yechim — chaqiriq",
+   "Salom — xayr",
+   "Faqat raqamlar",
+   "Sarlavha — rasm"
+  ],
+  "answer": 0,
+  "why": "Bir daqiqada aniq va ishonarli.",
+  "dars": 16
+ }
+];
+
+</script>
+<script>
+"use strict";
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function show(id){$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));scrollTo(0,0)}
+function clean(v,d){v=(v||'').trim().replace(/\s+/g,' ');return v?v.slice(0,24):d}
+const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* Ovoz — brauzerning o‘zida hosil qilinadi */
+const Snd={on:store.get('am_sound',true),ctx:null,
+  t(f,d=.15,type='sine',v=.14,delay=0){if(!this.on)return;try{this.ctx=this.ctx||new(window.AudioContext||window.webkitAudioContext)();const c=this.ctx;if(c.state==='suspended')c.resume();
+    const o=c.createOscillator(),g=c.createGain(),s=c.currentTime+delay;o.type=type;o.frequency.setValueAtTime(f,s);g.gain.setValueAtTime(v,s);g.gain.exponentialRampToValueAtTime(.0008,s+d);o.connect(g);g.connect(c.destination);o.start(s);o.stop(s+d+.03)}catch(e){}},
+  click(){this.t(600,.05,'triangle',.06)},
+  ok(){this.t(740,.12,'triangle',.15);this.t(1110,.22,'triangle',.14,.1)},
+  bad(){this.t(180,.3,'sawtooth',.06)},
+  tick(){this.t(1300,.04,'square',.03)},
+  whoosh(){[300,420,560,720].forEach((f,i)=>this.t(f,.08,'sine',.06,i*.04))},
+  win(){[523,659,784,1047,1319].forEach((f,i)=>this.t(f,.3,'triangle',.14,i*.12))}};
+
+class Ring{constructor(el){this.el=el;this.id=0}
+  start(sec,cb){this.stop();if(!sec){this.el.classList.add('inf');this.el.innerHTML='<span>∞</span>';return}
+    this.el.classList.remove('inf');this.left=sec;this.total=sec;this.cb=cb;this.draw();
+    this.id=setInterval(()=>{this.left--;this.draw();if(this.left>0&&this.left<=5)Snd.tick();
+      if(this.left<=0){this.stop();const f=this.cb;this.cb=null;f&&f()}},1000)}
+  stop(){clearInterval(this.id);this.id=0;this.el.classList.remove('warn')}
+  draw(){this.el.innerHTML='<span>'+Math.max(0,this.left)+'</span>';this.el.style.setProperty('--p',Math.max(0,this.left)/this.total);this.el.classList.toggle('warn',this.left<=5&&this.left>0)}}
+
+function banner(h,ms){const b=$('#banner');b.innerHTML=h;b.classList.add('on');clearTimeout(b._t);b._t=setTimeout(()=>b.classList.remove('on'),ms||1700)}
+function countdown(cb){let n=3;const st=()=>{if(n>0){banner('<span style="font-size:3.4rem">'+n+'</span>',800);Snd.tick();n--;setTimeout(st,900)}else{banner('🚀 Boshladik!',700);Snd.ok();cb()}};st()}
+function confetti(){const c=$('#confetti'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+  const cols=['#22d3ee','#a78bfa','#f472b6','#34d399','#fbbf24','#38bdf8'];
+  const P=Array.from({length:180},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.5,r:4+Math.random()*6,c:cols[Math.random()*6|0],vy:2+Math.random()*3.5,vx:-1.5+Math.random()*3,a:Math.random()*6,va:-.2+Math.random()*.4}));
+  let t=0;(function f(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});
+    if(++t<260)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
+
+/* Savol: type mcq | open | task. q.answer — to‘g‘ri variant indeksi */
+window.KEYH=null;
+function refLink(d){return d?' <a class="ref" href="'+d+'-dars.html" target="_blank" rel="noopener">📘 '+d+'-dars</a>':''}
+function renderQ(box,q,opt){opt=opt||{};let done=false;const L='ABCD';
+  let h='<div class="qtext">'+esc(q.q)+'</div>';
+  if(q.type==='mcq'){const ord=shuffle(q.options.map((_,i)=>i));
+    h+='<div class="opts">'+ord.map((oi,k)=>'<button class="opt" data-i="'+oi+'"><b>'+L[k]+'</b><span>'+esc(q.options[oi])+'</span></button>').join('')+'</div>';}
+  else{h+='<div class="ans" hidden><b>'+(q.type==='task'?'Baholash mezoni':'Namunaviy javob')+':</b> '+esc(q.answerText)+'</div><div class="grade"><button class="gbtn" data-show>👁 '+(q.type==='task'?'Mezonni ko‘rsatish':'Javobni ko‘rsatish')+'</button>'+
+    (q.type==='open'?'<button class="gbtn ok" data-g="1">✓ To‘g‘ri</button><button class="gbtn bad" data-g="0">✗ Noto‘g‘ri</button>'
+      :'<button class="gbtn bad" data-p="0">Bajarilmadi · 0</button><button class="gbtn ok" data-p="'+q.points+'">Bajarildi · '+q.points+'</button><button class="gbtn gold" data-p="'+(q.points+q.bonus)+'">A’lo · '+q.points+' + '+q.bonus+' bonus</button>')+
+    '</div><p class="hint" style="margin-top:.5rem">'+(q.type==='task'?'Topshiriqni o‘qituvchi mezon asosida baholaydi.':'Javobni o‘qituvchi tekshiradi.')+'</p>';}
+  h+='<div class="fb"></div>';box.innerHTML=h;const fb=$('.fb',box);
+  function fin(r){if(done)return;done=true;window.KEYH=null;
+    $$('button',box).forEach(b=>{if(!('show' in b.dataset))b.disabled=true});
+    if(q.type==='mcq')$$('.opt',box).forEach(b=>{const i=+b.dataset.i;b.classList.add(i===q.answer?'right':(i===r.chosen?'wrong':'dim'))});
+    else $('.ans',box).hidden=false;
+    const why=q.why?'<div class="why">'+esc(q.why)+refLink(q.dars)+'</div>':'';
+    let cls,head;
+    if(r.timeout){cls='bad';head='⏰ Vaqt tugadi!'+(q.type==='mcq'?' To‘g‘ri javob: '+esc(q.options[q.answer]):'')}
+    else if(q.type==='task'){cls=r.points>0?'ok':'bad';head=r.points>0?'✓ Baholandi: +'+r.points+' ball':'✗ Topshiriq bajarilmadi'}
+    else if(r.correct){cls='ok';head='✓ To‘g‘ri!'}
+    else{cls='bad';head='✗ Noto‘g‘ri.'+(q.type==='mcq'?' To‘g‘ri javob: '+esc(q.options[q.answer]):'')}
+    fb.className='fb on '+cls;fb.innerHTML='<b>'+head+'</b>'+why;cls==='ok'?Snd.ok():Snd.bad();
+    if(r.correct===undefined)r.correct=(r.points||0)>0;opt.onDone&&opt.onDone(r)}
+  if(q.type==='mcq'){$$('.opt',box).forEach(b=>b.onclick=()=>fin({correct:+b.dataset.i===q.answer,chosen:+b.dataset.i}));
+    window.KEYH=e=>{const n='1234'.indexOf(e.key);const bs=$$('.opt',box);if(n>=0&&bs[n]&&!bs[n].disabled){e.preventDefault();bs[n].click()}}}
+  else{$('[data-show]',box).onclick=e=>{$('.ans',box).hidden=false;e.currentTarget.disabled=true};
+    $$('[data-g]',box).forEach(b=>b.onclick=()=>fin({correct:b.dataset.g==='1'}));
+    $$('[data-p]',box).forEach(b=>b.onclick=()=>fin({points:+b.dataset.p}))}
+  return{timeout(){if(done)return;if(q.type==='mcq')fin({correct:false,timeout:true});else{$('.ans',box).hidden=false;fb.className='fb on info';fb.innerHTML='<b>⏰ Vaqt tugadi — endi javobni baholang.</b>'}},get done(){return done}}}
+
+/* Ikki o‘quvchi bir vaqtda o‘ynaydigan dvigatel */
+function Duel(c){const n=c.list.length,o0=shuffle(c.list),h=n>>1,orders=[o0,o0.slice(h).concat(o0.slice(0,h))];
+  const S={idx:[0,0],good:[0,0],bad:[0,0],t:[0,0],cur:[null,null],tm:[0,0],fin:[false,false],over:false,rings:[new Ring(c.rings[0]),new Ring(c.rings[1])]};
+  const fbset=(i,cls,html)=>{const e=c.fbs[i];e.className='dfb '+cls;e.innerHTML=html};
+  function ask(i){if(S.over)return;
+    if(S.idx[i]>=n){S.fin[i]=true;S.cur[i]=null;c.boxes[i].innerHTML='<div class="qtext sm wait">✓ Savollar tugadi.<br>Raqibni kuting…</div>';fbset(i,'','Jami: '+S.good[i]+' ta to‘g‘ri, '+S.bad[i]+' ta xato');
+      if(S.fin[0]&&S.fin[1]){S.over=true;c.onAllDone()}return}
+    const q=orders[i][S.idx[i]++],t0=performance.now(),K=c.keys[i],ord=shuffle(q.options.map((_,k)=>k));
+    c.boxes[i].innerHTML='<div class="qtext sm">'+esc(q.q)+'</div><div class="opts sm">'+ord.map((oi,k)=>'<button class="opt" data-i="'+oi+'"><b>'+K[k]+'</b><span>'+esc(q.options[oi])+'</span></button>').join('')+'</div>';
+    let done=false;const bs=$$('.opt',c.boxes[i]);
+    const fin=(ch,to)=>{if(done||S.over)return;done=true;S.rings[i].stop();S.t[i]+=(performance.now()-t0)/1000;
+      bs.forEach(b=>{b.disabled=true;const k=+b.dataset.i;b.classList.add(k===q.answer?'right':(k===ch?'wrong':'dim'))});
+      if(!to&&ch===q.answer){S.good[i]++;Snd.ok();fbset(i,'ok','✓ To‘g‘ri! '+esc(q.why||''));c.onCorrect(i);if(S.over)return;S.tm[i]=setTimeout(()=>ask(i),1200)}
+      else{S.bad[i]++;Snd.bad();fbset(i,'bad',(to?'⏰ Vaqt tugadi. ':'✗ Xato. ')+'To‘g‘ri: <b>'+esc(q.options[q.answer])+'</b>'+(c.pen?' · jarima '+c.pen+' s':''));S.tm[i]=setTimeout(()=>ask(i),1700+c.pen*1000)}
+      c.onUpdate&&c.onUpdate()};
+    bs.forEach(b=>b.onclick=()=>fin(+b.dataset.i,false));
+    S.cur[i]={key:k=>{const p=K.indexOf(k);if(p>=0&&bs[p]&&!done)bs[p].click()}};
+    fbset(i,'','Savol '+S.idx[i]+' / '+n);S.rings[i].start(c.time,()=>fin(-1,true))}
+  S.start=()=>{ask(0);ask(1)};
+  S.stop=()=>{S.over=true;[0,1].forEach(i=>{clearTimeout(S.tm[i]);S.rings[i].stop();if(c.boxes[i])$$('.opt',c.boxes[i]).forEach(b=>b.disabled=true)})};
+  S.key=k=>{if(S.over)return;[0,1].forEach(i=>{if(c.keys[i].includes(k)&&S.cur[i])S.cur[i].key(k)})};
+  S.avg=i=>{const a=S.good[i]+S.bad[i];return a?(S.t[i]/a).toFixed(1)+' s':'—'};
+  return S}
+
+document.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;if(window.KEYH)window.KEYH(e);else if(window.onKey)window.onKey(e)});
+
+function initChrome(){const sb=$('#sndBtn');const u=()=>{sb.innerHTML=Snd.on?'🔊 <span class="lbl">Ovoz</span>':'🔇 <span class="lbl">Ovozsiz</span>'};u();
+  sb.onclick=()=>{Snd.on=!Snd.on;store.set('am_sound',Snd.on);u()};
+  $('#fsBtn').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
+  const cb=$('#cfgBtn');if(cb)cb.onclick=()=>{const c=$('#cfg');c.hidden=!c.hidden;cb.textContent=c.hidden?'⚙️ Sozlamalar':'✕ Sozlamalarni yopish'};
+  document.addEventListener('keydown',e=>{if(e.key==='Enter'&&$('#setup').classList.contains('on')&&!e.target.matches('input,select,textarea,button')){e.preventDefault();$('#form').requestSubmit()}})}
+</script>
+<script>
+let D=null,G=null;
+$('#form').onsubmit=e=>{e.preventDefault();start()};
+$('#againBtn').onclick=()=>{D&&D.stop();show('setup')};
+function pool(){const [a,b]=$('#rng').value.split('-').map(Number);return QUESTIONS.filter(q=>q.dars>=a&&q.dars<=b)}
+function names(){return[clean($('#n1').value,'1-o‘yinchi'),clean($('#n2').value,'2-o‘yinchi')]}
+window.onKey=e=>{if(D&&$('#play').classList.contains('on'))D.key(e.key)};
+function results(title,sub,winner){D&&D.stop();
+  $('#rTitle').textContent=title;$('#rSub').textContent=sub;
+  $('#rBody').innerHTML=[0,1].map(i=>'<tr class="'+(i===winner?'win':'')+'"><td>'+(i===winner?'🥇 ':'')+'<b style="color:var(--t'+(i+1)+')">'+esc(G.nm[i])+'</b></td><td>'+D.good[i]+'</td><td>'+D.bad[i]+'</td><td>'+D.avg(i)+'</td></tr>').join('');
+  setTimeout(()=>{show('result');Snd.win();confetti()},winner===-1?300:1400)}
+function judge(score){/* score>0 — chap, <0 — o‘ng */
+  if(score!==0)return score>0?0:1;
+  if(D.good[0]!==D.good[1])return D.good[0]>D.good[1]?0:1;
+  const a=D.t[0]/Math.max(1,D.good[0]+D.bad[0]),b=D.t[1]/Math.max(1,D.good[1]+D.bad[1]);
+  return Math.abs(a-b)<.05?-1:(a<b?0:1)}
+
+let pos=0,LIM=3;
+function drawArena(){const x=50+pos*(50/LIM);$('#b1').style.width=x+'%';$('#b2').style.width=(100-x)+'%';$('#clash').style.left=x+'%';
+  [0,1].forEach(i=>{const s=$('#sh'+i),d=i===0?-pos:pos;s.classList.remove('dmg1','dmg2');if(d>0&&!s.classList.contains('broken'))s.classList.add(d>=LIM-1?'dmg2':'dmg1')});
+  $('#alabel').textContent=pos===0?'Energiya to‘qnashuvi — o‘rtada':(pos>0?G.nm[0]:G.nm[1])+' bosib bormoqda: '+Math.abs(pos)+' / '+LIM}
+function start(){LIM=+$('#lim').value;pos=0;const P=QUESTIONS.filter(q=>{const [a,b]=$('#rng').value.split('-').map(Number);return q.dars>=a&&q.dars<=b});
+  const n=Math.min(+$('#cnt').value,P.length);G={nm:names()};
+  $('#pn0').textContent=G.nm[0];$('#pn1').textContent=G.nm[1];$('#s0').textContent=$('#s1').textContent='0';
+  ['#sh0','#sh1'].forEach(s=>$(s).classList.remove('broken','hit','dmg1','dmg2'));
+  $('#marks').innerHTML=Array.from({length:2*LIM+1},(_,k)=>'<i class="'+(k===LIM?'mid':'')+'"></i>').join('');
+  drawArena();$('#q0').innerHTML=$('#q1').innerHTML='<div class="qtext sm wait">Tayyorlaning…</div>';$('#f0').textContent=$('#f1').textContent='';
+  D=Duel({list:shuffle(P).slice(0,n),keys:[['1','2','3','4'],['7','8','9','0']],boxes:[$('#q0'),$('#q1')],fbs:[$('#f0'),$('#f1')],rings:[$('#r0'),$('#r1')],time:+$('#tm').value,pen:+$('#pen').value,
+    onCorrect:i=>{pos+=i===0?1:-1;$('#s'+i).textContent=D.good[i];const v=$('#sh'+(1-i));v.classList.remove('hit');void v.offsetWidth;v.classList.add('hit');drawArena();
+      if(Math.abs(pos)>=LIM){D.stop();$('#sh'+(1-i)).classList.add('broken');banner('💥 '+esc(G.nm[i])+' qalqonni yorib o‘tdi!',2000);
+        results('🏆 G‘olib: '+G.nm[i],'Raqib qalqoni '+LIM+' ta zarbadan yorildi!',i)}},
+    onAllDone:()=>{const w=judge(pos);results(w<0?'🤝 Durang!':'🏆 G‘olib: '+G.nm[w],'Savollar tugadi — to‘qnashuv nuqtasi va to‘g‘ri javoblar bo‘yicha hisoblandi',w)}});
+  show('play');countdown(()=>D.start())}
+
+initChrome();
+</script>
+</body>
+</html>
