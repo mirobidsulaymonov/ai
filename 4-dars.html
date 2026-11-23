@@ -3,152 +3,250 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fakt-checking algoritmi</title>
+  <title>Fakt-checking algoritmi — 4-dars</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root{
-      --primary:#0f172a;
-      --accent:#2563eb;
-      --accent2:#7c3aed;
-      --bg:#f6f8fc;
-      --card:#ffffff;
-      --border:#e2e8f0;
-      --text:#0f172a;
-      --muted:#64748b;
-      --success:#16a34a;
-      --warning:#f59e0b;
-      --danger:#e11d48;
-      --radius:22px;
-      --shadow:0 10px 28px rgba(15,23,42,.08);
+      --primary:#0f172a; --accent:#2563eb; --accent2:#7c3aed;
+      --card:#ffffff; --border:#e2e8f0; --text:#0f172a; --muted:#64748b;
+      --success:#16a34a; --warning:#f59e0b; --danger:#e11d48;
+      --radius:22px; --shadow:0 10px 28px rgba(15,23,42,.08);
     }
     *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:'Inter',sans-serif;
-      background:linear-gradient(180deg,#f8fbff 0%, #f1f5ff 42%, #f8fafc 100%);
-      color:var(--text);
-      line-height:1.75;
-      font-size:17px;
-    }
-    .container{width:min(1180px, calc(100% - 32px));margin:auto}
+    body{margin:0;font-family:'Inter',sans-serif;background:linear-gradient(180deg,#f8fbff 0%,#f1f5ff 45%,#f8fafc 100%);color:var(--text);line-height:1.75;font-size:17px}
+    .container{width:min(1150px,calc(100% - 32px));margin:auto}
+
+    /* Topbar */
     .topbar{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
     .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:74px}
     .brand{display:flex;align-items:center;gap:12px;font-weight:900;text-decoration:none;color:var(--primary)}
-    .brand-icon{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px}
+    .brand-icon{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 14px 30px rgba(37,99,235,.24)}
     .back-btn{text-decoration:none;color:var(--accent);font-weight:800;background:#eff6ff;border:1px solid #dbeafe;padding:10px 14px;border-radius:12px}
+
+    /* Hero */
     .hero{padding:30px 0 10px}
-    .hero-box{background:linear-gradient(135deg,#0f172a 0%, #1e3a8a 52%, #312e81 100%);color:#fff;border-radius:30px;padding:36px 30px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-    .hero-box::before,.hero-box::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08)}
-    .hero-box::before{right:-50px;top:-50px;width:180px;height:180px}
-    .hero-box::after{left:-40px;bottom:-60px;width:160px;height:160px}
-    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.13);color:#dbeafe;padding:8px 12px;border-radius:999px;font-size:.92rem;font-weight:800;margin-bottom:14px}
-    .hero h1{margin:0 0 10px;font-size:clamp(2rem, 4vw, 3rem);line-height:1.08;letter-spacing:-.04em}
-    .hero p{margin:0;max-width:880px;color:#dbeafe;font-size:1.18rem}
+    .hero-box{background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#312e81 100%);color:#fff;border-radius:28px;padding:34px 28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .hero-box::before{content:"";position:absolute;right:-60px;top:-60px;width:180px;height:180px;background:rgba(96,165,250,.18);border-radius:50%}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);color:#dbeafe;padding:8px 12px;border-radius:999px;font-size:.9rem;font-weight:800;margin-bottom:14px}
+    .hero h1{margin:0 0 10px;font-size:clamp(2rem,4vw,3rem);line-height:1.08;letter-spacing:-.04em}
+    .hero p{margin:0;max-width:860px;color:#dbeafe;font-size:1.16rem}
+
+    /* Meta */
     .meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0 28px}
-    .meta-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(15,23,42,.05)}
-    .meta-card i{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#eff6ff;color:var(--accent);margin-bottom:10px}
-    .meta-card h4{margin:0 0 4px;font-size:.96rem;font-weight:900}
-    .meta-card p{margin:0;color:var(--muted);font-size:.92rem}
+    .meta-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(15,23,42,.05);min-height:154px;transition:.25s ease}
+    .meta-card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(15,23,42,.10)}
+    .meta-card i{width:64px;height:64px;border-radius:22px;font-size:28px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0f2fe,#eef2ff);color:var(--accent);box-shadow:0 12px 26px rgba(37,99,235,.16);margin-bottom:14px}
+    .meta-card h4{margin:0 0 4px;font-size:1.12rem;font-weight:900;letter-spacing:-.02em}
+    .meta-card p{margin:0;color:var(--muted);font-size:1.04rem;line-height:1.7}
+
+    /* Section */
     .section{margin:0 0 26px}
     .section-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
     .section-title{display:flex;align-items:center;gap:10px;margin:0 0 16px;font-size:1.72rem;line-height:1.2;font-weight:900;letter-spacing:-.03em}
     .section-title i{color:var(--accent)}
+    .sub-title{margin:26px 0 12px;font-size:1.3rem;font-weight:900;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+    .sub-title i{color:var(--accent2)}
     .lead{color:#475569;margin-top:-4px;margin-bottom:20px;font-size:1.08rem;font-weight:650}
+
     .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
     .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-    .card,.goal-card,.theory-card,.task-card,.small-card,.resource-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px}
-    .card h3,.goal-card h3,.theory-card h3,.task-card h3,.small-card h3,.resource-card h3{margin:0 0 10px;font-size:1.16rem;font-weight:900}
-    .card p,.goal-card p,.theory-card p,.task-card p,.small-card p,.resource-card p,li{color:#475569;font-size:1.03rem}
-    .goal-card i,.task-card i,.small-card i{color:var(--accent);margin-right:8px}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+
+    .card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px}
+    .card h3{margin:0 0 10px;font-size:1.16rem;font-weight:900}
+    .card p, li{color:#475569;font-size:1.05rem}
+    .card p{margin:0 0 8px}
+    .card p:last-child{margin-bottom:0}
+    .card h3 i{color:var(--accent);margin-right:8px}
+    .card ul{margin:6px 0 0;padding-left:20px}
+
     .highlight{background:linear-gradient(135deg,#eff6ff,#f5f3ff);border:1px solid #dbeafe;border-radius:18px;padding:18px;margin-top:16px}
     .highlight strong{color:var(--primary)}
-    .info-table{width:100%;border-collapse:collapse;margin-top:16px;overflow:hidden;border-radius:14px}
-    .info-table th,.info-table td{border:1px solid var(--border);padding:12px 14px;text-align:left;vertical-align:top;font-size:1rem}
+    .note{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:12px 14px;border-radius:14px;font-size:1rem;margin-top:12px}
+    .note i{margin-right:6px}
+
+    .info-table{width:100%;border-collapse:collapse;margin-top:16px}
+    .info-table th,.info-table td{border:1px solid var(--border);padding:12px 14px;text-align:left;vertical-align:top;font-size:1.02rem}
     .info-table th{background:#f8fafc;font-weight:900}
-    .algorithm{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:18px}
-    .step{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px 14px;text-align:center;position:relative}
-    .step-num{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-weight:900}
-    .step h4{margin:0 0 6px;font-size:1rem;font-weight:900}
-    .step p{margin:0;color:var(--muted);font-size:.96rem;line-height:1.55}
+    .info-table td:first-child{font-weight:800;white-space:nowrap}
+    .table-wrap{overflow-x:auto}
+
+    /* Turlar (mis/dis/mal) */
+    .type-card{border-radius:18px;padding:18px;border:1px solid var(--border);background:#fff;border-top:6px solid var(--accent)}
+    .type-card.dis{border-top-color:var(--danger)}
+    .type-card.mal{border-top-color:var(--warning)}
+    .type-card h3{margin:0 0 4px;font-size:1.16rem;font-weight:900}
+    .type-card .tag{display:inline-block;font-size:.85rem;font-weight:800;padding:3px 10px;border-radius:999px;background:#eff6ff;color:var(--accent);margin-bottom:8px}
+    .type-card.dis .tag{background:#fff1f2;color:var(--danger)}
+    .type-card.mal .tag{background:#fffbeb;color:#b45309}
+    .type-card p{margin:0 0 8px;color:#475569}
+    .type-card .ex{font-size:.98rem;background:#f8fafc;border-radius:12px;padding:10px 12px;color:#334155}
+
+    /* Belgilar */
+    .sign{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px}
+    .sign .ic{flex:0 0 44px;height:44px;border-radius:14px;background:#fff1f2;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px}
+    .sign h4{margin:0 0 2px;font-size:1.02rem;font-weight:900}
+    .sign p{margin:0;color:#475569;font-size:.98rem;line-height:1.55}
+
+    /* Timeline */
     .timeline{display:grid;gap:14px;margin-top:8px}
     .timeline-item{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:start;background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px}
     .time-badge{background:#eff6ff;color:var(--accent);border-radius:12px;padding:10px 12px;font-weight:900;text-align:center}
     .timeline-item h4{margin:0 0 6px;font-size:1.16rem;font-weight:900}
     .timeline-item p{margin:0;color:var(--muted);font-size:1.02rem}
-    .checklist{margin:0;padding-left:18px}
-    .checklist li{margin:6px 0}
-    .resource-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:12px}
-    .resource-card{background:linear-gradient(180deg,#ffffff,#f8fbff);box-shadow:0 8px 20px rgba(15,23,42,.06)}
-    .media-slot{min-height:240px;border:2px dashed #93c5fd;border-radius:18px;background:linear-gradient(135deg,#eff6ff,#f0fdfa);display:flex;align-items:center;justify-content:center;text-align:center;color:#2563eb;font-weight:900;padding:18px;overflow:hidden;cursor:pointer;position:relative;transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease}
-    .media-slot:hover{transform:translateY(-2px);border-color:#2563eb;box-shadow:0 12px 28px rgba(37,99,235,.14)}
-    .media-slot::after{content:"Kattalashtirib ko‘rish";position:absolute;right:14px;bottom:14px;background:rgba(15,23,42,.78);color:#fff;padding:7px 10px;border-radius:999px;font-size:.82rem;font-weight:900;opacity:0;transform:translateY(6px);transition:opacity .18s ease, transform .18s ease;pointer-events:none}
-    .media-slot:hover::after{opacity:1;transform:translateY(0)}
-    .media-slot img,.media-slot video{width:100%;max-height:360px;object-fit:contain;border-radius:14px;display:block;background:#000}
-    .media-slot img{background:transparent}
-    .media-open-btn{width:100%;margin-top:12px;border:0;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-weight:900;padding:11px 14px;border-radius:12px;cursor:pointer;font-family:inherit;font-size:1rem}
-    .media-open-btn:hover{background:#dbeafe}
-    .quiz-question{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px}
-    .quiz-question h4{margin:0 0 10px;font-size:1rem}
-    .quiz-question label{display:block;margin:7px 0;color:var(--muted);cursor:pointer}
-    .short-answer{width:100%;margin-top:10px;border:1px solid #cbd5e1;border-radius:12px;padding:13px 14px;font-size:1.05rem;font-family:inherit;outline:none;transition:border-color .18s ease, box-shadow .18s ease}
-    .short-answer:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
-    .open-hint{color:#64748b;font-size:.95rem;margin:8px 0 0}
-    .quiz-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:14px}
-    .btn{border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;padding:12px 16px;border-radius:12px;cursor:pointer}
+    .timeline-item .teacher{margin-top:8px;font-size:.96rem;color:#7c3aed;font-weight:650}
+
+    /* Infografika */
+    .infographic{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:18px}
+    .step{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px 14px;text-align:center}
+    .step-num{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-weight:900}
+    .step h4{margin:0 0 6px;font-size:1rem;font-weight:900}
+    .step p{margin:0;color:var(--muted);font-size:.98rem;line-height:1.55}
+    .step .q{margin-top:8px;font-size:.9rem;color:#7c3aed;font-weight:700}
+
+    /* Xabar namunalari */
+    .post{background:#f8fafc;border:1px solid var(--border);border-radius:18px;padding:16px;display:flex;flex-direction:column}
+    .post-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;flex:0 0 40px}
+    .post-head strong{display:block;font-size:.98rem}
+    .post-head span{font-size:.85rem;color:var(--muted)}
+    .bubble{background:#fff;border:1px solid var(--border);border-radius:4px 16px 16px 16px;padding:12px 14px;font-size:1rem;color:#1e293b;line-height:1.6;flex:1}
+    .bubble .img-ph{margin-top:10px;height:110px;border-radius:12px;background:linear-gradient(135deg,#64748b,#94a3b8);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.9rem;text-align:center;padding:8px}
+    .post-tasks{margin:12px 0 0;padding-left:20px;font-size:.98rem}
+    .post-tasks li{font-size:.98rem}
+    details.key{margin-top:12px;background:#fff;border:1px dashed #a78bfa;border-radius:14px;padding:10px 14px}
+    details.key summary{cursor:pointer;font-weight:800;color:#6d28d9}
+    details.key p, details.key li{font-size:.97rem;color:#334155;margin:6px 0}
+    details.key ul{padding-left:18px;margin:6px 0}
+    .verdict{display:inline-block;font-weight:900;padding:3px 10px;border-radius:999px;font-size:.88rem}
+    .verdict.bad{background:#fff1f2;color:var(--danger)}
+    .verdict.good{background:#f0fdf4;color:var(--success)}
+    .verdict.mid{background:#fffbeb;color:#b45309}
+
+    /* Fakt yoki fikr */
+    .ff-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+    .ff-row p{margin:0;color:#1e293b;font-size:1.02rem}
+    .ff-row .why{grid-column:1 / -1;font-size:.95rem;color:#475569;display:none;margin:0}
+    .ff-row.checked .why{display:block}
+    .ff-row.ok{border-color:#86efac;background:#f0fdf4}
+    .ff-row.no{border-color:#fda4af;background:#fff1f2}
+    .ff-btns{display:flex;gap:8px}
+    .ff-btn{border:1px solid #cbd5e1;background:#fff;border-radius:10px;padding:7px 14px;font-weight:800;cursor:pointer;font-family:inherit;font-size:.95rem;color:#334155}
+    .ff-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+    /* Tugmalar */
+    .actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:14px}
+    .btn{border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;padding:12px 16px;border-radius:12px;cursor:pointer;font-family:inherit;font-size:1rem}
     .btn.secondary{background:#e2e8f0;color:var(--primary)}
     .result{font-weight:800;color:var(--primary)}
-    .footer{padding:20px 0 40px;color:var(--muted);text-align:center;font-size:1rem}
-    .fullscreen-modal{position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,.92);display:none;align-items:center;justify-content:center;padding:22px}
+
+    /* Test */
+    .quiz-question{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px;transition:.2s}
+    .quiz-question h4{margin:0 0 10px;font-size:1.04rem}
+    .quiz-question label{display:block;margin:7px 0;color:#475569;cursor:pointer}
+    .quiz-question.ok{border-color:#86efac;background:#f0fdf4}
+    .quiz-question.no{border-color:#fda4af;background:#fff1f2}
+    .feedback{display:none;margin-top:10px;font-size:.97rem;color:#334155;background:rgba(255,255,255,.75);border-radius:10px;padding:8px 12px}
+    .quiz-question.ok .feedback,.quiz-question.no .feedback{display:block}
+    .short-answer{width:100%;margin-top:6px;border:1px solid #cbd5e1;border-radius:12px;padding:13px 14px;font-size:1.05rem;font-family:inherit;outline:none;transition:border-color .18s ease,box-shadow .18s ease}
+    .short-answer:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+    .open-hint{color:#64748b;font-size:.95rem;margin:8px 0 0}
+
+    /* Media */
+    .resource-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:12px}
+    .resource-card{background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid var(--border);border-radius:20px;padding:18px;box-shadow:0 8px 20px rgba(15,23,42,.06)}
+    .resource-card h3{margin:0 0 10px;font-size:1.18rem;font-weight:900}
+    .resource-card h3 i{color:var(--accent);margin-right:8px}
+    .media-slot{min-height:230px;border:2px dashed #93c5fd;border-radius:18px;background:linear-gradient(135deg,#eff6ff,#f0fdfa);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--accent);font-weight:900;padding:18px;overflow:hidden;cursor:pointer;position:relative;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+    .media-slot:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 12px 28px rgba(37,99,235,.14)}
+    .media-slot img,.media-slot video{width:100%;max-height:360px;object-fit:contain;border-radius:14px;display:block}
+    .media-slot video{background:#000}
+    .media-slot .placeholder{display:none}
+    .media-slot.missing .placeholder{display:block}
+    .media-slot.missing img,.media-slot.missing video{display:none}
+    .media-open-btn{width:100%;margin-top:12px;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-weight:900;padding:11px 14px;border-radius:12px;cursor:pointer;font-family:inherit;font-size:1rem}
+    .media-open-btn:hover{background:#dbeafe}
+
+    /* Modal */
+    .fullscreen-modal{position:fixed;inset:0;z-index:99999;background:rgba(2,6,23,.94);display:none;align-items:center;justify-content:center;padding:14px}
     .fullscreen-modal.show{display:flex}
-    .modal-content{width:min(1200px,96vw);max-height:92vh;background:#0f172a;border:1px solid rgba(255,255,255,.18);border-radius:22px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45)}
-    .modal-header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 16px;color:#fff;background:linear-gradient(135deg,#0f172a,#1e293b);border-bottom:1px solid rgba(255,255,255,.12)}
-    .modal-close{width:40px;height:40px;border:0;border-radius:12px;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;font-size:1.25rem}
-    .modal-body{background:#020617;display:flex;align-items:center;justify-content:center;min-height:55vh;max-height:82vh;padding:14px}
-    .modal-body img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:14px;background:#fff}
-    .modal-body video{width:100%;max-height:78vh;border-radius:14px;background:#000}
-    @media (max-width: 1080px){.meta-grid,.grid-4,.algorithm,.resource-grid{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}}
-    @media (max-width: 700px){.meta-grid,.grid-4,.algorithm,.resource-grid{grid-template-columns:1fr}.timeline-item{grid-template-columns:1fr}.hero-box{padding:24px 18px}.section-box{padding:18px}.topbar-inner{flex-direction:column;align-items:flex-start;padding:10px 0}}
-  
-
-    /* === QAYTA ISHLANGAN: haqiqiy infografika zoom, yirik ikonlar va mavzuga mos meta matn === */
-    .brand-icon{width:56px !important;height:56px !important;border-radius:18px !important;font-size:24px !important;box-shadow:0 14px 30px rgba(37,99,235,.24) !important}
-    .meta-card{min-height:154px !important;transition:.25s ease !important}
-    .meta-card:hover{transform:translateY(-3px) !important;box-shadow:0 14px 34px rgba(15,23,42,.10) !important}
-    .meta-card i{
-      width:64px !important;height:64px !important;border-radius:22px !important;font-size:28px !important;
-      display:flex !important;align-items:center !important;justify-content:center !important;
-      background:linear-gradient(135deg,#e0f2fe,#eef2ff) !important;color:#2563eb !important;
-      box-shadow:0 12px 26px rgba(37,99,235,.16) !important;margin-bottom:14px !important;
-    }
-    .meta-card h4{font-size:1.12rem !important;letter-spacing:-.02em !important}
-    .meta-card p{font-size:1.04rem !important;line-height:1.7 !important}
-
-    .fullscreen-modal{position:fixed !important;inset:0 !important;z-index:99999 !important;background:rgba(2,6,23,.94) !important;display:none !important;align-items:center !important;justify-content:center !important;padding:14px !important}
-    .fullscreen-modal.show{display:flex !important}
-    .modal-content{width:min(1560px,98vw) !important;height:min(94vh,980px) !important;max-height:94vh !important;background:#020617 !important;border:1px solid rgba(255,255,255,.18) !important;border-radius:26px !important;overflow:hidden !important;box-shadow:0 34px 90px rgba(0,0,0,.55) !important;display:flex !important;flex-direction:column !important}
-    .modal-header{min-height:64px !important;padding:12px 16px !important;color:#fff !important;background:linear-gradient(135deg,#0f172a,#1e293b) !important;border-bottom:1px solid rgba(255,255,255,.12) !important;display:flex !important;align-items:center !important;justify-content:space-between !important;gap:12px !important}
-    .modal-close{width:46px !important;height:46px !important;border:0 !important;border-radius:15px !important;background:rgba(255,255,255,.14) !important;color:#fff !important;cursor:pointer !important;font-size:1.35rem !important}
-    .modal-body{flex:1 !important;min-height:0 !important;max-height:none !important;padding:0 !important;display:block !important;overflow:hidden !important;background:#020617 !important}
-    .modal-body video{display:block !important;width:100% !important;height:100% !important;max-height:none !important;border-radius:0 !important;background:#000 !important}
-
-    .az-zoom-panel{height:100%;display:flex;flex-direction:column;background:#020617}
+    .modal-content{width:min(1560px,98vw);height:min(94vh,980px);background:#020617;border:1px solid rgba(255,255,255,.18);border-radius:26px;overflow:hidden;box-shadow:0 34px 90px rgba(0,0,0,.55);display:flex;flex-direction:column}
+    .modal-header{min-height:64px;padding:12px 16px;color:#fff;background:linear-gradient(135deg,#0f172a,#1e293b);border-bottom:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .modal-close{width:46px;height:46px;border:0;border-radius:15px;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;font-size:1.35rem}
+    .modal-body{flex:1;min-height:0;overflow:hidden;background:#020617}
+    .modal-body video{display:block;width:100%;height:100%;background:#000}
+    .modal-msg{color:#fff;text-align:center;font-weight:900;padding:34px}
+    .az-zoom-panel{height:100%;display:flex;flex-direction:column}
     .az-zoom-toolbar{min-height:64px;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 12px;background:rgba(15,23,42,.98);border-bottom:1px solid rgba(255,255,255,.12);color:#fff;flex-wrap:wrap}
-    .az-zoom-btn{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;min-width:48px;height:43px;border-radius:14px;font-weight:900;font-size:1.05rem;cursor:pointer;transition:.18s ease;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 13px}
-    .az-zoom-btn:hover{background:#2563eb;transform:translateY(-1px)}
+    .az-zoom-btn{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;min-width:48px;height:43px;border-radius:14px;font-weight:900;font-size:1.05rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 13px;font-family:inherit}
+    .az-zoom-btn:hover{background:var(--accent)}
     .az-zoom-value{min-width:82px;text-align:center;font-weight:900;color:#dbeafe;background:rgba(37,99,235,.18);border:1px solid rgba(147,197,253,.22);height:43px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center}
     .az-zoom-hint{font-size:.86rem;color:#cbd5e1;font-weight:700;margin-left:6px}
-    .az-stage{flex:1;min-height:0;overflow:auto;display:block;background:radial-gradient(circle at top,rgba(37,99,235,.14),transparent 35%),#020617;padding:28px;text-align:center;cursor:grab;scroll-behavior:auto;touch-action:none;user-select:none}
+    .az-stage{flex:1;min-height:0;overflow:auto;background:radial-gradient(circle at top,rgba(37,99,235,.14),transparent 35%),#020617;padding:28px;cursor:grab;touch-action:none;user-select:none}
     .az-stage.az-dragging{cursor:grabbing}
-    .az-img{display:block;margin:0 auto;background:#fff;border-radius:18px;box-shadow:0 28px 80px rgba(0,0,0,.45);max-width:none !important;max-height:none !important;object-fit:contain;user-select:none;-webkit-user-drag:none;transition:width .12s ease}
-    @media(max-width:700px){.az-zoom-toolbar{justify-content:flex-start}.az-zoom-hint{width:100%;margin-left:0;text-align:center}.az-stage{padding:16px}.modal-content{height:95vh !important;width:98vw !important}.meta-card{min-height:auto !important}}
+    .az-img{display:block;margin:0 auto;background:#fff;border-radius:18px;box-shadow:0 28px 80px rgba(0,0,0,.45);max-width:none;user-select:none;-webkit-user-drag:none}
 
+    .homework-list{margin:0;padding-left:20px}
+    .footer{padding:20px 0 40px;color:var(--muted);text-align:center;font-size:1rem}
+
+    @media (max-width:980px){
+      .meta-grid,.grid-3,.grid-4,.infographic,.resource-grid{grid-template-columns:repeat(2,1fr)}
+      .grid-2{grid-template-columns:1fr}
+    }
+    @media (max-width:700px){
+      .meta-grid,.grid-3,.grid-4,.infographic,.resource-grid{grid-template-columns:1fr}
+      .timeline-item{grid-template-columns:1fr}
+      .ff-row{grid-template-columns:1fr}
+      .hero-box{padding:24px 18px}
+      .section-box{padding:18px}
+      .topbar-inner{flex-direction:column;align-items:flex-start;padding:10px 0}
+      .info-table td:first-child{white-space:normal}
+      .az-zoom-hint{width:100%;margin-left:0;text-align:center}
+      .az-stage{padding:16px}
+      .meta-card{min-height:auto}
+    }
+  
+    /* === 2–4-darslar uchun qo'shimcha uslublar === */
+    .infographic.six{grid-template-columns:repeat(6,1fr)}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;position:relative}
+    .hero-actions a{text-decoration:none;display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:15px;font-weight:900;transition:.18s ease}
+    .hero-actions a:hover{transform:translateY(-2px)}
+    .primary-btn{background:#fff;color:#1d4ed8}
+    .secondary-btn{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.16)}
+    .criteria-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .criteria-card{background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid var(--border);border-radius:20px;padding:20px;box-shadow:0 8px 22px rgba(37,99,235,.08)}
+    .criteria-num{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;margin-bottom:12px}
+    .criteria-card h4{margin:0 0 8px;font-size:1.08rem;font-weight:900}
+    .criteria-card p{margin:0;color:#475569;font-size:.98rem}
+    .checklist{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+    .checklist li{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:16px;padding:13px}
+    .checklist i{color:var(--success);margin-top:6px}
+    code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:1px 6px;font-size:.92em;color:#1e293b}
+    .scorer{margin-top:12px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px}
+    .scorer label{display:block;font-size:.95rem;color:#334155;cursor:pointer;margin:3px 0}
+    .scorer-out{margin-top:8px;font-weight:900;font-size:.95rem;padding:7px 10px;border-radius:10px;background:#f1f5f9;color:#334155}
+    .scorer-out.good{background:#f0fdf4;color:#15803d}
+    .scorer-out.mid{background:#fffbeb;color:#b45309}
+    .scorer-out.bad{background:#fff1f2;color:#be123c}
+    .order-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+    .order-row span{color:#1e293b;font-size:1.02rem}
+    .order-row select{font-family:inherit;font-size:1rem;font-weight:800;padding:7px 10px;border-radius:10px;border:1px solid #cbd5e1;min-width:70px}
+    .order-row.ok{border-color:#86efac;background:#f0fdf4}
+    .order-row.no{border-color:#fda4af;background:#fff1f2}
+    .verdict-scale{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+    .vs{background:#fff;border:1px solid var(--border);border-top:6px solid var(--c);border-radius:16px;padding:14px}
+    .vs strong{display:block;color:var(--c);font-weight:900;margin-bottom:4px}
+    .vs span{color:#475569;font-size:.96rem;line-height:1.55;display:block}
+    .ff-btns{flex-wrap:wrap;justify-content:flex-end}
+    @media (max-width:980px){.infographic.six,.criteria-grid{grid-template-columns:repeat(2,1fr)}.verdict-scale{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:700px){.infographic.six,.criteria-grid,.verdict-scale{grid-template-columns:1fr}.order-row{flex-direction:column;align-items:flex-start}.ff-btns{justify-content:flex-start}}
   </style>
 </head>
 <body>
+
   <div class="topbar">
     <div class="container topbar-inner">
       <a href="#" class="brand">
@@ -164,7 +262,7 @@
       <div class="hero-box">
         <div class="hero-badge"><i class="fa-solid fa-bolt"></i> 4-modul · Dars ishlanmasi</div>
         <h1>Fakt-checking algoritmi</h1>
-        <p>Ushbu darsda o‘quvchilar xabarni boshqa manbalar bilan solishtirish, dalillarni tekshirish, rasm va videolarni tahlil qilish hamda shubhali axborot bo‘yicha ishonchli xulosa chiqarish bosqichlarini o‘rganadilar.</p>
+        <p>Bu darsda o‘quvchilar xabarni 6 bosqichli algoritm bo‘yicha tekshirishni, rasm va videoni teskari qidiruv bilan, raqamni “nimaga nisbatan?” savoli bilan, iqtibosni asl manba bilan solishtirishni hamda dalilga asoslangan hukm chiqarishni o‘rganadilar.</p>
       </div>
     </div>
   </header>
@@ -172,25 +270,10 @@
   <main class="container">
     <section class="section">
       <div class="meta-grid">
-        <div class="meta-card"><i class="fa-solid fa-school"></i><h4>Yo‘nalish</h4><p>Yoshlarning axborot madaniyatini oshirishga yo‘naltirilgan</p></div>
+        <div class="meta-card"><i class="fa-solid fa-school"></i><h4>Auditoriya</h4><p>7–11-sinf o‘quvchilari</p></div>
         <div class="meta-card"><i class="fa-solid fa-clock"></i><h4>Davomiyligi</h4><p>45 daqiqa</p></div>
         <div class="meta-card"><i class="fa-solid fa-layer-group"></i><h4>Dars turi</h4><p>Amaliy, tahliliy va mustahkamlovchi mashg‘ulot</p></div>
-        <div class="meta-card"><i class="fa-solid fa-list-check"></i><h4>Asosiy natija</h4><p>O‘quvchi xabarni fakt-checking bosqichlari asosida tekshira oladi</p></div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-box">
-        <h2 class="section-title"><i class="fa-solid fa-chalkboard-user"></i> Dars jarayoni</h2>
-        <p class="lead">45 daqiqalik namunaviy dars taqsimoti</p>
-        <div class="timeline">
-          <div class="timeline-item"><div class="time-badge">5 daqiqa</div><div><h4>Tashkiliy qism</h4><p>Salomlashish, davomat, mavzu va dars maqsadini e’lon qilish.</p></div></div>
-          <div class="timeline-item"><div class="time-badge">7 daqiqa</div><div><h4>Motivatsiya</h4><p>Bir shubhali xabar yoki surat ko‘rsatiladi va “Bu rostmi?” savoli asosida suhbat boshlanadi.</p></div></div>
-          <div class="timeline-item"><div class="time-badge">10 daqiqa</div><div><h4>Nazariy tushuntirish</h4><p>Fakt-checking tushunchasi, algoritm bosqichlari va ishonchli manbalar bilan ishlash tartibi tushuntiriladi.</p></div></div>
-          <div class="timeline-item"><div class="time-badge">12 daqiqa</div><div><h4>Amaliy mashq</h4><p>O‘quvchilar 2–3 ta xabarni algoritm bo‘yicha tekshirib, guruhda xulosa chiqaradilar.</p></div></div>
-          <div class="timeline-item"><div class="time-badge">6 daqiqa</div><div><h4>Mustahkamlash</h4><p>“Qadamlarni aralashtirib joylashtirish” yoki “Rost-yolg‘on” o‘yini orqali bilimlar mustahkamlanadi.</p></div></div>
-          <div class="timeline-item"><div class="time-badge">5 daqiqa</div><div><h4>Baholash va uyga vazifa</h4><p>Test, yozma savollar va uyga vazifa beriladi.</p></div></div>
-        </div>
+        <div class="meta-card"><i class="fa-solid fa-list-check"></i><h4>Asosiy natija</h4><p>Xabar, rasm yoki raqamni 6 bosqichda tekshirib, hukm chiqarish</p></div>
       </div>
     </section>
 
@@ -198,9 +281,10 @@
       <div class="section-box">
         <h2 class="section-title"><i class="fa-solid fa-id-card"></i> Dars pasporti</h2>
         <p class="lead">Darsning qisqacha reja-ma’lumoti</p>
-        <div class="grid-2">
-          <div class="small-card"><h3><i class="fa-solid fa-bullseye"></i> Dars maqsadi</h3><p>O‘quvchilarda xabarni dalillar asosida tekshirish, manbalarni solishtirish, vizual materiallarni baholash va yakuniy xulosa chiqarish ko‘nikmalarini shakllantirish.</p></div>
-          <div class="small-card"><h3><i class="fa-solid fa-toolbox"></i> Jihozlar</h3><p>Kompyuter, proyektor, internet, taqdimot, namuna xabarlar, tarqatma materiallar, refleksiya varaqalari va test savollari.</p></div>
+        <div class="grid-3">
+          <div class="card"><h3><i class="fa-solid fa-bullseye"></i> Dars maqsadi</h3><p>Fakt-checking algoritmini bosqichma-bosqich o‘rgatish; rasm, video, raqam va iqtiboslarni tekshirish usullari bilan tanishtirish; dalilga asoslangan hukm chiqarish ko‘nikmasini shakllantirish.</p></div>
+          <div class="card"><h3><i class="fa-solid fa-toolbox"></i> Jihozlar</h3><p>Kompyuter, proyektor, internet, telefon (Google Lens’ni jonli ko‘rsatish uchun), ushbu sahifa, infografika, video lavha.</p></div>
+          <div class="card"><h3><i class="fa-solid fa-key"></i> Tayanch tushunchalar</h3><p>Fakt-checking, da’vo, dalil, birlamchi manba, kontekst, teskari rasm qidiruvi, metama’lumot, hukm shkalasi.</p></div>
         </div>
       </div>
     </section>
@@ -210,9 +294,24 @@
         <h2 class="section-title"><i class="fa-solid fa-star"></i> O‘quv maqsadlari</h2>
         <p class="lead">Dars yakunida o‘quvchi quyidagilarni bajara oladi:</p>
         <div class="grid-3">
-          <div class="goal-card"><h3><i class="fa-solid fa-check"></i> Biladi</h3><p>Fakt-checking nima ekanini, nima uchun kerakligini va asosiy bosqichlarini aytib bera oladi.</p></div>
-          <div class="goal-card"><h3><i class="fa-solid fa-check"></i> Tushunadi</h3><p>Har qanday xabarni tekshirmasdan ishonish va ulashish xavfli ekanini tushunadi.</p></div>
-          <div class="goal-card"><h3><i class="fa-solid fa-check"></i> Qo‘llaydi</h3><p>Oddiy xabar, foto yoki video ustida fakt-checking algoritmini amalda qo‘llay oladi.</p></div>
+          <div class="card"><h3><i class="fa-solid fa-check"></i> Biladi</h3><p>Fakt-checkingning 6 bosqichini to‘g‘ri tartibda aytadi va hukm shkalasidagi darajalarni izohlaydi.</p></div>
+          <div class="card"><h3><i class="fa-solid fa-check"></i> Qo‘llaydi</h3><p>Rasmni teskari qidiruv bilan, raqamni “nimaga nisbatan?” savoli bilan, iqtibosni asl manba bilan tekshiradi.</p></div>
+          <div class="card"><h3><i class="fa-solid fa-check"></i> Baholaydi</h3><p>Xabarga “rost”, “qisman rost”, “kontekstdan uzilgan” yoki “yolg‘on” hukmini dalillar bilan beradi.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-chalkboard-user"></i> Dars jarayoni</h2>
+        <p class="lead">45 daqiqalik namunaviy dars taqsimoti va o‘qituvchi uchun izohlar</p>
+        <div class="timeline">
+          <div class="timeline-item"><div class="time-badge">3 daqiqa</div><div><h4>Tashkiliy qism</h4><p>Salomlashish, davomat, mavzu va maqsadni e’lon qilish.</p></div></div>
+          <div class="timeline-item"><div class="time-badge">5 daqiqa</div><div><h4>Motivatsiya</h4><p>Pastdagi “Toshkentda iyulda qor” namunasi ko‘rsatiladi. O‘quvchilar ovoz beradi: rost yoki yolg‘on? Keyin o‘qituvchi rasmni telefonda Google Lens orqali jonli tekshirib ko‘rsatadi.</p><p class="teacher"><i class="fa-solid fa-lightbulb"></i> O‘qituvchiga: darsdan oldin o‘zingiz tanlagan haqiqiy eski rasmni (masalan, boshqa yildagi qorli manzara) tayyorlab qo‘ying va teskari qidiruv natijasini oldindan tekshiring.</p></div></div>
+          <div class="timeline-item"><div class="time-badge">12 daqiqa</div><div><h4>Nazariy tushuntirish</h4><p>6 bosqichli algoritm, hukm shkalasi, rasm/video, raqam va iqtibosni tekshirish usullari. To‘liq namunaviy tekshiruv tahlili.</p></div></div>
+          <div class="timeline-item"><div class="time-badge">15 daqiqa</div><div><h4>Amaliy mashqlar</h4><p>“Qadamlarni tartiblang” o‘yini (3 daq.), guruhlarda 3 ta xabarni algoritm bo‘yicha tekshirish (8 daq.), “Hukm chiqaring” mashqi (4 daq.).</p></div></div>
+          <div class="timeline-item"><div class="time-badge">7 daqiqa</div><div><h4>Baholash</h4><p>10 savollik test, natija va izohlar ekranda.</p></div></div>
+          <div class="timeline-item"><div class="time-badge">3 daqiqa</div><div><h4>Refleksiya va uyga vazifa</h4><p>Motivatsiyadagi ovoz berish natijasiga qaytish, uyga vazifa.</p></div></div>
         </div>
       </div>
     </section>
@@ -222,58 +321,142 @@
         <h2 class="section-title"><i class="fa-solid fa-book"></i> Nazariy qism</h2>
         <p class="lead">Fakt-checking algoritmining mazmuni va ahamiyati</p>
         <div class="grid-2">
-          <div class="theory-card">
+          <div class="card">
             <h3>Fakt-checking nima?</h3>
-            <p>Fakt-checking — bu xabar, bayonot, foto yoki videoning qanchalik to‘g‘ri va ishonchli ekanini aniqlash jarayonidir. U xabarni boshqa manbalar bilan solishtirish, dalil topish, muallifni tekshirish va xulosa chiqarishni o‘z ichiga oladi.</p>
+            <p>Xabar, bayonot, rasm yoki videoning qanchalik to‘g‘ri ekanini <strong>dalillar asosida</strong> aniqlash jarayoni. Faktcheker “menimcha” demaydi — u “mana bu hujjatga ko‘ra” deydi.</p>
+            <p>Dunyoda bu bilan maxsus tashkilotlar shug‘ullanadi, lekin asosiy usullarni har bir o‘quvchi o‘rganishi mumkin.</p>
           </div>
-          <div class="theory-card">
+          <div class="card">
             <h3>Nega kerak?</h3>
-            <p>Chunki ijtimoiy tarmoqlarda yolg‘on xabarlar, manipulyativ sarlavhalar va montaj qilingan rasm-videolar ko‘p uchraydi. Fakt-checking o‘quvchini shoshmasdan o‘ylashga, tekshirishga va to‘g‘ri qaror qabul qilishga o‘rgatadi.</p>
+            <p>Yolg‘on xabar ko‘pincha haqiqatdan tezroq tarqaladi, chunki u qiziqroq va hissiyotliroq bo‘ladi. Montaj qilingan rasm, eski video, buzib ko‘rsatilgan raqam va to‘qib chiqarilgan iqtibos — eng ko‘p uchraydigan usullar.</p>
           </div>
         </div>
-        <div class="highlight"><strong>Asosiy tamoyil:</strong> xabar qanchalik shov-shuvli bo‘lmasin, u ishonchli manbalar, dalillar va mantiqiy tahlil asosida tekshirilmaguncha rost deb qabul qilinmaydi.</div>
-        <table class="info-table">
-          <thead><tr><th>Tushuncha</th><th>Qisqa izoh</th></tr></thead>
-          <tbody>
-            <tr><td>Fakt-checking</td><td>Xabar yoki da’voni dalillar yordamida tekshirish jarayoni.</td></tr>
-            <tr><td>Da’vo</td><td>Rost yoki yolg‘on bo‘lishi mumkin bo‘lgan bayonot.</td></tr>
-            <tr><td>Dalil</td><td>Da’voni tasdiqlovchi yoki inkor etuvchi aniq ma’lumot.</td></tr>
-            <tr><td>Birinchi manba</td><td>Xabar ilk bor chiqqan rasmiy yoki asosiy manba.</td></tr>
-            <tr><td>Vizual tekshiruv</td><td>Foto va videodagi tafsilotlarni tekshirish, montaj yoki kontekstni aniqlash.</td></tr>
-            <tr><td>Xulosa</td><td>Tekshiruv yakunida chiqarilgan asosli qaror.</td></tr>
-          </tbody>
-        </table>
+        <div class="table-wrap">
+          <table class="info-table">
+            <thead><tr><th>Tushuncha</th><th>Izoh</th></tr></thead>
+            <tbody>
+              <tr><td>Da’vo</td><td>Tekshirib bo‘ladigan, rost yoki yolg‘on bo‘lishi mumkin bo‘lgan bayonot. “Bu kino zo‘r” — da’vo emas (fikr); “Bu kino 3 ta “Oskar” olgan” — da’vo.</td></tr>
+              <tr><td>Dalil</td><td>Da’voni tasdiqlovchi yoki inkor etuvchi aniq ma’lumot: hujjat, statistika, asl video, guvoh.</td></tr>
+              <tr><td>Birlamchi manba</td><td>Xabar ilk bor chiqqan asl joy.</td></tr>
+              <tr><td>Kontekst</td><td>Voqea qachon, qayerda, qanday sharoitda bo‘lgani. Haqiqiy rasm noto‘g‘ri kontekstda yolg‘onga aylanadi.</td></tr>
+              <tr><td>Teskari rasm qidiruvi</td><td>Rasmning o‘zini qidiruvga berib, u internetda qachon va qayerda paydo bo‘lganini topish.</td></tr>
+              <tr><td>Metama’lumot</td><td>Fayl ichidagi yashirin ma’lumot: suratga olingan sana, kamera, ba’zan joy. Ijtimoiy tarmoqlar uni ko‘pincha o‘chirib yuboradi.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
     <section class="section">
       <div class="section-box">
         <h2 class="section-title"><i class="fa-solid fa-diagram-project"></i> Fakt-checkingning 6 bosqichli algoritmi</h2>
-        <p class="lead">Xabarni tekshirishda ushbu ketma-ketlikdan foydalaning:</p>
-        <div class="algorithm">
-          <div class="step"><div class="step-num">1</div><h4>Da’voni aniqlang</h4><p>Xabarda aynan nima aytilganini tushunib oling.</p></div>
-          <div class="step"><div class="step-num">2</div><h4>Manbani toping</h4><p>Muallif, sayt, kanal, sana va havolalarni tekshiring.</p></div>
-          <div class="step"><div class="step-num">3</div><h4>Boshqa manbalar bilan solishtiring</h4><p>Shu voqea haqida boshqa ishonchli manbalarda nima deyilganini ko‘ring.</p></div>
-          <div class="step"><div class="step-num">4</div><h4>Dalillarni tekshiring</h4><p>Raqam, hujjat, foto, video yoki ekspert fikrining asosini ko‘rib chiqing.</p></div>
-          <div class="step"><div class="step-num">5</div><h4>Kontekstni baholang</h4><p>Xabar eski emasmi, montaj qilinmaganmi, noto‘g‘ri talqin qilinmaganmi?</p></div>
-          <div class="step"><div class="step-num">6</div><h4>Xulosa chiqaring</h4><p>Rost, qisman rost, shubhali yoki yolg‘on ekanini asoslab ayting.</p></div>
+        <p class="lead">Xabarni tekshirishda ushbu ketma-ketlikdan foydalaning</p>
+        <div class="infographic six">
+          <div class="step"><div class="step-num">1</div><h4>Da’voni aniqlang</h4><p>Xabarda aynan nima da’vo qilinyapti? Bir gap bilan yozing.</p><div class="q">Nimani tekshiryapman?</div></div>
+          <div class="step"><div class="step-num">2</div><h4>Manbani toping</h4><p>Kim, qayerda, qachon e’lon qilgan?</p><div class="q">Kim aytyapti?</div></div>
+          <div class="step"><div class="step-num">3</div><h4>Solishtiring</h4><p>Boshqa ishonchli manbalar va birlamchi manba nima deydi?</p><div class="q">Kim tasdiqlaydi?</div></div>
+          <div class="step"><div class="step-num">4</div><h4>Dalillarni tekshiring</h4><p>Raqam, hujjat, rasm, video, iqtibos asli bormi?</p><div class="q">Isbot qayerda?</div></div>
+          <div class="step"><div class="step-num">5</div><h4>Kontekstni baholang</h4><p>Eski emasmi? Boshqa joyniki emasmi? Kesib olinmaganmi?</p><div class="q">Qachon va qayerda?</div></div>
+          <div class="step"><div class="step-num">6</div><h4>Hukm chiqaring</h4><p>Shkala bo‘yicha baho bering va sababini yozing.</p><div class="q">Dalillarim yetarlimi?</div></div>
+        </div>
+
+        <h3 class="sub-title"><i class="fa-solid fa-gavel"></i> Hukm shkalasi</h3>
+        <div class="verdict-scale">
+          <div class="vs" style="--c:#16a34a"><strong>Rost</strong><span>Da’vo dalillar bilan to‘liq tasdiqlandi.</span></div>
+          <div class="vs" style="--c:#65a30d"><strong>Qisman rost</strong><span>Bir qismi to‘g‘ri, lekin muhim tafsilot buzilgan yoki tushirib qoldirilgan.</span></div>
+          <div class="vs" style="--c:#f59e0b"><strong>Kontekstdan uzilgan</strong><span>Rasm, video yoki gap haqiqiy, lekin boshqa voqeaga yopishtirilgan.</span></div>
+          <div class="vs" style="--c:#64748b"><strong>Tasdiqlab bo‘lmadi</strong><span>Dalil yetarli emas — ulashmaslik kerak.</span></div>
+          <div class="vs" style="--c:#e11d48"><strong>Yolg‘on</strong><span>Da’voni dalillar inkor etadi.</span></div>
         </div>
       </div>
     </section>
 
     <section class="section">
       <div class="section-box">
-        <h2 class="section-title"><i class="fa-solid fa-scale-balanced"></i> Nimalarga e’tibor beriladi?</h2>
-        <p class="lead">Fakt-checking jarayonida quyidagi ko‘rsatkichlar muhim hisoblanadi:</p>
-        <div class="grid-4">
-          <div class="card"><h3>Muallif</h3><p>Muallif noma’lum yoki ishonchsiz bo‘lsa, xabar shubhali bo‘lishi mumkin.</p></div>
-          <div class="card"><h3>Sana</h3><p>Eski xabar yangidek tarqatilishi mumkin. Sanani tekshirish zarur.</p></div>
-          <div class="card"><h3>Havola</h3><p>Rasmiy manba, to‘liq havola va domen nomi ishonchlilikni ko‘rsatadi.</p></div>
-          <div class="card"><h3>Vizual material</h3><p>Rasm yoki video montaj qilinmaganmi, boshqa voqeaga tegishli emasmi — buni tekshirish kerak.</p></div>
+        <h2 class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> Nimani qanday tekshiramiz?</h2>
+        <p class="lead">To‘rt xil da’vo — to‘rt xil usul</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3><i class="fa-solid fa-image"></i> Rasm</h3>
+            <ul>
+              <li><strong>Teskari qidiruv:</strong> Google Lens, Yandex rasm qidiruvi yoki TinEye’ga rasmni yuklang. Eng eski natija — rasmning taxminiy “tug‘ilgan kuni”.</li>
+              <li><strong>Detallarga qarang:</strong> yozuvlar qaysi tilda? Mashina raqamlari, do‘kon nomlari, fasl, kiyimlar da’voga mosmi?</li>
+              <li><strong>Sun’iy intellekt belgilari:</strong> g‘alati barmoqlar, ma’nosiz yozuvlar, haddan tashqari silliq teri. Lekin bu belgilar tobora kamaymoqda — ularga yolg‘iz tayanmang.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3><i class="fa-solid fa-video"></i> Video</h3>
+            <ul>
+              <li>Videodan bir nechta kadrni skrinshot qilib, ularni teskari qidiruvda tekshiring.</li>
+              <li>Ovoz va lab harakati mosmi? Video kesilmaganmi — oldin va keyin nima bo‘lgan?</li>
+              <li>Video birinchi qaysi akkauntdan chiqqan? Asl muallifni toping.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3><i class="fa-solid fa-percent"></i> Raqam</h3>
+            <ul>
+              <li><strong>“Nimaga nisbatan?”</strong> “100% o‘sdi” — 2 tadan 4 taga ham bo‘lishi mumkin.</li>
+              <li><strong>Manbasi bormi?</strong> Raqam qaysi statistika yoki tadqiqotdan olingan?</li>
+              <li><strong>Bog‘liqlik — sabab emas:</strong> muzqaymoq savdosi va cho‘kish holatlari yozda birga oshadi, lekin muzqaymoq cho‘kishga sabab emas — sabab issiq havo.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3><i class="fa-solid fa-quote-left"></i> Iqtibos</h3>
+            <ul>
+              <li>Mashhur odamlarga ular aytmagan chiroyli gaplar ko‘p nisbat beriladi.</li>
+              <li>Iqtibosni qo‘shtirnoq ichida qidiring va asl manbani — nutq, intervyu, kitobni toping.</li>
+              <li>Gap to‘liq keltirilganmi? Ba’zan bitta jumla kesib olinib, ma’nosi teskari qilinadi.</li>
+            </ul>
+          </div>
         </div>
-        <div class="grid-2" style="margin-top:18px;">
-          <div class="small-card"><h3><i class="fa-solid fa-circle-check"></i> Ishonchli xabar belgiları</h3><ul class="checklist"><li>Muallifi yoki manbasi aniq</li><li>Sana ko‘rsatilgan</li><li>Boshqa manbalarda ham tasdiqlanadi</li><li>Dalil va faktlarga asoslangan</li><li>Shov-shuvli emas, muvozanatli yozilgan</li></ul></div>
-          <div class="small-card"><h3><i class="fa-solid fa-triangle-exclamation"></i> Shubhali xabar belgiları</h3><ul class="checklist"><li>"Zudlik bilan ulashing!" kabi chaqiriqlar bor</li><li>Sarlavha haddan tashqari qo‘rqituvchi</li><li>Manbasi noma’lum</li><li>Foto yoki video kontekstsiz berilgan</li><li>Raqamlar dalilsiz keltirilgan</li></ul></div>
+
+        <h3 class="sub-title"><i class="fa-solid fa-magnifying-glass-chart"></i> Namunaviy tekshiruv: bosqichma-bosqich</h3>
+        <div class="grid-2">
+          <div class="post">
+            <div class="post-head"><div class="avatar" style="background:#0ea5e9">OB</div><div><strong>“Ob-havo shoklari” kanali</strong><span>Telegram · 14-iyul</span></div></div>
+            <div class="bubble">
+              ❄️ BUGUN TOSHKENTDA IYUL OYIDA QOR YOG‘DI!!! Iqlim butunlay buzildi! Ishonmaysizmi? Mana rasm 👇
+              <div class="img-ph"><i class="fa-solid fa-image"></i>&nbsp; Qor bosgan ko‘cha va daraxtlar</div>
+            </div>
+          </div>
+          <div class="card">
+            <h3><i class="fa-solid fa-list-ol"></i> Faktcheker qanday ishlaydi</h3>
+            <p><strong>1. Da’vo:</strong> “14-iyulda Toshkentda qor yog‘di.”</p>
+            <p><strong>2. Manba:</strong> noma’lum kanal, muallif yo‘q.</p>
+            <p><strong>3. Solishtirish:</strong> gidrometeorologiya xizmati va yangilik saytlarida iyuldagi qor haqida hech narsa yo‘q; o‘sha kungi harorat +38°.</p>
+            <p><strong>4. Dalil:</strong> teskari qidiruv rasmni bir necha yil oldin, yanvar oyida boshqa shaharda e’lon qilinganini ko‘rsatdi.</p>
+            <p><strong>5. Kontekst:</strong> rasm haqiqiy, lekin boshqa vaqt va joyniki; daraxtlarda barg yo‘q — yozga xos emas.</p>
+            <p><strong>6. Hukm:</strong> <span class="verdict bad">Yolg‘on</span> (rasm — kontekstdan uzilgan).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-image"></i> Qo‘shimcha infografika va video</h2>
+        <p class="lead">Nazariy qism davomida namoyish etiladi</p>
+        <div class="resource-grid">
+          <div class="resource-card">
+            <h3><i class="fa-solid fa-chart-pie"></i> Infografika</h3>
+            <div class="media-slot" id="imgSlot" onclick="openMediaModal('image', MEDIA.image, 'Fakt-checking algoritmi infografikasi')" title="Rasmni kattalashtirib ochish">
+              <img id="slotImg" alt="Fakt-checking algoritmi infografikasi">
+              <span class="placeholder">Infografika topilmadi.<br>Rasmni <code>4-infografika.png</code> nomi bilan<br>HTML fayl bilan bitta papkaga joylang.</span>
+            </div>
+            <button class="media-open-btn" type="button" onclick="openMediaModal('image', MEDIA.image, 'Fakt-checking algoritmi infografikasi')">
+              <i class="fa-solid fa-up-right-and-down-left-from-center"></i> Infografikani katta ekranda ochish
+            </button>
+          </div>
+          <div class="resource-card">
+            <h3><i class="fa-solid fa-clapperboard"></i> Video lavha</h3>
+            <div class="media-slot" id="videoSlot" onclick="openMediaModal('video', MEDIA.video, 'Video lavha')" title="Videoni katta ekranda ochish">
+              <video id="slotVideo" controls preload="metadata" onclick="event.stopPropagation()"></video>
+              <span class="placeholder">Video topilmadi.<br>Videoni <code>4-dars.mp4</code> nomi bilan<br>HTML fayl bilan bitta papkaga joylang.</span>
+            </div>
+            <button class="media-open-btn" type="button" onclick="openMediaModal('video', MEDIA.video, 'Video lavha')">
+              <i class="fa-solid fa-up-right-and-down-left-from-center"></i> Videoni katta ekranda ochish
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -281,75 +464,66 @@
     <section class="section">
       <div class="section-box">
         <h2 class="section-title"><i class="fa-solid fa-pen-ruler"></i> Amaliy topshiriqlar</h2>
-        <p class="lead">Maktab o‘quvchilari uchun sodda va foydali mashqlar</p>
+        <p class="lead">Barcha materiallar tayyor: ekranga chiqarib, darhol ishlash mumkin</p>
+
+        <h3 class="sub-title"><i class="fa-solid fa-shuffle"></i> 1-topshiriq: Qadamlarni tartiblang (3 daqiqa)</h3>
+        <p style="color:#475569;margin-top:-4px">Qadamlar aralashib ketgan. Har biriga to‘g‘ri tartib raqamini tanlang.</p>
+        <div class="order-game" id="og1">
+          <div class="order-row" data-answer="4"><span>Raqam, rasm yoki iqtibosning aslini tekshirish</span><select><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div class="order-row" data-answer="1"><span>Xabarda aynan nima da’vo qilinayotganini aniqlash</span><select><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div class="order-row" data-answer="6"><span>Shkala bo‘yicha hukm chiqarish va sababini yozish</span><select><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div class="order-row" data-answer="3"><span>Boshqa ishonchli manbalar bilan solishtirish</span><select><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div class="order-row" data-answer="5"><span>Xabar eski yoki boshqa joyniki emasligini tekshirish</span><select><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+          <div class="order-row" data-answer="2"><span>Kim, qayerda va qachon e’lon qilganini aniqlash</span><select><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+        </div>
+        <div class="actions"><button class="btn" onclick="checkOrder('og1','ogResult')">Tekshirish</button><button class="btn secondary" onclick="resetOrder('og1','ogResult')">Tozalash</button><span id="ogResult" class="result"></span></div>
+
+        <h3 class="sub-title"><i class="fa-solid fa-newspaper"></i> 2-topshiriq: Xabarni algoritm bo‘yicha tekshiring (guruhlarda, 8 daqiqa)</h3>
+        <p style="color:#475569;margin-top:-4px">Har bir guruh bitta xabarni oladi va 6 bosqichning har biriga bir gapdan yozadi.</p>
         <div class="grid-3">
-          <div class="task-card"><h3><i class="fa-solid fa-magnifying-glass"></i> 1-topshiriq: Da’voni toping</h3><p>O‘qituvchi bergan xabarda asosiy da’voni bitta gap bilan yozing.</p></div>
-          <div class="task-card"><h3><i class="fa-solid fa-link"></i> 2-topshiriq: Manbani aniqlang</h3><p>Xabar qayerda chiqgan, kim yozgan, qachon joylanganini aniqlang.</p></div>
-          <div class="task-card"><h3><i class="fa-solid fa-book-open"></i> 3-topshiriq: Solishtiring</h3><p>Xuddi shu voqea bo‘yicha 2 ta boshqa manbani toping va taqqoslang.</p></div>
-          <div class="task-card"><h3><i class="fa-solid fa-photo-film"></i> 4-topshiriq: Rasmni tekshir</h3><p>Berilgan surat yoki videoning aynan shu voqeaga aloqadorligini tahlil qiling.</p></div>
-          <div class="task-card"><h3><i class="fa-solid fa-list-ul"></i> 5-topshiriq: Dalillarni yozing</h3><p>Da’voni tasdiqlovchi yoki inkor etuvchi kamida 3 ta dalil yozing.</p></div>
-          <div class="task-card"><h3><i class="fa-solid fa-gavel"></i> 6-topshiriq: Yakuniy hukm</h3><p>“Rost”, “qisman rost”, “shubhali” yoki “yolg‘on” deb xulosa chiqaring va sababini tushuntiring.</p></div>
+          <div class="post">
+            <div class="post-head"><div class="avatar" style="background:#e11d48">TY</div><div><strong>“Tezkor yangiliklar”</strong><span>Ijtimoiy tarmoq · sana yo‘q</span></div></div>
+            <div class="bubble">Mashhur olim: “Men maktabda eng yomon o‘quvchi edim, shuning uchun baholar hech narsani anglatmaydi.” Ulashing, ota-onalar bilsin! 👇</div>
+            <details class="key"><summary>Tahlil (o‘qituvchi uchun)</summary>
+              <p><span class="verdict bad">Yolg‘on / tasdiqlab bo‘lmadi</span></p>
+              <ul><li>Da’vo — iqtibos. Olimning ismi ham aytilmagan.</li><li>Iqtibosni qo‘shtirnoq bilan qidirsangiz, asl nutq yoki kitob topilmaydi — bunday “iqtiboslar” turli olimlarga nisbat beriladi.</li><li>Masalan, Albert Eynshteyn haqida “maktabda yomon o‘qigan” degan afsona keng tarqalgan, lekin uning matematikadan yaxshi o‘qigani ma’lum.</li></ul>
+            </details>
+          </div>
+          <div class="post">
+            <div class="post-head"><div class="avatar" style="background:#f59e0b">ShY</div><div><strong>“Shahar yangiliklari”</strong><span>Yangilik sayti · 10-noyabr</span></div></div>
+            <div class="bubble">Shahrimizda velosiped yo‘laklaridan foydalanuvchilar soni bir yilda <strong>300% oshdi!</strong> Bu shahar hokimligining hisobotida qayd etilgan.</div>
+            <details class="key"><summary>Tahlil (o‘qituvchi uchun)</summary>
+              <p><span class="verdict mid">Qisman rost (tekshirish kerak)</span></p>
+              <ul><li>Manba ko‘rsatilgan (hokimlik hisoboti) — birlamchi manbani topish kerak.</li><li>“300%” — nimaga nisbatan? Hisobotda: o‘tgan yili kuniga 50 kishi, bu yil 200 kishi. Raqam to‘g‘ri, lekin mutlaq son kichik.</li><li>Agar yangilik “minglab odamlar velosipedga o‘tdi” desa — bu buzib ko‘rsatish bo‘lardi.</li></ul>
+            </details>
+          </div>
+          <div class="post">
+            <div class="post-head"><div class="avatar" style="background:#16a34a">OT</div><div><strong>Sinfdoshingiz xabari</strong><span>Sinf guruhi · bugun</span></div></div>
+            <div class="bubble">Ertaga matematika olimpiadasining maktab bosqichi soat 10:00 da 2-qavatdagi 24-xonada bo‘ladi. Maktab sayti va sinf rahbarimiz guruhida ham e’lon qilingan.</div>
+            <details class="key"><summary>Tahlil (o‘qituvchi uchun)</summary>
+              <p><span class="verdict good">Rost</span></p>
+              <ul><li>Da’vo aniq, tekshirib bo‘ladi.</li><li>Ikki mustaqil manba: maktab sayti va sinf rahbari.</li><li>Hissiyot, shoshiltirish yo‘q. Shunday bo‘lsa ham, o‘quvchilar saytga kirib, o‘zlari ko‘rib chiqishi kerak.</li></ul>
+            </details>
+          </div>
         </div>
+
+        <h3 class="sub-title"><i class="fa-solid fa-gavel"></i> 3-topshiriq: Hukm chiqaring (4 daqiqa)</h3>
+        <div id="ff1">
+          <div class="ff-row" data-answer="r"><p>1. “Suv dengiz sathida 100 °C da qaynaydi.” Darslik va ensiklopediyalar buni tasdiqlaydi.</p><div class="ff-btns"><button class="ff-btn" data-v="r">Rost</button><button class="ff-btn" data-v="q">Qisman rost</button><button class="ff-btn" data-v="k">Kontekstdan uzilgan</button><button class="ff-btn" data-v="y">Yolg‘on</button></div><p class="why">Rost — ilmiy jihatdan tasdiqlangan.</p></div>
+          <div class="ff-row" data-answer="k"><p>2. Kechagi bo‘ron haqidagi postdagi video aslida 5 yil oldin boshqa mamlakatda olingan.</p><div class="ff-btns"><button class="ff-btn" data-v="r">Rost</button><button class="ff-btn" data-v="q">Qisman rost</button><button class="ff-btn" data-v="k">Kontekstdan uzilgan</button><button class="ff-btn" data-v="y">Yolg‘on</button></div><p class="why">Video haqiqiy, lekin boshqa voqeaga yopishtirilgan.</p></div>
+          <div class="ff-row" data-answer="q"><p>3. “Maktabimizda o‘quvchilar soni ikki baravar oshdi” — aslida faqat 1-sinflar soni ikki baravar oshgan, umumiy son 10% ko‘paygan.</p><div class="ff-btns"><button class="ff-btn" data-v="r">Rost</button><button class="ff-btn" data-v="q">Qisman rost</button><button class="ff-btn" data-v="k">Kontekstdan uzilgan</button><button class="ff-btn" data-v="y">Yolg‘on</button></div><p class="why">Bir qismi to‘g‘ri, lekin umumlashtirish buzilgan.</p></div>
+          <div class="ff-row" data-answer="y"><p>4. “Bu choy 3 kunda har qanday kasallikni davolaydi.” Hech qanday tadqiqot yoki shifokor buni tasdiqlamaydi.</p><div class="ff-btns"><button class="ff-btn" data-v="r">Rost</button><button class="ff-btn" data-v="q">Qisman rost</button><button class="ff-btn" data-v="k">Kontekstdan uzilgan</button><button class="ff-btn" data-v="y">Yolg‘on</button></div><p class="why">Yolg‘on — dalil yo‘q, “har qanday kasallik” iborasi ilmiy jihatdan imkonsiz.</p></div>
+        </div>
+        <div class="actions"><button class="btn" onclick="checkFF('ff1','ff1Result')">Tekshirish</button><button class="btn secondary" onclick="resetFF('ff1','ff1Result')">Tozalash</button><span id="ff1Result" class="result"></span></div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-box">
-        <h2 class="section-title"><i class="fa-solid fa-image"></i> Qo‘shimcha infografika va video ma’lumotlar</h2>
-        <div class="resource-grid">
-          <div class="resource-card">
-            <h3><i class="fa-solid fa-chart-column"></i> Infografika</h3>
-            <div class="media-slot" onclick="openMediaModal('image','4-infografika.png','Infografika')">
-              <img src="4-infografika.png" alt="Fakt-checking infografikasi" onerror="this.style.display='none'; this.parentElement.insertAdjacentHTML('beforeend','<span>Infografika</span>');">
-            </div>
-            <button class="media-open-btn" type="button" onclick="openMediaModal('image','4-infografika.png','Infografika')"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Infografikani katta ekranda ochish</button>
-          </div>
-          <div class="resource-card">
-            <h3><i class="fa-solid fa-clapperboard"></i> Video ma’lumot</h3>
-            <div class="media-slot" onclick="openMediaModal('video','4-dars.mp4','Video ma’lumot')">
-              <video controls preload="metadata" onclick="event.stopPropagation()">
-                <source src="4-dars.mp4" type="video/mp4">
-              </video>
-            </div>
-            <button class="media-open-btn" type="button" onclick="openMediaModal('video','4-dars.mp4','Video ma’lumot')"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Videoni katta ekranda ochish</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
+    <section id="test" class="section">
       <div class="section-box">
         <h2 class="section-title"><i class="fa-solid fa-circle-question"></i> Tezkor test</h2>
-        <p class="lead">Dars yakunida o‘quvchi 3 ta tanlovli test va 2 ta yozma yopiq savol orqali o‘zini tekshiradi</p>
-        <div class="quiz-question">
-          <h4>1. Fakt-checkingning asosiy maqsadi nima?</h4>
-          <label><input type="radio" name="q1" value="1"> Xabarni tekshirib, uning rost yoki yolg‘onligini aniqlash</label>
-          <label><input type="radio" name="q1" value="0"> Xabarni tezroq ulashish</label>
-          <label><input type="radio" name="q1" value="0"> Faqat sarlavhani o‘qish</label>
-        </div>
-        <div class="quiz-question">
-          <h4>2. Fakt-checkingda xabarni nima bilan solishtirish kerak?</h4>
-          <label><input type="radio" name="q2" value="0"> Faqat do‘stlar fikri bilan</label>
-          <label><input type="radio" name="q2" value="1"> Boshqa ishonchli manbalar bilan</label>
-          <label><input type="radio" name="q2" value="0"> Faqat sharhlar bilan</label>
-        </div>
-        <div class="quiz-question">
-          <h4>3. Xabardagi tasdiqni qo‘llab-quvvatlovchi aniq ma’lumot nima deyiladi?</h4>
-          <label><input type="radio" name="q3" value="0"> Fikr</label>
-          <label><input type="radio" name="q3" value="1"> Dalil</label>
-          <label><input type="radio" name="q3" value="0"> Taxmin</label>
-        </div>
-        <div class="quiz-question open-question">
-          <h4>4. Xabarni tekshirish uchun bir necha manbalarni o‘zaro nima qilish kerak?</h4>
-          <input type="text" id="q4" class="short-answer" placeholder="Javobni yozing...">
-          <p class="open-hint">Javob bitta fe’l yoki qisqa ibora bo‘lishi mumkin.</p>
-        </div>
-        <div class="quiz-question open-question">
-          <h4>5. Da’voni tasdiqlovchi yoki inkor etuvchi aniq ma’lumot nima deyiladi?</h4>
-          <input type="text" id="q5" class="short-answer" placeholder="Javobni yozing...">
-          <p class="open-hint">Javobni bitta so‘z bilan yozing.</p>
-        </div>
-        <div class="quiz-actions">
+        <p class="lead">7 ta tanlovli va 3 ta yozma savol. Natijadan keyin har bir savol ostida izoh chiqadi.</p>
+        <div id="quiz"></div>
+        <div class="actions">
           <button class="btn" onclick="checkQuiz()">Natijani ko‘rish</button>
           <button class="btn secondary" onclick="resetQuiz()">Tozalash</button>
           <span id="quizResult" class="result"></span>
@@ -359,15 +533,43 @@
 
     <section class="section">
       <div class="section-box">
-        <h2 class="section-title"><i class="fa-solid fa-house-laptop"></i> Uyga vazifa</h2>
-        <p class="lead">Qisqa va foydali topshiriq</p>
-        <ol class="checklist">
-          <li>Internetdan biror xabar toping va uning asosiy da’vosini yozing.</li>
-          <li>Xabarni kamida 2 ta boshqa manba bilan solishtiring.</li>
-          <li>O‘zingizning xulosangizni “rost”, “qisman rost” yoki “shubhali” shaklida yozing.</li>
-        </ol>
+        <h2 class="section-title"><i class="fa-solid fa-comments"></i> Refleksiya</h2>
+        <p class="lead">“Iyulda qor” xabariga qayting</p>
+        <div class="grid-3">
+          <div class="card"><h3><i class="fa-solid fa-hand"></i> Ovoz berish</h3><p>Darsning boshida kim “rost” degandi? Endi qanday dalil sizni fikringizni o‘zgartirishga majbur qildi?</p></div>
+          <div class="card"><h3><i class="fa-solid fa-toolbox"></i> Vosita</h3><p>Bugun o‘rgangan qaysi usul kundalik hayotda eng ko‘p kerak bo‘ladi?</p></div>
+          <div class="card"><h3><i class="fa-solid fa-flag"></i> Qaror</h3><p>Keyingi safar shubhali xabar kelganda birinchi nima qilasiz?</p></div>
+        </div>
       </div>
     </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-house-laptop"></i> Uyga vazifa</h2>
+        <p class="lead">“Mening birinchi fakt-checkim” — kichik hisobot</p>
+        <ol class="homework-list">
+          <li>Ijtimoiy tarmoqdan yoki oila guruhidan bitta shubhali xabar, rasm yoki iqtibos toping.</li>
+          <li>Uni 6 bosqichli algoritm bo‘yicha tekshiring va har bosqichda nima topganingizni yozing.</li>
+          <li>Agar rasm bo‘lsa — teskari qidiruv qiling va natijaning skrinshotini qo‘shing.</li>
+          <li>Hukm shkalasi bo‘yicha xulosa chiqaring va uni kamida 3 ta dalil bilan asoslang.</li>
+          <li>Ixtiyoriy: xabarni yuborgan odamga hurmat bilan natijani tushuntirib bering.</li>
+        </ol>
+        <div class="table-wrap">
+          <table class="info-table">
+            <thead><tr><th>Baholash mezoni</th><th>Ball</th></tr></thead>
+            <tbody>
+              <tr><td>Da’vo aniq ifodalangan</td><td>1</td></tr>
+              <tr><td>6 bosqichning hammasi bajarilgan</td><td>3</td></tr>
+              <tr><td>Kamida 2 ta mustaqil manba bilan solishtirilgan</td><td>2</td></tr>
+              <tr><td>Hukm shkala bo‘yicha to‘g‘ri tanlangan</td><td>1</td></tr>
+              <tr><td>Hukm 3 ta dalil bilan asoslangan</td><td>3</td></tr>
+              <tr><td><strong>Jami</strong></td><td><strong>10</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <div id="mediaModal" class="fullscreen-modal" role="dialog" aria-modal="true" aria-label="Media ko‘rish oynasi">
@@ -380,167 +582,421 @@
     </div>
   </div>
 
-  <footer class="footer container">Ushbu sahifa maktab o‘quvchilari uchun “Fakt-checking algoritmi” mavzusidagi darsni zamonaviy va tushunarli shaklda tashkil etish uchun tayyorlandi.</footer>
+  <footer class="footer container">
+    Ushbu sahifa “Fakt-checking algoritmi” mavzusidagi 4-darsni zamonaviy va tushunarli shaklda tashkil etish uchun tayyorlandi.
+  </footer>
 
   <script>
-    function openMediaModal(type, src, title){
-      const modal=document.getElementById('mediaModal');
-      const modalTitle=document.getElementById('modalTitle');
-      const modalBody=document.getElementById('modalBody');
-      modalTitle.textContent=title||'Media';
-      if(type==='image'){
-        modalBody.innerHTML=`<img src="${src}" alt="${title||'Infografika'}" onerror="this.outerHTML='<div style=&quot;color:white;text-align:center;font-weight:800;padding:30px&quot;>Rasm topilmadi.</div>'">`;
-      }else{
-        modalBody.innerHTML=`<video controls autoplay><source src="${src}" type="video/mp4">Brauzeringiz MP4 videoni qo‘llab-quvvatlamaydi.</video>`;
-      }
-      modal.classList.add('show');
-      document.body.style.overflow='hidden';
-    }
-    function closeMediaModal(){
-      const modal=document.getElementById('mediaModal');
-      const modalBody=document.getElementById('modalBody');
-      modal.classList.remove('show');
-      modalBody.innerHTML='';
-      document.body.style.overflow='';
-    }
-    document.addEventListener('keydown',e=>{if(e.key==='Escape') closeMediaModal();});
-    document.addEventListener('click',e=>{const modal=document.getElementById('mediaModal');if(e.target===modal) closeMediaModal();});
-    function normalizeAnswer(text){return text.toLowerCase().replace(/[’‘`']/g,"'").replace(/\s+/g,' ').trim();}
-    function checkQuiz(){
-      const answers=['q1','q2','q3']; let score=0; let checkedCount=0;
-      answers.forEach(q=>{ const selected=document.querySelector(`input[name="${q}"]:checked`); if(selected){checkedCount++; score+=Number(selected.value);} });
-      const q4=normalizeAnswer(document.getElementById('q4').value);
-      const q5=normalizeAnswer(document.getElementById('q5').value);
-      const result=document.getElementById('quizResult');
-      if(checkedCount<answers.length || !q4 || !q5){ result.textContent="Iltimos, barcha savollarga javob bering."; result.style.color="#b45309"; return; }
-      if(["solishtirish","solishtirish kerak","taqqoslash","solishtirish lozim","solishtirish kerak bo'ladi"].includes(q4)) score++;
-      if(["dalil","isbot","aniq dalil"].includes(q5)) score++;
-      if(score===5){result.textContent="Ajoyib! Natija: 5 / 5"; result.style.color="#15803d";}
-      else if(score>=3){result.textContent="Yaxshi! Natija: "+score+" / 5"; result.style.color="#2563eb";}
-      else {result.textContent="Yana bir bor urinib ko‘ring. Natija: "+score+" / 5"; result.style.color="#dc2626";}
-    }
-    function resetQuiz(){document.querySelectorAll('input[type="radio"]').forEach(el=>el.checked=false);document.querySelectorAll('.short-answer').forEach(el=>el.value='');document.getElementById('quizResult').textContent='';}
-  </script>
+  /* ============ MEDIA FAYLLAR (nomlar faqat shu yerda) ============ */
+  const MEDIA = { image: '4-infografika.png', video: '4-dars.mp4' };
 
+  (function initMedia(){
+    const img = document.getElementById('slotImg');
+    const imgSlot = document.getElementById('imgSlot');
+    img.onerror = () => imgSlot.classList.add('missing');
+    img.src = MEDIA.image;
 
-  <script>
-  /* === QAYTA ISHLANGAN: infografika haqiqiy kattalashadi, scroll va surish ishlaydi === */
-  (function(){
-    const state = { scale:1, min:.45, max:5, baseWidth:900, dragging:false, sx:0, sy:0, sl:0, st:0 };
-    function ensureModal(){
-      let modal = document.getElementById('mediaModal');
-      if(!modal){
-        modal = document.createElement('div');
-        modal.id = 'mediaModal';
-        modal.className = 'fullscreen-modal';
-        modal.setAttribute('role','dialog');
-        modal.setAttribute('aria-modal','true');
-        modal.innerHTML = '<div class="modal-content"><div class="modal-header"><strong id="modalTitle">Media</strong><button class="modal-close" type="button" aria-label="Yopish"><i class="fa-solid fa-xmark"></i></button></div><div id="modalBody" class="modal-body"></div></div>';
-        document.body.appendChild(modal);
-      }
-      const closeBtn = modal.querySelector('.modal-close');
-      if(closeBtn) closeBtn.onclick = window.closeMediaModal;
-      return modal;
-    }
-    function clamp(v){ return Math.max(state.min, Math.min(state.max, v)); }
-    function update(){
-      const img = document.getElementById('azZoomImg');
-      const value = document.getElementById('azZoomValue');
-      if(!img) return;
-      img.style.width = Math.round(state.baseWidth * state.scale) + 'px';
-      img.style.height = 'auto';
-      if(value) value.textContent = Math.round(state.scale * 100) + '%';
-    }
-    window.zoomImage = function(delta){
-      const stage = document.getElementById('azZoomStage');
-      if(!stage) return;
-      const oldScale = state.scale;
-      const oldLeft = stage.scrollLeft, oldTop = stage.scrollTop;
-      const cx = oldLeft + stage.clientWidth/2;
-      const cy = oldTop + stage.clientHeight/2;
-      state.scale = clamp(state.scale + delta);
-      update();
-      const ratio = state.scale / oldScale;
-      stage.scrollLeft = cx * ratio - stage.clientWidth/2;
-      stage.scrollTop = cy * ratio - stage.clientHeight/2;
-    };
-    window.resetImageZoom = function(){
-      const stage = document.getElementById('azZoomStage');
-      state.scale = 1;
-      update();
-      if(stage){ stage.scrollLeft = Math.max(0,(stage.scrollWidth-stage.clientWidth)/2); stage.scrollTop = 0; }
-    };
-    window.closeMediaModal = function(){
-      const modal = document.getElementById('mediaModal');
-      const body = document.getElementById('modalBody');
-      if(modal) modal.classList.remove('show');
-      if(body) body.innerHTML = '';
-      document.body.style.overflow = '';
-    };
-    window.openMediaModal = function(type, src, title){
-      const modal = ensureModal();
-      const modalTitle = document.getElementById('modalTitle');
-      const modalBody = document.getElementById('modalBody');
-      if(modalTitle) modalTitle.textContent = title || 'Media';
-      if(!modalBody) return;
-      if(type === 'image'){
-        state.scale = 1;
-        modalBody.innerHTML = '<div class="az-zoom-panel"><div class="az-zoom-toolbar"><button class="az-zoom-btn" type="button" onclick="zoomImage(-0.25)" title="Kichraytirish">−</button><span id="azZoomValue" class="az-zoom-value">100%</span><button class="az-zoom-btn" type="button" onclick="zoomImage(0.25)" title="Kattalashtirish">+</button><button class="az-zoom-btn" type="button" onclick="zoomImage(0.75)" title="Tez kattalashtirish"><i class="fa-solid fa-magnifying-glass-plus"></i></button><button class="az-zoom-btn" type="button" onclick="resetImageZoom()" title="Boshlang\'ich holat">100%</button><span class="az-zoom-hint">+ / − tugmalari, sichqoncha g‘ildiragi va rasmni ushlab surish ishlaydi</span></div><div id="azZoomStage" class="az-stage"><img id="azZoomImg" class="az-img" alt="Infografika"></div></div>';
-        const stage = document.getElementById('azZoomStage');
-        const img = document.getElementById('azZoomImg');
-        img.onload = function(){
-          const available = Math.max(320, stage.clientWidth - 70);
-          const natural = img.naturalWidth || 1200;
-          state.baseWidth = Math.min(natural, available);
-          if(natural < available) state.baseWidth = Math.min(available, 1100);
-          update();
-          requestAnimationFrame(()=>{ stage.scrollLeft = Math.max(0,(stage.scrollWidth-stage.clientWidth)/2); stage.scrollTop = 0; });
-        };
-        img.onerror = function(){ stage.innerHTML = '<div style="color:#fff;text-align:center;font-weight:900;padding:34px">Rasm topilmadi. Infografika fayli HTML bilan bitta papkada turganini tekshiring.</div>'; };
-        img.src = src;
-      } else {
-        modalBody.innerHTML = '<video controls autoplay><source src="'+String(src).replace(/"/g,'&quot;')+'" type="video/mp4">Brauzeringiz MP4 videoni qo‘llab-quvvatlamaydi.</video>';
-      }
-      modal.classList.add('show');
-      document.body.style.overflow = 'hidden';
-    };
-    document.addEventListener('wheel', function(e){
-      const stage = e.target.closest && e.target.closest('#azZoomStage');
-      if(!stage) return;
-      e.preventDefault();
-      window.zoomImage(e.deltaY < 0 ? 0.18 : -0.18);
-    }, {passive:false});
-    document.addEventListener('pointerdown', function(e){
-      const stage = e.target.closest && e.target.closest('#azZoomStage');
-      if(!stage) return;
-      state.dragging = true; state.sx = e.clientX; state.sy = e.clientY; state.sl = stage.scrollLeft; state.st = stage.scrollTop;
-      stage.classList.add('az-dragging');
-      stage.setPointerCapture && stage.setPointerCapture(e.pointerId);
-    });
-    document.addEventListener('pointermove', function(e){
-      if(!state.dragging) return;
-      const stage = document.getElementById('azZoomStage'); if(!stage) return;
-      stage.scrollLeft = state.sl - (e.clientX - state.sx);
-      stage.scrollTop = state.st - (e.clientY - state.sy);
-    });
-    document.addEventListener('pointerup', function(){
-      state.dragging = false;
-      const stage = document.getElementById('azZoomStage'); if(stage) stage.classList.remove('az-dragging');
-    });
-    document.addEventListener('keydown', function(e){
-      const modal = document.getElementById('mediaModal');
-      if(!modal || !modal.classList.contains('show')) return;
-      if(e.key === 'Escape') window.closeMediaModal();
-      if(e.key === '+' || e.key === '=') window.zoomImage(0.25);
-      if(e.key === '-') window.zoomImage(-0.25);
-      if(e.key === '0') window.resetImageZoom();
-    });
-    document.addEventListener('click', function(e){
-      const modal = document.getElementById('mediaModal');
-      if(modal && e.target === modal) window.closeMediaModal();
-    });
+    const video = document.getElementById('slotVideo');
+    const videoSlot = document.getElementById('videoSlot');
+    const source = document.createElement('source');
+    source.src = MEDIA.video;
+    source.type = 'video/mp4';
+    source.onerror = () => videoSlot.classList.add('missing');
+    video.appendChild(source);
   })();
-  </script>
 
+  /* ============ MODAL + ZOOM ============ */
+  const zoom = { scale:1, min:.45, max:5, baseWidth:900, dragging:false, sx:0, sy:0, sl:0, st:0 };
+
+  function clampScale(v){ return Math.max(zoom.min, Math.min(zoom.max, v)); }
+
+  function updateZoom(){
+    const img = document.getElementById('azZoomImg');
+    const value = document.getElementById('azZoomValue');
+    if(!img) return;
+    img.style.width = Math.round(zoom.baseWidth * zoom.scale) + 'px';
+    if(value) value.textContent = Math.round(zoom.scale * 100) + '%';
+  }
+
+  function zoomImage(delta){
+    const stage = document.getElementById('azZoomStage');
+    if(!stage) return;
+    const old = zoom.scale;
+    const cx = stage.scrollLeft + stage.clientWidth/2;
+    const cy = stage.scrollTop + stage.clientHeight/2;
+    zoom.scale = clampScale(zoom.scale + delta);
+    updateZoom();
+    const r = zoom.scale / old;
+    stage.scrollLeft = cx * r - stage.clientWidth/2;
+    stage.scrollTop = cy * r - stage.clientHeight/2;
+  }
+
+  function resetImageZoom(){
+    const stage = document.getElementById('azZoomStage');
+    zoom.scale = 1;
+    updateZoom();
+    if(stage){ stage.scrollLeft = Math.max(0,(stage.scrollWidth-stage.clientWidth)/2); stage.scrollTop = 0; }
+  }
+
+  function openMediaModal(type, src, title){
+    const modal = document.getElementById('mediaModal');
+    const body = document.getElementById('modalBody');
+    document.getElementById('modalTitle').textContent = title || 'Media';
+
+    if(type === 'image'){
+      zoom.scale = 1;
+      body.innerHTML =
+        '<div class="az-zoom-panel">' +
+          '<div class="az-zoom-toolbar">' +
+            '<button class="az-zoom-btn" type="button" onclick="zoomImage(-0.25)" title="Kichraytirish">−</button>' +
+            '<span id="azZoomValue" class="az-zoom-value">100%</span>' +
+            '<button class="az-zoom-btn" type="button" onclick="zoomImage(0.25)" title="Kattalashtirish">+</button>' +
+            '<button class="az-zoom-btn" type="button" onclick="zoomImage(0.75)" title="Tez kattalashtirish"><i class="fa-solid fa-magnifying-glass-plus"></i></button>' +
+            '<button class="az-zoom-btn" type="button" onclick="resetImageZoom()" title="Boshlang‘ich holat"><i class="fa-solid fa-rotate-left"></i></button>' +
+            '<span class="az-zoom-hint">+ / − tugmalari, sichqoncha g‘ildiragi va rasmni ushlab surish ishlaydi</span>' +
+          '</div>' +
+          '<div id="azZoomStage" class="az-stage"><img id="azZoomImg" class="az-img" alt="Infografika"></div>' +
+        '</div>';
+      const stage = document.getElementById('azZoomStage');
+      const img = document.getElementById('azZoomImg');
+      img.onload = function(){
+        const available = Math.max(320, stage.clientWidth - 70);
+        const natural = img.naturalWidth || 1200;
+        zoom.baseWidth = natural < available ? Math.min(available, 1100) : available;
+        updateZoom();
+        requestAnimationFrame(() => { stage.scrollLeft = Math.max(0,(stage.scrollWidth-stage.clientWidth)/2); stage.scrollTop = 0; });
+      };
+      img.onerror = function(){ stage.innerHTML = '<div class="modal-msg">Rasm topilmadi. <code>' + MEDIA.image + '</code> fayli HTML bilan bitta papkada turganini tekshiring.</div>'; };
+      img.src = src;
+    } else {
+      const v = document.createElement('video');
+      v.controls = true; v.autoplay = true;
+      const s = document.createElement('source');
+      s.src = src; s.type = 'video/mp4';
+      s.onerror = () => { body.innerHTML = '<div class="modal-msg">Video topilmadi. <code>' + MEDIA.video + '</code> fayli HTML bilan bitta papkada turganini tekshiring.</div>'; };
+      v.appendChild(s);
+      body.innerHTML = '';
+      body.appendChild(v);
+    }
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMediaModal(){
+    document.getElementById('mediaModal').classList.remove('show');
+    document.getElementById('modalBody').innerHTML = '';
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', e => { if(e.target.id === 'mediaModal') closeMediaModal(); });
+  document.addEventListener('keydown', e => {
+    const modal = document.getElementById('mediaModal');
+    if(!modal.classList.contains('show')) return;
+    if(e.key === 'Escape') closeMediaModal();
+    if(!document.getElementById('azZoomStage')) return;
+    if(e.key === '+' || e.key === '=') zoomImage(0.25);
+    if(e.key === '-') zoomImage(-0.25);
+    if(e.key === '0') resetImageZoom();
+  });
+  document.addEventListener('wheel', e => {
+    if(!(e.target.closest && e.target.closest('#azZoomStage'))) return;
+    e.preventDefault();
+    zoomImage(e.deltaY < 0 ? 0.18 : -0.18);
+  }, {passive:false});
+  document.addEventListener('pointerdown', e => {
+    const stage = e.target.closest && e.target.closest('#azZoomStage');
+    if(!stage) return;
+    Object.assign(zoom, { dragging:true, sx:e.clientX, sy:e.clientY, sl:stage.scrollLeft, st:stage.scrollTop });
+    stage.classList.add('az-dragging');
+  });
+  document.addEventListener('pointermove', e => {
+    if(!zoom.dragging) return;
+    const stage = document.getElementById('azZoomStage'); if(!stage) return;
+    stage.scrollLeft = zoom.sl - (e.clientX - zoom.sx);
+    stage.scrollTop = zoom.st - (e.clientY - zoom.sy);
+  });
+  document.addEventListener('pointerup', () => {
+    zoom.dragging = false;
+    const stage = document.getElementById('azZoomStage'); if(stage) stage.classList.remove('az-dragging');
+  });
+
+  /* ============ TANLASH MASHQLARI (Fakt/Fikr va h.k.) ============ */
+  document.querySelectorAll('.ff-row').forEach(row => {
+    row.querySelectorAll('.ff-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.ff-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        row.classList.remove('ok','no','checked');
+      });
+    });
+  });
+
+  function checkFF(listId, resultId){
+    listId = listId || 'ffList'; resultId = resultId || 'ffResult';
+    const rows = document.querySelectorAll('#' + listId + ' .ff-row');
+    const out = document.getElementById(resultId);
+    let score = 0, answered = 0;
+    rows.forEach(row => { if(row.querySelector('.ff-btn.active')) answered++; });
+    if(answered < rows.length){
+      out.textContent = 'Iltimos, barcha qatorlar uchun javob tanlang.';
+      out.style.color = '#b45309';
+      return;
+    }
+    rows.forEach(row => {
+      const ok = row.querySelector('.ff-btn.active').dataset.v === row.dataset.answer;
+      if(ok) score++;
+      row.classList.add('checked', ok ? 'ok' : 'no');
+    });
+    out.textContent = 'Natija: ' + score + ' / ' + rows.length;
+    out.style.color = score === rows.length ? '#15803d' : '#2563eb';
+  }
+
+  function resetFF(listId, resultId){
+    listId = listId || 'ffList'; resultId = resultId || 'ffResult';
+    document.querySelectorAll('#' + listId + ' .ff-row').forEach(row => {
+      row.classList.remove('ok','no','checked');
+      row.querySelectorAll('.ff-btn').forEach(b => b.classList.remove('active'));
+    });
+    document.getElementById(resultId).textContent = '';
+  }
+
+  /* ============ MANBA BAHOLASH KALKULYATORI ============ */
+  document.querySelectorAll('.scorer').forEach(sc => {
+    const boxes = sc.querySelectorAll('input[type="checkbox"]');
+    const out = sc.querySelector('.scorer-out');
+    const upd = () => {
+      const n = [...boxes].filter(b => b.checked).length;
+      let verdict = '', cls = '';
+      if(n >= 6){ verdict = 'ishonchli'; cls = 'good'; }
+      else if(n >= 4){ verdict = 'ehtiyotkorlik bilan, qo‘shimcha tekshiring'; cls = 'mid'; }
+      else { verdict = 'ishonchsiz'; cls = 'bad'; }
+      out.textContent = 'Belgilangan: ' + n + ' / ' + boxes.length + ' — ' + verdict;
+      out.className = 'scorer-out ' + cls;
+    };
+    boxes.forEach(b => b.addEventListener('change', upd));
+  });
+
+  /* ============ TARTIBLASH O‘YINI ============ */
+  function checkOrder(gameId, resultId){
+    const rows = document.querySelectorAll('#' + gameId + ' .order-row');
+    const out = document.getElementById(resultId);
+    const vals = [...rows].map(r => r.querySelector('select').value);
+    if(vals.some(v => !v)){
+      out.textContent = 'Iltimos, har bir qadamga raqam tanlang.';
+      out.style.color = '#b45309';
+      return;
+    }
+    let score = 0;
+    rows.forEach((r, i) => {
+      const ok = vals[i] === r.dataset.answer;
+      if(ok) score++;
+      r.classList.remove('ok','no');
+      r.classList.add(ok ? 'ok' : 'no');
+    });
+    out.textContent = score === rows.length ? 'Ajoyib! Barcha qadamlar to‘g‘ri: ' + score + ' / ' + rows.length
+                                            : 'Natija: ' + score + ' / ' + rows.length + '. Qizil qatorlarni qayta ko‘rib chiqing.';
+    out.style.color = score === rows.length ? '#15803d' : '#2563eb';
+  }
+
+  function resetOrder(gameId, resultId){
+    document.querySelectorAll('#' + gameId + ' .order-row').forEach(r => {
+      r.classList.remove('ok','no');
+      r.querySelector('select').value = '';
+    });
+    document.getElementById(resultId).textContent = '';
+  }
+
+  /* ============ TEST ============ */
+  const QUIZ = [
+  {
+    "type": "mc",
+    "q": "Fakt-checkingning birinchi qadami qaysi?",
+    "options": [
+      "Xabarni do‘stlarga yuborib, fikrini so‘rash",
+      "Xabarda aynan nima da’vo qilinayotganini aniqlash",
+      "Darhol hukm chiqarish"
+    ],
+    "answer": 1,
+    "why": "Nimani tekshirayotganingizni bilmasangiz, tekshirib bo‘lmaydi."
+  },
+  {
+    "type": "mc",
+    "q": "Rasm boshqa voqeaga tegishli ekanini qanday aniqlash mumkin?",
+    "options": [
+      "Rasmni kattalashtirib qarash",
+      "Izohlarni o‘qish",
+      "Teskari rasm qidiruvi (Google Lens, TinEye)"
+    ],
+    "answer": 2,
+    "why": "Teskari qidiruv rasm internetda birinchi marta qachon va qayerda chiqqanini ko‘rsatadi."
+  },
+  {
+    "type": "mc",
+    "q": "“Qisman rost” hukmi qachon beriladi?",
+    "options": [
+      "Da’voning bir qismi to‘g‘ri, lekin muhim tafsilot buzilgan yoki tushirib qoldirilgan bo‘lsa",
+      "Da’vo umuman tekshirilmagan bo‘lsa",
+      "Xabar ko‘p odam tomonidan ulashilgan bo‘lsa"
+    ],
+    "answer": 0,
+    "why": "Masalan, raqam to‘g‘ri, lekin undan noto‘g‘ri umumiy xulosa chiqarilgan."
+  },
+  {
+    "type": "mc",
+    "q": "“Ishtirokchilar soni 100% oshdi” degan xabarda avvalo nimani aniqlash kerak?",
+    "options": [
+      "Xabar qancha layk olganini",
+      "Boshlang‘ich son qancha bo‘lganini (masalan, 2 dan 4 ga)",
+      "Sarlavha rangini"
+    ],
+    "answer": 1,
+    "why": "Foiz o‘zi hech narsani anglatmaydi — “nimaga nisbatan?” deb so‘rang."
+  },
+  {
+    "type": "mc",
+    "q": "Ijtimoiy tarmoqdan yuklab olingan rasmning metama’lumoti haqida qaysi gap to‘g‘ri?",
+    "options": [
+      "U har doim aniq sana va joyni ko‘rsatadi",
+      "Ko‘pincha o‘chirib yuboriladi, shuning uchun yagona dalil bo‘la olmaydi",
+      "Uni o‘zgartirib bo‘lmaydi"
+    ],
+    "answer": 1,
+    "why": "Ko‘p platformalar metama’lumotni o‘chiradi, uni o‘zgartirish ham mumkin."
+  },
+  {
+    "type": "mc",
+    "q": "Mashhur shaxsga nisbat berilgan iqtibosni qanday tekshirasiz?",
+    "options": [
+      "Asl nutq, intervyu yoki kitobni topib, shu gap bor-yo‘qligini ko‘rish",
+      "Iqtibos chiroyli bo‘lsa, rost deb hisoblash",
+      "Rasm ostida yozilgani uchun ishonish"
+    ],
+    "answer": 0,
+    "why": "Iqtibosni qo‘shtirnoq ichida qidiring va asl manbaga yetib boring."
+  },
+  {
+    "type": "mc",
+    "q": "Muzqaymoq savdosi va cho‘kish holatlari yozda birga oshadi. To‘g‘ri xulosa qaysi?",
+    "options": [
+      "Muzqaymoq cho‘kishga sabab bo‘ladi",
+      "Ikkalasiga ham umumiy sabab — issiq havo ta’sir qiladi",
+      "Bu tasodif, hech qanday bog‘liqlik yo‘q"
+    ],
+    "answer": 1,
+    "why": "Bog‘liqlik — sabab degani emas. Ko‘pincha ikkalasining ortida uchinchi omil turadi."
+  },
+  {
+    "type": "text",
+    "q": "Xabarni tekshirish uchun bir necha manbani o‘zaro nima qilish kerak?",
+    "hint": "Bitta so‘z yoki qisqa ibora.",
+    "accept": [
+      "solishtirish",
+      "taqqoslash",
+      "solishtirish kerak",
+      "qiyoslash",
+      "solishtiramiz"
+    ],
+    "correct": "Solishtirish",
+    "why": "Bir nechta mustaqil manba tasdiqlasa, xabar ishonchliroq bo‘ladi."
+  },
+  {
+    "type": "text",
+    "q": "Da’voni tasdiqlovchi yoki inkor etuvchi aniq ma’lumot nima deyiladi?",
+    "hint": "Bitta so‘z.",
+    "accept": [
+      "dalil",
+      "isbot"
+    ],
+    "correct": "Dalil",
+    "why": "Hukm faqat dalillarga tayanishi kerak, “menimcha”ga emas."
+  },
+  {
+    "type": "text",
+    "q": "Tekshiruv yakunida dalillar asosida chiqariladigan qaror nima deyiladi?",
+    "hint": "Bitta so‘z.",
+    "accept": [
+      "hukm",
+      "xulosa",
+      "verdikt"
+    ],
+    "correct": "Hukm (xulosa)",
+    "why": "Hukm shkalasi: rost, qisman rost, kontekstdan uzilgan, tasdiqlab bo‘lmadi, yolg‘on."
+  }
+];
+
+  function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  function renderQuiz(){
+    const box = document.getElementById('quiz');
+    box.innerHTML = QUIZ.map((item, i) => {
+      const n = i + 1;
+      let inner = '';
+      if(item.type === 'mc'){
+        inner = item.options.map((opt, j) =>
+          '<label><input type="radio" name="q' + n + '" value="' + j + '"> ' + escapeHtml(opt) + '</label>'
+        ).join('');
+      } else {
+        inner = '<input type="text" id="q' + n + '" class="short-answer" placeholder="Javobni yozing..." autocomplete="off">' +
+                '<p class="open-hint">' + escapeHtml(item.hint) + '</p>';
+      }
+      return '<div class="quiz-question" id="box' + n + '"><h4>' + n + '. ' + escapeHtml(item.q) + '</h4>' + inner +
+             '<div class="feedback" id="fb' + n + '"></div></div>';
+    }).join('');
+  }
+
+  function normalizeAnswer(text){
+    return text.toLowerCase().replace(/[’‘`ʻʼ']/g, "'").replace(/\s+/g, ' ').trim();
+  }
+
+  function checkQuiz(){
+    const result = document.getElementById('quizResult');
+    let missing = 0;
+    QUIZ.forEach((item, i) => {
+      const n = i + 1;
+      if(item.type === 'mc'){ if(!document.querySelector('input[name="q' + n + '"]:checked')) missing++; }
+      else if(!normalizeAnswer(document.getElementById('q' + n).value)) missing++;
+    });
+    if(missing){
+      result.textContent = 'Iltimos, barcha ' + QUIZ.length + ' ta savolga javob bering (yana ' + missing + ' ta qoldi).';
+      result.style.color = '#b45309';
+      return;
+    }
+
+    let score = 0;
+    QUIZ.forEach((item, i) => {
+      const n = i + 1;
+      const box = document.getElementById('box' + n);
+      const fb = document.getElementById('fb' + n);
+      let ok, correctText;
+      if(item.type === 'mc'){
+        const sel = Number(document.querySelector('input[name="q' + n + '"]:checked').value);
+        ok = sel === item.answer;
+        correctText = item.options[item.answer];
+      } else {
+        const val = normalizeAnswer(document.getElementById('q' + n).value);
+        ok = item.accept.map(normalizeAnswer).includes(val);
+        correctText = item.correct;
+      }
+      if(ok) score++;
+      box.classList.remove('ok','no');
+      box.classList.add(ok ? 'ok' : 'no');
+      fb.innerHTML = (ok ? '<strong style="color:#15803d">✔ To‘g‘ri.</strong> ' :
+        '<strong style="color:#e11d48">✘ Noto‘g‘ri.</strong> To‘g‘ri javob: <strong>' + escapeHtml(correctText) + '</strong>. ') + escapeHtml(item.why);
+    });
+
+    const total = QUIZ.length;
+    if(score === total){ result.textContent = 'Ajoyib! Natija: ' + score + ' / ' + total; result.style.color = '#15803d'; }
+    else if(score >= 7){ result.textContent = 'Yaxshi! Natija: ' + score + ' / ' + total; result.style.color = '#2563eb'; }
+    else if(score >= 5){ result.textContent = 'Qoniqarli. Natija: ' + score + ' / ' + total + '. Izohlarni o‘qib chiqing.'; result.style.color = '#b45309'; }
+    else { result.textContent = 'Yana bir bor urinib ko‘ring. Natija: ' + score + ' / ' + total; result.style.color = '#dc2626'; }
+  }
+
+  function resetQuiz(){
+    renderQuiz();
+    document.getElementById('quizResult').textContent = '';
+  }
+
+  renderQuiz();
+  </script>
 </body>
 </html>
