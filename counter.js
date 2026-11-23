@@ -1,57 +1,52 @@
-/* =====================================================================
-   Platformaga tashriflarni hisoblash
-   - Har bir sahifaga qo‘shish uchun </body> oldidan shu qatorni qo‘ying:
-       <script src="counter.js" defer></script>
-   - Shaxsiy ma’lumot yuborilmaydi: faqat "yangi foydalanuvchi / yo‘q" belgisi.
-   - Bir brauzer seansida bir marta hisoblanadi (sahifani yangilash sanalmaydi).
-   - Sahifada data-visits="unique|total|today" belgili elementlar bo‘lsa, sonlar shu yerga yoziladi.
-   ===================================================================== */
+/* Tashriflar hisoblagichi — Axborot madaniyati platformasi
+   Bepul Abacus xizmatidan foydalanadi (https://abacus.jasoncameron.dev), kalit yoki ro‘yxatdan o‘tish shart emas.
+   Shaxsiy ma’lumot yuborilmaydi: faqat raqamlar oshiriladi.
+   Sahifadagi elementlar: data-visits="unique" | "total" | "today" */
 (function () {
-  var API_URL = "https://script.google.com/macros/s/AKfycby8iPtcZuk_gTUDLFiz6BFT-49huUt6NoUieuGptW837jUIl0rnx4jKq4txwCUoRH7VFQ/exec";
-  var VID_KEY = "mdim_visitor_id";
-  var SESSION_KEY = "mdim_visit_counted";
+  var API = 'https://abacus.jasoncameron.dev';
+  var NS = 'axborot-madaniyati-mirobid30';           // nomlar maydoni (o‘zgartirmang, aks holda hisob 0 dan boshlanadi)
+  var now = new Date();
+  var day = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
 
-  function get(store, key) { try { return window[store].getItem(key); } catch (e) { return null; } }
-  function set(store, key, val) { try { window[store].setItem(key, val); } catch (e) {} }
+  function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  function ss(k, v) { try { if (v === undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k, v); } catch (e) { return null; } }
 
-  function fmt(n) {
-    n = Number(n) || 0;
-    return n.toLocaleString("uz-UZ").replace(/,/g, " ");
+  function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+  function put(kind, val) {
+    document.querySelectorAll('[data-visits="' + kind + '"]').forEach(function (el) { el.textContent = fmt(val); });
   }
-
-  function show(d) {
-    if (!d || d.ok === false) return;
-    var map = { unique: d.unique, total: d.total, today: d.today };
-    var els = document.querySelectorAll("[data-visits]");
-    for (var i = 0; i < els.length; i++) {
-      var k = els[i].getAttribute("data-visits");
-      if (map[k] !== undefined) els[i].textContent = fmt(map[k]);
-    }
-  }
-
-  function run() {
-    // Avtomatlashtirilgan brauzerlar (botlar) hisoblanmaydi
-    if (navigator.webdriver) return;
-
-    var isNew = !get("localStorage", VID_KEY);
-    var counted = get("sessionStorage", SESSION_KEY) === "1";
-    var url = counted
-      ? API_URL + "?action=visitStats"
-      : API_URL + "?action=hit&new=" + (isNew ? 1 : 0);
-
-    fetch(url, { cache: "no-store" })
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        if (!counted && d && d.ok !== false) {
-          set("sessionStorage", SESSION_KEY, "1");
-          // Belgi faqat hisob muvaffaqiyatli bo‘lgandan keyin qo‘yiladi
-          if (isNew) set("localStorage", VID_KEY, Date.now().toString(36) + Math.random().toString(36).slice(2, 8));
-        }
-        show(d);
+  function call(action, key) {
+    return fetch(API + '/' + action + '/' + NS + '/' + key, { cache: 'no-store' })
+      .then(function (r) {
+        if (r.status === 404) return { value: 0 };   // hisoblagich hali yaratilmagan
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
       })
-      .catch(function () { /* hisoblagich ishlamasa, sahifa odatdagidek ishlayveradi */ });
+      .then(function (d) { return Number(d.value) || 0; });
+  }
+  function count(kind, key, isNew, markNew) {
+    var p = call(isNew ? 'hit' : 'get', key);
+    p.then(function (v) {
+      if (isNew && markNew) markNew();
+      put(kind, v);
+    }).catch(function () {
+      // xizmat vaqtincha javob bermasa — bir marta qayta urinamiz
+      setTimeout(function () {
+        call(isNew ? 'hit' : 'get', key).then(function (v) { if (isNew && markNew) markNew(); put(kind, v); })
+          .catch(function () { put(kind, '—'); });
+      }, 2500);
+    });
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run);
-  else run();
+  // 1) Foydalanuvchilar: har bir brauzer faqat bir marta sanaladi
+  var firstEver = !ls('am_seen');
+  count('unique', 'unique', firstEver, function () { ls('am_seen', '1'); });
+
+  // 2) Jami tashriflar: har bir yangi seans (sahifani yangilash hisoblanmaydi)
+  var newSession = !ss('am_session');
+  count('total', 'total', newSession, function () { ss('am_session', '1'); });
+
+  // 3) Bugun: har bir brauzer kuniga bir marta
+  var newToday = ls('am_day') !== day;
+  count('today', 'day-' + day, newToday, function () { ls('am_day', day); });
 })();
