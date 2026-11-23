@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Axborot xavfsizligi — 6-dars</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    :root{
+      --primary:#0f172a; --accent:#2563eb; --accent2:#7c3aed;
+      --card:#ffffff; --border:#e2e8f0; --text:#0f172a; --muted:#64748b;
+      --success:#16a34a; --warning:#f59e0b; --danger:#e11d48;
+      --radius:22px; --shadow:0 10px 28px rgba(15,23,42,.08);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Inter',sans-serif;background:linear-gradient(180deg,#f8fbff 0%,#f1f5ff 45%,#f8fafc 100%);color:var(--text);line-height:1.75;font-size:17px}
+    .container{width:min(1150px,calc(100% - 32px));margin:auto}
+
+    /* Topbar */
+    .topbar{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:74px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;text-decoration:none;color:var(--primary)}
+    .brand-icon{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 14px 30px rgba(37,99,235,.24)}
+    .back-btn{text-decoration:none;color:var(--accent);font-weight:800;background:#eff6ff;border:1px solid #dbeafe;padding:10px 14px;border-radius:12px}
+
+    /* Hero */
+    .hero{padding:30px 0 10px}
+    .hero-box{background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#312e81 100%);color:#fff;border-radius:28px;padding:34px 28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .hero-box::before{content:"";position:absolute;right:-60px;top:-60px;width:180px;height:180px;background:rgba(96,165,250,.18);border-radius:50%}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);color:#dbeafe;padding:8px 12px;border-radius:999px;font-size:.9rem;font-weight:800;margin-bottom:14px}
+    .hero h1{margin:0 0 10px;font-size:clamp(2rem,4vw,3rem);line-height:1.08;letter-spacing:-.04em}
+    .hero p{margin:0;max-width:860px;color:#dbeafe;font-size:1.16rem}
+
+    /* Meta */
+    .meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0 28px}
+    .meta-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(15,23,42,.05);min-height:154px;transition:.25s ease}
+    .meta-card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(15,23,42,.10)}
+    .meta-card i{width:64px;height:64px;border-radius:22px;font-size:28px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0f2fe,#eef2ff);color:var(--accent);box-shadow:0 12px 26px rgba(37,99,235,.16);margin-bottom:14px}
+    .meta-card h4{margin:0 0 4px;font-size:1.12rem;font-weight:900;letter-spacing:-.02em}
+    .meta-card p{margin:0;color:var(--muted);font-size:1.04rem;line-height:1.7}
+
+    /* Section */
+    .section{margin:0 0 26px}
+    .section-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+    .section-title{display:flex;align-items:center;gap:10px;margin:0 0 16px;font-size:1.72rem;line-height:1.2;font-weight:900;letter-spacing:-.03em}
+    .section-title i{color:var(--accent)}
+    .sub-title{margin:26px 0 12px;font-size:1.3rem;font-weight:900;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+    .sub-title i{color:var(--accent2)}
+    .lead{color:#475569;margin-top:-4px;margin-bottom:20px;font-size:1.08rem;font-weight:650}
+
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+
+    .card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px}
+    .card h3{margin:0 0 10px;font-size:1.16rem;font-weight:900}
+    .card p, li{color:#475569;font-size:1.05rem}
+    .card p{margin:0 0 8px}
+    .card p:last-child{margin-bottom:0}
+    .card h3 i{color:var(--accent);margin-right:8px}
+    .card ul{margin:6px 0 0;padding-left:20px}
+
+    .highlight{background:linear-gradient(135deg,#eff6ff,#f5f3ff);border:1px solid #dbeafe;border-radius:18px;padding:18px;margin-top:16px}
+    .highlight strong{color:var(--primary)}
+    .note{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:12px 14px;border-radius:14px;font-size:1rem;margin-top:12px}
+    .note i{margin-right:6px}
+
+    .info-table{width:100%;border-collapse:collapse;margin-top:16px}
+    .info-table th,.info-table td{border:1px solid var(--border);padding:12px 14px;text-align:left;vertical-align:top;font-size:1.02rem}
+    .info-table th{background:#f8fafc;font-weight:900}
+    .info-table td:first-child{font-weight:800;white-space:nowrap}
+    .table-wrap{overflow-x:auto}
+
+    /* Turlar (mis/dis/mal) */
+    .type-card{border-radius:18px;padding:18px;border:1px solid var(--border);background:#fff;border-top:6px solid var(--accent)}
+    .type-card.dis{border-top-color:var(--danger)}
+    .type-card.mal{border-top-color:var(--warning)}
+    .type-card h3{margin:0 0 4px;font-size:1.16rem;font-weight:900}
+    .type-card .tag{display:inline-block;font-size:.85rem;font-weight:800;padding:3px 10px;border-radius:999px;background:#eff6ff;color:var(--accent);margin-bottom:8px}
+    .type-card.dis .tag{background:#fff1f2;color:var(--danger)}
+    .type-card.mal .tag{background:#fffbeb;color:#b45309}
+    .type-card p{margin:0 0 8px;color:#475569}
+    .type-card .ex{font-size:.98rem;background:#f8fafc;border-radius:12px;padding:10px 12px;color:#334155}
+
+    /* Belgilar */
+    .sign{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px}
+    .sign .ic{flex:0 0 44px;height:44px;border-radius:14px;background:#fff1f2;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px}
+    .sign h4{margin:0 0 2px;font-size:1.02rem;font-weight:900}
+    .sign p{margin:0;color:#475569;font-size:.98rem;line-height:1.55}
+
+    /* Timeline */
+    .timeline{display:grid;gap:14px;margin-top:8px}
+    .timeline-item{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:start;background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px}
+    .time-badge{background:#eff6ff;color:var(--accent);border-radius:12px;padding:10px 12px;font-weight:900;text-align:center}
+    .timeline-item h4{margin:0 0 6px;font-size:1.16rem;font-weight:900}
+    .timeline-item p{margin:0;color:var(--muted);font-size:1.02rem}
+    .timeline-item .teacher{margin-top:8px;font-size:.96rem;color:#7c3aed;font-weight:650}
+
+    /* Infografika */
+    .infographic{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:18px}
+    .step{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px 14px;text-align:center}
+    .step-num{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-weight:900}
+    .step h4{margin:0 0 6px;font-size:1rem;font-weight:900}
+    .step p{margin:0;color:var(--muted);font-size:.98rem;line-height:1.55}
+    .step .q{margin-top:8px;font-size:.9rem;color:#7c3aed;font-weight:700}
+
+    /* Xabar namunalari */
+    .post{background:#f8fafc;border:1px solid var(--border);border-radius:18px;padding:16px;display:flex;flex-direction:column}
+    .post-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;flex:0 0 40px}
+    .post-head strong{display:block;font-size:.98rem}
+    .post-head span{font-size:.85rem;color:var(--muted)}
+    .bubble{background:#fff;border:1px solid var(--border);border-radius:4px 16px 16px 16px;padding:12px 14px;font-size:1rem;color:#1e293b;line-height:1.6;flex:1}
+    .bubble .img-ph{margin-top:10px;height:110px;border-radius:12px;background:linear-gradient(135deg,#64748b,#94a3b8);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.9rem;text-align:center;padding:8px}
+    .post-tasks{margin:12px 0 0;padding-left:20px;font-size:.98rem}
+    .post-tasks li{font-size:.98rem}
+    details.key{margin-top:12px;background:#fff;border:1px dashed #a78bfa;border-radius:14px;padding:10px 14px}
+    details.key summary{cursor:pointer;font-weight:800;color:#6d28d9}
+    details.key p, details.key li{font-size:.97rem;color:#334155;margin:6px 0}
+    details.key ul{padding-left:18px;margin:6px 0}
+    .verdict{display:inline-block;font-weight:900;padding:3px 10px;border-radius:999px;font-size:.88rem}
+    .verdict.bad{background:#fff1f2;color:var(--danger)}
+    .verdict.good{background:#f0fdf4;color:var(--success)}
+    .verdict.mid{background:#fffbeb;color:#b45309}
+
+    /* Fakt yoki fikr */
+    .ff-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+    .ff-row p{margin:0;color:#1e293b;font-size:1.02rem}
+    .ff-row .why{grid-column:1 / -1;font-size:.95rem;color:#475569;display:none;margin:0}
+    .ff-row.checked .why{display:block}
+    .ff-row.ok{border-color:#86efac;background:#f0fdf4}
+    .ff-row.no{border-color:#fda4af;background:#fff1f2}
+    .ff-btns{display:flex;gap:8px}
+    .ff-btn{border:1px solid #cbd5e1;background:#fff;border-radius:10px;padding:7px 14px;font-weight:800;cursor:pointer;font-family:inherit;font-size:.95rem;color:#334155}
+    .ff-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+    /* Tugmalar */
+    .actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:14px}
+    .btn{border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;padding:12px 16px;border-radius:12px;cursor:pointer;font-family:inherit;font-size:1rem}
+    .btn.secondary{background:#e2e8f0;color:var(--primary)}
+    .result{font-weight:800;color:var(--primary)}
+
+    /* Test */
+    .quiz-question{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px;transition:.2s}
+    .quiz-question h4{margin:0 0 10px;font-size:1.04rem}
+    .quiz-question label{display:block;margin:7px 0;color:#475569;cursor:pointer}
+    .quiz-question.ok{border-color:#86efac;background:#f0fdf4}
+    .quiz-question.no{border-color:#fda4af;background:#fff1f2}
+    .feedback{display:none;margin-top:10px;font-size:.97rem;color:#334155;background:rgba(255,255,255,.75);border-radius:10px;padding:8px 12px}
+    .quiz-question.ok .feedback,.quiz-question.no .feedback{display:block}
+    .short-answer{width:100%;margin-top:6px;border:1px solid #cbd5e1;border-radius:12px;padding:13px 14px;font-size:1.05rem;font-family:inherit;outline:none;transition:border-color .18s ease,box-shadow .18s ease}
+    .short-answer:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+    .open-hint{color:#64748b;font-size:.95rem;margin:8px 0 0}
+
+    /* Media */
+    .resource-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:12px}
+    .resource-card{background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid var(--border);border-radius:20px;padding:18px;box-shadow:0 8px 20px rgba(15,23,42,.06)}
+    .resource-card h3{margin:0 0 10px;font-size:1.18rem;font-weight:900}
+    .resource-card h3 i{color:var(--accent);margin-right:8px}
+    .media-slot{min-height:230px;border:2px dashed #93c5fd;border-radius:18px;background:linear-gradient(135deg,#eff6ff,#f0fdfa);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--accent);font-weight:900;padding:18px;overflow:hidden;cursor:pointer;position:relative;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+    .media-slot:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 12px 28px rgba(37,99,235,.14)}
+    .media-slot img,.media-slot video{width:100%;max-height:360px;object-fit:contain;border-radius:14px;display:block}
+    .media-slot video{background:#000}
+    .media-slot .placeholder{display:none}
+    .media-slot.missing .placeholder{display:block}
+    .media-slot.missing img,.media-slot.missing video{display:none}
+    .media-open-btn{width:100%;margin-top:12px;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-weight:900;padding:11px 14px;border-radius:12px;cursor:pointer;font-family:inherit;font-size:1rem}
+    .media-open-btn:hover{background:#dbeafe}
+
+    /* Modal */
+    .fullscreen-modal{position:fixed;inset:0;z-index:99999;background:rgba(2,6,23,.94);display:none;align-items:center;justify-content:center;padding:14px}
+    .fullscreen-modal.show{display:flex}
+    .modal-content{width:min(1560px,98vw);height:min(94vh,980px);background:#020617;border:1px solid rgba(255,255,255,.18);border-radius:26px;overflow:hidden;box-shadow:0 34px 90px rgba(0,0,0,.55);display:flex;flex-direction:column}
+    .modal-header{min-height:64px;padding:12px 16px;color:#fff;background:linear-gradient(135deg,#0f172a,#1e293b);border-bottom:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .modal-close{width:46px;height:46px;border:0;border-radius:15px;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;font-size:1.35rem}
+    .modal-body{flex:1;min-height:0;overflow:hidden;background:#020617}
+    .modal-body video{display:block;width:100%;height:100%;background:#000}
+    .modal-msg{color:#fff;text-align:center;font-weight:900;padding:34px}
+    .az-zoom-panel{height:100%;display:flex;flex-direction:column}
+    .az-zoom-toolbar{min-height:64px;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 12px;background:rgba(15,23,42,.98);border-bottom:1px solid rgba(255,255,255,.12);color:#fff;flex-wrap:wrap}
+    .az-zoom-btn{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;min-width:48px;height:43px;border-radius:14px;font-weight:900;font-size:1.05rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 13px;font-family:inherit}
+    .az-zoom-btn:hover{background:var(--accent)}
+    .az-zoom-value{min-width:82px;text-align:center;font-weight:900;color:#dbeafe;background:rgba(37,99,235,.18);border:1px solid rgba(147,197,253,.22);height:43px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center}
+    .az-zoom-hint{font-size:.86rem;color:#cbd5e1;font-weight:700;margin-left:6px}
+    .az-stage{flex:1;min-height:0;overflow:auto;background:radial-gradient(circle at top,rgba(37,99,235,.14),transparent 35%),#020617;padding:28px;cursor:grab;touch-action:none;user-select:none}
+    .az-stage.az-dragging{cursor:grabbing}
+    .az-img{display:block;margin:0 auto;background:#fff;border-radius:18px;box-shadow:0 28px 80px rgba(0,0,0,.45);max-width:none;user-select:none;-webkit-user-drag:none}
+
+    .homework-list{margin:0;padding-left:20px}
+    .footer{padding:20px 0 40px;color:var(--muted);text-align:center;font-size:1rem}
+
+    @media (max-width:980px){
+      .meta-grid,.grid-3,.grid-4,.infographic,.resource-grid{grid-template-columns:repeat(2,1fr)}
+      .grid-2{grid-template-columns:1fr}
+    }
+    @media (max-width:700px){
+      .meta-grid,.grid-3,.grid-4,.infographic,.resource-grid{grid-template-columns:1fr}
+      .timeline-item{grid-template-columns:1fr}
+      .ff-row{grid-template-columns:1fr}
+      .hero-box{padding:24px 18px}
+      .section-box{padding:18px}
+      .topbar-inner{flex-direction:column;align-items:flex-start;padding:10px 0}
+      .info-table td:first-child{white-space:normal}
+      .az-zoom-hint{width:100%;margin-left:0;text-align:center}
+      .az-stage{padding:16px}
+      .meta-card{min-height:auto}
+    }
+  
+    /* === 2–4-darslar uchun qo'shimcha uslublar === */
+    .infographic.six{grid-template-columns:repeat(6,1fr)}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;position:relative}
+    .hero-actions a{text-decoration:none;display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:15px;font-weight:900;transition:.18s ease}
+    .hero-actions a:hover{transform:translateY(-2px)}
+    .primary-btn{background:#fff;color:#1d4ed8}
+    .secondary-btn{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.16)}
+    .criteria-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .criteria-card{background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid var(--border);border-radius:20px;padding:20px;box-shadow:0 8px 22px rgba(37,99,235,.08)}
+    .criteria-num{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;margin-bottom:12px}
+    .criteria-card h4{margin:0 0 8px;font-size:1.08rem;font-weight:900}
+    .criteria-card p{margin:0;color:#475569;font-size:.98rem}
+    .checklist{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+    .checklist li{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:16px;padding:13px}
+    .checklist i{color:var(--success);margin-top:6px}
+    code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:1px 6px;font-size:.92em;color:#1e293b}
+    .scorer{margin-top:12px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px}
+    .scorer label{display:block;font-size:.95rem;color:#334155;cursor:pointer;margin:3px 0}
+    .scorer-out{margin-top:8px;font-weight:900;font-size:.95rem;padding:7px 10px;border-radius:10px;background:#f1f5f9;color:#334155}
+    .scorer-out.good{background:#f0fdf4;color:#15803d}
+    .scorer-out.mid{background:#fffbeb;color:#b45309}
+    .scorer-out.bad{background:#fff1f2;color:#be123c}
+    .order-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+    .order-row span{color:#1e293b;font-size:1.02rem}
+    .order-row select{font-family:inherit;font-size:1rem;font-weight:800;padding:7px 10px;border-radius:10px;border:1px solid #cbd5e1;min-width:70px}
+    .order-row.ok{border-color:#86efac;background:#f0fdf4}
+    .order-row.no{border-color:#fda4af;background:#fff1f2}
+    .verdict-scale{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+    .vs{background:#fff;border:1px solid var(--border);border-top:6px solid var(--c);border-radius:16px;padding:14px}
+    .vs strong{display:block;color:var(--c);font-weight:900;margin-bottom:4px}
+    .vs span{color:#475569;font-size:.96rem;line-height:1.55;display:block}
+    .ff-btns{flex-wrap:wrap;justify-content:flex-end}
+    @media (max-width:980px){.infographic.six,.criteria-grid{grid-template-columns:repeat(2,1fr)}.verdict-scale{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:700px){.infographic.six,.criteria-grid,.verdict-scale{grid-template-columns:1fr}.order-row{flex-direction:column;align-items:flex-start}.ff-btns{justify-content:flex-start}}
+
+    /* === 5–12-darslar: qo'shimcha interaktiv vositalar === */
+    .tool-box{background:linear-gradient(135deg,#0f172a,#1e293b);color:#e2e8f0;border-radius:20px;padding:22px;margin-top:8px}
+    .tool-box h3{margin:0 0 6px;color:#fff;font-weight:900}
+    .tool-box p{color:#cbd5e1;margin:0 0 12px}
+    .tool-box input[type=text]{width:100%;font-family:inherit;font-size:1.1rem;padding:14px 16px;border-radius:14px;border:1px solid #334155;background:#0b1220;color:#fff;outline:none}
+    .tool-box input[type=text]:focus{border-color:#60a5fa;box-shadow:0 0 0 4px rgba(96,165,250,.2)}
+    .pw-bar{height:12px;border-radius:999px;background:#334155;margin:14px 0 8px;overflow:hidden}
+    .pw-bar span{display:block;height:100%;width:0;border-radius:999px;transition:width .25s ease,background .25s ease}
+    .pw-verdict{font-weight:900;font-size:1.1rem}
+    .pw-tips{margin:8px 0 0;padding-left:20px}
+    .pw-tips li{color:#cbd5e1;font-size:.97rem}
+    .demo-wrap{background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px;text-align:center}
+    .demo-wrap svg{width:100%;max-width:620px;height:auto;display:block;margin:0 auto}
+    .demo-cap{font-weight:900;font-size:1.08rem;margin:10px 0 4px;color:#0f172a}
+    .demo-sub{color:#64748b;font-size:.96rem;margin:0}
+    .toggle{display:inline-flex;background:#f1f5f9;border-radius:12px;padding:4px;gap:4px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+    .toggle button{border:0;background:transparent;font-family:inherit;font-weight:800;font-size:.95rem;padding:8px 14px;border-radius:9px;cursor:pointer;color:#334155}
+    .toggle button.on{background:#fff;color:#1d4ed8;box-shadow:0 2px 8px rgba(15,23,42,.1)}
+    .rewrite{width:100%;min-height:90px;font-family:inherit;font-size:1rem;padding:12px 14px;border-radius:12px;border:1px solid #cbd5e1;margin-top:8px;resize:vertical}
+    .think{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+    .think div{background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px;text-align:center}
+    .think b{display:flex;width:46px;height:46px;margin:0 auto 8px;border-radius:14px;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+    .think h4{margin:0 0 4px;font-weight:900}
+    .think p{margin:0;color:#475569;font-size:.95rem;line-height:1.5}
+    .vs-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .headline{background:#fff;border:1px solid var(--border);border-left:6px solid var(--c,#2563eb);border-radius:14px;padding:14px 16px}
+    .headline small{display:block;color:#64748b;font-weight:700;margin-bottom:4px}
+    .headline strong{font-size:1.1rem;color:#0f172a;line-height:1.4;display:block}
+    .think.four{grid-template-columns:repeat(4,1fr)}
+    .think.three{grid-template-columns:repeat(3,1fr)}
+    .course-map{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .cm{display:block;text-decoration:none;background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px;transition:.2s ease;position:relative}
+    .cm:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(37,99,235,.14);border-color:#bfdbfe}
+    .cm span{display:inline-flex;font-weight:900;font-size:.85rem;color:#1d4ed8;background:#eff6ff;border-radius:999px;padding:3px 10px;margin-bottom:8px}
+    .cm h4{margin:0 0 6px;color:#0f172a;font-weight:900;font-size:1.02rem;line-height:1.35}
+    .cm p{margin:0;color:#475569;font-size:.93rem;line-height:1.5}
+    @media (max-width:980px){.course-map{grid-template-columns:repeat(2,1fr)}.think,.think.four,.think.three{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:700px){.course-map,.think,.think.four,.think.three,.vs-two{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <a href="#" class="brand">
+        <span class="brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+        <span>Axborot madaniyati platformasi</span>
+      </a>
+      <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Bosh sahifaga qaytish</a>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-box">
+        <div class="hero-badge"><i class="fa-solid fa-lock"></i> 6-modul · Dars ishlanmasi</div>
+        <h1>Axborot xavfsizligi</h1>
+        <p>Bu darsda o‘quvchilar parol, akkaunt, shaxsiy ma’lumot va raqamli izlarni himoya qilishni o‘rganadilar: kuchli parol iborasini tuzadilar, ikki bosqichli himoya qanday ishlashini tushunadilar, fishing va ijtimoiy muhandislik hiylalarini taniydilar hamda akkaunt buzilganda nima qilishni bilib oladilar.</p>
+        <div class="hero-actions">
+          <a class="primary-btn" href="#nazariya"><i class="fa-solid fa-book-open"></i> Nazariyani o‘rganish</a>
+          <a class="secondary-btn" href="#test"><i class="fa-solid fa-clipboard-check"></i> Testni bajarish</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="section">
+      <div class="meta-grid">
+        <div class="meta-card"><i class="fa-solid fa-school"></i><h4>Auditoriya</h4><p>7–11-sinf o‘quvchilari</p></div>
+        <div class="meta-card"><i class="fa-solid fa-clock"></i><h4>Davomiyligi</h4><p>45 daqiqa</p></div>
+        <div class="meta-card"><i class="fa-solid fa-layer-group"></i><h4>Dars turi</h4><p>Amaliy, muammoli va trening mashg‘uloti</p></div>
+        <div class="meta-card"><i class="fa-solid fa-list-check"></i><h4>Asosiy natija</h4><p>Parol, akkaunt va shaxsiy ma’lumotni amalda himoya qila olish</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-id-card"></i> Dars pasporti</h2>
+        <p class="lead">Darsning qisqacha reja-ma’lumoti</p>
+<div class="grid-3"><div class="card"><h3><i class="fa-solid fa-bullseye"></i> Dars maqsadi</h3><p>Raqamli tahdidlar (fishing, ijtimoiy muhandislik, zararli ilovalar) haqida tushuncha berish; kuchli parol yaratish, ikki bosqichli himoyani yoqish, shaxsiy ma’lumotni saqlash va akkaunt buzilganda to‘g‘ri harakat qilish ko‘nikmalarini shakllantirish.</p></div>
+<div class="card"><h3><i class="fa-solid fa-toolbox"></i> Jihozlar</h3><p>Kompyuter, proyektor, ushbu sahifa (parol tekshirgich va mashqlar), o‘quvchilar telefonlari (sozlamalarni ko‘rish uchun), infografika, video lavha.</p></div>
+<div class="card"><h3><i class="fa-solid fa-key"></i> Tayanch tushunchalar</h3><p>Axborot xavfsizligi, parol, parol iborasi, parol menejeri, ikki bosqichli himoya (2FA), fishing, ijtimoiy muhandislik, zararli dastur, ruxsatlar, shaxsiy ma’lumot.</p></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-star"></i> O‘quv maqsadlari</h2>
+        <p class="lead">Dars yakunida o‘quvchi quyidagilarni bajara oladi:</p>
+<div class="grid-3"><div class="card"><h3><i class="fa-solid fa-check"></i> Biladi</h3><p>Eng ko‘p uchraydigan raqamli tahdidlarni va ularning belgilarini sanab beradi.</p></div>
+<div class="card"><h3><i class="fa-solid fa-check"></i> Tushunadi</h3><p>Nega firibgarlar texnikadan ko‘ra ko‘proq inson ishonchi va shoshqaloqligiga “hujum” qilishini tushuntiradi.</p></div>
+<div class="card"><h3><i class="fa-solid fa-check"></i> Qo‘llaydi</h3><p>Kuchli parol iborasi tuzadi, fishing xabarni taniydi, telefonidagi xavfsizlik sozlamalarini tekshiradi.</p></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-chalkboard-user"></i> Dars jarayoni</h2>
+        <p class="lead">45 daqiqalik namunaviy dars taqsimoti va o‘qituvchi uchun izohlar</p>
+<div class="timeline"><div class="timeline-item"><div class="time-badge">3 daqiqa</div><div><h4>Tashkiliy qism</h4><p>Salomlashish, davomat, mavzu va maqsadni e’lon qilish.</p></div></div><div class="timeline-item"><div class="time-badge">5 daqiqa</div><div><h4>Motivatsiya</h4><p>Savol: “Agar kimdir telefoningizni 10 daqiqaga olsa, nimalarni bila oladi?” O‘quvchilar ro‘yxat tuzadi: yozishmalar, rasmlar, manzil, do‘stlar, parollar... So‘ng: “Firibgarga telefon kerak emas — unga faqat siz aytadigan bitta kod yetarli.”</p><p class="teacher"><i class="fa-solid fa-lightbulb"></i> O‘qituvchiga: savolga jiddiy, lekin qo‘rqitmasdan yondashing. Maqsad — vahima emas, nazorat hissi.</p></div></div><div class="timeline-item"><div class="time-badge">12 daqiqa</div><div><h4>Nazariy tushuntirish</h4><p>Tahdidlar turlari, kuchli parol, 2FA, fishing belgilari, qurilma xavfsizligi.</p></div></div><div class="timeline-item"><div class="time-badge">15 daqiqa</div><div><h4>Amaliy mashqlar</h4><p>Parol tekshirgich (3 daq.), “Fishingmi yoki haqiqiy?” (5 daq.), vaziyatlar tahlili (4 daq.), “Mening xavfsizligim” cheklisti (3 daq.).</p><p class="teacher"><i class="fa-solid fa-lightbulb"></i> O‘qituvchiga: o‘quvchilardan haqiqiy parollarini tekshirgichga yozmasliklarini so‘rang — faqat o‘ylab topilgan namunalar.</p></div></div><div class="timeline-item"><div class="time-badge">7 daqiqa</div><div><h4>Baholash</h4><p>10 savollik test.</p></div></div><div class="timeline-item"><div class="time-badge">3 daqiqa</div><div><h4>Refleksiya va uyga vazifa</h4><p>Uyda bajariladigan “xavfsizlik auditi”ni tushuntirish.</p></div></div></div>
+      </div>
+    </section>
+
+    <section id="nazariya" class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-book"></i> Nazariy qism</h2>
+        <p class="lead">Tahdidlar, parollar, ikki bosqichli himoya va qurilma xavfsizligi</p>
+<div class="grid-2"><div class="card"><h3>Axborot xavfsizligi nima?</h3><p>Shaxsiy ma’lumotlar, akkauntlar va qurilmalarni ruxsatsiz kirish, o‘g‘irlash va buzilishdan himoya qilish. U uch narsani asraydi: <strong>maxfiylik</strong> (begona ko‘rmasin), <strong>yaxlitlik</strong> (hech kim o‘zgartirmasin) va <strong>foydalanish imkoniyati</strong> (kerak paytda o‘zingiz kira olasiz).</p></div>
+<div class="card"><h3>Nega bu sizga tegishli?</h3><p>Firibgarlar uchun “oddiy o‘quvchi” akkaunti ham qimmatli: undan do‘stlaringizga pul so‘rab xabar yuborish, ota-onangiz kartasiga yetib borish yoki sizning nomingizdan yolg‘on tarqatish mumkin.</p></div></div><h3 class="sub-title"><i class="fa-solid fa-skull-crossbones"></i> Eng ko‘p uchraydigan tahdidlar</h3><div class="grid-3"><div class="type-card dis"><h3>Fishing</h3><span class="tag">Soxta havola, soxta sayt</span><p>Rasmiy tashkilotga o‘xshatilgan xabar sizni soxta sahifaga olib boradi va login, parol yoki karta ma’lumotini kiritishni so‘raydi.</p><div class="ex">“Akkauntingiz bloklandi. Tasdiqlash uchun havolaga o‘ting.”</div></div>
+<div class="type-card mal"><h3>Ijtimoiy muhandislik</h3><span class="tag">Insonni aldash</span><p>Firibgar o‘zini bank xodimi, operator yoki do‘stingiz deb tanishtiradi va ishonchingizdan foydalanadi.</p><div class="ex">“Men do‘stingizman, raqamim o‘zgardi. Hozir sizga kod keladi, uni menga yuboring.”</div></div>
+<div class="type-card "><h3>Zararli ilova va fayl</h3><span class="tag">Yashirin dastur</span><p>Noma’lum manbadan yuklangan ilova yoki fayl (.apk, “rasmlar.zip”) ma’lumotlaringizni o‘g‘irlashi mumkin.</p><div class="ex">“O‘yinning bepul to‘liq versiyasi — shu fayldan o‘rnating.”</div></div></div><div class="highlight"><strong>Asosiy qoida:</strong> hech bir haqiqiy bank, operator, maktab yoki ilova sizdan <strong>parolni, SMS kodni yoki karta orqasidagi kodni</strong> so‘ramaydi. Kim so‘rasa — u firibgar.</div><h3 class="sub-title"><i class="fa-solid fa-key"></i> Kuchli parol: uzunlik muhimroq</h3><div class="grid-2"><div class="card"><h3><i class="fa-solid fa-xmark" style="color:#e11d48"></i> Zaif parollar</h3><ul><li><code>123456</code>, <code>qwerty</code>, <code>parol</code> — eng ko‘p ishlatiladiganlar, birinchi bo‘lib sinab ko‘riladi.</li><li>Ismingiz, tug‘ilgan yilingiz, uy hayvoningiz nomi — ijtimoiy tarmoqdan topish oson.</li><li>Hamma joyda bitta parol — bir sayt buzilsa, hammasi buziladi.</li></ul></div>
+<div class="card"><h3><i class="fa-solid fa-check" style="color:#16a34a"></i> Kuchli parollar</h3><ul><li><strong>Parol iborasi:</strong> 3–4 ta bir-biriga bog‘liq bo‘lmagan so‘z, masalan <code>Qovun-Velosiped-Yomg‘ir-42</code>. Eslab qolish oson, topish qiyin.</li><li>Kamida 12 ta belgi; har bir muhim akkaunt uchun alohida parol.</li><li><strong>Parol menejeri</strong> — barcha parollarni shifrlangan holda saqlaydigan ilova. Siz faqat bitta bosh parolni eslab qolasiz.</li></ul></div></div><h3 class="sub-title"><i class="fa-solid fa-mobile-screen"></i> Ikki bosqichli himoya (2FA)</h3><div class="card"><h3><i class="fa-solid fa-lock"></i> Ikkita qulf — bitta kalit yetmaydi</h3><p>Kirishda parol (siz <em>biladigan</em> narsa) bilan birga yana bir tasdiq so‘raladi: telefonga kelgan kod yoki autentifikator ilovasi (sizda <em>bor</em> narsa). Shunda firibgar parolingizni bilib olsa ham, telefoningizsiz kira olmaydi.</p><p>Shuning uchun SMS kod — eng muhim sir: uni aytsangiz, ikkinchi qulfni o‘z qo‘lingiz bilan ochib bergan bo‘lasiz.</p></div><h3 class="sub-title"><i class="fa-solid fa-fish"></i> Fishing xabarning 6 belgisi</h3><div class="grid-2"><div class="sign"><div class="ic" style="background:#fff1f2;color:#e11d48"><i class="fa-solid fa-stopwatch"></i></div><div><h4>Shoshilinchlik va tahdid</h4><p>“24 soat ichida tasdiqlamasangiz, akkaunt o‘chiriladi!”</p></div></div>
+<div class="sign"><div class="ic" style="background:#fff1f2;color:#e11d48"><i class="fa-solid fa-link-slash"></i></div><div><h4>G‘alati havola</h4><p>Rasmiy nomga o‘xshash, lekin harf almashgan yoki qo‘shimcha so‘zli manzil.</p></div></div>
+<div class="sign"><div class="ic" style="background:#fff1f2;color:#e11d48"><i class="fa-solid fa-gift"></i></div><div><h4>Haddan tashqari yaxshi taklif</h4><p>“Siz iPhone yutdingiz!”, “Bepul 100 GB internet!”</p></div></div>
+<div class="sign"><div class="ic" style="background:#fff1f2;color:#e11d48"><i class="fa-solid fa-comment-sms"></i></div><div><h4>Kod yoki parol so‘rash</h4><p>Haqiqiy xizmatlar buni hech qachon so‘ramaydi.</p></div></div>
+<div class="sign"><div class="ic" style="background:#fff1f2;color:#e11d48"><i class="fa-solid fa-spell-check"></i></div><div><h4>Xatolar va g‘alati uslub</h4><p>Imlo xatolari, “Hurmatli mijoz” kabi umumiy murojaat.</p></div></div>
+<div class="sign"><div class="ic" style="background:#fff1f2;color:#e11d48"><i class="fa-solid fa-user-secret"></i></div><div><h4>Kutilmagan yuboruvchi</h4><p>Notanish raqam yoki “raqamini almashtirgan” do‘st.</p></div></div></div><h3 class="sub-title"><i class="fa-solid fa-shield-halved"></i> Qurilma xavfsizligi: 5 odat</h3><div class="table-wrap"><table class="info-table"><thead><tr><th>Odat</th><th>Nega muhim</th></tr></thead><tbody><tr><td>Ekran qulfi (PIN, barmoq izi)</td><td>Telefon yo‘qolsa yoki birov olsa, ichiga kira olmaydi.</td></tr><tr><td>Yangilanishlarni o‘rnatish</td><td>Yangilanishlar ko‘pincha topilgan xavfsizlik teshiklarini yopadi.</td></tr><tr><td>Ilovalarni faqat rasmiy do‘kondan yuklash</td><td>Noma’lum saytdagi ilovada zararli kod bo‘lishi mumkin.</td></tr><tr><td>Ilova ruxsatlarini tekshirish</td><td>Fonar ilovasiga kontaktlar va joylashuv nima uchun kerak?</td></tr><tr><td>Ochiq Wi-Fi’da ehtiyotkorlik</td><td>Kafe yoki vokzal tarmog‘ida bank va muhim akkauntlarga kirmaslik ma’qul.</td></tr></tbody></table></div><h3 class="sub-title"><i class="fa-solid fa-life-ring"></i> Akkaunt buzilgan bo‘lsa — nima qilish kerak?</h3><ul class="checklist"><li><i class="fa-solid fa-circle-check"></i><span><strong>Vahimaga tushmang va kattalarga ayting.</strong> Ota-ona yoki o‘qituvchi yordam beradi — bu uyat emas.</span></li><li><i class="fa-solid fa-circle-check"></i><span><strong>Parolni darhol almashtiring.</strong> Agar shu parol boshqa joyda ham ishlatilgan bo‘lsa, u yerda ham almashtiring.</span></li><li><i class="fa-solid fa-circle-check"></i><span><strong>Barcha qurilmalardan chiqing va 2FA ni yoqing.</strong> Ko‘p ilovalarda “Barcha seanslarni yakunlash” funksiyasi bor.</span></li><li><i class="fa-solid fa-circle-check"></i><span><strong>Do‘stlaringizni ogohlantiring.</strong> Sizning nomingizdan pul yoki kod so‘ralsa, bermasliklarini ayting.</span></li><li><i class="fa-solid fa-circle-check"></i><span><strong>Platformaga murojaat qiling.</strong> Rasmiy “Akkauntni tiklash” yoki “Yordam” bo‘limi orqali.</span></li></ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-gauge-high"></i> Parol kuchi tekshirgichi</h2>
+        <p class="lead">O‘ylab topilgan parol namunasini yozing va uning kuchini ko‘ring</p>
+
+<div class="tool-box">
+  <h3><i class="fa-solid fa-key"></i> Parolingiz qanchalik kuchli?</h3>
+  <p><i class="fa-solid fa-circle-info"></i> Tekshiruv faqat sizning brauzeringizda bajariladi, hech qayerga yuborilmaydi. Shunday bo‘lsa ham, <strong>haqiqiy parolingizni yozmang</strong> — o‘ylab topilgan namuna bilan sinab ko‘ring.</p>
+  <input type="text" id="pwInput" placeholder="Masalan: salom123 yoki Qovun-Velosiped-Yomg‘ir-42" autocomplete="off" spellcheck="false">
+  <div class="pw-bar"><span id="pwBar"></span></div>
+  <div class="pw-verdict" id="pwVerdict"></div>
+  <ul class="pw-tips" id="pwTips"></ul>
+</div><div class="note"><i class="fa-solid fa-lightbulb"></i> Sinab ko‘ring: <code>ali2010</code> → <code>Ali2010!</code> → <code>Qovun-Velosiped-Yomg‘ir-42</code>. Qaysi biri eng kuchli va qaysi birini eslab qolish oson?</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-image"></i> Qo‘shimcha infografika va video</h2>
+        <p class="lead">Nazariy qism davomida namoyish etiladi</p>
+        <div class="resource-grid">
+          <div class="resource-card">
+            <h3><i class="fa-solid fa-chart-pie"></i> Infografika</h3>
+            <div class="media-slot" id="imgSlot" onclick="openMediaModal('image', MEDIA.image, 'Axborot xavfsizligi infografikasi')" title="Rasmni kattalashtirib ochish">
+              <img id="slotImg" alt="Axborot xavfsizligi infografikasi">
+              <span class="placeholder">Infografika topilmadi.<br>Rasmni <code>6-infografika.png</code> nomi bilan<br>HTML fayl bilan bitta papkaga joylang.</span>
+            </div>
+            <button class="media-open-btn" type="button" onclick="openMediaModal('image', MEDIA.image, 'Axborot xavfsizligi infografikasi')">
+              <i class="fa-solid fa-up-right-and-down-left-from-center"></i> Infografikani katta ekranda ochish
+            </button>
+          </div>
+          <div class="resource-card">
+            <h3><i class="fa-solid fa-clapperboard"></i> Video lavha</h3>
+            <div class="media-slot" id="videoSlot" onclick="openMediaModal('video', MEDIA.video, 'Video lavha')" title="Videoni katta ekranda ochish">
+              <video id="slotVideo" controls preload="metadata" onclick="event.stopPropagation()"></video>
+              <span class="placeholder">Video topilmadi.<br>Videoni <code>6-dars.mp4</code> nomi bilan<br>HTML fayl bilan bitta papkaga joylang.</span>
+            </div>
+            <button class="media-open-btn" type="button" onclick="openMediaModal('video', MEDIA.video, 'Video lavha')">
+              <i class="fa-solid fa-up-right-and-down-left-from-center"></i> Videoni katta ekranda ochish
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-pen-ruler"></i> Amaliy topshiriqlar</h2>
+        <p class="lead">Barcha materiallar tayyor: ekranga chiqarib, darhol ishlash mumkin</p>
+<h3 class="sub-title"><i class="fa-solid fa-fish"></i> 1-topshiriq: Fishingmi yoki haqiqiy? (5 daqiqa)</h3><div id="ff1"><div class="ff-row" data-answer="f"><p>1. SMS: “Hurmatli mijoz! Kartangiz bloklandi. Tiklash uchun karta raqami va SMS kodni shu havolaga kiriting: bank-yordam24.top”</p><div class="ff-btns"><button class="ff-btn" data-v="f">Fishing</button><button class="ff-btn" data-v="h">Haqiqiy</button></div><p class="why">Fishing: tahdid, kod so‘rash, g‘alati domen.</p></div><div class="ff-row" data-answer="h"><p>2. Ilova bildirishnomasi: “Hisobingizga yangi qurilmadan kirildi. Agar bu siz bo‘lmasangiz, ilova sozlamalarida parolni almashtiring.” (Hech qanday havola yo‘q)</p><div class="ff-btns"><button class="ff-btn" data-v="f">Fishing</button><button class="ff-btn" data-v="h">Haqiqiy</button></div><p class="why">Haqiqiy bo‘lishi mumkin: kod so‘ralmaydi, havola yo‘q, ilovaning o‘zida harakat qilish taklif etiladi. Baribir, xabardagi havolaga emas, ilovaga o‘zingiz kiring.</p></div><div class="ff-row" data-answer="f"><p>3. Telegram: “Salom, bu men, Aziz. Raqamim o‘zgardi. Hozir sizga 5 xonali kod keladi, xato yuborildi, menga tashlab yubor iltimos.”</p><div class="ff-btns"><button class="ff-btn" data-v="f">Fishing</button><button class="ff-btn" data-v="h">Haqiqiy</button></div><p class="why">Fishing (ijtimoiy muhandislik): kod — sizning akkauntingiz kaliti. Do‘stingizga boshqa yo‘l bilan qo‘ng‘iroq qilib tekshiring.</p></div><div class="ff-row" data-answer="f"><p>4. Xabar: “Tabriklaymiz! Siz 1000-tashrifchisiz. Sovg‘angizni olish uchun 15 000 so‘m yetkazib berish to‘lovini to‘lang.”</p><div class="ff-btns"><button class="ff-btn" data-v="f">Fishing</button><button class="ff-btn" data-v="h">Haqiqiy</button></div><p class="why">Fishing: haddan tashqari yaxshi taklif + oldindan to‘lov talabi.</p></div><div class="ff-row" data-answer="h"><p>5. Maktab rasmiy kanalida: “Ertangi olimpiada jadvali maktab saytining ‘E’lonlar’ bo‘limida joylashtirildi.”</p><div class="ff-btns"><button class="ff-btn" data-v="f">Fishing</button><button class="ff-btn" data-v="h">Haqiqiy</button></div><p class="why">Haqiqiy: ma’lum manba, hech narsa so‘ralmaydi, saytga o‘zingiz kirib tekshira olasiz.</p></div><div class="ff-row" data-answer="f"><p>6. E-mail: “Sizning ijtimoiy tarmoq akkauntingiz qoidalarni buzdi. 24 soat ichida tasdiqlamasangiz, o‘chiriladi. Tasdiqlash: login-tasdiq-akkaunt.com”</p><div class="ff-btns"><button class="ff-btn" data-v="f">Fishing</button><button class="ff-btn" data-v="h">Haqiqiy</button></div><p class="why">Fishing: tahdid, shoshiltirish, soxta domen.</p></div></div><div class="actions"><button class="btn" onclick="checkFF('ff1','ff1Result')">Tekshirish</button><button class="btn secondary" onclick="resetFF('ff1','ff1Result')">Tozalash</button><span id="ff1Result" class="result"></span></div><h3 class="sub-title"><i class="fa-solid fa-people-group"></i> 2-topshiriq: Vaziyatlar tahlili (guruhlarda, 4 daqiqa)</h3><div class="grid-3"><div class="post"><div class="post-head"><div class="avatar" style="background:#64748b">?</div><div><strong>Vaziyat 1</strong><span>O‘yin chati</span></div></div>
+<div class="bubble">Onlayn o‘yinda tanishgan “do‘st” sizga bepul o‘yin valyutasi va’da qilib, akkauntingiz login va parolini so‘rayapti: “Men faqat sening akkauntingga valyuta qo‘shib qo‘yaman, keyin chiqib ketaman.”</div><details class="key"><summary>Tahlil (o‘qituvchi uchun)</summary><p><span class="verdict bad">Bermaslik kerak</span></p><ul><li>Login va parol hech kimga berilmaydi — hatto do‘stga ham.</li><li>“Bepul valyuta” — klassik aldov: akkaunt o‘g‘irlanadi va sotiladi.</li><li>To‘g‘ri harakat: rad etish, foydalanuvchini bloklash, o‘yin ma’muriyatiga shikoyat qilish, kattalarga aytish.</li></ul></details></div>
+<div class="post"><div class="post-head"><div class="avatar" style="background:#64748b">?</div><div><strong>Vaziyat 2</strong><span>Kafe</span></div></div>
+<div class="bubble">Siz kafedasiz. Ochiq “Free_WiFi” tarmog‘i bor. Onangiz sizdan telefon orqali bank ilovasidan bir to‘lovni amalga oshirishni so‘radi.</div><details class="key"><summary>Tahlil (o‘qituvchi uchun)</summary><p><span class="verdict mid">Ehtiyot bo‘lish kerak</span></p><ul><li>Ochiq tarmoqda trafikni boshqalar kuzatishi yoki soxta “Free_WiFi” yaratilishi mumkin.</li><li>To‘g‘ri harakat: bank operatsiyasi uchun mobil internetdan foydalanish yoki uyga qaytgach bajarish.</li><li>Ochiq Wi-Fi oddiy maqola o‘qish uchun mayli, lekin parol va to‘lov uchun emas.</li></ul></details></div>
+<div class="post"><div class="post-head"><div class="avatar" style="background:#64748b">?</div><div><strong>Vaziyat 3</strong><span>Sinf guruhi</span></div></div>
+<div class="bubble">Sinfdoshingiz guruhga yangi o‘yin ilovasining “.apk” faylini tashladi: “Bu Play Market’da yo‘q, lekin zo‘r o‘yin, o‘rnatib ko‘ringlar!”</div><details class="key"><summary>Tahlil (o‘qituvchi uchun)</summary><p><span class="verdict bad">O‘rnatmaslik kerak</span></p><ul><li>Rasmiy do‘kondan tashqaridagi ilova tekshirilmagan — ichida zararli kod bo‘lishi mumkin.</li><li>Sinfdoshingiz ham buni bilmasdan yuborgan bo‘lishi mumkin (misinformatsiya kabi!).</li><li>To‘g‘ri harakat: o‘rnatmaslik, guruhga ehtiyotkorlik haqida yozish.</li></ul></details></div></div><h3 class="sub-title"><i class="fa-solid fa-clipboard-check"></i> 3-topshiriq: Mening xavfsizligim (o‘zini baholash, 3 daqiqa)</h3>
+<p style="color:#475569;margin-top:-4px">Halol belgilang — natijani hech kim ko‘rmaydi.</p><div class="scorer" data-hi="7" data-lo="4" data-good="zo‘r himoyalangansiz!" data-mid="yomon emas, lekin bo‘shliqlar bor" data-bad="xavf yuqori — bugunoq sozlamalarni tekshiring" data-label="Xavfsizlik darajasi"><label><input type="checkbox"> Telefonimda ekran qulfi bor</label><label><input type="checkbox"> Muhim akkauntlarimda turli parollar ishlataman</label><label><input type="checkbox"> Parolim kamida 12 belgidan iborat</label><label><input type="checkbox"> Kamida bitta akkauntda ikki bosqichli himoya yoqilgan</label><label><input type="checkbox"> SMS kodni hech qachon hech kimga aytmaganman</label><label><input type="checkbox"> Ilovalarni faqat rasmiy do‘kondan yuklayman</label><label><input type="checkbox"> Telefonim va ilovalarim yangilangan</label><label><input type="checkbox"> Ilovalar ruxsatlarini (kamera, joylashuv) tekshirib ko‘rganman</label><div class="scorer-out">Xavfsizlik darajasi: 0 / 8</div></div>
+      </div>
+    </section>
+
+    <section id="test" class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-circle-question"></i> Tezkor test</h2>
+        <p class="lead">7 ta tanlovli va 3 ta yozma savol. Natijadan keyin har bir savol ostida izoh chiqadi.</p>
+        <div id="quiz"></div>
+        <div class="actions">
+          <button class="btn" onclick="checkQuiz()">Natijani ko‘rish</button>
+          <button class="btn secondary" onclick="resetQuiz()">Tozalash</button>
+          <span id="quizResult" class="result"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-comments"></i> Refleksiya</h2>
+        <p class="lead">“Uch qulf” refleksiyasi</p>
+<div class="grid-3"><div class="card"><h3><i class="fa-solid fa-key"></i> Birinchi qulf</h3><p>Qaysi parolingizni birinchi bo‘lib almashtirasiz va nima uchun?</p></div>
+<div class="card"><h3><i class="fa-solid fa-mobile-screen"></i> Ikkinchi qulf</h3><p>Qaysi akkauntingizda ikki bosqichli himoyani yoqasiz?</p></div>
+<div class="card"><h3><i class="fa-solid fa-brain"></i> Uchinchi qulf — aql</h3><p>Kod yoki parol so‘rashsa, o‘zingizga qanday javob berasiz?</p></div></div><div class="note"><i class="fa-solid fa-pen"></i> Eng kuchli himoya dasturda emas, odatda: “To‘xta, tekshir, so‘ra”.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-house-laptop"></i> Uyga vazifa</h2>
+        <p class="lead">“Oilaviy xavfsizlik auditi”</p>
+<ol class="homework-list"><li>O‘z telefoningizda ekran qulfi, yangilanishlar va 3 ta ilovaning ruxsatlarini tekshiring. Nimani o‘zgartirganingizni yozing.</li><li>O‘zingiz uchun parol iborasi tuzish usulini o‘ylab toping (parolning o‘zini yozmang!) va qoidasini tushuntiring.</li><li>Bitta muhim akkauntingizda ikki bosqichli himoyani yoqing (kattalar yordamida).</li><li>Oila a’zolaringizga fishing xabarning 6 belgisini tushuntiring va ulardan birortasi shunday xabar olgan-olmaganini so‘rang.</li><li>“Agar akkauntim buzilsa” — 5 qadamli shaxsiy rejangizni yozing.</li></ol><div class="table-wrap"><table class="info-table"><thead><tr><th>Baholash mezoni</th><th>Ball</th></tr></thead><tbody><tr><td>Qurilma tekshiruvi bajarilgan va tavsiflangan</td><td>2</td></tr><tr><td>Parol iborasi qoidasi tushuntirilgan (parolsiz)</td><td>2</td></tr><tr><td>2FA yoqilgan</td><td>2</td></tr><tr><td>Oila bilan suhbat natijasi</td><td>2</td></tr><tr><td>5 qadamli reja</td><td>2</td></tr><tr><td><strong>Jami</strong></td><td><strong>10</strong></td></tr></tbody></table></div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="mediaModal" class="fullscreen-modal" role="dialog" aria-modal="true" aria-label="Media ko‘rish oynasi">
+    <div class="modal-content">
+      <div class="modal-header">
+        <strong id="modalTitle">Media</strong>
+        <button class="modal-close" type="button" onclick="closeMediaModal()" aria-label="Yopish"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <footer class="footer container">
+    Ushbu sahifa “Axborot xavfsizligi” mavzusidagi 6-darsni zamonaviy va tushunarli shaklda tashkil etish uchun tayyorlandi.
+  </footer>
+
+  <script>
+  /* ============ MEDIA FAYLLAR (nomlar faqat shu yerda) ============ */
+  const MEDIA = { image: '6-infografika.png', video: '6-dars.mp4' };
+
+  (function initMedia(){
+    const img = document.getElementById('slotImg');
+    const imgSlot = document.getElementById('imgSlot');
+    img.onerror = () => imgSlot.classList.add('missing');
+    img.src = MEDIA.image;
+
+    const video = document.getElementById('slotVideo');
+    const videoSlot = document.getElementById('videoSlot');
+    const source = document.createElement('source');
+    source.src = MEDIA.video;
+    source.type = 'video/mp4';
+    source.onerror = () => videoSlot.classList.add('missing');
+    video.appendChild(source);
+  })();
+
+  /* ============ MODAL + ZOOM ============ */
+  const zoom = { scale:1, min:.45, max:5, baseWidth:900, dragging:false, sx:0, sy:0, sl:0, st:0 };
+
+  function clampScale(v){ return Math.max(zoom.min, Math.min(zoom.max, v)); }
+
+  function updateZoom(){
+    const img = document.getElementById('azZoomImg');
+    const value = document.getElementById('azZoomValue');
+    if(!img) return;
+    img.style.width = Math.round(zoom.baseWidth * zoom.scale) + 'px';
+    if(value) value.textContent = Math.round(zoom.scale * 100) + '%';
+  }
+
+  function zoomImage(delta){
+    const stage = document.getElementById('azZoomStage');
+    if(!stage) return;
+    const old = zoom.scale;
+    const cx = stage.scrollLeft + stage.clientWidth/2;
+    const cy = stage.scrollTop + stage.clientHeight/2;
+    zoom.scale = clampScale(zoom.scale + delta);
+    updateZoom();
+    const r = zoom.scale / old;
+    stage.scrollLeft = cx * r - stage.clientWidth/2;
+    stage.scrollTop = cy * r - stage.clientHeight/2;
+  }
+
+  function resetImageZoom(){
+    const stage = document.getElementById('azZoomStage');
+    zoom.scale = 1;
+    updateZoom();
+    if(stage){ stage.scrollLeft = Math.max(0,(stage.scrollWidth-stage.clientWidth)/2); stage.scrollTop = 0; }
+  }
+
+  function openMediaModal(type, src, title){
+    const modal = document.getElementById('mediaModal');
+    const body = document.getElementById('modalBody');
+    document.getElementById('modalTitle').textContent = title || 'Media';
+
+    if(type === 'image'){
+      zoom.scale = 1;
+      body.innerHTML =
+        '<div class="az-zoom-panel">' +
+          '<div class="az-zoom-toolbar">' +
+            '<button class="az-zoom-btn" type="button" onclick="zoomImage(-0.25)" title="Kichraytirish">−</button>' +
+            '<span id="azZoomValue" class="az-zoom-value">100%</span>' +
+            '<button class="az-zoom-btn" type="button" onclick="zoomImage(0.25)" title="Kattalashtirish">+</button>' +
+            '<button class="az-zoom-btn" type="button" onclick="zoomImage(0.75)" title="Tez kattalashtirish"><i class="fa-solid fa-magnifying-glass-plus"></i></button>' +
+            '<button class="az-zoom-btn" type="button" onclick="resetImageZoom()" title="Boshlang‘ich holat"><i class="fa-solid fa-rotate-left"></i></button>' +
+            '<span class="az-zoom-hint">+ / − tugmalari, sichqoncha g‘ildiragi va rasmni ushlab surish ishlaydi</span>' +
+          '</div>' +
+          '<div id="azZoomStage" class="az-stage"><img id="azZoomImg" class="az-img" alt="Infografika"></div>' +
+        '</div>';
+      const stage = document.getElementById('azZoomStage');
+      const img = document.getElementById('azZoomImg');
+      img.onload = function(){
+        const available = Math.max(320, stage.clientWidth - 70);
+        const natural = img.naturalWidth || 1200;
+        zoom.baseWidth = natural < available ? Math.min(available, 1100) : available;
+        updateZoom();
+        requestAnimationFrame(() => { stage.scrollLeft = Math.max(0,(stage.scrollWidth-stage.clientWidth)/2); stage.scrollTop = 0; });
+      };
+      img.onerror = function(){ stage.innerHTML = '<div class="modal-msg">Rasm topilmadi. <code>' + MEDIA.image + '</code> fayli HTML bilan bitta papkada turganini tekshiring.</div>'; };
+      img.src = src;
+    } else {
+      const v = document.createElement('video');
+      v.controls = true; v.autoplay = true;
+      const s = document.createElement('source');
+      s.src = src; s.type = 'video/mp4';
+      s.onerror = () => { body.innerHTML = '<div class="modal-msg">Video topilmadi. <code>' + MEDIA.video + '</code> fayli HTML bilan bitta papkada turganini tekshiring.</div>'; };
+      v.appendChild(s);
+      body.innerHTML = '';
+      body.appendChild(v);
+    }
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMediaModal(){
+    document.getElementById('mediaModal').classList.remove('show');
+    document.getElementById('modalBody').innerHTML = '';
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', e => { if(e.target.id === 'mediaModal') closeMediaModal(); });
+  document.addEventListener('keydown', e => {
+    const modal = document.getElementById('mediaModal');
+    if(!modal.classList.contains('show')) return;
+    if(e.key === 'Escape') closeMediaModal();
+    if(!document.getElementById('azZoomStage')) return;
+    if(e.key === '+' || e.key === '=') zoomImage(0.25);
+    if(e.key === '-') zoomImage(-0.25);
+    if(e.key === '0') resetImageZoom();
+  });
+  document.addEventListener('wheel', e => {
+    if(!(e.target.closest && e.target.closest('#azZoomStage'))) return;
+    e.preventDefault();
+    zoomImage(e.deltaY < 0 ? 0.18 : -0.18);
+  }, {passive:false});
+  document.addEventListener('pointerdown', e => {
+    const stage = e.target.closest && e.target.closest('#azZoomStage');
+    if(!stage) return;
+    Object.assign(zoom, { dragging:true, sx:e.clientX, sy:e.clientY, sl:stage.scrollLeft, st:stage.scrollTop });
+    stage.classList.add('az-dragging');
+  });
+  document.addEventListener('pointermove', e => {
+    if(!zoom.dragging) return;
+    const stage = document.getElementById('azZoomStage'); if(!stage) return;
+    stage.scrollLeft = zoom.sl - (e.clientX - zoom.sx);
+    stage.scrollTop = zoom.st - (e.clientY - zoom.sy);
+  });
+  document.addEventListener('pointerup', () => {
+    zoom.dragging = false;
+    const stage = document.getElementById('azZoomStage'); if(stage) stage.classList.remove('az-dragging');
+  });
+
+  /* ============ TANLASH MASHQLARI (Fakt/Fikr va h.k.) ============ */
+  document.querySelectorAll('.ff-row').forEach(row => {
+    row.querySelectorAll('.ff-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.ff-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        row.classList.remove('ok','no','checked');
+      });
+    });
+  });
+
+  function checkFF(listId, resultId){
+    listId = listId || 'ffList'; resultId = resultId || 'ffResult';
+    const rows = document.querySelectorAll('#' + listId + ' .ff-row');
+    const out = document.getElementById(resultId);
+    let score = 0, answered = 0;
+    rows.forEach(row => { if(row.querySelector('.ff-btn.active')) answered++; });
+    if(answered < rows.length){
+      out.textContent = 'Iltimos, barcha qatorlar uchun javob tanlang.';
+      out.style.color = '#b45309';
+      return;
+    }
+    rows.forEach(row => {
+      const ok = row.querySelector('.ff-btn.active').dataset.v === row.dataset.answer;
+      if(ok) score++;
+      row.classList.add('checked', ok ? 'ok' : 'no');
+    });
+    out.textContent = 'Natija: ' + score + ' / ' + rows.length;
+    out.style.color = score === rows.length ? '#15803d' : '#2563eb';
+  }
+
+  function resetFF(listId, resultId){
+    listId = listId || 'ffList'; resultId = resultId || 'ffResult';
+    document.querySelectorAll('#' + listId + ' .ff-row').forEach(row => {
+      row.classList.remove('ok','no','checked');
+      row.querySelectorAll('.ff-btn').forEach(b => b.classList.remove('active'));
+    });
+    document.getElementById(resultId).textContent = '';
+  }
+
+  /* ============ BAHOLASH KALKULYATORI (umumiy) ============ */
+  document.querySelectorAll('.scorer').forEach(sc => {
+    const boxes = sc.querySelectorAll('input[type="checkbox"]');
+    const out = sc.querySelector('.scorer-out');
+    const d = sc.dataset;
+    const hi = Number(d.hi || 6), lo = Number(d.lo || 4), inv = d.invert === '1';
+    const upd = () => {
+      const n = [...boxes].filter(b => b.checked).length;
+      let verdict, cls;
+      if(n >= hi){ verdict = d.good || 'ishonchli'; cls = inv ? 'bad' : 'good'; }
+      else if(n >= lo){ verdict = d.mid || 'ehtiyotkorlik bilan'; cls = 'mid'; }
+      else { verdict = d.bad || 'ishonchsiz'; cls = inv ? 'good' : 'bad'; }
+      out.textContent = (d.label || 'Belgilangan') + ': ' + n + ' / ' + boxes.length + ' — ' + verdict;
+      out.className = 'scorer-out ' + cls;
+    };
+    boxes.forEach(b => b.addEventListener('change', upd));
+  });
+
+  /* ============ PAROL KUCHI TEKSHIRGICHI (faqat brauzerda, hech qayerga yuborilmaydi) ============ */
+  (function(){
+    const inp = document.getElementById('pwInput');
+    if(!inp) return;
+    const bar = document.getElementById('pwBar'), ver = document.getElementById('pwVerdict'), tips = document.getElementById('pwTips');
+    const common = ['123456','12345678','123456789','qwerty','password','parol','111111','000000','abc123','iloveyou','qwerty123','1q2w3e','admin','uzbekistan','toshkent'];
+    inp.addEventListener('input', () => {
+      const v = inp.value, low = v.toLowerCase();
+      const t = [];
+      let s = 0;
+      if(!v){ bar.style.width = '0'; ver.textContent = ''; tips.innerHTML = ''; return; }
+      s += Math.min(v.length, 20) * 4;
+      const kinds = [/[a-z]/.test(v), /[A-Z]/.test(v), /[0-9]/.test(v), /[^A-Za-z0-9]/.test(v)].filter(Boolean).length;
+      s += (kinds - 1) * 10;
+      const words = v.trim().split(/[\s\-_.]+/).filter(w => w.length >= 3).length;
+      if(words >= 3) s += 20;
+      if(common.some(c => low.includes(c))){ s = Math.min(s, 15); t.push('Juda mashhur parol yoki uning bir qismi ishlatilgan — bunday parollar birinchi bo‘lib sinab ko‘riladi.'); }
+      if(/(.)\1{2,}/.test(v)){ s -= 15; t.push('Bir xil belgini ketma-ket takrorlamang (aaa, 111).'); }
+      if(/(19|20)\d{2}/.test(v)){ s -= 10; t.push('Tug‘ilgan yil yoki sana kabi topish oson raqamlardan qoching.'); }
+      if(v.length < 12) t.push('Kamida 12 ta belgi bo‘lsin — uzunlik eng muhim omil.');
+      if(kinds < 3 && words < 3) t.push('Katta-kichik harf, raqam va belgilarni aralashtiring yoki 3–4 tasodifiy so‘zdan iborat ibora tuzing.');
+      s = Math.max(0, Math.min(100, s));
+      let label, color;
+      if(s < 30){ label = 'Juda zaif'; color = '#e11d48'; }
+      else if(s < 50){ label = 'Zaif'; color = '#f97316'; }
+      else if(s < 70){ label = 'O‘rtacha'; color = '#f59e0b'; }
+      else if(s < 85){ label = 'Kuchli'; color = '#22c55e'; }
+      else { label = 'Juda kuchli'; color = '#16a34a'; }
+      if(!t.length) t.push('Yaxshi! Endi uni faqat bitta saytda ishlating va ikki bosqichli himoyani yoqing.');
+      bar.style.width = Math.max(6, s) + '%'; bar.style.background = color;
+      ver.textContent = label + ' (' + s + ' / 100)'; ver.style.color = color;
+      tips.innerHTML = t.map(x => '<li>' + x + '</li>').join('');
+    });
+  })();
+
+  /* ============ DIAGRAMMA MANIPULYATSIYASI NAMOYISHI ============ */
+  (function(){
+    const svg = document.getElementById('chartDemo');
+    if(!svg) return;
+    const data = [['A maktab', 96], ['B maktab', 98]];
+    function draw(start){
+      const W = 600, H = 320, L = 60, B = 270, T = 30;
+      const max = 100, scale = (B - T) / (max - start);
+      let g = '<rect width="600" height="320" fill="#fff"/>';
+      for(let i = 0; i <= 5; i++){
+        const val = start + (max - start) * i / 5, y = B - (val - start) * scale;
+        g += '<line x1="'+L+'" x2="'+(W-20)+'" y1="'+y+'" y2="'+y+'" stroke="#e2e8f0"/>';
+        g += '<text x="'+(L-10)+'" y="'+(y+5)+'" text-anchor="end" font-size="14" fill="#64748b">'+(Math.round(val*10)/10)+'</text>';
+      }
+      data.forEach((d, i) => {
+        const x = 150 + i * 220, h = (d[1] - start) * scale;
+        g += '<rect x="'+x+'" y="'+(B-h)+'" width="120" height="'+h+'" rx="8" fill="'+(i ? '#7c3aed' : '#2563eb')+'"/>';
+        g += '<text x="'+(x+60)+'" y="'+(B-h-10)+'" text-anchor="middle" font-size="18" font-weight="800" fill="#0f172a">'+d[1]+'%</text>';
+        g += '<text x="'+(x+60)+'" y="'+(B+24)+'" text-anchor="middle" font-size="16" font-weight="700" fill="#334155">'+d[0]+'</text>';
+      });
+      g += '<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+B+'" stroke="#94a3b8" stroke-width="2"/>';
+      svg.innerHTML = g;
+      const cap = document.getElementById('chartCap');
+      cap.textContent = start === 0 ? '“Ikki maktab natijasi deyarli bir xil”' : '“B maktab A maktabdan deyarli uch baravar yaxshi!”';
+      document.getElementById('chartSub').textContent = start === 0 ? 'O‘q 0 dan boshlanadi — farq haqiqiy hajmida ko‘rinadi (2 foiz punkt).' : 'Xuddi shu raqamlar! O‘q 95 dan boshlangani uchun 2 punktlik farq ulkan bo‘lib ko‘rinadi.';
+    }
+    document.querySelectorAll('[data-chart]').forEach(b => b.addEventListener('click', () => {
+      document.querySelectorAll('[data-chart]').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      draw(Number(b.dataset.chart));
+    }));
+    draw(0);
+  })();
+
+  /* ============ KADRNI KESISH NAMOYISHI ============ */
+  (function(){
+    const svg = document.getElementById('cropDemo');
+    if(!svg) return;
+    const views = {
+      full: ['0 0 600 320', '“Shanbalikda ko‘ngillilar shaharni tozalamoqda”', 'To‘liq kadr: bayroq, ko‘ngillilar, yig‘ilgan qoplar va mashina ko‘rinadi.'],
+      crop: ['230 120 170 200', '“Bu odam ko‘chaga axlat tashlamoqda!”', 'Xuddi shu suratning kesilgan qismi: kontekst yo‘qoldi, ma’no teskarisiga aylandi.']
+    };
+    document.querySelectorAll('[data-crop]').forEach(b => b.addEventListener('click', () => {
+      document.querySelectorAll('[data-crop]').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      const v = views[b.dataset.crop];
+      svg.setAttribute('viewBox', v[0]);
+      document.getElementById('cropCap').textContent = v[1];
+      document.getElementById('cropSub').textContent = v[2];
+    }));
+  })();
+
+  /* ============ TARTIBLASH O‘YINI ============ */
+  function checkOrder(gameId, resultId){
+    const rows = document.querySelectorAll('#' + gameId + ' .order-row');
+    const out = document.getElementById(resultId);
+    const vals = [...rows].map(r => r.querySelector('select').value);
+    if(vals.some(v => !v)){
+      out.textContent = 'Iltimos, har bir qadamga raqam tanlang.';
+      out.style.color = '#b45309';
+      return;
+    }
+    let score = 0;
+    rows.forEach((r, i) => {
+      const ok = vals[i] === r.dataset.answer;
+      if(ok) score++;
+      r.classList.remove('ok','no');
+      r.classList.add(ok ? 'ok' : 'no');
+    });
+    out.textContent = score === rows.length ? 'Ajoyib! Barcha qadamlar to‘g‘ri: ' + score + ' / ' + rows.length
+                                            : 'Natija: ' + score + ' / ' + rows.length + '. Qizil qatorlarni qayta ko‘rib chiqing.';
+    out.style.color = score === rows.length ? '#15803d' : '#2563eb';
+  }
+
+  function resetOrder(gameId, resultId){
+    document.querySelectorAll('#' + gameId + ' .order-row').forEach(r => {
+      r.classList.remove('ok','no');
+      r.querySelector('select').value = '';
+    });
+    document.getElementById(resultId).textContent = '';
+  }
+
+  /* ============ TEST ============ */
+  const QUIZ = [
+  {
+    "type": "mc",
+    "q": "Qaysi parol eng kuchli?",
+    "options": [
+      "Ali2010",
+      "qwerty123",
+      "Qovun-Velosiped-Yomg‘ir-42"
+    ],
+    "answer": 2,
+    "why": "Uzun, bir-biriga bog‘liq bo‘lmagan so‘zlardan iborat ibora — eslab qolish oson, topish qiyin."
+  },
+  {
+    "type": "mc",
+    "q": "Ikki bosqichli himoya (2FA) nima beradi?",
+    "options": [
+      "Internetni tezlashtiradi",
+      "Parol bilinib qolsa ham, ikkinchi tasdiqsiz kirib bo‘lmaydi",
+      "Parolni eslab qolishga yordam beradi"
+    ],
+    "answer": 1,
+    "why": "Firibgarga parol bilan birga sizning telefoningiz yoki kodingiz ham kerak bo‘ladi."
+  },
+  {
+    "type": "mc",
+    "q": "“Do‘stingiz” yangi raqamdan yozib, sizga kelgan SMS kodni so‘rayapti. To‘g‘ri harakat?",
+    "options": [
+      "Kodni yuborish — axir u do‘st",
+      "Kodni bermaslik va do‘stingizga boshqa yo‘l bilan qo‘ng‘iroq qilib tekshirish",
+      "Kodni yarmini yuborish"
+    ],
+    "answer": 1,
+    "why": "Bu ijtimoiy muhandislik. SMS kod — akkauntingiz kaliti."
+  },
+  {
+    "type": "mc",
+    "q": "Fishing nima?",
+    "options": [
+      "Baliq ovlash o‘yini",
+      "Soxta xabar yoki sayt orqali login, parol yoki karta ma’lumotini o‘g‘irlash",
+      "Kompyuterni tozalash dasturi"
+    ],
+    "answer": 1,
+    "why": "Fishing — “qarmoq” tashlab, ma’lumotingizni ilintirib olish."
+  },
+  {
+    "type": "mc",
+    "q": "Nega har bir muhim akkaunt uchun alohida parol kerak?",
+    "options": [
+      "Chunki bitta sayt buzilsa, qolganlari xavfsiz qoladi",
+      "Chunki bu qonun bilan majburiy",
+      "Chunki saytlar bir xil parolni qabul qilmaydi"
+    ],
+    "answer": 0,
+    "why": "Bir xil parol — bitta kalit bilan barcha eshiklarni ochish imkoniyati."
+  },
+  {
+    "type": "mc",
+    "q": "Fonar ilovasi kontaktlaringiz va joylashuvingizga ruxsat so‘rayapti. Nima qilasiz?",
+    "options": [
+      "Ruxsat beraman",
+      "Ruxsat bermayman — fonarga bu ma’lumotlar kerak emas",
+      "Telefonni o‘chirib qo‘yaman"
+    ],
+    "answer": 1,
+    "why": "Ilova vazifasiga kerak bo‘lmagan ruxsat — shubha belgisi."
+  },
+  {
+    "type": "mc",
+    "q": "Akkauntingiz buzilganini sezdingiz. Birinchi qilinadigan ishlardan biri?",
+    "options": [
+      "Hech kimga aytmaslik",
+      "Parolni almashtirish va kattalarga aytish",
+      "Yangi akkaunt ochib, eskisini unutish"
+    ],
+    "answer": 1,
+    "why": "Tez harakat qiling: parolni almashtiring, barcha seanslardan chiqing, kattalar va do‘stlarni ogohlantiring."
+  },
+  {
+    "type": "text",
+    "q": "Soxta xabar yoki sayt orqali maxfiy ma’lumotni o‘g‘irlash usuli nima deyiladi?",
+    "hint": "Bitta so‘z.",
+    "accept": [
+      "fishing",
+      "phishing",
+      "fishing hujumi"
+    ],
+    "correct": "Fishing",
+    "why": "Inglizcha “fishing” — baliq ovlash so‘zidan."
+  },
+  {
+    "type": "text",
+    "q": "Barcha parollarni shifrlangan holda saqlaydigan ilova nima deyiladi?",
+    "hint": "Ikki so‘z: “parol ...”.",
+    "accept": [
+      "parol menejeri",
+      "parollar menejeri",
+      "parol menedjeri"
+    ],
+    "correct": "Parol menejeri",
+    "why": "Unda faqat bitta bosh parolni eslab qolasiz."
+  },
+  {
+    "type": "text",
+    "q": "Firibgar o‘zini boshqa odam deb tanishtirib, ishonchdan foydalanib aldashi nima deyiladi?",
+    "hint": "Ikki so‘z: “ijtimoiy ...”.",
+    "accept": [
+      "ijtimoiy muhandislik",
+      "sotsial muhandislik"
+    ],
+    "correct": "Ijtimoiy muhandislik",
+    "why": "Bu hujum texnikaga emas, inson ishonchiga qaratilgan."
+  }
+];
+
+  function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  function renderQuiz(){
+    const box = document.getElementById('quiz');
+    box.innerHTML = QUIZ.map((item, i) => {
+      const n = i + 1;
+      let inner = '';
+      if(item.type === 'mc'){
+        inner = item.options.map((opt, j) =>
+          '<label><input type="radio" name="q' + n + '" value="' + j + '"> ' + escapeHtml(opt) + '</label>'
+        ).join('');
+      } else {
+        inner = '<input type="text" id="q' + n + '" class="short-answer" placeholder="Javobni yozing..." autocomplete="off">' +
+                '<p class="open-hint">' + escapeHtml(item.hint) + '</p>';
+      }
+      return '<div class="quiz-question" id="box' + n + '"><h4>' + n + '. ' + escapeHtml(item.q) + '</h4>' + inner +
+             '<div class="feedback" id="fb' + n + '"></div></div>';
+    }).join('');
+  }
+
+  function normalizeAnswer(text){
+    return text.toLowerCase().replace(/[’‘`ʻʼ']/g, "'").replace(/\s+/g, ' ').trim();
+  }
+
+  function checkQuiz(){
+    const result = document.getElementById('quizResult');
+    let missing = 0;
+    QUIZ.forEach((item, i) => {
+      const n = i + 1;
+      if(item.type === 'mc'){ if(!document.querySelector('input[name="q' + n + '"]:checked')) missing++; }
+      else if(!normalizeAnswer(document.getElementById('q' + n).value)) missing++;
+    });
+    if(missing){
+      result.textContent = 'Iltimos, barcha ' + QUIZ.length + ' ta savolga javob bering (yana ' + missing + ' ta qoldi).';
+      result.style.color = '#b45309';
+      return;
+    }
+
+    let score = 0;
+    QUIZ.forEach((item, i) => {
+      const n = i + 1;
+      const box = document.getElementById('box' + n);
+      const fb = document.getElementById('fb' + n);
+      let ok, correctText;
+      if(item.type === 'mc'){
+        const sel = Number(document.querySelector('input[name="q' + n + '"]:checked').value);
+        ok = sel === item.answer;
+        correctText = item.options[item.answer];
+      } else {
+        const val = normalizeAnswer(document.getElementById('q' + n).value);
+        ok = item.accept.map(normalizeAnswer).includes(val);
+        correctText = item.correct;
+      }
+      if(ok) score++;
+      box.classList.remove('ok','no');
+      box.classList.add(ok ? 'ok' : 'no');
+      fb.innerHTML = (ok ? '<strong style="color:#15803d">✔ To‘g‘ri.</strong> ' :
+        '<strong style="color:#e11d48">✘ Noto‘g‘ri.</strong> To‘g‘ri javob: <strong>' + escapeHtml(correctText) + '</strong>. ') + escapeHtml(item.why);
+    });
+
+    const total = QUIZ.length;
+    if(score === total){ result.textContent = 'Ajoyib! Natija: ' + score + ' / ' + total; result.style.color = '#15803d'; }
+    else if(score >= 7){ result.textContent = 'Yaxshi! Natija: ' + score + ' / ' + total; result.style.color = '#2563eb'; }
+    else if(score >= 5){ result.textContent = 'Qoniqarli. Natija: ' + score + ' / ' + total + '. Izohlarni o‘qib chiqing.'; result.style.color = '#b45309'; }
+    else { result.textContent = 'Yana bir bor urinib ko‘ring. Natija: ' + score + ' / ' + total; result.style.color = '#dc2626'; }
+  }
+
+  function resetQuiz(){
+    renderQuiz();
+    document.getElementById('quizResult').textContent = '';
+  }
+
+  renderQuiz();
+  </script>
+</body>
+</html>
