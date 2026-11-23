@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Axborot iste’moli madaniyatiga kirish — 1-dars</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    :root{
+      --primary:#0f172a; --accent:#2563eb; --accent2:#7c3aed;
+      --card:#ffffff; --border:#e2e8f0; --text:#0f172a; --muted:#64748b;
+      --success:#16a34a; --warning:#f59e0b; --danger:#e11d48;
+      --radius:22px; --shadow:0 10px 28px rgba(15,23,42,.08);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Inter',sans-serif;background:linear-gradient(180deg,#f8fbff 0%,#f1f5ff 45%,#f8fafc 100%);color:var(--text);line-height:1.75;font-size:17px}
+    .container{width:min(1150px,calc(100% - 32px));margin:auto}
+
+    /* Topbar */
+    .topbar{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:74px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;text-decoration:none;color:var(--primary)}
+    .brand-icon{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 14px 30px rgba(37,99,235,.24)}
+    .back-btn{text-decoration:none;color:var(--accent);font-weight:800;background:#eff6ff;border:1px solid #dbeafe;padding:10px 14px;border-radius:12px}
+
+    /* Hero */
+    .hero{padding:30px 0 10px}
+    .hero-box{background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#312e81 100%);color:#fff;border-radius:28px;padding:34px 28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .hero-box::before{content:"";position:absolute;right:-60px;top:-60px;width:180px;height:180px;background:rgba(96,165,250,.18);border-radius:50%}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);color:#dbeafe;padding:8px 12px;border-radius:999px;font-size:.9rem;font-weight:800;margin-bottom:14px}
+    .hero h1{margin:0 0 10px;font-size:clamp(2rem,4vw,3rem);line-height:1.08;letter-spacing:-.04em}
+    .hero p{margin:0;max-width:860px;color:#dbeafe;font-size:1.16rem}
+
+    /* Meta */
+    .meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0 28px}
+    .meta-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(15,23,42,.05);min-height:154px;transition:.25s ease}
+    .meta-card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(15,23,42,.10)}
+    .meta-card i{width:64px;height:64px;border-radius:22px;font-size:28px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0f2fe,#eef2ff);color:var(--accent);box-shadow:0 12px 26px rgba(37,99,235,.16);margin-bottom:14px}
+    .meta-card h4{margin:0 0 4px;font-size:1.12rem;font-weight:900;letter-spacing:-.02em}
+    .meta-card p{margin:0;color:var(--muted);font-size:1.04rem;line-height:1.7}
+
+    /* Section */
+    .section{margin:0 0 26px}
+    .section-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+    .section-title{display:flex;align-items:center;gap:10px;margin:0 0 16px;font-size:1.72rem;line-height:1.2;font-weight:900;letter-spacing:-.03em}
+    .section-title i{color:var(--accent)}
+    .sub-title{margin:26px 0 12px;font-size:1.3rem;font-weight:900;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+    .sub-title i{color:var(--accent2)}
+    .lead{color:#475569;margin-top:-4px;margin-bottom:20px;font-size:1.08rem;font-weight:650}
+
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+
+    .card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px}
+    .card h3{margin:0 0 10px;font-size:1.16rem;font-weight:900}
+    .card p, li{color:#475569;font-size:1.05rem}
+    .card p{margin:0 0 8px}
+    .card p:last-child{margin-bottom:0}
+    .card h3 i{color:var(--accent);margin-right:8px}
+    .card ul{margin:6px 0 0;padding-left:20px}
+
+    .highlight{background:linear-gradient(135deg,#eff6ff,#f5f3ff);border:1px solid #dbeafe;border-radius:18px;padding:18px;margin-top:16px}
+    .highlight strong{color:var(--primary)}
+    .note{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:12px 14px;border-radius:14px;font-size:1rem;margin-top:12px}
+    .note i{margin-right:6px}
+
+    .info-table{width:100%;border-collapse:collapse;margin-top:16px}
+    .info-table th,.info-table td{border:1px solid var(--border);padding:12px 14px;text-align:left;vertical-align:top;font-size:1.02rem}
+    .info-table th{background:#f8fafc;font-weight:900}
+    .info-table td:first-child{font-weight:800;white-space:nowrap}
+    .table-wrap{overflow-x:auto}
+
+    /* Turlar (mis/dis/mal) */
+    .type-card{border-radius:18px;padding:18px;border:1px solid var(--border);background:#fff;border-top:6px solid var(--accent)}
+    .type-card.dis{border-top-color:var(--danger)}
+    .type-card.mal{border-top-color:var(--warning)}
+    .type-card h3{margin:0 0 4px;font-size:1.16rem;font-weight:900}
+    .type-card .tag{display:inline-block;font-size:.85rem;font-weight:800;padding:3px 10px;border-radius:999px;background:#eff6ff;color:var(--accent);margin-bottom:8px}
+    .type-card.dis .tag{background:#fff1f2;color:var(--danger)}
+    .type-card.mal .tag{background:#fffbeb;color:#b45309}
+    .type-card p{margin:0 0 8px;color:#475569}
+    .type-card .ex{font-size:.98rem;background:#f8fafc;border-radius:12px;padding:10px 12px;color:#334155}
+
+    /* Belgilar */
+    .sign{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px}
+    .sign .ic{flex:0 0 44px;height:44px;border-radius:14px;background:#fff1f2;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px}
+    .sign h4{margin:0 0 2px;font-size:1.02rem;font-weight:900}
+    .sign p{margin:0;color:#475569;font-size:.98rem;line-height:1.55}
+
+    /* Timeline */
+    .timeline{display:grid;gap:14px;margin-top:8px}
+    .timeline-item{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:start;background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px}
+    .time-badge{background:#eff6ff;color:var(--accent);border-radius:12px;padding:10px 12px;font-weight:900;text-align:center}
+    .timeline-item h4{margin:0 0 6px;font-size:1.16rem;font-weight:900}
+    .timeline-item p{margin:0;color:var(--muted);font-size:1.02rem}
+    .timeline-item .teacher{margin-top:8px;font-size:.96rem;color:#7c3aed;font-weight:650}
+
+    /* Infografika */
+    .infographic{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:18px}
+    .step{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px 14px;text-align:center}
+    .step-num{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-weight:900}
+    .step h4{margin:0 0 6px;font-size:1rem;font-weight:900}
+    .step p{margin:0;color:var(--muted);font-size:.98rem;line-height:1.55}
+    .step .q{margin-top:8px;font-size:.9rem;color:#7c3aed;font-weight:700}
+
+    /* Xabar namunalari */
+    .post{background:#f8fafc;border:1px solid var(--border);border-radius:18px;padding:16px;display:flex;flex-direction:column}
+    .post-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;flex:0 0 40px}
+    .post-head strong{display:block;font-size:.98rem}
+    .post-head span{font-size:.85rem;color:var(--muted)}
+    .bubble{background:#fff;border:1px solid var(--border);border-radius:4px 16px 16px 16px;padding:12px 14px;font-size:1rem;color:#1e293b;line-height:1.6;flex:1}
+    .bubble .img-ph{margin-top:10px;height:110px;border-radius:12px;background:linear-gradient(135deg,#64748b,#94a3b8);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.9rem;text-align:center;padding:8px}
+    .post-tasks{margin:12px 0 0;padding-left:20px;font-size:.98rem}
+    .post-tasks li{font-size:.98rem}
+    details.key{margin-top:12px;background:#fff;border:1px dashed #a78bfa;border-radius:14px;padding:10px 14px}
+    details.key summary{cursor:pointer;font-weight:800;color:#6d28d9}
+    details.key p, details.key li{font-size:.97rem;color:#334155;margin:6px 0}
+    details.key ul{padding-left:18px;margin:6px 0}
+    .verdict{display:inline-block;font-weight:900;padding:3px 10px;border-radius:999px;font-size:.88rem}
+    .verdict.bad{background:#fff1f2;color:var(--danger)}
+    .verdict.good{background:#f0fdf4;color:var(--success)}
+    .verdict.mid{background:#fffbeb;color:#b45309}
+
+    /* Fakt yoki fikr */
+    .ff-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+    .ff-row p{margin:0;color:#1e293b;font-size:1.02rem}
+    .ff-row .why{grid-column:1 / -1;font-size:.95rem;color:#475569;display:none;margin:0}
+    .ff-row.checked .why{display:block}
+    .ff-row.ok{border-color:#86efac;background:#f0fdf4}
+    .ff-row.no{border-color:#fda4af;background:#fff1f2}
+    .ff-btns{display:flex;gap:8px}
+    .ff-btn{border:1px solid #cbd5e1;background:#fff;border-radius:10px;padding:7px 14px;font-weight:800;cursor:pointer;font-family:inherit;font-size:.95rem;color:#334155}
+    .ff-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+    /* Tugmalar */
+    .actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:14px}
+    .btn{border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;padding:12px 16px;border-radius:12px;cursor:pointer;font-family:inherit;font-size:1rem}
+    .btn.secondary{background:#e2e8f0;color:var(--primary)}
+    .result{font-weight:800;color:var(--primary)}
+
+    /* Test */
+    .quiz-question{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px;transition:.2s}
+    .quiz-question h4{margin:0 0 10px;font-size:1.04rem}
+    .quiz-question label{display:block;margin:7px 0;color:#475569;cursor:pointer}
+    .quiz-question.ok{border-color:#86efac;background:#f0fdf4}
+    .quiz-question.no{border-color:#fda4af;background:#fff1f2}
+    .feedback{display:none;margin-top:10px;font-size:.97rem;color:#334155;background:rgba(255,255,255,.75);border-radius:10px;padding:8px 12px}
+    .quiz-question.ok .feedback,.quiz-question.no .feedback{display:block}
+    .short-answer{width:100%;margin-top:6px;border:1px solid #cbd5e1;border-radius:12px;padding:13px 14px;font-size:1.05rem;font-family:inherit;outline:none;transition:border-color .18s ease,box-shadow .18s ease}
+    .short-answer:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+    .open-hint{color:#64748b;font-size:.95rem;margin:8px 0 0}
+
+    /* Media */
+    .resource-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:12px}
+    .resource-card{background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid var(--border);border-radius:20px;padding:18px;box-shadow:0 8px 20px rgba(15,23,42,.06)}
+    .resource-card h3{margin:0 0 10px;font-size:1.18rem;font-weight:900}
+    .resource-card h3 i{color:var(--accent);margin-right:8px}
+    .media-slot{min-height:230px;border:2px dashed #93c5fd;border-radius:18px;background:linear-gradient(135deg,#eff6ff,#f0fdfa);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--accent);font-weight:900;padding:18px;overflow:hidden;cursor:pointer;position:relative;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+    .media-slot:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 12px 28px rgba(37,99,235,.14)}
+    .media-slot img,.media-slot video{width:100%;max-height:360px;object-fit:contain;border-radius:14px;display:block}
+    .media-slot video{background:#000}
+    .media-slot .placeholder{display:none}
+    .media-slot.missing .placeholder{display:block}
+    .media-slot.missing img,.media-slot.missing video{display:none}
+    .media-open-btn{width:100%;margin-top:12px;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-weight:900;padding:11px 14px;border-radius:12px;cursor:pointer;font-family:inherit;font-size:1rem}
+    .media-open-btn:hover{background:#dbeafe}
+
+    /* Modal */
+    .fullscreen-modal{position:fixed;inset:0;z-index:99999;background:rgba(2,6,23,.94);display:none;align-items:center;justify-content:center;padding:14px}
+    .fullscreen-modal.show{display:flex}
+    .modal-content{width:min(1560px,98vw);height:min(94vh,980px);background:#020617;border:1px solid rgba(255,255,255,.18);border-radius:26px;overflow:hidden;box-shadow:0 34px 90px rgba(0,0,0,.55);display:flex;flex-direction:column}
+    .modal-header{min-height:64px;padding:12px 16px;color:#fff;background:linear-gradient(135deg,#0f172a,#1e293b);border-bottom:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .modal-close{width:46px;height:46px;border:0;border-radius:15px;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;font-size:1.35rem}
+    .modal-body{flex:1;min-height:0;overflow:hidden;background:#020617}
+    .modal-body video{display:block;width:100%;height:100%;background:#000}
+    .modal-msg{color:#fff;text-align:center;font-weight:900;padding:34px}
+    .az-zoom-panel{height:100%;display:flex;flex-direction:column}
+    .az-zoom-toolbar{min-height:64px;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 12px;background:rgba(15,23,42,.98);border-bottom:1px solid rgba(255,255,255,.12);color:#fff;flex-wrap:wrap}
+    .az-zoom-btn{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;min-width:48px;height:43px;border-radius:14px;font-weight:900;font-size:1.05rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 13px;font-family:inherit}
+    .az-zoom-btn:hover{background:var(--accent)}
+    .az-zoom-value{min-width:82px;text-align:center;font-weight:900;color:#dbeafe;background:rgba(37,99,235,.18);border:1px solid rgba(147,197,253,.22);height:43px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center}
+    .az-zoom-hint{font-size:.86rem;color:#cbd5e1;font-weight:700;margin-left:6px}
+    .az-stage{flex:1;min-height:0;overflow:auto;background:radial-gradient(circle at top,rgba(37,99,235,.14),transparent 35%),#020617;padding:28px;cursor:grab;touch-action:none;user-select:none}
+    .az-stage.az-dragging{cursor:grabbing}
+    .az-img{display:block;margin:0 auto;background:#fff;border-radius:18px;box-shadow:0 28px 80px rgba(0,0,0,.45);max-width:none;user-select:none;-webkit-user-drag:none}
+
+    .homework-list{margin:0;padding-left:20px}
+    .footer{padding:20px 0 40px;color:var(--muted);text-align:center;font-size:1rem}
+
+    @media (max-width:980px){
+      .meta-grid,.grid-3,.grid-4,.infographic,.resource-grid{grid-template-columns:repeat(2,1fr)}
+      .grid-2{grid-template-columns:1fr}
+    }
+    @media (max-width:700px){
+      .meta-grid,.grid-3,.grid-4,.infographic,.resource-grid{grid-template-columns:1fr}
+      .timeline-item{grid-template-columns:1fr}
+      .ff-row{grid-template-columns:1fr}
+      .hero-box{padding:24px 18px}
+      .section-box{padding:18px}
+      .topbar-inner{flex-direction:column;align-items:flex-start;padding:10px 0}
+      .info-table td:first-child{white-space:normal}
+      .az-zoom-hint{width:100%;margin-left:0;text-align:center}
+      .az-stage{padding:16px}
+      .meta-card{min-height:auto}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <a href="#" class="brand">
+        <span class="brand-icon"><i class="fa-solid fa-book-open-reader"></i></span>
+        <span>Axborot madaniyati platformasi</span>
+      </a>
+      <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Bosh sahifaga qaytish</a>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-box">
+        <div class="hero-badge"><i class="fa-solid fa-bolt"></i> 1-modul · 1-dars · Dars ishlanmasi</div>
+        <h1>Axborot iste’moli madaniyatiga kirish</h1>
+        <p>
+          Bu darsda o‘quvchilar axborotni ongli qabul qilishni, yolg‘on va chalg‘ituvchi xabarlarni belgilaridan
+          tanib olishni, fakt bilan fikrni ajratishni hamda xabarni ulashishdan oldin oddiy vositalar bilan
+          tekshirishni o‘rganadilar.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- META -->
+    <section class="section">
+      <div class="meta-grid">
+        <div class="meta-card"><i class="fa-solid fa-school"></i><h4>Auditoriya</h4><p>7–11-sinf o‘quvchilari</p></div>
+        <div class="meta-card"><i class="fa-solid fa-clock"></i><h4>Davomiyligi</h4><p>45 daqiqa</p></div>
+        <div class="meta-card"><i class="fa-solid fa-layer-group"></i><h4>Dars turi</h4><p>Yangi bilim beruvchi va amaliy mashg‘ulot</p></div>
+        <div class="meta-card"><i class="fa-solid fa-list-check"></i><h4>Asosiy natija</h4><p>Xabarni 5 qadamda tekshira olish ko‘nikmasi</p></div>
+      </div>
+    </section>
+
+    <!-- DARS PASPORTI -->
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-id-card"></i> Dars pasporti</h2>
+        <p class="lead">Darsning qisqacha reja-ma’lumoti</p>
+        <div class="grid-3">
+          <div class="card">
+            <h3><i class="fa-solid fa-bullseye"></i> Dars maqsadi</h3>
+            <p>O‘quvchilarga axborot iste’moli madaniyati tushunchasini tushuntirish, yolg‘on axborot turlari va belgilarini tanishtirish, xabarni tekshirishning amaliy usullarini o‘rgatish.</p>
+          </div>
+          <div class="card">
+            <h3><i class="fa-solid fa-toolbox"></i> Jihozlar</h3>
+            <p>Kompyuter, proyektor, internet, ushbu sahifa, infografika va video lavha, telefon (rasm qidiruvini ko‘rsatish uchun), refleksiya varaqasi.</p>
+          </div>
+          <div class="card">
+            <h3><i class="fa-solid fa-key"></i> Tayanch tushunchalar</h3>
+            <p>Manba, fakt, fikr, misinformatsiya, dezinformatsiya, malinformatsiya, klikbeyt, deepfake, axborot pufagi, axborot gigiyenasi.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- O'QUV MAQSADLARI -->
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-star"></i> O‘quv maqsadlari</h2>
+        <p class="lead">Dars yakunida o‘quvchi quyidagilarni bajara oladi:</p>
+        <div class="grid-3">
+          <div class="card">
+            <h3><i class="fa-solid fa-check"></i> Biladi</h3>
+            <p>Axborot iste’moli madaniyati, manba, fakt, fikr tushunchalarini va yolg‘on axborotning uch turini ta’riflab bera oladi.</p>
+          </div>
+          <div class="card">
+            <h3><i class="fa-solid fa-check"></i> Tushunadi</h3>
+            <p>Nega yolg‘on xabarlar tez tarqalishini (hissiyot, shoshiltirish, algoritm) va tekshirmasdan ulashish qanday zarar keltirishini tushuntiradi.</p>
+          </div>
+          <div class="card">
+            <h3><i class="fa-solid fa-check"></i> Qo‘llaydi</h3>
+            <p>Tayyor xabarni 5 qadamli qoida bo‘yicha tahlil qiladi, undagi shubhali belgilarni topadi va “ulashaman / ulashmayman” qarorini asoslaydi.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DARS JARAYONI -->
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-chalkboard-user"></i> Dars jarayoni</h2>
+        <p class="lead">45 daqiqalik namunaviy dars taqsimoti va o‘qituvchi uchun izohlar</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="time-badge">3 daqiqa</div>
+            <div>
+              <h4>Tashkiliy qism</h4>
+              <p>Salomlashish, davomat, dars mavzusi va maqsadini e’lon qilish.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="time-badge">5 daqiqa</div>
+            <div>
+              <h4>Motivatsiya</h4>
+              <p>“Kecha sizga kelgan eng qiziq xabar qaysi edi? U rostligini qayerdan bildingiz?” savoli bilan suhbat. So‘ng “Shoshilinch! Maktablar yopiladi” xabari (pastdagi 1-namuna) ekranga chiqariladi va qo‘l ko‘tarib ovoz beriladi: kim bunga ishonardi?</p>
+              <p class="teacher"><i class="fa-solid fa-lightbulb"></i> O‘qituvchiga: javobni hozir aytmang — darsning oxirida shu xabarga qaytiladi.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="time-badge">12 daqiqa</div>
+            <div>
+              <h4>Nazariy tushuntirish</h4>
+              <p>Tushunchalar jadvali, yolg‘on axborotning 3 turi, yolg‘on xabarning 8 belgisi va axborot pufagi haqida tushuntirish. Video lavha namoyishi.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="time-badge">15 daqiqa</div>
+            <div>
+              <h4>Amaliy mashqlar</h4>
+              <p>Juftlikda: 3 ta xabar namunasini 5 qadamli qoida bo‘yicha tahlil qilish (8 daq.). Butun sinf bilan: “Faktmi yoki fikr?” mashqi (4 daq.) va “Ulashishdan oldin” vaziyati muhokamasi (3 daq.).</p>
+              <p class="teacher"><i class="fa-solid fa-lightbulb"></i> O‘qituvchiga: har bir xabar ostida yashirin “Tahlil” bloki bor — juftliklar javob bergandan keyin oching.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="time-badge">7 daqiqa</div>
+            <div>
+              <h4>Baholash</h4>
+              <p>10 savollik tezkor test. Natijalar ekranda chiqadi, har bir savol ostida izoh ko‘rinadi.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="time-badge">3 daqiqa</div>
+            <div>
+              <h4>Refleksiya va uyga vazifa</h4>
+              <p>“3–2–1” refleksiyasi, uyga vazifani tushuntirish.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NAZARIY QISM -->
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-book"></i> Nazariy qism</h2>
+        <p class="lead">Asosiy tushunchalar, yolg‘on axborot turlari va ularni tanish belgilari</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Axborot iste’moli madaniyati nima?</h3>
+            <p>Bu — insonning axborotni shunchaki ko‘rib yoki eshitib qolmasdan, uni <strong>ongli qabul qilishi</strong>, <strong>tekshirishi</strong>, <strong>foydali qismini tanlashi</strong> va <strong>mas’uliyat bilan ulashishi</strong>.</p>
+            <p>Oziq-ovqatga o‘xshatish mumkin: har qanday ovqatni yeyavermaganimiz kabi, har qanday xabarni ham “yutib” yuboravermaslik kerak. Avval yorlig‘iga (manbasiga) va yaroqlilik muddatiga (sanasiga) qaraymiz.</p>
+          </div>
+          <div class="card">
+            <h3>Nega bu muhim?</h3>
+            <p>Har kuni telefonimizga yuzlab xabar, post va video keladi. Ularning bir qismi to‘g‘ri, bir qismi xato, ba’zilari esa ataylab aldash uchun yasalgan.</p>
+            <ul>
+              <li>Yolg‘on tibbiy maslahat sog‘liqqa zarar yetkazishi mumkin.</li>
+              <li>Soxta “shoshilinch” xabar vahima uyg‘otadi.</li>
+              <li>Tekshirilmagan mish-mish insonning obro‘siga putur yetkazadi.</li>
+              <li>Soxta “yutuq” va “sovg‘a” havolalari pul va akkauntni o‘g‘irlashga xizmat qiladi.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="sub-title"><i class="fa-solid fa-table-list"></i> Tayanch tushunchalar</h3>
+        <div class="table-wrap">
+          <table class="info-table">
+            <thead><tr><th>Tushuncha</th><th>Izoh</th><th>Misol</th></tr></thead>
+            <tbody>
+              <tr><td>Manba</td><td>Xabar qayerdan va kimdan olingani: sayt, muallif, tashkilot, kanal, kitob.</td><td>Vazirlikning rasmiy sayti; noma’lum Telegram kanal.</td></tr>
+              <tr><td>Fakt</td><td>Dalil bilan tekshirib, tasdiqlab bo‘ladigan ma’lumot.</td><td>“Bir yilda 12 oy bor.”</td></tr>
+              <tr><td>Fikr</td><td>Shaxsiy qarash, baho yoki taxmin. Uni “to‘g‘ri” yoki “xato” deb isbotlab bo‘lmaydi.</td><td>“Matematika eng qiziq fan.”</td></tr>
+              <tr><td>Axborot savodxonligi</td><td>Kerakli ma’lumotni topish, uni baholash va to‘g‘ri foydalanish ko‘nikmasi.</td><td>Referat uchun ishonchli manba tanlash.</td></tr>
+              <tr><td>Klikbeyt</td><td>Ichidagi mazmundan ko‘ra ko‘proq va’da beradigan, bosishga undovchi sarlavha.</td><td>“Buni ko‘rib hayratdan qotib qolasiz!”</td></tr>
+              <tr><td>Deepfake</td><td>Sun’iy intellekt yordamida yasalgan soxta video, rasm yoki ovoz.</td><td>Mashhur odam aytmagan gapni “aytayotgan” video.</td></tr>
+              <tr><td>Axborot pufagi</td><td>Ijtimoiy tarmoq algoritmlari sizga faqat yoqqan narsalarni ko‘rsatib, boshqa fikrlarni yashirishi.</td><td>Lentangizda faqat bir xil qarashdagi videolar chiqishi.</td></tr>
+              <tr><td>Axborot gigiyenasi</td><td>Axborotni me’yorida, tanlab va tekshirib iste’mol qilish odati.</td><td>Ekran vaqtini cheklash, shubhali kanallardan obunani bekor qilish.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub-title"><i class="fa-solid fa-triangle-exclamation"></i> Yolg‘on axborotning 3 turi</h3>
+        <div class="grid-3">
+          <div class="type-card">
+            <h3>Misinformatsiya</h3>
+            <span class="tag">Bilmasdan tarqatilgan xato</span>
+            <p>Xabar noto‘g‘ri, lekin uni tarqatgan odam aldash niyatida emas — o‘zi ham ishongan.</p>
+            <div class="ex"><strong>Misol:</strong> buvi “sarimsoq hamma virusni o‘ldiradi” degan xabarni yaxshilik qilish niyatida oila guruhiga yuboradi.</div>
+          </div>
+          <div class="type-card dis">
+            <h3>Dezinformatsiya</h3>
+            <span class="tag">Ataylab to‘qilgan yolg‘on</span>
+            <p>Kimdir aldash, pul ishlash yoki vahima tarqatish uchun yolg‘onni ongli ravishda yasaydi.</p>
+            <div class="ex"><strong>Misol:</strong> “Bepul telefon yutib oling — havolaga kiring” degan soxta aksiya.</div>
+          </div>
+          <div class="type-card mal">
+            <h3>Malinformatsiya</h3>
+            <span class="tag">Zarar yetkazish uchun ishlatilgan haqiqat</span>
+            <p>Ma’lumot rost bo‘lishi mumkin, lekin u insonga zarar yetkazish uchun ruxsatsiz tarqatiladi.</p>
+            <div class="ex"><strong>Misol:</strong> sinfdoshning shaxsiy yozishmasini skrinshot qilib, masxara qilish uchun guruhga tashlash.</div>
+          </div>
+        </div>
+
+        <h3 class="sub-title"><i class="fa-solid fa-magnifying-glass"></i> Yolg‘on xabarning 8 ta belgisi</h3>
+        <div class="grid-2">
+          <div class="sign"><div class="ic"><i class="fa-solid fa-fire"></i></div><div><h4>Kuchli hissiyot</h4><p>“SHOK!”, “DAHSHAT!”, ko‘p undov belgilari. Maqsad — o‘ylashga emas, qo‘rqish yoki g‘azablanishga majburlash.</p></div></div>
+          <div class="sign"><div class="ic"><i class="fa-solid fa-stopwatch"></i></div><div><h4>Shoshiltirish</h4><p>“Tezda ulashing!”, “O‘chirib yuborishlaridan oldin ko‘ring!” Shoshgan odam tekshirmaydi.</p></div></div>
+          <div class="sign"><div class="ic"><i class="fa-solid fa-circle-question"></i></div><div><h4>Manba yo‘q yoki noaniq</h4><p>“Olimlar aniqladi”, “bir tanishim aytdi” — qaysi olim? qaysi tanish? Ism, tashkilot, havola yo‘q.</p></div></div>
+          <div class="sign"><div class="ic"><i class="fa-solid fa-calendar-xmark"></i></div><div><h4>Sana yo‘q yoki eski</h4><p>Bir necha yil oldingi voqea bugungidek qayta tarqatiladi.</p></div></div>
+          <div class="sign"><div class="ic"><i class="fa-solid fa-image"></i></div><div><h4>Kontekstdan uzilgan rasm</h4><p>Boshqa joy yoki boshqa yildagi haqiqiy surat yangi voqeaga “isbot” qilib qo‘yiladi.</p></div></div>
+          <div class="sign"><div class="ic"><i class="fa-solid fa-wand-magic-sparkles"></i></div><div><h4>Haddan tashqari va’da</h4><p>“3 kunda davolaydi”, “100% kafolat”, “bepul iPhone”. Haqiqat bo‘lishi uchun juda yaxshi bo‘lsa — ehtimol yolg‘on.</p></div></div>
+          <div class="sign"><div class="ic"><i class="fa-solid fa-spell-check"></i></div><div><h4>Imlo xatolari va g‘alati havola</h4><p>Rasmiy tashkilotlar xatoli matn yozmaydi. Havoladagi nomning bitta harfi o‘zgartirilgan bo‘lishi mumkin.</p></div></div>
+          <div class="sign"><div class="ic"><i class="fa-solid fa-user-secret"></i></div><div><h4>“Sizdan yashirishmoqda”</h4><p>“Shifokorlar buni aytmaydi”, “OAV jim” — sirli fitna hikoyasi tekshirishdan qochish usuli.</p></div></div>
+        </div>
+
+        <h3 class="sub-title"><i class="fa-solid fa-filter"></i> Axborot pufagi qanday paydo bo‘ladi?</h3>
+        <div class="card">
+          <p>Ijtimoiy tarmoqlar sizni ilovada ko‘proq ushlab qolishdan manfaatdor. Shuning uchun algoritm siz uzoq ko‘rgan, layk bosgan va izoh yozgan narsalarga o‘xshash kontentni ko‘proq ko‘rsatadi. Natijada lentangiz asta-sekin bir xil mavzu va bir xil fikrlardan iborat “pufak”ka aylanadi, siz esa “hamma shunday o‘ylaydi” degan xulosaga kelasiz.</p>
+          <p><strong>Pufakdan chiqish uchun:</strong> turli manbalarni kuzating, qarshi fikrni ham o‘qib ko‘ring, xabarni bitta kanal emas, kamida ikki-uch mustaqil manbadan tekshiring.</p>
+        </div>
+
+        <h3 class="sub-title"><i class="fa-solid fa-screwdriver-wrench"></i> Xabarni tekshirish vositalari</h3>
+        <div class="grid-4">
+          <div class="card"><h3><i class="fa-solid fa-camera"></i> Rasm qidiruvi</h3><p>Google Lens, Yandex rasm qidiruvi yoki TinEye orqali rasm qachon va qayerda birinchi chiqqanini toping.</p></div>
+          <div class="card"><h3><i class="fa-solid fa-landmark"></i> Rasmiy manba</h3><p>Maktab, imtihon, ob-havo kabi xabarlarni tegishli vazirlik yoki tashkilotning rasmiy sayti va kanalidan tekshiring.</p></div>
+          <div class="card"><h3><i class="fa-solid fa-newspaper"></i> Mustaqil OAV</h3><p>Muhim voqeani ishonchli nashrlar ham yozganmi? Hech kim yozmagan bo‘lsa — shubhalaning.</p></div>
+          <div class="card"><h3><i class="fa-solid fa-user-check"></i> Kattalar bilan maslahat</h3><p>Ishonchingiz komil bo‘lmasa, ota-ona yoki o‘qituvchidan so‘rang. Bu zaiflik emas, aql belgisi.</p></div>
+        </div>
+
+        <div class="highlight">
+          <strong>Esda tuting:</strong> Yaxshi axborotning manbasi aniq, sanasi ko‘rsatilgan, boshqa manbalar bilan tasdiqlanadi va sizni qo‘rqitishga emas, o‘ylashga undaydi. <strong>Shubhalansangiz — ulashmang.</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- INFOGRAFIKA -->
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-chart-pie"></i> Infografika: 5 qadamli qoida</h2>
+        <p class="lead">Har qanday xabarni ko‘rganingizda quyidagi bosqichlardan o‘ting:</p>
+        <div class="infographic">
+          <div class="step"><div class="step-num">1</div><h4>Ko‘r</h4><p>Xabarni oxirigacha o‘qing, faqat sarlavhaga qaramang.</p><div class="q">Aslida nima deyilyapti?</div></div>
+          <div class="step"><div class="step-num">2</div><h4>Tekshir</h4><p>Muallif, manba va sanani aniqlang.</p><div class="q">Kim yozgan? Qachon?</div></div>
+          <div class="step"><div class="step-num">3</div><h4>Solishtir</h4><p>Rasmiy va boshqa ishonchli manbalarda ham bormi?</p><div class="q">Kim yana tasdiqlaydi?</div></div>
+          <div class="step"><div class="step-num">4</div><h4>O‘yla</h4><p>8 ta belgidan qaysilari bor? Xabar kimga foyda keltiradi?</p><div class="q">Meni qo‘rqityaptimi?</div></div>
+          <div class="step"><div class="step-num">5</div><h4>Xulosa qil</h4><p>Tasdiqlansa — ishonish mumkin. Shubha qolsa — ulashmang.</p><div class="q">Ulashsam, kimga zarar?</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEDIA -->
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-image"></i> Qo‘shimcha infografika va video</h2>
+        <p class="lead">Nazariy qism davomida namoyish etiladi</p>
+        <div class="resource-grid">
+          <div class="resource-card">
+            <h3><i class="fa-solid fa-chart-pie"></i> Infografika</h3>
+            <div class="media-slot" id="imgSlot" onclick="openMediaModal('image', MEDIA.image, 'Infografika')" title="Rasmni kattalashtirib ochish">
+              <img id="slotImg" alt="Darsga oid infografika">
+              <span class="placeholder">Infografika topilmadi.<br>Rasmni <code>1-infografika.png</code> nomi bilan<br>HTML fayl bilan bitta papkaga joylang.</span>
+            </div>
+            <button class="media-open-btn" type="button" onclick="openMediaModal('image', MEDIA.image, 'Infografika')">
+              <i class="fa-solid fa-up-right-and-down-left-from-center"></i> Infografikani katta ekranda ochish
+            </button>
+          </div>
+          <div class="resource-card">
+            <h3><i class="fa-solid fa-clapperboard"></i> Video lavha</h3>
+            <div class="media-slot" id="videoSlot" onclick="openMediaModal('video', MEDIA.video, 'Video lavha')" title="Videoni katta ekranda ochish">
+              <video id="slotVideo" controls preload="metadata" onclick="event.stopPropagation()"></video>
+              <span class="placeholder">Video topilmadi.<br>Videoni <code>1-dars.mp4</code> nomi bilan<br>HTML fayl bilan bitta papkaga joylang.</span>
+            </div>
+            <button class="media-open-btn" type="button" onclick="openMediaModal('video', MEDIA.video, 'Video lavha')">
+              <i class="fa-solid fa-up-right-and-down-left-from-center"></i> Videoni katta ekranda ochish
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AMALIY TOPSHIRIQLAR -->
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-pen-ruler"></i> Amaliy topshiriqlar</h2>
+        <p class="lead">Barcha materiallar tayyor: o‘qituvchi ekranga chiqarib, darhol ishlashi mumkin</p>
+
+        <h3 class="sub-title"><i class="fa-solid fa-newspaper"></i> 1-topshiriq: Xabarni tekshir (juftlikda, 8 daqiqa)</h3>
+        <p style="color:#475569;margin-top:-4px">Har bir xabar uchun quyidagilarni toping: muallif / manba, sana, nechta shubhali belgi bor, xulosa — ishonsa bo‘ladimi?</p>
+        <div class="grid-3">
+          <div class="post">
+            <div class="post-head">
+              <div class="avatar" style="background:#e11d48">YT</div>
+              <div><strong>“Yangiliklar TEZKOR 24/7”</strong><span>Telegram kanal · sana ko‘rsatilmagan</span></div>
+            </div>
+            <div class="bubble">
+              🔴🔴 SHOSHILINCH!!! Ertadan boshlab BARCHA maktablar 2 haftaga yopiladi!!! Vazirlik hali e’lon qilmadi, lekin ishonchli odamlardan bildik. Ota-onalarga TEZDA ULASHING, o‘chirib yuborishlaridan oldin!!!
+            </div>
+            <details class="key">
+              <summary>Tahlil (o‘qituvchi uchun)</summary>
+              <p><span class="verdict bad">Ishonib bo‘lmaydi</span></p>
+              <ul>
+                <li><strong>Manba:</strong> noma’lum kanal, “ishonchli odamlar” — kimligi aytilmagan.</li>
+                <li><strong>Sana:</strong> yo‘q, “ertadan” qachonligini bilib bo‘lmaydi.</li>
+                <li><strong>Belgilar:</strong> kuchli hissiyot, shoshiltirish, “o‘chirib yuborishadi” (yashirish hikoyasi), manba yo‘q — kamida 4 ta.</li>
+                <li><strong>Qanday tekshiriladi:</strong> ta’lim vazirligi yoki maktabning rasmiy sayti/kanali, sinf rahbari.</li>
+                <li><strong>Turi:</strong> tarqatgan kanal uchun dezinformatsiya, uni ishonib yuborgan ota-ona uchun misinformatsiya.</li>
+              </ul>
+            </details>
+          </div>
+
+          <div class="post">
+            <div class="post-head">
+              <div class="avatar" style="background:#f59e0b">ShX</div>
+              <div><strong>“Shahar xabarlari”</strong><span>Ijtimoiy tarmoq sahifasi · kecha</span></div>
+            </div>
+            <div class="bubble">
+              Kecha shahrimizda kuchli suv toshqini bo‘ldi! Ko‘chalar butunlay suv ostida qoldi. Mana isbot 👇
+              <div class="img-ph"><i class="fa-solid fa-image"></i>&nbsp; Suv bosgan ko‘cha surati</div>
+            </div>
+            <details class="key">
+              <summary>Tahlil (o‘qituvchi uchun)</summary>
+              <p><span class="verdict mid">Tekshirish kerak</span></p>
+              <ul>
+                <li><strong>Manba:</strong> sahifa bor, lekin voqea joyi va rasm muallifi aytilmagan.</li>
+                <li><strong>Belgilar:</strong> kontekstdan uzilgan rasm bo‘lishi mumkin. Rasm qidiruvi bilan tekshirilganda u bir necha yil oldin boshqa davlatda olingani ma’lum bo‘lsa — yolg‘on.</li>
+                <li><strong>Qanday tekshiriladi:</strong> Google Lens / TinEye orqali rasm qidiruvi; mahalliy rasmiy organlar va boshqa nashrlar shu voqea haqida yozganmi?</li>
+                <li><strong>Saboq:</strong> “Mana isbot” deyilgan rasm har doim ham isbot emas.</li>
+              </ul>
+            </details>
+          </div>
+
+          <div class="post">
+            <div class="post-head">
+              <div class="avatar" style="background:#16a34a">GM</div>
+              <div><strong>Gidrometeorologiya xizmati</strong><span>Rasmiy kanal · 22-noyabr, 18:00</span></div>
+            </div>
+            <div class="bubble">
+              Gidrometeorologiya xizmati ma’lumotiga ko‘ra, 23-noyabr kuni Toshkent shahrida havo bulutli bo‘lib, kunduzi +6…+8 daraja, kechasi 0…+2 daraja bo‘lishi kutilmoqda. Batafsil ma’lumot rasmiy saytda.
+            </div>
+            <details class="key">
+              <summary>Tahlil (o‘qituvchi uchun)</summary>
+              <p><span class="verdict good">Ishonchli</span></p>
+              <ul>
+                <li><strong>Manba:</strong> tegishli rasmiy tashkilot, saytga ishora bor.</li>
+                <li><strong>Sana:</strong> aniq ko‘rsatilgan.</li>
+                <li><strong>Belgilar:</strong> hissiyot, shoshiltirish, haddan tashqari va’da yo‘q — xotirjam, aniq raqamlar.</li>
+                <li><strong>Eslatma:</strong> rasmiy ko‘rinish ham soxtalashtirilishi mumkin — kanal haqiqatan rasmiymi, saytdan tekshirib ko‘rish foydali.</li>
+              </ul>
+            </details>
+          </div>
+        </div>
+
+        <h3 class="sub-title"><i class="fa-solid fa-scale-balanced"></i> 2-topshiriq: Faktmi yoki fikr? (4 daqiqa)</h3>
+        <p style="color:#475569;margin-top:-4px">Har bir gap uchun tugmani tanlang, so‘ng “Tekshirish”ni bosing.</p>
+        <div id="ffList">
+          <div class="ff-row" data-answer="fakt">
+            <p>1. O‘zbekiston poytaxti — Toshkent shahri.</p>
+            <div class="ff-btns"><button class="ff-btn" data-v="fakt">Fakt</button><button class="ff-btn" data-v="fikr">Fikr</button></div>
+            <p class="why">Fakt — xarita va rasmiy hujjatlar bilan tasdiqlanadi.</p>
+          </div>
+          <div class="ff-row" data-answer="fikr">
+            <p>2. Qish yilning eng zerikarli fasli.</p>
+            <div class="ff-btns"><button class="ff-btn" data-v="fakt">Fakt</button><button class="ff-btn" data-v="fikr">Fikr</button></div>
+            <p class="why">Fikr — kimgadir qish eng yoqimli fasl. “Zerikarli” degan baho shaxsiy.</p>
+          </div>
+          <div class="ff-row" data-answer="fakt">
+            <p>3. Suv dengiz sathida 100 darajada qaynaydi.</p>
+            <div class="ff-btns"><button class="ff-btn" data-v="fakt">Fakt</button><button class="ff-btn" data-v="fikr">Fikr</button></div>
+            <p class="why">Fakt — tajriba orqali tekshirish mumkin.</p>
+          </div>
+          <div class="ff-row" data-answer="fikr">
+            <p>4. Bu blogerning videolari internetdagi eng foydali videolar.</p>
+            <div class="ff-btns"><button class="ff-btn" data-v="fakt">Fakt</button><button class="ff-btn" data-v="fikr">Fikr</button></div>
+            <p class="why">Fikr — “eng foydali” degan baho o‘lchab bo‘lmaydi.</p>
+          </div>
+          <div class="ff-row" data-answer="fakt">
+            <p>5. Bir sutkada 24 soat bor.</p>
+            <div class="ff-btns"><button class="ff-btn" data-v="fakt">Fakt</button><button class="ff-btn" data-v="fikr">Fikr</button></div>
+            <p class="why">Fakt — umumqabul qilingan o‘lchov.</p>
+          </div>
+          <div class="ff-row" data-answer="fikr">
+            <p>6. Kelajakda hech kim kitob o‘qimaydi.</p>
+            <div class="ff-btns"><button class="ff-btn" data-v="fakt">Fakt</button><button class="ff-btn" data-v="fikr">Fikr</button></div>
+            <p class="why">Fikr (taxmin) — kelajak haqidagi gapni hozir isbotlab bo‘lmaydi.</p>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn" onclick="checkFF()">Tekshirish</button>
+          <button class="btn secondary" onclick="resetFF()">Tozalash</button>
+          <span id="ffResult" class="result"></span>
+        </div>
+
+        <h3 class="sub-title"><i class="fa-solid fa-share-nodes"></i> 3-topshiriq: Ulashishdan oldin (muhokama, 3 daqiqa)</h3>
+        <div class="card">
+          <p><strong>Vaziyat:</strong> Sinf guruhiga kimdir “Telefon kompaniyasi 10 yilligi munosabati bilan barcha o‘quvchilarga 50 GB bepul internet beryapti! Shu havolaga kirib, telefon raqamingiz va SMS kodni kiriting” degan xabar tashladi. Do‘stlaringizdan ikki kishi allaqachon kirib ko‘rgan.</p>
+          <p><strong>Savollar:</strong></p>
+          <ul>
+            <li>Xabarda qaysi shubhali belgilar bor?</li>
+            <li>Siz nima qilasiz: kirasizmi, ulashasizmi, yoki boshqa ish qilasizmi?</li>
+            <li>Allaqachon kirib qo‘ygan do‘stlaringizga nima maslahat berasiz?</li>
+          </ul>
+          <details class="key">
+            <summary>Kutilgan javob (o‘qituvchi uchun)</summary>
+            <ul>
+              <li>Belgilar: haddan tashqari va’da (bepul), shaxsiy ma’lumot va SMS kod so‘ralishi, rasmiy manbaga ishora yo‘q.</li>
+              <li>To‘g‘ri harakat: havolaga kirmaslik, ulashmaslik, kompaniyaning rasmiy sayti yoki ilovasidan tekshirish, guruhga “bu firibgarlik bo‘lishi mumkin” deb ogohlantirish.</li>
+              <li>Kirgan do‘stlarga: hech kimga SMS kodni aytmaslik, darhol parolni almashtirish va ota-onaga xabar berish.</li>
+              <li>Xulosa: SMS kod — kalit. Uni hech qachon, hech kimga bermang.</li>
+            </ul>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEST -->
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-circle-question"></i> Tezkor test</h2>
+        <p class="lead">7 ta tanlovli va 3 ta yozma savol. Natijadan keyin har bir savol ostida izoh chiqadi.</p>
+
+        <div id="quiz"></div>
+
+        <div class="actions">
+          <button class="btn" onclick="checkQuiz()">Natijani ko‘rish</button>
+          <button class="btn secondary" onclick="resetQuiz()">Tozalash</button>
+          <span id="quizResult" class="result"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- REFLEKSIYA -->
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-comments"></i> Refleksiya: 3–2–1</h2>
+        <p class="lead">O‘quvchi daftariga yoki refleksiya varaqasiga yozadi</p>
+        <div class="grid-3">
+          <div class="card"><h3><i class="fa-solid fa-3"></i> ta yangi narsa</h3><p>Bugun o‘rgangan 3 ta yangi tushuncha yoki qoida.</p></div>
+          <div class="card"><h3><i class="fa-solid fa-2"></i> ta belgi</h3><p>Yolg‘on xabarning eng ko‘p uchraydigan 2 ta belgisi.</p></div>
+          <div class="card"><h3><i class="fa-solid fa-1"></i> ta qaror</h3><p>Bundan keyin xabar ulashishdan oldin qiladigan 1 ta odatim.</p></div>
+        </div>
+        <div class="note"><i class="fa-solid fa-rotate-left"></i> Darsning boshidagi “maktablar yopiladi” xabariga qayting: endi kim bunga ishonardi? Ovozlar soni qanday o‘zgardi?</div>
+      </div>
+    </section>
+
+    <!-- UYGA VAZIFA -->
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-house-laptop"></i> Uyga vazifa</h2>
+        <p class="lead">“Axborot detektivi” — bitta xabarni to‘liq tekshirish</p>
+        <ol class="homework-list">
+          <li>Telefoningizga yoki oila guruhiga kelgan bitta xabar yoki postni tanlang (shaxsiy yozishmalar emas).</li>
+          <li>Uni 5 qadamli qoida bo‘yicha tekshiring: manbasi, sanasi, boshqa manbalarda bor-yo‘qligi, qaysi shubhali belgilar borligi.</li>
+          <li>Xabarda fakt va fikrlarni ajrating (kamida bittadan misol).</li>
+          <li>Xulosa yozing: ishonsa bo‘ladimi, ulashish kerakmi? (5–6 gap)</li>
+          <li><em>Qo‘shimcha (ixtiyoriy):</em> agar xabarda rasm bo‘lsa, uni rasm qidiruvi orqali tekshirib, natijani yozing.</li>
+        </ol>
+        <div class="table-wrap">
+          <table class="info-table">
+            <thead><tr><th>Baholash mezoni</th><th>Ball</th></tr></thead>
+            <tbody>
+              <tr><td>Manba va sana to‘g‘ri aniqlangan</td><td>2</td></tr>
+              <tr><td>Kamida 2 ta mustaqil manba bilan solishtirilgan</td><td>2</td></tr>
+              <tr><td>Fakt va fikr to‘g‘ri ajratilgan</td><td>2</td></tr>
+              <tr><td>Shubhali belgilar topilgan va nomlangan</td><td>2</td></tr>
+              <tr><td>Xulosa asoslangan</td><td>2</td></tr>
+              <tr><td><strong>Jami</strong></td><td><strong>10</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="mediaModal" class="fullscreen-modal" role="dialog" aria-modal="true" aria-label="Media ko‘rish oynasi">
+    <div class="modal-content">
+      <div class="modal-header">
+        <strong id="modalTitle">Media</strong>
+        <button class="modal-close" type="button" onclick="closeMediaModal()" aria-label="Yopish"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <footer class="footer container">
+    Ushbu sahifa “Axborot iste’moli madaniyatiga kirish” mavzusidagi 1-darsni zamonaviy va tushunarli shaklda tashkil etish uchun tayyorlandi.
+  </footer>
+
+  <script>
+  /* ============ MEDIA FAYLLAR (nomlar faqat shu yerda) ============ */
+  const MEDIA = { image: '1-infografika.png', video: '1-dars.mp4' };
+
+  (function initMedia(){
+    const img = document.getElementById('slotImg');
+    const imgSlot = document.getElementById('imgSlot');
+    img.onerror = () => imgSlot.classList.add('missing');
+    img.src = MEDIA.image;
+
+    const video = document.getElementById('slotVideo');
+    const videoSlot = document.getElementById('videoSlot');
+    const source = document.createElement('source');
+    source.src = MEDIA.video;
+    source.type = 'video/mp4';
+    source.onerror = () => videoSlot.classList.add('missing');
+    video.appendChild(source);
+  })();
+
+  /* ============ MODAL + ZOOM ============ */
+  const zoom = { scale:1, min:.45, max:5, baseWidth:900, dragging:false, sx:0, sy:0, sl:0, st:0 };
+
+  function clampScale(v){ return Math.max(zoom.min, Math.min(zoom.max, v)); }
+
+  function updateZoom(){
+    const img = document.getElementById('azZoomImg');
+    const value = document.getElementById('azZoomValue');
+    if(!img) return;
+    img.style.width = Math.round(zoom.baseWidth * zoom.scale) + 'px';
+    if(value) value.textContent = Math.round(zoom.scale * 100) + '%';
+  }
+
+  function zoomImage(delta){
+    const stage = document.getElementById('azZoomStage');
+    if(!stage) return;
+    const old = zoom.scale;
+    const cx = stage.scrollLeft + stage.clientWidth/2;
+    const cy = stage.scrollTop + stage.clientHeight/2;
+    zoom.scale = clampScale(zoom.scale + delta);
+    updateZoom();
+    const r = zoom.scale / old;
+    stage.scrollLeft = cx * r - stage.clientWidth/2;
+    stage.scrollTop = cy * r - stage.clientHeight/2;
+  }
+
+  function resetImageZoom(){
+    const stage = document.getElementById('azZoomStage');
+    zoom.scale = 1;
+    updateZoom();
+    if(stage){ stage.scrollLeft = Math.max(0,(stage.scrollWidth-stage.clientWidth)/2); stage.scrollTop = 0; }
+  }
+
+  function openMediaModal(type, src, title){
+    const modal = document.getElementById('mediaModal');
+    const body = document.getElementById('modalBody');
+    document.getElementById('modalTitle').textContent = title || 'Media';
+
+    if(type === 'image'){
+      zoom.scale = 1;
+      body.innerHTML =
+        '<div class="az-zoom-panel">' +
+          '<div class="az-zoom-toolbar">' +
+            '<button class="az-zoom-btn" type="button" onclick="zoomImage(-0.25)" title="Kichraytirish">−</button>' +
+            '<span id="azZoomValue" class="az-zoom-value">100%</span>' +
+            '<button class="az-zoom-btn" type="button" onclick="zoomImage(0.25)" title="Kattalashtirish">+</button>' +
+            '<button class="az-zoom-btn" type="button" onclick="zoomImage(0.75)" title="Tez kattalashtirish"><i class="fa-solid fa-magnifying-glass-plus"></i></button>' +
+            '<button class="az-zoom-btn" type="button" onclick="resetImageZoom()" title="Boshlang‘ich holat"><i class="fa-solid fa-rotate-left"></i></button>' +
+            '<span class="az-zoom-hint">+ / − tugmalari, sichqoncha g‘ildiragi va rasmni ushlab surish ishlaydi</span>' +
+          '</div>' +
+          '<div id="azZoomStage" class="az-stage"><img id="azZoomImg" class="az-img" alt="Infografika"></div>' +
+        '</div>';
+      const stage = document.getElementById('azZoomStage');
+      const img = document.getElementById('azZoomImg');
+      img.onload = function(){
+        const available = Math.max(320, stage.clientWidth - 70);
+        const natural = img.naturalWidth || 1200;
+        zoom.baseWidth = natural < available ? Math.min(available, 1100) : available;
+        updateZoom();
+        requestAnimationFrame(() => { stage.scrollLeft = Math.max(0,(stage.scrollWidth-stage.clientWidth)/2); stage.scrollTop = 0; });
+      };
+      img.onerror = function(){ stage.innerHTML = '<div class="modal-msg">Rasm topilmadi. <code>' + MEDIA.image + '</code> fayli HTML bilan bitta papkada turganini tekshiring.</div>'; };
+      img.src = src;
+    } else {
+      const v = document.createElement('video');
+      v.controls = true; v.autoplay = true;
+      const s = document.createElement('source');
+      s.src = src; s.type = 'video/mp4';
+      s.onerror = () => { body.innerHTML = '<div class="modal-msg">Video topilmadi. <code>' + MEDIA.video + '</code> fayli HTML bilan bitta papkada turganini tekshiring.</div>'; };
+      v.appendChild(s);
+      body.innerHTML = '';
+      body.appendChild(v);
+    }
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMediaModal(){
+    document.getElementById('mediaModal').classList.remove('show');
+    document.getElementById('modalBody').innerHTML = '';
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', e => { if(e.target.id === 'mediaModal') closeMediaModal(); });
+  document.addEventListener('keydown', e => {
+    const modal = document.getElementById('mediaModal');
+    if(!modal.classList.contains('show')) return;
+    if(e.key === 'Escape') closeMediaModal();
+    if(!document.getElementById('azZoomStage')) return;
+    if(e.key === '+' || e.key === '=') zoomImage(0.25);
+    if(e.key === '-') zoomImage(-0.25);
+    if(e.key === '0') resetImageZoom();
+  });
+  document.addEventListener('wheel', e => {
+    if(!(e.target.closest && e.target.closest('#azZoomStage'))) return;
+    e.preventDefault();
+    zoomImage(e.deltaY < 0 ? 0.18 : -0.18);
+  }, {passive:false});
+  document.addEventListener('pointerdown', e => {
+    const stage = e.target.closest && e.target.closest('#azZoomStage');
+    if(!stage) return;
+    Object.assign(zoom, { dragging:true, sx:e.clientX, sy:e.clientY, sl:stage.scrollLeft, st:stage.scrollTop });
+    stage.classList.add('az-dragging');
+  });
+  document.addEventListener('pointermove', e => {
+    if(!zoom.dragging) return;
+    const stage = document.getElementById('azZoomStage'); if(!stage) return;
+    stage.scrollLeft = zoom.sl - (e.clientX - zoom.sx);
+    stage.scrollTop = zoom.st - (e.clientY - zoom.sy);
+  });
+  document.addEventListener('pointerup', () => {
+    zoom.dragging = false;
+    const stage = document.getElementById('azZoomStage'); if(stage) stage.classList.remove('az-dragging');
+  });
+
+  /* ============ FAKTMI YOKI FIKR ============ */
+  document.querySelectorAll('.ff-row').forEach(row => {
+    row.querySelectorAll('.ff-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.ff-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        row.classList.remove('ok','no','checked');
+      });
+    });
+  });
+
+  function checkFF(){
+    const rows = document.querySelectorAll('.ff-row');
+    const out = document.getElementById('ffResult');
+    let score = 0, answered = 0;
+    rows.forEach(row => { if(row.querySelector('.ff-btn.active')) answered++; });
+    if(answered < rows.length){
+      out.textContent = 'Iltimos, barcha gaplar uchun javob tanlang.';
+      out.style.color = '#b45309';
+      return;
+    }
+    rows.forEach(row => {
+      const chosen = row.querySelector('.ff-btn.active').dataset.v;
+      const ok = chosen === row.dataset.answer;
+      if(ok) score++;
+      row.classList.add('checked', ok ? 'ok' : 'no');
+    });
+    out.textContent = 'Natija: ' + score + ' / ' + rows.length;
+    out.style.color = score === rows.length ? '#15803d' : '#2563eb';
+  }
+
+  function resetFF(){
+    document.querySelectorAll('.ff-row').forEach(row => {
+      row.classList.remove('ok','no','checked');
+      row.querySelectorAll('.ff-btn').forEach(b => b.classList.remove('active'));
+    });
+    document.getElementById('ffResult').textContent = '';
+  }
+
+  /* ============ TEST ============ */
+  const QUIZ = [
+    { type:'mc', q:'Axborot iste’moli madaniyati nimani bildiradi?',
+      options:['Har qanday xabarni tez tarqatishni','Axborotni ongli qabul qilish, tekshirish va mas’uliyat bilan ulashishni','Faqat rasmiy saytlardan foydalanishni'],
+      answer:1, why:'Asosiy so‘zlar: ongli qabul qilish, tekshirish, mas’uliyat bilan ulashish.' },
+    { type:'mc', q:'Kimdir pul ishlash uchun ataylab to‘qib chiqargan yolg‘on xabar qanday ataladi?',
+      options:['Misinformatsiya','Dezinformatsiya','Fikr'],
+      answer:1, why:'Dezinformatsiya — ataylab, ongli ravishda tarqatilgan yolg‘on. Misinformatsiya esa bilmasdan tarqatilgan xato.' },
+    { type:'mc', q:'Quyidagilardan qaysi biri FIKR?',
+      options:['Bir haftada 7 kun bor','Futbol dunyodagi eng qiziqarli o‘yin','Yer Quyosh atrofida aylanadi'],
+      answer:1, why:'“Eng qiziqarli” — shaxsiy baho, uni isbotlab bo‘lmaydi.' },
+    { type:'mc', q:'Qaysi sarlavha klikbeytga misol bo‘ladi?',
+      options:['Toshkentda yangi metro bekati ochildi','Bu bolaning nima qilganini ko‘rib, ko‘zingizga ishonmaysiz!!!','Ertaga havo harorati pasayadi'],
+      answer:1, why:'Mazmunni yashirib, hissiyot va qiziqish bilan bosishga undaydi — bu klikbeyt.' },
+    { type:'mc', q:'Xabardagi rasm eski yoki boshqa joyda olinganini qanday tekshirish mumkin?',
+      options:['Rasmni yaqinlashtirib qarash','Teskari rasm qidiruvi (Google Lens, TinEye)','Izohlarni o‘qish'],
+      answer:1, why:'Rasm qidiruvi rasm internetda birinchi marta qachon va qayerda paydo bo‘lganini ko‘rsatadi.' },
+    { type:'mc', q:'Sizga “Tezda ulashing, o‘chirib yuborishadi!” degan shubhali xabar keldi. Eng to‘g‘ri harakat qaysi?',
+      options:['Darhol barcha guruhlarga yuborish','Ulashmasdan, avval rasmiy manbadan tekshirish','Faqat eng yaqin do‘stlarga yuborish'],
+      answer:1, why:'Shoshiltirish — yolg‘on xabar belgisi. Shubha bo‘lsa, ulashilmaydi.' },
+    { type:'mc', q:'“Axborot pufagi” nima sababdan paydo bo‘ladi?',
+      options:['Algoritmlar sizga faqat yoqqan narsaga o‘xshash kontentni ko‘rsatgani uchun','Internet sekin ishlagani uchun','Telefonda xotira kam bo‘lgani uchun'],
+      answer:0, why:'Algoritm sizni ilovada ushlab qolish uchun bir xil turdagi kontentni ko‘paytiradi.' },
+    { type:'text', q:'Xabar yoki ma’lumot qayerdan va kimdan olinganini bildiruvchi tushuncha nima deyiladi?',
+      hint:'Sayt, kitob, kanal, muallif — bular axborotning nimasi?',
+      accept:['manba','axborot manbasi','ma\'lumot manbasi','manbasi','manbaa'], correct:'Manba',
+      why:'Manba — xabarning kelib chiqish joyi: sayt, muallif, tashkilot.' },
+    { type:'text', q:'Dalil bilan tekshirib, tasdiqlab bo‘ladigan ma’lumot nima deyiladi?',
+      hint:'Bitta so‘z bilan yozing.',
+      accept:['fakt','fakt.'], correct:'Fakt',
+      why:'Fakt tekshiriladi va tasdiqlanadi. Fikr esa shaxsiy baho.' },
+    { type:'text', q:'Sun’iy intellekt yordamida yasalgan soxta video yoki ovoz nima deyiladi?',
+      hint:'Inglizcha atama, o‘zbekcha talaffuzda ham yozish mumkin.',
+      accept:['deepfake','deep fake','dipfeyk','dip feyk','dipfeik','deepfeyk','dipfake'], correct:'Deepfake (dipfeyk)',
+      why:'Deepfake — real odam aytmagan gapni “aytayotgandek” ko‘rsatuvchi soxta kontent.' }
+  ];
+
+  function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  function renderQuiz(){
+    const box = document.getElementById('quiz');
+    box.innerHTML = QUIZ.map((item, i) => {
+      const n = i + 1;
+      let inner = '';
+      if(item.type === 'mc'){
+        inner = item.options.map((opt, j) =>
+          '<label><input type="radio" name="q' + n + '" value="' + j + '"> ' + escapeHtml(opt) + '</label>'
+        ).join('');
+      } else {
+        inner = '<input type="text" id="q' + n + '" class="short-answer" placeholder="Javobni yozing..." autocomplete="off">' +
+                '<p class="open-hint">' + escapeHtml(item.hint) + '</p>';
+      }
+      return '<div class="quiz-question" id="box' + n + '"><h4>' + n + '. ' + escapeHtml(item.q) + '</h4>' + inner +
+             '<div class="feedback" id="fb' + n + '"></div></div>';
+    }).join('');
+  }
+
+  function normalizeAnswer(text){
+    return text.toLowerCase().replace(/[’‘`ʻʼ']/g, "'").replace(/\s+/g, ' ').trim();
+  }
+
+  function checkQuiz(){
+    const result = document.getElementById('quizResult');
+    let missing = 0;
+    QUIZ.forEach((item, i) => {
+      const n = i + 1;
+      if(item.type === 'mc'){ if(!document.querySelector('input[name="q' + n + '"]:checked')) missing++; }
+      else if(!normalizeAnswer(document.getElementById('q' + n).value)) missing++;
+    });
+    if(missing){
+      result.textContent = 'Iltimos, barcha ' + QUIZ.length + ' ta savolga javob bering (yana ' + missing + ' ta qoldi).';
+      result.style.color = '#b45309';
+      return;
+    }
+
+    let score = 0;
+    QUIZ.forEach((item, i) => {
+      const n = i + 1;
+      const box = document.getElementById('box' + n);
+      const fb = document.getElementById('fb' + n);
+      let ok, correctText;
+      if(item.type === 'mc'){
+        const sel = Number(document.querySelector('input[name="q' + n + '"]:checked').value);
+        ok = sel === item.answer;
+        correctText = item.options[item.answer];
+      } else {
+        const val = normalizeAnswer(document.getElementById('q' + n).value);
+        ok = item.accept.map(normalizeAnswer).includes(val);
+        correctText = item.correct;
+      }
+      if(ok) score++;
+      box.classList.remove('ok','no');
+      box.classList.add(ok ? 'ok' : 'no');
+      fb.innerHTML = (ok ? '<strong style="color:#15803d">✔ To‘g‘ri.</strong> ' :
+        '<strong style="color:#e11d48">✘ Noto‘g‘ri.</strong> To‘g‘ri javob: <strong>' + escapeHtml(correctText) + '</strong>. ') + escapeHtml(item.why);
+    });
+
+    const total = QUIZ.length;
+    if(score === total){ result.textContent = 'Ajoyib! Natija: ' + score + ' / ' + total; result.style.color = '#15803d'; }
+    else if(score >= 7){ result.textContent = 'Yaxshi! Natija: ' + score + ' / ' + total; result.style.color = '#2563eb'; }
+    else if(score >= 5){ result.textContent = 'Qoniqarli. Natija: ' + score + ' / ' + total + '. Izohlarni o‘qib chiqing.'; result.style.color = '#b45309'; }
+    else { result.textContent = 'Yana bir bor urinib ko‘ring. Natija: ' + score + ' / ' + total; result.style.color = '#dc2626'; }
+  }
+
+  function resetQuiz(){
+    renderQuiz();
+    document.getElementById('quizResult').textContent = '';
+  }
+
+  renderQuiz();
+  </script>
+</body>
+</html>
