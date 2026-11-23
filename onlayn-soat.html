@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Onlayn axborot savodxonligi soati — infoyosh.uz</title><meta name="description" content="Onlayn mashg‘ulot: tekshirish vositalari, xavfsizlik qoidalari, Feykni aniqla! viktorinasi va xavfsizlik xaritasi">
+<style>
+:root{--ink:#14213d;--muted:#5b6475;--bg:#f6f7fb;--card:#fff;--line:#e3e6ee;--pri:#0f5e9c;--pri2:#e8f1fa;--acc:#e8732a;--acc2:#fdf0e7;--ok:#1f8a4c;--ok2:#e6f4ec;--bad:#c0392b;--bad2:#fbeaea;--warn:#b7791f;--warn2:#fdf6e3;--r:14px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;font-size:17px}
+a{color:var(--pri)}
+.top{background:var(--ink);color:#fff;position:sticky;top:0;z-index:20}
+.top .in{max-width:1100px;margin:auto;display:flex;align-items:center;gap:18px;padding:10px 20px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:20px;color:#fff;text-decoration:none;letter-spacing:.3px}.logo b{color:#ffb27d}
+.nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.nav a{color:#d7deea;text-decoration:none;padding:6px 12px;border-radius:999px;font-size:15px}
+.nav a:hover{background:#ffffff1a;color:#fff}.nav a.on{background:#fff;color:var(--ink);font-weight:600}
+.hero{background:linear-gradient(135deg,#0f5e9c 0%,#14213d 100%);color:#fff}
+.hero .in{max-width:1100px;margin:auto;padding:48px 20px 40px}
+.tag{display:inline-block;background:#ffffff22;border:1px solid #ffffff44;border-radius:999px;padding:3px 12px;font-size:13px;letter-spacing:.4px;text-transform:uppercase}
+.hero h1{font-size:clamp(26px,4vw,40px);line-height:1.2;margin:14px 0 10px}
+.hero p{max-width:760px;color:#dfe8f5;margin:0;font-size:18px}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.meta span{background:#ffffff1a;border-radius:10px;padding:6px 12px;font-size:14px}
+main{max-width:1100px;margin:auto;padding:28px 20px 60px}
+section{margin:0 0 34px}
+h2{font-size:26px;margin:0 0 14px;line-height:1.25}
+h3{font-size:19px;margin:0 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:0 1px 2px #14213d0a}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.lead{font-size:18px;color:#2d3648}
+.muted{color:var(--muted)}
+.steps{counter-reset:s;display:grid;gap:14px}
+.step{display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:start}
+.num{width:56px;height:56px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center;font-weight:800;font-size:22px}
+.step .card{padding:18px 20px}
+.time{display:inline-block;font-size:13px;background:var(--pri2);color:var(--pri);border-radius:999px;padding:2px 10px;margin-left:6px;font-weight:600;vertical-align:middle}
+.note{border-left:4px solid var(--acc);background:var(--acc2);padding:12px 16px;border-radius:0 10px 10px 0;margin:12px 0}
+.goal{border-left:4px solid var(--pri);background:var(--pri2);padding:12px 16px;border-radius:0 10px 10px 0}
+ul.clean{padding-left:20px;margin:8px 0}ul.clean li{margin:4px 0}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:10px;padding:10px 16px;font-size:16px;font-weight:600;cursor:pointer;background:var(--pri);color:#fff;text-decoration:none;font-family:inherit}
+.btn:hover{filter:brightness(1.08)}.btn.ghost{background:#fff;color:var(--pri);border:1.5px solid var(--pri)}.btn.acc{background:var(--acc)}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.check{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;margin:8px 0;transition:.15s}
+.check input{width:22px;height:22px;margin-top:2px;accent-color:var(--ok);flex:none}
+.check.done{border-color:var(--ok);background:var(--ok2)}
+.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--ok);transition:.3s}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tabs button{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:inherit;color:var(--ink);text-align:left}
+.tabs button b{display:block;font-size:13px;color:var(--muted);font-weight:600}
+.tabs button.on{border-color:var(--pri);background:var(--pri2)}
+.panel{display:none}.panel.on{display:block}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:600;background:var(--pri2);color:var(--pri);margin:2px 4px 2px 0}
+.role{border-top:5px solid var(--acc)}.role.b{border-top-color:var(--pri)}
+.timer{font-variant-numeric:tabular-nums;font-size:44px;font-weight:800;letter-spacing:1px;margin:6px 0}
+.q{display:none}.q.on{display:block}
+.opts{display:grid;gap:10px;margin:14px 0}
+.opt{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;font-size:16px;cursor:pointer;font-family:inherit;color:var(--ink)}
+.opt:hover{border-color:var(--pri)}.opt.right{border-color:var(--ok);background:var(--ok2)}.opt.wrong{border-color:var(--bad);background:var(--bad2)}
+.msg{display:none;padding:12px 14px;border-radius:12px;margin-top:6px}.msg.on{display:block}.msg.ok{background:var(--ok2)}.msg.no{background:var(--bad2)}
+.post{background:#f0f2f7;border-radius:12px;padding:14px 16px;border:1px dashed #c5cbd8;font-size:16px}
+.post .src{font-size:13px;color:var(--muted);margin-bottom:6px}
+textarea,input[type=text]{width:100%;font-family:inherit;font-size:16px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+textarea:focus,input[type=text]:focus{outline:none;border-color:var(--pri)}
+.pledge{background:#fff;border:2px solid var(--ink);border-radius:16px;padding:26px;position:relative}
+.pledge h3{text-align:center;font-size:22px;margin-bottom:4px}
+.pledge ol{margin:14px 0 0;padding-left:22px}.pledge li{margin:6px 0}
+.sign{display:flex;justify-content:space-between;gap:20px;margin-top:22px;color:var(--muted);font-size:14px;flex-wrap:wrap}
+.tool{display:flex;gap:14px;align-items:flex-start}
+.ico{width:46px;height:46px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--pri2);color:var(--pri);font-weight:800;font-size:18px}
+.day{display:grid;grid-template-columns:80px 1fr;gap:14px;align-items:start}
+.dnum{background:var(--ink);color:#fff;border-radius:14px;text-align:center;padding:10px 4px;font-weight:700;line-height:1.1}
+.dnum span{display:block;font-size:30px}
+.hub a.card{display:block;text-decoration:none;color:inherit;transition:.15s}
+.hub a.card:hover{border-color:var(--pri);transform:translateY(-2px)}
+.hub .k{font-size:13px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.5px}
+.foot{border-top:1px solid var(--line);padding:22px 20px;text-align:center;color:var(--muted);font-size:14px}
+table.t{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}
+table.t th,table.t td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+table.t th{background:var(--pri2)}
+.cells{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+@media (max-width:640px){body{font-size:16px}.step{grid-template-columns:42px 1fr}.num{width:42px;height:42px;font-size:18px}.day{grid-template-columns:1fr}.dnum{display:flex;gap:8px;align-items:center;justify-content:center}.dnum span{display:inline;font-size:20px}}
+@media print{.top,.noprint,.foot{display:none!important}body{background:#fff}.card{box-shadow:none}.hero{background:#fff;color:#000}.hero p,.meta span{color:#000}.panel{display:block!important}.q{display:block!important}}
+</style></head><body>
+<header class="top"><div class="in"><a class="logo" href="index.html#tadbirlar">info<b>yosh</b>.uz</a><nav class="nav"><a href="index.html#tadbirlar">Tadbirlar</a><a href="trening.html">Trening</a><a href="axborot-haftaligi.html">Axborot haftaligi</a><a href="media-kuni.html">Media-kuni</a><a href="onlayn-soat.html" class=on>Onlayn soat</a></nav></div></header>
+<div class="hero"><div class="in"><span class="tag">Onlayn mashg‘ulot · 1 soat</span>
+<h1>“Onlayn axborot savodxonligi soati”</h1>
+<p>Raqamli muhitdagi madaniy va axloqiy faollikni oshirishga qaratilgan amaliy mashg‘ulot. Google Classroom, Zoom yoki Telegram orqali tashkil etiladi.</p>
+<div class="meta"><span>Google Classroom</span><span>Zoom</span><span>Telegram</span></div></div></div>
+<main><section><h2>Axborotni tekshirish vositalari</h2><div class="grid g3">
+<div class="card tool"><div class="ico">FC</div><div><h3>FactCheck</h3><p class="muted">Faktcheking saytlari mashhur da’volar va xabarlarni tekshirib, dalillar bilan xulosa beradi.</p></div></div>
+<div class="card tool"><div class="ico">TE</div><div><h3>TinEye</h3><p class="muted">Suratni teskari qidirish: rasm qachon va qayerda birinchi marta paydo bo‘lganini topadi.</p></div></div>
+<div class="card tool"><div class="ico">SN</div><div><h3>Snopes</h3><p class="muted">Internetdagi mish-mish, feyk va shubhali hikoyalarni tekshiruvchi xalqaro resurs.</p></div></div>
+</div><div class="note"><b>Eslatma:</b> bu resurslar asosan ingliz tilida. Mashg‘ulotda ularning ishlash tamoyilini ko‘rsating va mahalliy rasmiy manbalar (vazirlik, hokimlik, maktab sahifalari) bilan solishtirishni ham o‘rgating.</div></section>
+
+<section><div class="card"><h2>Onlayn xavfsizlik qoidalari</h2><div class="cells">
+<div class="goal"><b>Parol</b><br>Murakkab parol, hech kimga aytmaslik, ikki bosqichli himoya.</div>
+<div class="goal"><b>Shaxsiy ma’lumot</b><br>Manzil, telefon, karta ma’lumotini ochiq joylamaslik.</div>
+<div class="goal"><b>Havolalar</b><br>Notanish havola va fayllarni ochmaslik, sovg‘a va’dasiga ishonmaslik.</div>
+<div class="goal"><b>Muloqot</b><br>Notanish odam bilan shaxsiy suhbatga kirishmaslik, shubhali holatda kattalarga aytish.</div>
+</div></div></section>
+
+<section id="viktorina"><div class="card"><h2>“Feykni aniqla!” viktorinasi</h2>
+<p class="muted">6 ta vaziyat. Har birida eng to‘g‘ri javobni tanlang. Barcha misollar mashq uchun to‘qilgan.</p>
+<div class="bar"><i id="qbar"></i></div><p class="muted" id="qn" style="margin:6px 0 0"></p>
+<div id="quiz"></div>
+<div id="qend" class="msg"></div>
+<div class="row noprint" style="margin-top:12px"><button class="btn" id="next" onclick="nextQ()" disabled>Keyingi savol</button><button class="btn ghost" onclick="startQ()">Qaytadan</button></div>
+</div></section>
+
+<section id="xarita"><div class="card"><h2>Mini-loyiha: “Mening axborot xavfsizligim xaritam”</h2>
+<p class="muted">Har bir platformada qanday xavf borligini va o‘zingizni qanday himoya qilishingizni yozing. Tayyor xaritani chop eting yoki o‘qituvchiga yuboring.</p>
+<div class="row" style="margin:8px 0 14px"><input type="text" id="mname" placeholder="Ismingiz va sinfingiz" style="max-width:340px"></div>
+<table class="t" id="map"><tr><th style="width:22%">Platforma</th><th>Qanday xavf bor?</th><th>Men o‘zimni qanday himoya qilaman?</th></tr></table>
+<div class="row noprint" style="margin-top:12px"><button class="btn ghost" onclick="addRow()">Platforma qo‘shish</button><button class="btn acc" onclick="window.print()">Chop etish</button></div>
+</div></section>
+
+<section><div class="card"><h2>Kutilgan natija</h2><p class="lead">Ushbu tadbirlar o‘quvchilarda axborotni faqat o‘rganish emas, balki ongli anglash, qayta yaratish va jamiyat manfaatiga yo‘naltirish madaniyatini rivojlantiradi. Ular axborot ta’limi va ma’naviy tarbiyani uyg‘unlashtirib, axborot madaniyatini amaliy hayotga joriy etishning samarali usuli bo‘ladi.</p></div></section></main>
+<footer class="foot">infoyosh.uz — o‘quvchilarning axborot iste’moli madaniyatini oshirishga mo‘ljallangan raqamli ta’lim platformasi · Sinfdan tashqari tadbirlar bo‘limi</footer>
+<script>const Q=[["Telegramda: “SHOSHILINCH!!! Ertaga barcha maktablarda darslar bekor! Hammaga tarqating!!!” Manba ko‘rsatilmagan.", ["Ishonchli xabar", "Feyk bo‘lish ehtimoli yuqori — rasmiy manbadan tekshirish kerak", "Reklama"], 1, "Manba yo‘q, katta harflar va “tarqating” chaqirig‘i — emotsional bosim belgilari. Maktab yoki vazirlikning rasmiy sahifasini tekshiring."], ["Bugungi “toshqin” haqidagi suratni teskari qidiruvda (TinEye) tekshirdingiz: u bir necha yil oldin boshqa mamlakatda olingan ekan.", ["Surat haqiqiy, xabar to‘g‘ri", "Eski surat yangi voqeaga bog‘langan — kontekstdan uzilgan", "Bu fikr, fakt emas"], 1, "Teskari qidiruv suratning birinchi paydo bo‘lgan vaqti va joyini ko‘rsatadi. Eski surat yangi voqea sifatida berilsa — bu manipulyatsiya."], ["“Bu choy 3 kunda 10 kg ozdiradi! Shifokorlar buni sizdan yashiryapti!” — ostida xarid havolasi.", ["Ilmiy yangilik", "Manipulyativ reklama", "Rasmiy ogohlantirish"], 1, "Mo‘jizaviy va’da, “yashirishyapti” degan fitna ohangi va xarid havolasi — manipulyativ reklama belgilari."], ["Yangi ochilgan “Rasmiy_Yangiliklar24” sahifasi: “Havolani bosing va telefon yutib oling! Faqat karta raqamingizni kiriting.”", ["Aksiya — qatnashish mumkin", "Firibgarlik (fishing) — shaxsiy ma’lumot bermaslik kerak", "Oddiy yangilik"], 1, "Yangi sahifa, sovg‘a va’dasi, karta ma’lumotini so‘rash — fishing belgilari. Hech qachon karta raqami va kodni bermang."], ["Xabar sanasi, muallifi ko‘rsatilgan, rasmiy sayt manzili bor va boshqa ishonchli nashrlar ham xuddi shu ma’lumotni berishgan.", ["Ishonchli bo‘lish ehtimoli yuqori", "Albatta feyk", "Reklama"], 0, "Manba, sana, muallif va bir nechta mustaqil tasdiq — ishonchlilik belgilari. Shunday bo‘lsa ham, tanqidiy yondashuvni saqlang."], ["Gazetadagi maqola “Muallif fikri” ruknida chiqqan: “Menimcha, maktab formasi bekor qilinishi kerak.”", ["Bu fakt", "Bu fikr — fakt bilan aralashtirmaslik kerak", "Bu feyk"], 1, "Fikr — muallifning nuqtai nazari, uni tekshirib bo‘lmaydi, lekin u yolg‘on ham emas. Fakt va fikrni farqlash media savodxonlikning asosi."]];
+let qi=0,score=0;
+function esc(s){return s.replace(/</g,'&lt;')}
+function startQ(){qi=0;score=0;document.getElementById('qend').className='msg';
+document.getElementById('quiz').innerHTML=Q.map((q,i)=>`<div class="q" id="q${i}"><div class="post" style="margin-top:14px">${esc(q[0])}</div><div class="opts">${q[1].map((o,k)=>`<button class="opt" onclick="ans(${i},${k},this)">${esc(o)}</button>`).join('')}</div><div class="msg" id="m${i}"></div></div>`).join('');showQ()}
+function showQ(){document.querySelectorAll('.q').forEach((e,k)=>e.classList.toggle('on',k===qi));document.getElementById('qn').textContent=`Savol ${Math.min(qi+1,Q.length)} / ${Q.length}`;document.getElementById('qbar').style.width=(qi/Q.length*100)+'%';document.getElementById('next').disabled=true}
+function ans(i,k,btn){const box=document.getElementById('q'+i);if(box.dataset.done)return;box.dataset.done=1;const r=Q[i][2];
+box.querySelectorAll('.opt').forEach((b,j)=>{if(j===r)b.classList.add('right');else if(j===k)b.classList.add('wrong')});
+const m=document.getElementById('m'+i);if(k===r){score++;m.className='msg on ok';m.innerHTML='<b>To‘g‘ri!</b> '+esc(Q[i][3])}else{m.className='msg on no';m.innerHTML='<b>Unchalik emas.</b> '+esc(Q[i][3])}
+document.getElementById('next').disabled=false;if(i===Q.length-1)document.getElementById('next').textContent='Natijani ko‘rish'}
+function nextQ(){if(qi<Q.length-1){qi++;showQ()}else{document.querySelectorAll('.q').forEach(e=>e.classList.remove('on'));document.getElementById('qbar').style.width='100%';
+const e=document.getElementById('qend');e.className='msg on '+(score>=5?'ok':'no');e.innerHTML=`<b>Natija: ${score} / ${Q.length}.</b> `+(score>=5?'Siz feykni yaxshi taniysiz!':score>=3?'Yaxshi, lekin manba va dalilga ko‘proq e’tibor bering.':'Aqlli tekshiruv algoritmini qayta ko‘rib chiqing: manba → solishtirish → tahlil → xulosa.');
+document.getElementById('next').disabled=true;document.getElementById('next').textContent='Keyingi savol'}}
+startQ();
+const PL=["Telegram","Instagram","YouTube","Onlayn o‘yinlar"];
+function addRow(name){const t=document.getElementById('map');const r=t.insertRow();r.innerHTML=`<td><input type="text" value="${name?esc(name):''}" placeholder="Platforma"></td><td><textarea rows="2" placeholder="Masalan: feyk kanallar, fishing havolalar"></textarea></td><td><textarea rows="2" placeholder="Masalan: manbani tekshiraman, havolani bosmayman"></textarea></td>`}
+PL.forEach(addRow);</script></body></html>

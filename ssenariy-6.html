@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ssenariy-6: Kanal admini — Axborot madaniyati platformasi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    :root{
+      --primary:#0f172a; --accent:#2563eb; --accent2:#7c3aed;
+      --card:#ffffff; --border:#e2e8f0; --text:#0f172a; --muted:#64748b;
+      --success:#16a34a; --warning:#f59e0b; --danger:#e11d48;
+      --radius:22px; --shadow:0 10px 28px rgba(15,23,42,.08);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Inter',sans-serif;background:linear-gradient(180deg,#f8fbff 0%,#f1f5ff 45%,#f8fafc 100%);color:var(--text);line-height:1.75;font-size:17px}
+    .container{width:min(1150px,calc(100% - 32px));margin:auto}
+
+    /* Topbar */
+    .topbar{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:74px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;text-decoration:none;color:var(--primary)}
+    .brand-icon{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 14px 30px rgba(37,99,235,.24)}
+    .back-btn{text-decoration:none;color:var(--accent);font-weight:800;background:#eff6ff;border:1px solid #dbeafe;padding:10px 14px;border-radius:12px}
+
+    /* Hero */
+    .hero{padding:30px 0 10px}
+    .hero-box{background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#312e81 100%);color:#fff;border-radius:28px;padding:34px 28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .hero-box::before{content:"";position:absolute;right:-60px;top:-60px;width:180px;height:180px;background:rgba(96,165,250,.18);border-radius:50%}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);color:#dbeafe;padding:8px 12px;border-radius:999px;font-size:.9rem;font-weight:800;margin-bottom:14px}
+    .hero h1{margin:0 0 10px;font-size:clamp(2rem,4vw,3rem);line-height:1.08;letter-spacing:-.04em}
+    .hero p{margin:0;max-width:860px;color:#dbeafe;font-size:1.16rem}
+
+    /* Meta */
+    .meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0 28px}
+    .meta-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(15,23,42,.05);min-height:154px;transition:.25s ease}
+    .meta-card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(15,23,42,.10)}
+    .meta-card i{width:64px;height:64px;border-radius:22px;font-size:28px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e0f2fe,#eef2ff);color:var(--accent);box-shadow:0 12px 26px rgba(37,99,235,.16);margin-bottom:14px}
+    .meta-card h4{margin:0 0 4px;font-size:1.12rem;font-weight:900;letter-spacing:-.02em}
+    .meta-card p{margin:0;color:var(--muted);font-size:1.04rem;line-height:1.7}
+
+    /* Section */
+    .section{margin:0 0 26px}
+    .section-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+    .section-title{display:flex;align-items:center;gap:10px;margin:0 0 16px;font-size:1.72rem;line-height:1.2;font-weight:900;letter-spacing:-.03em}
+    .section-title i{color:var(--accent)}
+    .sub-title{margin:26px 0 12px;font-size:1.3rem;font-weight:900;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+    .sub-title i{color:var(--accent2)}
+    .lead{color:#475569;margin-top:-4px;margin-bottom:20px;font-size:1.08rem;font-weight:650}
+
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+
+    .card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px}
+    .card h3{margin:0 0 10px;font-size:1.16rem;font-weight:900}
+    .card p, li{color:#475569;font-size:1.05rem}
+    .card p{margin:0 0 8px}
+    .card p:last-child{margin-bottom:0}
+    .card h3 i{color:var(--accent);margin-right:8px}
+    .card ul{margin:6px 0 0;padding-left:20px}
+
+    .highlight{background:linear-gradient(135deg,#eff6ff,#f5f3ff);border:1px solid #dbeafe;border-radius:18px;padding:18px;margin-top:16px}
+    .highlight strong{color:var(--primary)}
+    .note{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:12px 14px;border-radius:14px;font-size:1rem;margin-top:12px}
+    .note i{margin-right:6px}
+
+    .info-table{width:100%;border-collapse:collapse;margin-top:16px}
+    .info-table th,.info-table td{border:1px solid var(--border);padding:12px 14px;text-align:left;vertical-align:top;font-size:1.02rem}
+    .info-table th{background:#f8fafc;font-weight:900}
+    .info-table td:first-child{font-weight:800;white-space:nowrap}
+    .table-wrap{overflow-x:auto}
+
+    /* Turlar (mis/dis/mal) */
+    .type-card{border-radius:18px;padding:18px;border:1px solid var(--border);background:#fff;border-top:6px solid var(--accent)}
+    .type-card.dis{border-top-color:var(--danger)}
+    .type-card.mal{border-top-color:var(--warning)}
+    .type-card h3{margin:0 0 4px;font-size:1.16rem;font-weight:900}
+    .type-card .tag{display:inline-block;font-size:.85rem;font-weight:800;padding:3px 10px;border-radius:999px;background:#eff6ff;color:var(--accent);margin-bottom:8px}
+    .type-card.dis .tag{background:#fff1f2;color:var(--danger)}
+    .type-card.mal .tag{background:#fffbeb;color:#b45309}
+    .type-card p{margin:0 0 8px;color:#475569}
+    .type-card .ex{font-size:.98rem;background:#f8fafc;border-radius:12px;padding:10px 12px;color:#334155}
+
+    /* Belgilar */
+    .sign{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px}
+    .sign .ic{flex:0 0 44px;height:44px;border-radius:14px;background:#fff1f2;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px}
+    .sign h4{margin:0 0 2px;font-size:1.02rem;font-weight:900}
+    .sign p{margin:0;color:#475569;font-size:.98rem;line-height:1.55}
+
+    /* Timeline */
+    .timeline{display:grid;gap:14px;margin-top:8px}
+    .timeline-item{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:start;background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px}
+    .time-badge{background:#eff6ff;color:var(--accent);border-radius:12px;padding:10px 12px;font-weight:900;text-align:center}
+    .timeline-item h4{margin:0 0 6px;font-size:1.16rem;font-weight:900}
+    .timeline-item p{margin:0;color:var(--muted);font-size:1.02rem}
+    .timeline-item .teacher{margin-top:8px;font-size:.96rem;color:#7c3aed;font-weight:650}
+
+    /* Infografika */
+    .infographic{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:18px}
+    .step{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px 14px;text-align:center}
+    .step-num{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-weight:900}
+    .step h4{margin:0 0 6px;font-size:1rem;font-weight:900}
+    .step p{margin:0;color:var(--muted);font-size:.98rem;line-height:1.55}
+    .step .q{margin-top:8px;font-size:.9rem;color:#7c3aed;font-weight:700}
+
+    /* Xabar namunalari */
+    .post{background:#f8fafc;border:1px solid var(--border);border-radius:18px;padding:16px;display:flex;flex-direction:column}
+    .post-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;flex:0 0 40px}
+    .post-head strong{display:block;font-size:.98rem}
+    .post-head span{font-size:.85rem;color:var(--muted)}
+    .bubble{background:#fff;border:1px solid var(--border);border-radius:4px 16px 16px 16px;padding:12px 14px;font-size:1rem;color:#1e293b;line-height:1.6;flex:1}
+    .bubble .img-ph{margin-top:10px;height:110px;border-radius:12px;background:linear-gradient(135deg,#64748b,#94a3b8);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.9rem;text-align:center;padding:8px}
+    .post-tasks{margin:12px 0 0;padding-left:20px;font-size:.98rem}
+    .post-tasks li{font-size:.98rem}
+    details.key{margin-top:12px;background:#fff;border:1px dashed #a78bfa;border-radius:14px;padding:10px 14px}
+    details.key summary{cursor:pointer;font-weight:800;color:#6d28d9}
+    details.key p, details.key li{font-size:.97rem;color:#334155;margin:6px 0}
+    details.key ul{padding-left:18px;margin:6px 0}
+    .verdict{display:inline-block;font-weight:900;padding:3px 10px;border-radius:999px;font-size:.88rem}
+    .verdict.bad{background:#fff1f2;color:var(--danger)}
+    .verdict.good{background:#f0fdf4;color:var(--success)}
+    .verdict.mid{background:#fffbeb;color:#b45309}
+
+    /* Fakt yoki fikr */
+    .ff-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+    .ff-row p{margin:0;color:#1e293b;font-size:1.02rem}
+    .ff-row .why{grid-column:1 / -1;font-size:.95rem;color:#475569;display:none;margin:0}
+    .ff-row.checked .why{display:block}
+    .ff-row.ok{border-color:#86efac;background:#f0fdf4}
+    .ff-row.no{border-color:#fda4af;background:#fff1f2}
+    .ff-btns{display:flex;gap:8px}
+    .ff-btn{border:1px solid #cbd5e1;background:#fff;border-radius:10px;padding:7px 14px;font-weight:800;cursor:pointer;font-family:inherit;font-size:.95rem;color:#334155}
+    .ff-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+    /* Tugmalar */
+    .actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:14px}
+    .btn{border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;padding:12px 16px;border-radius:12px;cursor:pointer;font-family:inherit;font-size:1rem}
+    .btn.secondary{background:#e2e8f0;color:var(--primary)}
+    .result{font-weight:800;color:var(--primary)}
+
+    /* Test */
+    .quiz-question{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px;transition:.2s}
+    .quiz-question h4{margin:0 0 10px;font-size:1.04rem}
+    .quiz-question label{display:block;margin:7px 0;color:#475569;cursor:pointer}
+    .quiz-question.ok{border-color:#86efac;background:#f0fdf4}
+    .quiz-question.no{border-color:#fda4af;background:#fff1f2}
+    .feedback{display:none;margin-top:10px;font-size:.97rem;color:#334155;background:rgba(255,255,255,.75);border-radius:10px;padding:8px 12px}
+    .quiz-question.ok .feedback,.quiz-question.no .feedback{display:block}
+    .short-answer{width:100%;margin-top:6px;border:1px solid #cbd5e1;border-radius:12px;padding:13px 14px;font-size:1.05rem;font-family:inherit;outline:none;transition:border-color .18s ease,box-shadow .18s ease}
+    .short-answer:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+    .open-hint{color:#64748b;font-size:.95rem;margin:8px 0 0}
+
+    /* Media */
+    .resource-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:12px}
+    .resource-card{background:linear-gradient(180deg,#ffffff,#f8fbff);border:1px solid var(--border);border-radius:20px;padding:18px;box-shadow:0 8px 20px rgba(15,23,42,.06)}
+    .resource-card h3{margin:0 0 10px;font-size:1.18rem;font-weight:900}
+    .resource-card h3 i{color:var(--accent);margin-right:8px}
+    .media-slot{min-height:230px;border:2px dashed #93c5fd;border-radius:18px;background:linear-gradient(135deg,#eff6ff,#f0fdfa);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--accent);font-weight:900;padding:18px;overflow:hidden;cursor:pointer;position:relative;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+    .media-slot:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 12px 28px rgba(37,99,235,.14)}
+    .media-slot img,.media-slot video{width:100%;max-height:360px;object-fit:contain;border-radius:14px;display:block}
+    .media-slot video{background:#000}
+    .media-slot .placeholder{display:none}
+    .media-slot.missing .placeholder{display:block}
+    .media-slot.missing img,.media-slot.missing video{display:none}
+    .media-open-btn{width:100%;margin-top:12px;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-weight:900;padding:11px 14px;border-radius:12px;cursor:pointer;font-family:inherit;font-size:1rem}
+    .media-open-btn:hover{background:#dbeafe}
+
+    /* Modal */
+    .fullscreen-modal{position:fixed;inset:0;z-index:99999;background:rgba(2,6,23,.94);display:none;align-items:center;justify-content:center;padding:14px}
+    .fullscreen-modal.show{display:flex}
+    .modal-content{width:min(1560px,98vw);height:min(94vh,980px);background:#020617;border:1px solid rgba(255,255,255,.18);border-radius:26px;overflow:hidden;box-shadow:0 34px 90px rgba(0,0,0,.55);display:flex;flex-direction:column}
+    .modal-header{min-height:64px;padding:12px 16px;color:#fff;background:linear-gradient(135deg,#0f172a,#1e293b);border-bottom:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .modal-close{width:46px;height:46px;border:0;border-radius:15px;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;font-size:1.35rem}
+    .modal-body{flex:1;min-height:0;overflow:hidden;background:#020617}
+    .modal-body video{display:block;width:100%;height:100%;background:#000}
+    .modal-msg{color:#fff;text-align:center;font-weight:900;padding:34px}
+    .az-zoom-panel{height:100%;display:flex;flex-direction:column}
+    .az-zoom-toolbar{min-height:64px;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 12px;background:rgba(15,23,42,.98);border-bottom:1px solid rgba(255,255,255,.12);color:#fff;flex-wrap:wrap}
+    .az-zoom-btn{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;min-width:48px;height:43px;border-radius:14px;font-weight:900;font-size:1.05rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 13px;font-family:inherit}
+    .az-zoom-btn:hover{background:var(--accent)}
+    .az-zoom-value{min-width:82px;text-align:center;font-weight:900;color:#dbeafe;background:rgba(37,99,235,.18);border:1px solid rgba(147,197,253,.22);height:43px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center}
+    .az-zoom-hint{font-size:.86rem;color:#cbd5e1;font-weight:700;margin-left:6px}
+    .az-stage{flex:1;min-height:0;overflow:auto;background:radial-gradient(circle at top,rgba(37,99,235,.14),transparent 35%),#020617;padding:28px;cursor:grab;touch-action:none;user-select:none}
+    .az-stage.az-dragging{cursor:grabbing}
+    .az-img{display:block;margin:0 auto;background:#fff;border-radius:18px;box-shadow:0 28px 80px rgba(0,0,0,.45);max-width:none;user-select:none;-webkit-user-drag:none}
+
+    .homework-list{margin:0;padding-left:20px}
+    .footer{padding:20px 0 40px;color:var(--muted);text-align:center;font-size:1rem}
+
+    @media (max-width:980px){
+      .meta-grid,.grid-3,.grid-4,.infographic,.resource-grid{grid-template-columns:repeat(2,1fr)}
+      .grid-2{grid-template-columns:1fr}
+    }
+    @media (max-width:700px){
+      .meta-grid,.grid-3,.grid-4,.infographic,.resource-grid{grid-template-columns:1fr}
+      .timeline-item{grid-template-columns:1fr}
+      .ff-row{grid-template-columns:1fr}
+      .hero-box{padding:24px 18px}
+      .section-box{padding:18px}
+      .topbar-inner{flex-direction:column;align-items:flex-start;padding:10px 0}
+      .info-table td:first-child{white-space:normal}
+      .az-zoom-hint{width:100%;margin-left:0;text-align:center}
+      .az-stage{padding:16px}
+      .meta-card{min-height:auto}
+    }
+  
+    /* === 2–4-darslar uchun qo'shimcha uslublar === */
+    .infographic.six{grid-template-columns:repeat(6,1fr)}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;position:relative}
+    .hero-actions a{text-decoration:none;display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:15px;font-weight:900;transition:.18s ease}
+    .hero-actions a:hover{transform:translateY(-2px)}
+    .primary-btn{background:#fff;color:#1d4ed8}
+    .secondary-btn{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.16)}
+    .criteria-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .criteria-card{background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid var(--border);border-radius:20px;padding:20px;box-shadow:0 8px 22px rgba(37,99,235,.08)}
+    .criteria-num{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;margin-bottom:12px}
+    .criteria-card h4{margin:0 0 8px;font-size:1.08rem;font-weight:900}
+    .criteria-card p{margin:0;color:#475569;font-size:.98rem}
+    .checklist{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+    .checklist li{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:16px;padding:13px}
+    .checklist i{color:var(--success);margin-top:6px}
+    code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:1px 6px;font-size:.92em;color:#1e293b}
+    .scorer{margin-top:12px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px}
+    .scorer label{display:block;font-size:.95rem;color:#334155;cursor:pointer;margin:3px 0}
+    .scorer-out{margin-top:8px;font-weight:900;font-size:.95rem;padding:7px 10px;border-radius:10px;background:#f1f5f9;color:#334155}
+    .scorer-out.good{background:#f0fdf4;color:#15803d}
+    .scorer-out.mid{background:#fffbeb;color:#b45309}
+    .scorer-out.bad{background:#fff1f2;color:#be123c}
+    .order-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+    .order-row span{color:#1e293b;font-size:1.02rem}
+    .order-row select{font-family:inherit;font-size:1rem;font-weight:800;padding:7px 10px;border-radius:10px;border:1px solid #cbd5e1;min-width:70px}
+    .order-row.ok{border-color:#86efac;background:#f0fdf4}
+    .order-row.no{border-color:#fda4af;background:#fff1f2}
+    .verdict-scale{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+    .vs{background:#fff;border:1px solid var(--border);border-top:6px solid var(--c);border-radius:16px;padding:14px}
+    .vs strong{display:block;color:var(--c);font-weight:900;margin-bottom:4px}
+    .vs span{color:#475569;font-size:.96rem;line-height:1.55;display:block}
+    .ff-btns{flex-wrap:wrap;justify-content:flex-end}
+    @media (max-width:980px){.infographic.six,.criteria-grid{grid-template-columns:repeat(2,1fr)}.verdict-scale{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:700px){.infographic.six,.criteria-grid,.verdict-scale{grid-template-columns:1fr}.order-row{flex-direction:column;align-items:flex-start}.ff-btns{justify-content:flex-start}}
+
+    /* === 5–12-darslar: qo'shimcha interaktiv vositalar === */
+    .tool-box{background:linear-gradient(135deg,#0f172a,#1e293b);color:#e2e8f0;border-radius:20px;padding:22px;margin-top:8px}
+    .tool-box h3{margin:0 0 6px;color:#fff;font-weight:900}
+    .tool-box p{color:#cbd5e1;margin:0 0 12px}
+    .tool-box input[type=text]{width:100%;font-family:inherit;font-size:1.1rem;padding:14px 16px;border-radius:14px;border:1px solid #334155;background:#0b1220;color:#fff;outline:none}
+    .tool-box input[type=text]:focus{border-color:#60a5fa;box-shadow:0 0 0 4px rgba(96,165,250,.2)}
+    .pw-bar{height:12px;border-radius:999px;background:#334155;margin:14px 0 8px;overflow:hidden}
+    .pw-bar span{display:block;height:100%;width:0;border-radius:999px;transition:width .25s ease,background .25s ease}
+    .pw-verdict{font-weight:900;font-size:1.1rem}
+    .pw-tips{margin:8px 0 0;padding-left:20px}
+    .pw-tips li{color:#cbd5e1;font-size:.97rem}
+    .demo-wrap{background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px;text-align:center}
+    .demo-wrap svg{width:100%;max-width:620px;height:auto;display:block;margin:0 auto}
+    .demo-cap{font-weight:900;font-size:1.08rem;margin:10px 0 4px;color:#0f172a}
+    .demo-sub{color:#64748b;font-size:.96rem;margin:0}
+    .toggle{display:inline-flex;background:#f1f5f9;border-radius:12px;padding:4px;gap:4px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+    .toggle button{border:0;background:transparent;font-family:inherit;font-weight:800;font-size:.95rem;padding:8px 14px;border-radius:9px;cursor:pointer;color:#334155}
+    .toggle button.on{background:#fff;color:#1d4ed8;box-shadow:0 2px 8px rgba(15,23,42,.1)}
+    .rewrite{width:100%;min-height:90px;font-family:inherit;font-size:1rem;padding:12px 14px;border-radius:12px;border:1px solid #cbd5e1;margin-top:8px;resize:vertical}
+    .think{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+    .think div{background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px;text-align:center}
+    .think b{display:flex;width:46px;height:46px;margin:0 auto 8px;border-radius:14px;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+    .think h4{margin:0 0 4px;font-weight:900}
+    .think p{margin:0;color:#475569;font-size:.95rem;line-height:1.5}
+    .vs-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .headline{background:#fff;border:1px solid var(--border);border-left:6px solid var(--c,#2563eb);border-radius:14px;padding:14px 16px}
+    .headline small{display:block;color:#64748b;font-weight:700;margin-bottom:4px}
+    .headline strong{font-size:1.1rem;color:#0f172a;line-height:1.4;display:block}
+    .think.four{grid-template-columns:repeat(4,1fr)}
+    .think.three{grid-template-columns:repeat(3,1fr)}
+    .course-map{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .cm{display:block;text-decoration:none;background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px;transition:.2s ease;position:relative}
+    .cm:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(37,99,235,.14);border-color:#bfdbfe}
+    .cm span{display:inline-flex;font-weight:900;font-size:.85rem;color:#1d4ed8;background:#eff6ff;border-radius:999px;padding:3px 10px;margin-bottom:8px}
+    .cm h4{margin:0 0 6px;color:#0f172a;font-weight:900;font-size:1.02rem;line-height:1.35}
+    .cm p{margin:0;color:#475569;font-size:.93rem;line-height:1.5}
+    .cert{margin-top:18px;background:#fff;border:10px double #1d4ed8;border-radius:24px;padding:34px 26px;text-align:center;position:relative;background-image:radial-gradient(circle at 10% 10%,rgba(37,99,235,.08),transparent 40%),radial-gradient(circle at 90% 90%,rgba(124,58,237,.08),transparent 40%)}
+    .cert .seal{width:72px;height:72px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;font-size:30px}
+    .cert small{letter-spacing:.3em;font-weight:900;color:#64748b}
+    .cert h2{margin:6px 0 4px;font-size:clamp(1.8rem,4vw,2.6rem);letter-spacing:-.03em;color:#0f172a}
+    .cert .who{font-size:clamp(1.4rem,3vw,2rem);font-weight:900;color:#1d4ed8;border-bottom:2px solid #c7d2fe;display:inline-block;padding:0 20px 4px;margin:10px 0}
+    .cert p{color:#334155;max-width:640px;margin:8px auto}
+    .cert .date{color:#64748b;font-weight:700;margin-top:14px}
+    @media print{body.print-cert *{visibility:hidden}body.print-cert #certOut,body.print-cert #certOut *{visibility:visible}body.print-cert #certOut{position:fixed;left:0;top:0;width:100%;margin:0}body.print-cert .no-print{display:none}}
+    @media (max-width:980px){.course-map{grid-template-columns:repeat(2,1fr)}.think,.think.four,.think.three{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:700px){.course-map,.think,.think.four,.think.three,.vs-two{grid-template-columns:1fr}}
+
+    .chars{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+    .char{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:16px;padding:12px}
+    .char strong{display:block}.char span{color:#64748b;font-size:.88rem;line-height:1.4;display:block}
+    .sc-player{background:linear-gradient(180deg,#f8fbff,#fff);border:1px solid var(--border);border-radius:22px;padding:18px;box-shadow:0 10px 30px rgba(37,99,235,.08)}
+    .sc-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+    .chip{display:inline-flex;align-items:center;gap:6px;background:#1d4ed8;color:#fff;border-radius:999px;padding:5px 12px;font-weight:900;font-size:.88rem}
+    .chip.ghost{background:#eff6ff;color:#1d4ed8}
+    .chip.warn{background:#fef2f2;color:#b91c1c}
+    .sc-q{font-weight:900;font-size:1.08rem;margin:0 0 10px}
+    .sc-btn{border:1px solid #e2e8f0;background:#fff;border-radius:12px;padding:10px 14px;font:inherit;font-weight:800;color:#334155;cursor:pointer;transition:.15s;text-align:left;line-height:1.45}
+    .sc-btn:hover:not([disabled]){border-color:#93c5fd;background:#eff6ff}
+    .sc-btn[disabled]{cursor:default}
+    .sc-btn.sel{box-shadow:0 0 0 3px rgba(37,99,235,.25)}
+    .sc-btn.good,.sc-btn.ok{background:#f0fdf4;border-color:#22c55e;color:#166534}
+    .sc-btn.mid{background:#fffbeb;border-color:#f59e0b;color:#92400e}
+    .sc-btn.bad,.sc-btn.no{background:#fef2f2;border-color:#ef4444;color:#991b1b}
+    .sc-list{display:grid;gap:8px}
+    .sc-fb{margin-top:10px;border-radius:12px;padding:10px 12px;font-weight:700;line-height:1.5;animation:scIn .3s}
+    .sc-fb.good{background:#f0fdf4;color:#166534}.sc-fb.mid{background:#fffbeb;color:#92400e}.sc-fb.bad{background:#fef2f2;color:#991b1b}.sc-fb.info{background:#eff6ff;color:#1e3a8a}
+    @keyframes scIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .sc-center{text-align:center;padding:14px}
+    .sc-center .big{font-size:3.6rem;line-height:1}
+    .sc-center h3{font-size:1.5rem;margin:8px 0}
+    .sc-center p{max-width:760px;margin:0 auto 12px;color:#475569}
+    .tag-k{display:inline-block;border-radius:999px;padding:1px 8px;font-weight:900;font-size:.8rem}
+    .tag-k.good{background:#dcfce7;color:#166534}.tag-k.mid{background:#fef3c7;color:#92400e}.tag-k.bad{background:#fee2e2;color:#991b1b}
+    .meter{display:flex;align-items:center;gap:8px;min-width:180px;flex:1}
+    .meter b{font-size:.85rem;white-space:nowrap}
+    .meter .bar{flex:1;height:12px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+    .meter .bar span{display:block;height:100%;width:50%;transition:width .5s,background .5s}
+    .meter em{font-style:normal;font-weight:900;min-width:2.2em;text-align:right}
+
+    .tg-wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:18px;align-items:start}
+    .tg{border-radius:18px;overflow:hidden;border:1px solid #cfe3f3;background:#dbe9f4 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='4' cy='4' r='1.5' fill='%23c3d8ea'/%3E%3C/svg%3E")}
+    .tg-head{display:flex;gap:10px;align-items:center;background:#fff;padding:10px 14px;border-bottom:1px solid #e2e8f0}
+    .tg-head strong{display:block}.tg-head span{font-size:.82rem;color:#64748b}
+    .tg-body{padding:16px;min-height:200px}
+    .tg-msg{background:#fff;border-radius:4px 16px 16px 16px;padding:10px 14px;max-width:95%;box-shadow:0 2px 6px rgba(0,0,0,.06);animation:scIn .35s}
+    .tg-msg b{color:#229ed9;display:block}.tg-msg small{color:#94a3b8;font-size:.78rem}
+    .tg-msg p{margin:6px 0 0;color:#1e293b}
+    .tg-img{margin-top:8px;height:110px;border-radius:12px;background:linear-gradient(135deg,#64748b,#94a3b8);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;text-align:center;padding:8px;font-size:.9rem}
+    .sc-text{color:#334155;margin:10px 0 12px}
+    .sc-h4{margin:16px 0 8px;font-size:1.05rem}
+    .sc-path{margin:0;padding-left:22px;color:#334155}.sc-path li{margin:4px 0}
+    .end-chips{display:flex;flex-wrap:wrap;gap:8px}
+    .end-chip{border-radius:999px;padding:5px 12px;font-weight:800;font-size:.88rem;background:#f1f5f9;color:#94a3b8;border:1px dashed #cbd5e1}
+    .end-chip.on.good{background:#dcfce7;color:#166534;border-style:solid;border-color:#86efac}
+    .end-chip.on.mid{background:#fef3c7;color:#92400e;border-style:solid;border-color:#fcd34d}
+    .end-chip.on.bad{background:#fee2e2;color:#991b1b;border-style:solid;border-color:#fca5a5}
+    .tree{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .tree div{background:#fff;border:1px solid var(--border);border-radius:14px;padding:10px 12px;font-size:.92rem}
+    .tree b{display:block;color:#1d4ed8}
+    @media(max-width:1000px){.tg-wrap{grid-template-columns:1fr}.tree{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <a href="#" class="brand">
+        <span class="brand-icon"><i class="fa-solid fa-bullhorn"></i></span>
+        <span>Axborot madaniyati platformasi</span>
+      </a>
+      <a href="index.html#keyslar" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Bosh sahifaga qaytish</a>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-box">
+        <div class="hero-badge"><i class="fa-solid fa-clapperboard"></i> Ssenariy · S6 · Tarmoqlanuvchi hikoya</div>
+        <h1>Ssenariy-6: Kanal admini</h1>
+        <p>Tezlik yoki aniqlik? Siz maktab kanalining admini Madinasiz. Shoshilinch “sensatsion” xabar keldi va har bir qaroringiz hikoyani boshqa yo‘lga buradi. Ssenariyda 8 xil yakun bor.</p>
+        <div class="hero-actions">
+          <a class="primary-btn" href="#ssenariy"><i class="fa-solid fa-play"></i> Ssenariyni boshlash</a>
+          <a class="secondary-btn" href="#muhokama"><i class="fa-solid fa-comments"></i> Muhokama savollari</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-id-card"></i> Ssenariy pasporti</h2>
+        <p class="lead">O‘qituvchi va o‘quvchi uchun qisqacha ma’lumot</p>
+<div class="grid-3"><div class="card"><h3><i class="fa-solid fa-bullseye"></i> Maqsad</h3><p>O‘quvchi axborot tarqatuvchi (kanal admini) rolida tezlik va aniqlik o‘rtasida tanlov qiladi, xabarni birlamchi manba va teskari qidiruv bilan tekshiradi, xatoni ochiq tuzatish madaniyatini o‘rganadi.</p></div>
+<div class="card"><h3><i class="fa-solid fa-people-group"></i> Format</h3><p>Tarmoqlanuvchi ssenariy: har bir qaror hikoyani boshqa yo‘lga buradi. 8 ta turli yakun bor. Yakka, juftlikda yoki proyektorda butun sinf bilan.</p></div>
+<div class="card"><h3><i class="fa-solid fa-hourglass-half"></i> Vaqt va natija</h3><p>35–40 daqiqa. O‘quvchi kamida 2 marta o‘ynab, turli yakunlarni solishtiradi va “nega shunday bo‘ldi?” degan savolga javob beradi.</p></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-book-open"></i> Vaziyat</h2>
+        <p class="lead">Ssenariyni boshlashdan oldin o‘qing</p>
+<p>Madina — 9-sinf o‘quvchisi, maktabning “Maktab hayoti” Telegram kanali admini. Kanalda 1 200 obunachi bor: o‘quvchilar, ota-onalar, o‘qituvchilar. Bir kuni soat 17:00 da unga shoshilinch xabar keladi…</p><p>Bu ssenariyda to‘g‘ri yoki noto‘g‘ri javob emas, <strong>yo‘l</strong> tanlaysiz. Har bir qaror ikki ko‘rsatkichga ta’sir qiladi va hikoyani boshqa tomonga buradi. Ba’zi yo‘llar tez “qamrov” beradi, lekin “ishonch”ni yo‘qotadi.</p><h3 class="sub-title"><i class="fa-solid fa-users"></i> Ssenariy qahramonlari</h3><div class="chars"><div class="char"><div class="avatar" style="background:#229ed9">M</div><div><strong>Madina</strong><span>9-sinf, “Maktab hayoti” kanali admini. Siz uning o‘rnidasiz.</span></div></div><div class="char"><div class="avatar" style="background:#64748b">?</div><div><strong>Noma’lum yuboruvchi</strong><span>Shoshilinch xabar va rasm yuboradi.</span></div></div><div class="char"><div class="avatar" style="background:#ef4444">MO</div><div><strong>“Maktab ovozi”</strong><span>Norasmiy raqib kanal — har doim birinchi bo‘lishga intiladi.</span></div></div><div class="char"><div class="avatar" style="background:#16a34a">D</div><div><strong>Direktor</strong><span>Maktabdagi birlamchi, rasmiy manba.</span></div></div><div class="char"><div class="avatar" style="background:#7c3aed">A</div><div><strong>Akmal</strong><span>Faol obunachi, teskari qidiruvni yaxshi biladi.</span></div></div></div>
+      </div>
+    </section>
+
+    <section id="ssenariy" class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-play"></i> Ssenariyni boshlang</h2>
+        <p class="lead">Har bir qaror hikoyani o‘zgartiradi. Ko‘rsatkichlarni kuzatib boring.</p>
+<div class="sc-player" id="scPlayer">
+  <div class="sc-top"><span class="chip" id="scClock"></span><span class="chip ghost" id="scFound"></span>
+    <div class="meter"><b>🛡 Ishonch</b><div class="bar"><span id="m_trust"></span></div><em id="v_trust">50</em></div>
+    <div class="meter"><b>📈 Qamrov</b><div class="bar"><span id="m_reach"></span></div><em id="v_reach">50</em></div></div>
+  <div id="scStage"></div>
+</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-life-ring"></i> Kanal admini uchun eslatma</h2>
+        <p class="lead">Xabarni joylashdan oldin</p>
+<div class="grid-2"><div class="card"><h3><i class="fa-solid fa-list-check"></i> Joylashdan oldin 4 savol</h3><ul><li>Xabarni kim yubordi? U buni qayerdan biladi?</li><li>Rasm yoki video aynan shu voqeagami? (teskari qidiruv)</li><li>Birlamchi manba (maktab, rasmiy organ) nima deydi?</li><li>Agar xato bo‘lsa, kimga zarar yetadi?</li></ul></div>
+<div class="card"><h3><i class="fa-solid fa-rotate-left"></i> Agar xato qilsangiz</h3><ul><li>Postni jim o‘chirmang — skrinshotlar qoladi.</li><li>Ochiq tuzatish yozing: nima xato edi, haqiqat qanday.</li><li>Kechirim so‘rang va qanday tekshirganingizni ko‘rsating.</li><li>Kanalda tekshirish qoidalarini joriy eting.</li></ul></div></div><div class="highlight"><strong>Oltin qoida:</strong> “Birinchi bo‘lish”dan ko‘ra “to‘g‘ri bo‘lish” muhimroq. Kechikkan haqiqat — tez tarqalgan yolg‘ondan yaxshiroq.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-diagram-project"></i> Ssenariy xaritasi (o‘qituvchi uchun)</h2>
+        <p class="lead">Barcha yo‘llar va yakunlar — o‘quvchilar o‘ynab bo‘lgach ko‘rsating</p>
+<details class="key"><summary>Xaritani ochish</summary><ul><li><b>Darhol joylash</b> → portlash → (jim o‘chirish → 🫥 Iz qoldirgan xato | ochiq tuzatish → qoidalar → 🌱 Xatodan saboq yoki ⚖️ Yarim yo‘l | tuzatmaslik → 📉 Yolg‘on kanali)</li><li><b>Tekshirish</b> → teskari qidiruv yoki direktor → dalilli post → 🏆 Ishonchli manba | qisqa post → 👍 To‘g‘ri, lekin to‘liq emas | raqibni masxara → 🥊 G‘alaba, lekin… | jim qolish → 🤐 Jim qolgan admin</li><li><b>Yuboruvchidan so‘rash</b> → “100% rost, hamma biladi” → ishonib joylash (portlash yo‘li) yoki tekshirish</li><li><b>E’tibor bermaslik</b> → vahima kuchayadi → kech bo‘lsa ham tekshirish yoki 🤐 Jim qolgan admin</li></ul></details>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-masks-theater"></i> Rol o‘yini varianti</h2>
+        <p class="lead">“Tahririyat yig‘ilishi”: sinf 4 guruhga bo‘linadi</p>
+<div class="grid-2"><div class="card"><h3>📰 Tahririyat (Madina jamoasi)</h3><p>Har bir tanlovdan oldin 1 daqiqa muhokama qilib, qaror qabul qiladi va uni asoslaydi.</p></div>
+<div class="card"><h3>🚨 “Maktab ovozi” jamoasi</h3><p>Tahririyatga bosim o‘tkazadi: “Biz allaqachon joyladik, siz ortda qoldingiz!”</p></div>
+<div class="card"><h3>👨‍👩‍👧 Ota-onalar jamoasi</h3><p>Har bir postdan keyin munosabat bildiradi: xavotir, minnatdorlik yoki norozilik.</p></div>
+<div class="card"><h3>🔍 Faktcheker jamoasi</h3><p>Tahririyat so‘rasa, rasm va manbani tekshirish usulini tushuntiradi.</p></div></div>
+      </div>
+    </section>
+
+    <section id="muhokama" class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-comments"></i> Muhokama savollari</h2>
+        <p class="lead">Ssenariydan keyin sinf bilan birga muhokama qiling</p>
+<ol class="homework-list"><li>Qaysi yakunga yetdingiz? Boshqa juftlikning yakuni bilan solishtiring: qaysi qaror farq qildi?</li><li>Nima uchun “Qamrov” tez oshadigan yo‘l ko‘pincha “Ishonch”ni pasaytiradi?</li><li>“Hamma biladi” va “100% rost” — nega bu dalil emas?</li><li>Xatoni jimgina o‘chirish bilan ochiq tuzatishning farqi nimada? Raqamli iz bunga qanday ta’sir qiladi?</li><li>Raqib kanalni masxara qilish nega yaxshi yakun bermadi, garchi Madina haqiqatni aytgan bo‘lsa ham?</li><li>Siz ham biror guruh yoki kanalda “admin” bo‘lganmisiz? Qanday qoidalarni joriy qilgan bo‘lardingiz?</li></ol><details class="key"><summary>Ssenariy kaliti (o‘qituvchi uchun)</summary><ul><li>Eng yaxshi yo‘l: Tekshirish → teskari qidiruv yoki direktor → dalilli faktcheking posti (🏆).</li><li>Xatodan keyingi eng yaxshi yo‘l: ochiq tuzatish → tekshirish qoidalarini joriy etish (🌱).</li><li>Asosiy g‘oya: tezlik va qamrov emas, aniqlik va halollik uzoq muddatli ishonchni beradi.</li></ul></details>
+      </div>
+    </section>
+<section id="test" class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-circle-question"></i> Yakuniy savollar</h2>
+        <p class="lead">Ssenariydan nimani o‘rgandingiz? 5 ta savol — natijadan keyin izoh chiqadi.</p>
+        <div id="quiz"></div>
+        <div class="actions">
+          <button class="btn" onclick="checkQuiz()">Natijani ko‘rish</button>
+          <button class="btn secondary" onclick="resetQuiz()">Tozalash</button>
+          <span id="quizResult" class="result"></span>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-chalkboard-user"></i> Ssenariyni o‘tkazish tartibi</h2>
+        <p class="lead">40 daqiqalik namunaviy taqsimot va o‘qituvchi uchun izohlar</p>
+<div class="timeline"><div class="timeline-item"><div class="time-badge">3 daqiqa</div><div><h4>Kirish</h4><p>Savol: “Agar siz maktab kanali admini bo‘lsangiz va shoshilinch xabar kelsa, nima qilasiz?” Javoblarni doskaga yozing.</p></div></div><div class="timeline-item"><div class="time-badge">15 daqiqa</div><div><h4>Ssenariy</h4><p>Juftliklar ssenariyni kamida 2 marta o‘ynaydi: birinchi marta o‘z instinkti bilan, ikkinchi marta boshqa yo‘lni sinab.</p><p class="teacher"><i class="fa-solid fa-lightbulb"></i> O‘qituvchiga: Kim qaysi yakunni topganini doskada belgilab boring — sinf birgalikda 8 ta yakunni ham ochishga harakat qilsin.</p></div></div><div class="timeline-item"><div class="time-badge">10 daqiqa</div><div><h4>Rol o‘yini</h4><p>“Tahririyat yig‘ilishi” — 2–3 tugun bo‘yicha.</p></div></div><div class="timeline-item"><div class="time-badge">7 daqiqa</div><div><h4>Muhokama</h4><p>Muhokama savollari; o‘qituvchi ssenariy xaritasini ko‘rsatadi.</p></div></div><div class="timeline-item"><div class="time-badge">5 daqiqa</div><div><h4>Yakuniy savollar va refleksiya</h4><p>5 savol va refleksiya kartalari.</p></div></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-box">
+        <h2 class="section-title"><i class="fa-solid fa-comments"></i> Refleksiya</h2>
+        <p class="lead">Ssenariy yakunida javob bering:</p>
+<div class="grid-3"><div class="card"><h3><i class="fa-solid fa-scale-balanced"></i> Tezlik yoki aniqlik?</h3><p>Men qaror qabul qilganda ko‘proq … ga e’tibor berdim, chunki…</p></div>
+<div class="card"><h3><i class="fa-solid fa-shield-halved"></i> Ishonch</h3><p>Obunachilar ishonchini qozonish uchun eng muhim qadam…</p></div>
+<div class="card"><h3><i class="fa-solid fa-pen-nib"></i> Mening qoidam</h3><p>Agar men admin bo‘lsam, kanalimga shu 3 ta qoidani yozardim…</p></div></div><div class="note"><i class="fa-solid fa-pen"></i> Uyga vazifa: o‘z sinfingiz guruhi uchun “Xabar joylash qoidalari” (5 banddan iborat) tuzing.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="mediaModal" class="fullscreen-modal" role="dialog" aria-modal="true" aria-label="Media ko‘rish oynasi">
+    <div class="modal-content">
+      <div class="modal-header">
+        <strong id="modalTitle">Media</strong>
+        <button class="modal-close" type="button" onclick="closeMediaModal()" aria-label="Yopish"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <footer class="footer container">
+    Axborot madaniyati platformasi · Ssenariy-6 · Vaziyatli topshiriq
+  </footer>
+
+  <script>
+  /* ===== SSENARIY MA’LUMOTLARI — matnlarni tahrirlash mumkin ===== */
+  const NODES = {
+ "start": {
+  "time": "17:00",
+  "title": "Shoshilinch xabar",
+  "who": "Noma’lum foydalanuvchi",
+  "meta": "Shaxsiy xabar · 17:00",
+  "msg": "Salom, admin! Bugun maktab oshxonasida ovqatdan 20 ta o‘quvchi zaharlandi!!! Mana rasm 👇 Tezroq kanalga qo‘ying, hamma bilsin!",
+  "img": "📷 Rasm: tez yordam mashinasi va bino oldida odamlar",
+  "text": "Madina “Maktab hayoti” kanaliga (1 200 obunachi) shu xabarni oldi. Norasmiy raqib kanal “Maktab ovozi” uni allaqachon joylab bo‘lgan va 3 000 marta ko‘rilgan. Obunachilar Madinadan ham xabar kutmoqda.",
+  "choices": [
+   {
+    "t": "Darhol “SHOSHILINCH!” deb kanalga joylayman — raqiblardan ortda qolmayman.",
+    "to": "viral",
+    "d": [
+     -15,
+     25
+    ],
+    "fb": "Post bir zumda tarqaldi va 300 ta yangi obunachi qo‘shildi… lekin xabar tekshirilmagan edi."
+   },
+   {
+    "t": "Avval tekshiraman, keyin qaror qilaman.",
+    "to": "check",
+    "d": [
+     0,
+     -5
+    ],
+    "fb": "Tezlik biroz pasaydi, lekin to‘g‘ri yo‘ldasiz: tekshirilmagan xabar — xavf."
+   },
+   {
+    "t": "E’tibor bermayman — bu mening ishim emas.",
+    "to": "silent",
+    "d": [
+     -5,
+     -5
+    ],
+    "fb": "Siz tarqatmadingiz, lekin vahima kuchaymoqda, obunachilar esa javob kutmoqda."
+   }
+  ]
+ },
+ "viral": {
+  "time": "17:25",
+  "title": "Xabar portladi",
+  "who": "Izohlar",
+  "meta": "Post ostida · 17:25",
+  "msg": "Akmal: “Bu rasm 2019-yilda boshqa davlatda olingan-ku! Google Lens’da qidirib ko‘ring.” · Ota-ona: “Farzandim shu maktabda, hozir maktabga yuguraman!!!”",
+  "text": "Post 5 000 marta ko‘rildi. Ota-onalar maktabga qo‘ng‘iroq qilmoqda, ba’zilari maktabga yo‘lga chiqdi. Izohda kimdir rasm soxta ekanini yozdi. Madina tekshirib ko‘rdi — rostdan ham rasm 2019-yilda boshqa mamlakatda olingan.",
+  "choices": [
+   {
+    "t": "Postni jimgina o‘chirib yuboraman — hech kim eslamaydi.",
+    "to": "E:hidden",
+    "d": [
+     -15,
+     -5
+    ],
+    "fb": "Skrinshotlar allaqachon tarqalgan. Odamlar “Admin xatoni yashirdi” deb yozishmoqda."
+   },
+   {
+    "t": "Ochiq tuzatish e’lon qilaman: xato nima edi, haqiqat qanday — va kechirim so‘rayman.",
+    "to": "fix",
+    "d": [
+     15,
+     -5
+    ],
+    "fb": "Tuzatish posti ham tez tarqaldi. Ko‘pchilik halollikni qadrladi."
+   },
+   {
+    "t": "“Biz faqat eshitganimizni yetkazdik” deb hech narsani o‘zgartirmayman.",
+    "to": "E:liar",
+    "d": [
+     -30,
+     5
+    ],
+    "fb": "Kanal yolg‘onni tarqatishda davom etmoqda."
+   }
+  ]
+ },
+ "fix": {
+  "time": "18:10",
+  "title": "Tuzatishdan keyin",
+  "who": "Direktor",
+  "meta": "Shaxsiy xabar · 18:05",
+  "msg": "Madina, tuzatish uchun rahmat. Maktabda hech kim zaharlanmagan. Lekin bugun ota-onalar juda xavotirga tushishdi.",
+  "text": "Vahima bosildi. Madina endi bu holat takrorlanmasligi uchun nima qilishni o‘ylamoqda.",
+  "choices": [
+   {
+    "t": "Kanalda “Tekshirish qoidalari”ni e’lon qilaman: har bir xabarga manba belgisi va ikki manba qoidasi.",
+    "to": "E:lesson",
+    "d": [
+     15,
+     5
+    ],
+    "fb": "Obunachilar yangi qoidalarni olqishladi."
+   },
+   {
+    "t": "Hammasini unutib, avvalgidek davom etaman.",
+    "to": "E:half",
+    "d": [
+     0,
+     0
+    ],
+    "fb": "Bu safar omad kulib boqdi, lekin xato yana takrorlanishi mumkin."
+   }
+  ]
+ },
+ "check": {
+  "time": "17:05",
+  "title": "Tekshiruv",
+  "who": "Madina",
+  "meta": "Ichki ovoz",
+  "msg": "Qayerdan boshlasam ekan? Xabarda rasm bor, lekin manba yo‘q…",
+  "text": "Tekshiruvni qaysi qadamdan boshlaysiz?",
+  "choices": [
+   {
+    "t": "Rasmni teskari qidiruv (Google Lens / TinEye) orqali tekshiraman.",
+    "to": "photo",
+    "d": [
+     5,
+     0
+    ],
+    "fb": "Natija: rasm 2019-yilda boshqa davlatdagi voqeadan olingan!"
+   },
+   {
+    "t": "Yuboruvchidan “Rostmi?” deb so‘rayman.",
+    "to": "ask",
+    "d": [
+     0,
+     -5
+    ],
+    "fb": "U javob berdi…"
+   },
+   {
+    "t": "Maktab direktori yoki hamshirasiga qo‘ng‘iroq qilaman.",
+    "to": "call",
+    "d": [
+     5,
+     0
+    ],
+    "fb": "Direktor javob berdi…"
+   }
+  ]
+ },
+ "ask": {
+  "time": "17:12",
+  "title": "Yuboruvchining javobi",
+  "who": "Noma’lum foydalanuvchi",
+  "meta": "Shaxsiy xabar · 17:12",
+  "msg": "100% rost!!! Hamma biladi, ishonmasangiz o‘zingiz bilasiz. Tezroq qo‘ying!",
+  "text": "Yuboruvchi qo‘shimcha dalil bermadi, faqat qayta shoshiltirmoqda.",
+  "choices": [
+   {
+    "t": "Shuncha ishonch bilan aytyapti — joylayman.",
+    "to": "viral",
+    "d": [
+     -15,
+     20
+    ],
+    "fb": "“Hamma biladi” — dalil emas. Endi xabar sizning kanalingizda…"
+   },
+   {
+    "t": "“Hamma biladi” — dalil emas. Rasmni o‘zim tekshiraman.",
+    "to": "photo",
+    "d": [
+     5,
+     0
+    ],
+    "fb": "To‘g‘ri! Teskari qidiruv rasm 2019-yilda boshqa davlatda olinganini ko‘rsatdi."
+   },
+   {
+    "t": "Maktab ma’muriyatidan rasmiy izoh so‘rayman.",
+    "to": "call",
+    "d": [
+     5,
+     0
+    ],
+    "fb": "Direktor javob berdi…"
+   }
+  ]
+ },
+ "call": {
+  "time": "17:15",
+  "title": "Rasmiy izoh",
+  "who": "Direktor",
+  "meta": "Telefon suhbati · 17:15",
+  "msg": "Hech kim zaharlanmagan. Bugun ikki o‘quvchi boshqa sabab bilan uyga ertaroq ketgan, xolos. Rasmiy e’lonni hozir maktab sahifasiga qo‘yamiz.",
+  "text": "Endi sizda birlamchi manbadan rasmiy rad javobi bor. Raqib kanal esa hali ham yolg‘onni tarqatmoqda.",
+  "choices": [
+   {
+    "t": "Rasmni ham tekshirib, to‘liq faktcheking posti tayyorlayman: direktor izohi + rasmning asl manbasi.",
+    "to": "E:trusted",
+    "d": [
+     25,
+     15
+    ],
+    "fb": "Post ko‘plab guruhlarga ulashildi — vahima tez bosildi."
+   },
+   {
+    "t": "Qisqa post: “Direktor rad etdi.”",
+    "to": "E:short",
+    "d": [
+     10,
+     5
+    ],
+    "fb": "Foydali, lekin dalil yetarli emas: ba’zilar “direktor yashiryapti” deb o‘ylashdi."
+   },
+   {
+    "t": "“Maktab ovozi” kanali yolg‘onchi!” deb raqibni masxara qilaman.",
+    "to": "E:war",
+    "d": [
+     0,
+     10
+    ],
+    "fb": "Janjal chiqdi, izohlar haqoratga to‘ldi. Asosiy mavzu — haqiqat — chetda qoldi."
+   }
+  ]
+ },
+ "photo": {
+  "time": "17:20",
+  "title": "Rasm soxta!",
+  "who": "Google Lens natijasi",
+  "meta": "Teskari qidiruv",
+  "msg": "Eng birinchi nashr: 2019-yil, boshqa davlatdagi yangiliklar sayti. Sarlavha: “Fabrikadagi mashg‘ulot”.",
+  "text": "Rasm bu voqeaga umuman aloqasi yo‘q. Raqib kanal esa uni tarqatishda davom etmoqda, obunachilar Madinadan “Nega sizda yo‘q?” deb so‘ramoqda.",
+  "choices": [
+   {
+    "t": "Maktabdan rasmiy izoh ham olib, dalillar bilan faktcheking posti tayyorlayman.",
+    "to": "E:trusted",
+    "d": [
+     25,
+     15
+    ],
+    "fb": "Rasm manbasi + direktor izohi = kuchli dalil. Post tez tarqaldi."
+   },
+   {
+    "t": "“Maktab ovozi” kanalini masxara qiluvchi post yozaman.",
+    "to": "E:war",
+    "d": [
+     0,
+     10
+    ],
+    "fb": "Janjal chiqdi, izohlar haqoratga to‘ldi."
+   },
+   {
+    "t": "Hech narsa yozmayman — soxta ekanini o‘zim bilaman, yetarli.",
+    "to": "E:quiet",
+    "d": [
+     -5,
+     -10
+    ],
+    "fb": "Siz haqiqatni bilardingiz, lekin uni aytmadingiz. Vahima davom etdi."
+   }
+  ]
+ },
+ "silent": {
+  "time": "18:30",
+  "title": "Vahima kuchaydi",
+  "who": "Obunachilar",
+  "meta": "Kanal izohlari · 18:30",
+  "msg": "“Nega jimsiz?!” · “Admin, haqiqatni ayting!” · “Bolalarimni maktabga yubormayman!”",
+  "text": "Raqib kanaldagi post 10 000 marta ko‘rildi. Ota-onalar xavotirda, obunachilar Madinadan izoh kutmoqda.",
+  "choices": [
+   {
+    "t": "Endi tekshirib ko‘raman: rasmni teskari qidiruvdan o‘tkazaman.",
+    "to": "photo",
+    "d": [
+     5,
+     0
+    ],
+    "fb": "Kech bo‘lsa ham, to‘g‘ri qadam."
+   },
+   {
+    "t": "Baribir jim turaman.",
+    "to": "E:quiet",
+    "d": [
+     -10,
+     -15
+    ],
+    "fb": "Obunachilar boshqa kanallarga o‘tib ketishdi."
+   }
+  ]
+ }
+};
+  const ENDINGS = {
+ "trusted": {
+  "emoji": "🏆",
+  "kind": "good",
+  "title": "Ishonchli manba",
+  "text": "Madina shoshilmadi, xabarni birlamchi manba va teskari qidiruv bilan tekshirdi va dalilli faktcheking posti chiqardi. Kanal maktabdagi eng ishonchli axborot manbaiga aylandi. Tezlik emas, aniqlik g‘alaba qozondi."
+ },
+ "lesson": {
+  "emoji": "🌱",
+  "kind": "good",
+  "title": "Xatodan saboq",
+  "text": "Madina xato qildi, lekin uni ochiq tan oldi, tuzatdi va kanalda tekshirish qoidalarini joriy etdi. Xatoni tan olish ham ishonch qozonish yo‘li."
+ },
+ "short": {
+  "emoji": "👍",
+  "kind": "mid",
+  "title": "To‘g‘ri, lekin to‘liq emas",
+  "text": "Madina rasmiy manbaga murojaat qildi — bu katta yutuq. Ammo dalillarni to‘liq ko‘rsatmagani uchun ba’zilar shubhada qoldi. Faktcheking posti dalillar bilan kuchli bo‘ladi."
+ },
+ "half": {
+  "emoji": "⚖️",
+  "kind": "mid",
+  "title": "Yarim yo‘l",
+  "text": "Xato tuzatildi, lekin undan saboq olinmadi. Keyingi safar shunday xabar kelsa, xato takrorlanishi mumkin."
+ },
+ "war": {
+  "emoji": "🥊",
+  "kind": "mid",
+  "title": "G‘alaba, lekin…",
+  "text": "Madina haqiqatni bilardi, lekin raqib bilan janjalga berildi. Haqorat ishonchni oshirmaydi — dalil oshiradi. Netiketni unutmang."
+ },
+ "quiet": {
+  "emoji": "🤐",
+  "kind": "bad",
+  "title": "Jim qolgan admin",
+  "text": "Madina haqiqatni bilishi yoki bilib olishi mumkin edi, lekin jim qoldi. Admin sifatida uning so‘zi vahimani to‘xtata olardi. Jimlik ham tanlov va uning ham oqibati bor."
+ },
+ "hidden": {
+  "emoji": "🫥",
+  "kind": "bad",
+  "title": "Iz qoldirgan xato",
+  "text": "Post o‘chirildi, lekin skrinshotlar qoldi. Xatoni yashirish uni ochiq tuzatishdan ko‘ra ko‘proq ishonchni yo‘qotadi. Raqamli iz o‘chmaydi."
+ },
+ "liar": {
+  "emoji": "📉",
+  "kind": "bad",
+  "title": "Yolg‘on kanali",
+  "text": "Madina xatosini tan olmadi. Kanal yolg‘on xabar manbai sifatida tanildi, obunachilar birin-ketin chiqib ketdi. “Biz faqat yetkazdik” degan bahona mas’uliyatdan qutqarmaydi."
+ }
+};
+
+
+  /* ============ MEDIA FAYLLAR (nomlar faqat shu yerda) ============ */
+  const MEDIA = { image: '1-infografika.png', video: '1-dars.mp4' };
+
+  
+
+  /* ============ MODAL + ZOOM ============ */
+  const zoom = { scale:1, min:.45, max:5, baseWidth:900, dragging:false, sx:0, sy:0, sl:0, st:0 };
+
+  function clampScale(v){ return Math.max(zoom.min, Math.min(zoom.max, v)); }
+
+  function updateZoom(){
+    const img = document.getElementById('azZoomImg');
+    const value = document.getElementById('azZoomValue');
+    if(!img) return;
+    img.style.width = Math.round(zoom.baseWidth * zoom.scale) + 'px';
+    if(value) value.textContent = Math.round(zoom.scale * 100) + '%';
+  }
+
+  function zoomImage(delta){
+    const stage = document.getElementById('azZoomStage');
+    if(!stage) return;
+    const old = zoom.scale;
+    const cx = stage.scrollLeft + stage.clientWidth/2;
+    const cy = stage.scrollTop + stage.clientHeight/2;
+    zoom.scale = clampScale(zoom.scale + delta);
+    updateZoom();
+    const r = zoom.scale / old;
+    stage.scrollLeft = cx * r - stage.clientWidth/2;
+    stage.scrollTop = cy * r - stage.clientHeight/2;
+  }
+
+  function resetImageZoom(){
+    const stage = document.getElementById('azZoomStage');
+    zoom.scale = 1;
+    updateZoom();
+    if(stage){ stage.scrollLeft = Math.max(0,(stage.scrollWidth-stage.clientWidth)/2); stage.scrollTop = 0; }
+  }
+
+  function openMediaModal(type, src, title){
+    const modal = document.getElementById('mediaModal');
+    const body = document.getElementById('modalBody');
+    document.getElementById('modalTitle').textContent = title || 'Media';
+
+    if(type === 'image'){
+      zoom.scale = 1;
+      body.innerHTML =
+        '<div class="az-zoom-panel">' +
+          '<div class="az-zoom-toolbar">' +
+            '<button class="az-zoom-btn" type="button" onclick="zoomImage(-0.25)" title="Kichraytirish">−</button>' +
+            '<span id="azZoomValue" class="az-zoom-value">100%</span>' +
+            '<button class="az-zoom-btn" type="button" onclick="zoomImage(0.25)" title="Kattalashtirish">+</button>' +
+            '<button class="az-zoom-btn" type="button" onclick="zoomImage(0.75)" title="Tez kattalashtirish"><i class="fa-solid fa-magnifying-glass-plus"></i></button>' +
+            '<button class="az-zoom-btn" type="button" onclick="resetImageZoom()" title="Boshlang‘ich holat"><i class="fa-solid fa-rotate-left"></i></button>' +
+            '<span class="az-zoom-hint">+ / − tugmalari, sichqoncha g‘ildiragi va rasmni ushlab surish ishlaydi</span>' +
+          '</div>' +
+          '<div id="azZoomStage" class="az-stage"><img id="azZoomImg" class="az-img" alt="Infografika"></div>' +
+        '</div>';
+      const stage = document.getElementById('azZoomStage');
+      const img = document.getElementById('azZoomImg');
+      img.onload = function(){
+        const available = Math.max(320, stage.clientWidth - 70);
+        const natural = img.naturalWidth || 1200;
+        zoom.baseWidth = natural < available ? Math.min(available, 1100) : available;
+        updateZoom();
+        requestAnimationFrame(() => { stage.scrollLeft = Math.max(0,(stage.scrollWidth-stage.clientWidth)/2); stage.scrollTop = 0; });
+      };
+      img.onerror = function(){ stage.innerHTML = '<div class="modal-msg">Rasm topilmadi. <code>' + MEDIA.image + '</code> fayli HTML bilan bitta papkada turganini tekshiring.</div>'; };
+      img.src = src;
+    } else {
+      const v = document.createElement('video');
+      v.controls = true; v.autoplay = true;
+      const s = document.createElement('source');
+      s.src = src; s.type = 'video/mp4';
+      s.onerror = () => { body.innerHTML = '<div class="modal-msg">Video topilmadi. <code>' + MEDIA.video + '</code> fayli HTML bilan bitta papkada turganini tekshiring.</div>'; };
+      v.appendChild(s);
+      body.innerHTML = '';
+      body.appendChild(v);
+    }
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMediaModal(){
+    document.getElementById('mediaModal').classList.remove('show');
+    document.getElementById('modalBody').innerHTML = '';
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', e => { if(e.target.id === 'mediaModal') closeMediaModal(); });
+  document.addEventListener('keydown', e => {
+    const modal = document.getElementById('mediaModal');
+    if(!modal.classList.contains('show')) return;
+    if(e.key === 'Escape') closeMediaModal();
+    if(!document.getElementById('azZoomStage')) return;
+    if(e.key === '+' || e.key === '=') zoomImage(0.25);
+    if(e.key === '-') zoomImage(-0.25);
+    if(e.key === '0') resetImageZoom();
+  });
+  document.addEventListener('wheel', e => {
+    if(!(e.target.closest && e.target.closest('#azZoomStage'))) return;
+    e.preventDefault();
+    zoomImage(e.deltaY < 0 ? 0.18 : -0.18);
+  }, {passive:false});
+  document.addEventListener('pointerdown', e => {
+    const stage = e.target.closest && e.target.closest('#azZoomStage');
+    if(!stage) return;
+    Object.assign(zoom, { dragging:true, sx:e.clientX, sy:e.clientY, sl:stage.scrollLeft, st:stage.scrollTop });
+    stage.classList.add('az-dragging');
+  });
+  document.addEventListener('pointermove', e => {
+    if(!zoom.dragging) return;
+    const stage = document.getElementById('azZoomStage'); if(!stage) return;
+    stage.scrollLeft = zoom.sl - (e.clientX - zoom.sx);
+    stage.scrollTop = zoom.st - (e.clientY - zoom.sy);
+  });
+  document.addEventListener('pointerup', () => {
+    zoom.dragging = false;
+    const stage = document.getElementById('azZoomStage'); if(stage) stage.classList.remove('az-dragging');
+  });
+
+  /* ============ TANLASH MASHQLARI (Fakt/Fikr va h.k.) ============ */
+  document.querySelectorAll('.ff-row').forEach(row => {
+    row.querySelectorAll('.ff-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.ff-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        row.classList.remove('ok','no','checked');
+      });
+    });
+  });
+
+  function checkFF(listId, resultId){
+    listId = listId || 'ffList'; resultId = resultId || 'ffResult';
+    const rows = document.querySelectorAll('#' + listId + ' .ff-row');
+    const out = document.getElementById(resultId);
+    let score = 0, answered = 0;
+    rows.forEach(row => { if(row.querySelector('.ff-btn.active')) answered++; });
+    if(answered < rows.length){
+      out.textContent = 'Iltimos, barcha qatorlar uchun javob tanlang.';
+      out.style.color = '#b45309';
+      return;
+    }
+    rows.forEach(row => {
+      const ok = row.querySelector('.ff-btn.active').dataset.v === row.dataset.answer;
+      if(ok) score++;
+      row.classList.add('checked', ok ? 'ok' : 'no');
+    });
+    out.textContent = 'Natija: ' + score + ' / ' + rows.length;
+    out.style.color = score === rows.length ? '#15803d' : '#2563eb';
+  }
+
+  function resetFF(listId, resultId){
+    listId = listId || 'ffList'; resultId = resultId || 'ffResult';
+    document.querySelectorAll('#' + listId + ' .ff-row').forEach(row => {
+      row.classList.remove('ok','no','checked');
+      row.querySelectorAll('.ff-btn').forEach(b => b.classList.remove('active'));
+    });
+    document.getElementById(resultId).textContent = '';
+  }
+
+  /* ============ BAHOLASH KALKULYATORI (umumiy) ============ */
+  document.querySelectorAll('.scorer').forEach(sc => {
+    const boxes = sc.querySelectorAll('input[type="checkbox"]');
+    const out = sc.querySelector('.scorer-out');
+    const d = sc.dataset;
+    const hi = Number(d.hi || 6), lo = Number(d.lo || 4), inv = d.invert === '1';
+    const upd = () => {
+      const n = [...boxes].filter(b => b.checked).length;
+      let verdict, cls;
+      if(n >= hi){ verdict = d.good || 'ishonchli'; cls = inv ? 'bad' : 'good'; }
+      else if(n >= lo){ verdict = d.mid || 'ehtiyotkorlik bilan'; cls = 'mid'; }
+      else { verdict = d.bad || 'ishonchsiz'; cls = inv ? 'good' : 'bad'; }
+      out.textContent = (d.label || 'Belgilangan') + ': ' + n + ' / ' + boxes.length + ' — ' + verdict;
+      out.className = 'scorer-out ' + cls;
+    };
+    boxes.forEach(b => b.addEventListener('change', upd));
+  });
+
+  /* ============ PAROL KUCHI TEKSHIRGICHI (faqat brauzerda, hech qayerga yuborilmaydi) ============ */
+  (function(){
+    const inp = document.getElementById('pwInput');
+    if(!inp) return;
+    const bar = document.getElementById('pwBar'), ver = document.getElementById('pwVerdict'), tips = document.getElementById('pwTips');
+    const common = ['123456','12345678','123456789','qwerty','password','parol','111111','000000','abc123','iloveyou','qwerty123','1q2w3e','admin','uzbekistan','toshkent'];
+    inp.addEventListener('input', () => {
+      const v = inp.value, low = v.toLowerCase();
+      const t = [];
+      let s = 0;
+      if(!v){ bar.style.width = '0'; ver.textContent = ''; tips.innerHTML = ''; return; }
+      s += Math.min(v.length, 20) * 4;
+      const kinds = [/[a-z]/.test(v), /[A-Z]/.test(v), /[0-9]/.test(v), /[^A-Za-z0-9]/.test(v)].filter(Boolean).length;
+      s += (kinds - 1) * 10;
+      const words = v.trim().split(/[\s\-_.]+/).filter(w => w.length >= 3).length;
+      if(words >= 3) s += 20;
+      if(common.some(c => low.includes(c))){ s = Math.min(s, 15); t.push('Juda mashhur parol yoki uning bir qismi ishlatilgan — bunday parollar birinchi bo‘lib sinab ko‘riladi.'); }
+      if(/(.)\1{2,}/.test(v)){ s -= 15; t.push('Bir xil belgini ketma-ket takrorlamang (aaa, 111).'); }
+      if(/(19|20)\d{2}/.test(v)){ s -= 10; t.push('Tug‘ilgan yil yoki sana kabi topish oson raqamlardan qoching.'); }
+      if(v.length < 12) t.push('Kamida 12 ta belgi bo‘lsin — uzunlik eng muhim omil.');
+      if(kinds < 3 && words < 3) t.push('Katta-kichik harf, raqam va belgilarni aralashtiring yoki 3–4 tasodifiy so‘zdan iborat ibora tuzing.');
+      s = Math.max(0, Math.min(100, s));
+      let label, color;
+      if(s < 30){ label = 'Juda zaif'; color = '#e11d48'; }
+      else if(s < 50){ label = 'Zaif'; color = '#f97316'; }
+      else if(s < 70){ label = 'O‘rtacha'; color = '#f59e0b'; }
+      else if(s < 85){ label = 'Kuchli'; color = '#22c55e'; }
+      else { label = 'Juda kuchli'; color = '#16a34a'; }
+      if(!t.length) t.push('Yaxshi! Endi uni faqat bitta saytda ishlating va ikki bosqichli himoyani yoqing.');
+      bar.style.width = Math.max(6, s) + '%'; bar.style.background = color;
+      ver.textContent = label + ' (' + s + ' / 100)'; ver.style.color = color;
+      tips.innerHTML = t.map(x => '<li>' + x + '</li>').join('');
+    });
+  })();
+
+  /* ============ DIAGRAMMA MANIPULYATSIYASI NAMOYISHI ============ */
+  (function(){
+    const svg = document.getElementById('chartDemo');
+    if(!svg) return;
+    const data = [['A maktab', 96], ['B maktab', 98]];
+    function draw(start){
+      const W = 600, H = 320, L = 60, B = 270, T = 30;
+      const max = 100, scale = (B - T) / (max - start);
+      let g = '<rect width="600" height="320" fill="#fff"/>';
+      for(let i = 0; i <= 5; i++){
+        const val = start + (max - start) * i / 5, y = B - (val - start) * scale;
+        g += '<line x1="'+L+'" x2="'+(W-20)+'" y1="'+y+'" y2="'+y+'" stroke="#e2e8f0"/>';
+        g += '<text x="'+(L-10)+'" y="'+(y+5)+'" text-anchor="end" font-size="14" fill="#64748b">'+(Math.round(val*10)/10)+'</text>';
+      }
+      data.forEach((d, i) => {
+        const x = 150 + i * 220, h = (d[1] - start) * scale;
+        g += '<rect x="'+x+'" y="'+(B-h)+'" width="120" height="'+h+'" rx="8" fill="'+(i ? '#7c3aed' : '#2563eb')+'"/>';
+        g += '<text x="'+(x+60)+'" y="'+(B-h-10)+'" text-anchor="middle" font-size="18" font-weight="800" fill="#0f172a">'+d[1]+'%</text>';
+        g += '<text x="'+(x+60)+'" y="'+(B+24)+'" text-anchor="middle" font-size="16" font-weight="700" fill="#334155">'+d[0]+'</text>';
+      });
+      g += '<line x1="'+L+'" x2="'+L+'" y1="'+T+'" y2="'+B+'" stroke="#94a3b8" stroke-width="2"/>';
+      svg.innerHTML = g;
+      const cap = document.getElementById('chartCap');
+      cap.textContent = start === 0 ? '“Ikki maktab natijasi deyarli bir xil”' : '“B maktab A maktabdan deyarli uch baravar yaxshi!”';
+      document.getElementById('chartSub').textContent = start === 0 ? 'O‘q 0 dan boshlanadi — farq haqiqiy hajmida ko‘rinadi (2 foiz punkt).' : 'Xuddi shu raqamlar! O‘q 95 dan boshlangani uchun 2 punktlik farq ulkan bo‘lib ko‘rinadi.';
+    }
+    document.querySelectorAll('[data-chart]').forEach(b => b.addEventListener('click', () => {
+      document.querySelectorAll('[data-chart]').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      draw(Number(b.dataset.chart));
+    }));
+    draw(0);
+  })();
+
+  /* ============ KADRNI KESISH NAMOYISHI ============ */
+  (function(){
+    const svg = document.getElementById('cropDemo');
+    if(!svg) return;
+    const views = {
+      full: ['0 0 600 320', '“Shanbalikda ko‘ngillilar shaharni tozalamoqda”', 'To‘liq kadr: bayroq, ko‘ngillilar, yig‘ilgan qoplar va mashina ko‘rinadi.'],
+      crop: ['230 120 170 200', '“Bu odam ko‘chaga axlat tashlamoqda!”', 'Xuddi shu suratning kesilgan qismi: kontekst yo‘qoldi, ma’no teskarisiga aylandi.']
+    };
+    document.querySelectorAll('[data-crop]').forEach(b => b.addEventListener('click', () => {
+      document.querySelectorAll('[data-crop]').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      const v = views[b.dataset.crop];
+      svg.setAttribute('viewBox', v[0]);
+      document.getElementById('cropCap').textContent = v[1];
+      document.getElementById('cropSub').textContent = v[2];
+    }));
+  })();
+
+  /* ============ TARTIBLASH O‘YINI ============ */
+  function checkOrder(gameId, resultId){
+    const rows = document.querySelectorAll('#' + gameId + ' .order-row');
+    const out = document.getElementById(resultId);
+    const vals = [...rows].map(r => r.querySelector('select').value);
+    if(vals.some(v => !v)){
+      out.textContent = 'Iltimos, har bir qadamga raqam tanlang.';
+      out.style.color = '#b45309';
+      return;
+    }
+    let score = 0;
+    rows.forEach((r, i) => {
+      const ok = vals[i] === r.dataset.answer;
+      if(ok) score++;
+      r.classList.remove('ok','no');
+      r.classList.add(ok ? 'ok' : 'no');
+    });
+    out.textContent = score === rows.length ? 'Ajoyib! Barcha qadamlar to‘g‘ri: ' + score + ' / ' + rows.length
+                                            : 'Natija: ' + score + ' / ' + rows.length + '. Qizil qatorlarni qayta ko‘rib chiqing.';
+    out.style.color = score === rows.length ? '#15803d' : '#2563eb';
+  }
+
+  function resetOrder(gameId, resultId){
+    document.querySelectorAll('#' + gameId + ' .order-row').forEach(r => {
+      r.classList.remove('ok','no');
+      r.querySelector('select').value = '';
+    });
+    document.getElementById(resultId).textContent = '';
+  }
+
+  
+  /* ============ SERTIFIKAT ============ */
+  function makeCert(){
+    const inp = document.getElementById('certName');
+    const name = (inp.value || '').trim();
+    const out = document.getElementById('certOut');
+    if(!name){ inp.focus(); inp.placeholder = 'Avval ism-familiyangizni yozing!'; return; }
+    document.getElementById('certNameOut').textContent = name;
+    const d = new Date();
+    const oy = ['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'][d.getMonth()];
+    document.getElementById('certDate').textContent = d.getFullYear() + '-yil ' + d.getDate() + '-' + oy;
+    out.hidden = false;
+    out.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+  function printCert(){
+    document.body.classList.add('print-cert');
+    window.print();
+    setTimeout(() => document.body.classList.remove('print-cert'), 500);
+  }
+
+  
+  /* ============ TARMOQLANUVCHI SSENARIY ============ */
+  (function(){
+    const stage = document.getElementById('scStage'), START = {trust:50, reach:50};
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    let st, path;
+    function load(){ try { return JSON.parse(localStorage.getItem('s2_endings') || '[]'); } catch(e){ return []; } }
+    function save(a){ try { localStorage.setItem('s2_endings', JSON.stringify(a)); } catch(e){} }
+    const found = new Set(load());
+    function meters(){
+      [['trust', st.trust], ['reach', st.reach]].forEach(([k, v]) => {
+        v = Math.max(0, Math.min(100, v)); const bar = document.getElementById('m_' + k);
+        bar.style.width = v + '%'; bar.style.background = v >= 60 ? '#16a34a' : v >= 35 ? '#f59e0b' : '#ef4444';
+        document.getElementById('v_' + k).textContent = v; });
+      document.getElementById('scFound').textContent = '🏁 Yakunlar: ' + found.size + ' / ' + Object.keys(ENDINGS).length;
+    }
+    function intro(){
+      st = {...START}; path = []; meters();
+      document.getElementById('scClock').textContent = '🕔 16:55';
+      stage.innerHTML = '<div class="sc-center"><div class="big">📣</div><h3>Siz — maktab kanalining admini Madinasiz</h3><p>Ikki ko‘rsatkichga e’tibor bering: <b>🛡 Ishonch</b> — obunachilar sizga qanchalik ishonadi, <b>📈 Qamrov</b> — xabarlaringiz qancha odamga yetadi. Ba’zan ular bir-biriga zid bo‘ladi.</p><p>Bu ssenariyda <b>8 xil yakun</b> bor. Qayta o‘ynab, hammasini toping!</p><button class="btn" id="scGo">▶ Boshlash</button></div>';
+      document.getElementById('scGo').onclick = () => node('start');
+    }
+    function node(id){
+      const n = NODES[id]; document.getElementById('scClock').textContent = '🕔 ' + n.time;
+      stage.innerHTML = '<div class="tg-wrap"><div class="tg"><div class="tg-head"><div class="avatar" style="background:#229ed9">MH</div><div><strong>Maktab hayoti</strong><span>kanal · admin: Madina</span></div></div>' +
+        '<div class="tg-body"><div class="tg-msg"><b>' + esc(n.who) + '</b><small>' + esc(n.meta) + '</small><p>' + esc(n.msg) + '</p>' + (n.img ? '<div class="tg-img">' + esc(n.img) + '</div>' : '') + '</div></div></div>' +
+        '<div><span class="chip ghost">' + esc(n.title) + '</span><p class="sc-text">' + esc(n.text) + '</p><p class="sc-q">Madina nima qilsin?</p><div class="sc-list">' +
+        n.choices.map((c, k) => '<button class="sc-btn" data-k="' + k + '">' + esc(c.t) + '</button>').join('') + '</div><div id="scFb"></div></div></div>';
+      stage.querySelectorAll('.sc-btn').forEach(b => b.onclick = () => {
+        const c = n.choices[+b.dataset.k]; st.trust += c.d[0]; st.reach += c.d[1];
+        st.trust = Math.max(0, Math.min(100, st.trust)); st.reach = Math.max(0, Math.min(100, st.reach));
+        path.push({time:n.time, t:c.t, d:c.d}); meters();
+        stage.querySelectorAll('.sc-btn').forEach(x => x.disabled = true); b.classList.add('sel');
+        const fmt = (v, l) => v ? '<span class="tag-k ' + (v > 0 ? 'good' : 'bad') + '">' + l + ' ' + (v > 0 ? '+' : '') + v + '</span> ' : '';
+        document.getElementById('scFb').innerHTML = '<div class="sc-fb info">' + fmt(c.d[0], '🛡') + fmt(c.d[1], '📈') + '<br>' + esc(c.fb) + '</div><button class="btn" id="scNext" style="margin-top:12px">Davom etish →</button>';
+        document.getElementById('scNext').onclick = () => c.to.startsWith('E:') ? end(c.to.slice(2)) : node(c.to);
+      });
+      document.getElementById('scPlayer').scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+    function end(id){
+      const e = ENDINGS[id]; found.add(id); save([...found]); meters();
+      document.getElementById('scClock').textContent = '🌙 Kun yakuni';
+      const all = Object.keys(ENDINGS).map(k => '<span class="end-chip ' + (found.has(k) ? 'on ' + ENDINGS[k].kind : '') + '">' + (found.has(k) ? ENDINGS[k].emoji + ' ' + ENDINGS[k].title : '🔒 ???') + '</span>').join('');
+      stage.innerHTML = '<div class="sc-center"><div class="big">' + e.emoji + '</div><span class="tag-k ' + e.kind + '">' + ({good:'Yaxshi yakun', mid:'O‘rtacha yakun', bad:'Yomon yakun'})[e.kind] + '</span><h3>' + e.title + '</h3><p>' + esc(e.text) + '</p>' +
+        '<p><b>🛡 Ishonch: ' + st.trust + '</b> · <b>📈 Qamrov: ' + st.reach + '</b></p></div>' +
+        '<h4 class="sc-h4">Sizning yo‘lingiz</h4><ol class="sc-path">' + path.map(x => '<li><b>' + x.time + '</b> — ' + esc(x.t) + '</li>').join('') + '</ol>' +
+        '<h4 class="sc-h4">Topilgan yakunlar (' + found.size + ' / ' + Object.keys(ENDINGS).length + ')</h4><div class="end-chips">' + all + '</div>' +
+        '<div class="actions"><button class="btn" id="scAgain">↻ Boshqa yo‘lni sinash</button><a class="btn secondary" href="#muhokama" style="text-decoration:none">Muhokamaga o‘tish ↓</a></div>';
+      document.getElementById('scAgain').onclick = intro;
+    }
+    intro();
+  })();
+
+  /* ============ TEST ============ */
+  const QUIZ = [
+  {
+    "type": "mc",
+    "q": "Shoshilinch xabar va rasm keldi, raqib kanal uni allaqachon joylagan. Adminning birinchi qadami?",
+    "options": [
+      "Raqibdan ortda qolmaslik uchun darhol joylash",
+      "Xabar va rasmni tekshirish",
+      "Raqib kanalni tanqid qilish",
+      "Kanalni vaqtincha yopish"
+    ],
+    "answer": 1,
+    "why": "“Birinchi bo‘lish”dan “to‘g‘ri bo‘lish” muhimroq."
+  },
+  {
+    "type": "mc",
+    "q": "Rasm boshqa voqeaga tegishli ekanini qanday aniqlash mumkin?",
+    "options": [
+      "Rasmni kattalashtirib",
+      "Yuboruvchidan so‘rab",
+      "Teskari rasm qidiruvi (Google Lens, TinEye)",
+      "Izohlarni sanab"
+    ],
+    "answer": 2,
+    "why": "Teskari qidiruv rasm birinchi qachon va qayerda chiqqanini ko‘rsatadi."
+  },
+  {
+    "type": "mc",
+    "q": "Yuboruvchi “100% rost, hamma biladi!” deb javob berdi. Bu nima?",
+    "options": [
+      "Kuchli dalil",
+      "Rasmiy tasdiq",
+      "Birlamchi manba",
+      "Dalil emas — shunchaki bosim"
+    ],
+    "answer": 3,
+    "why": "Ishonch bilan aytilgan gap — dalil emas."
+  },
+  {
+    "type": "mc",
+    "q": "Admin yolg‘on xabar joylaganini bildi. Eng to‘g‘ri yo‘l?",
+    "options": [
+      "Ochiq tuzatish yozish va kechirim so‘rash",
+      "Postni jimgina o‘chirish",
+      "Hech narsa qilmaslik",
+      "“Biz faqat yetkazdik” deyish"
+    ],
+    "answer": 0,
+    "why": "Ochiq tuzatish ishonchni tiklaydi; jim o‘chirish esa skrinshotlar sabab baribir fosh bo‘ladi."
+  },
+  {
+    "type": "mc",
+    "q": "Maktabdagi voqea haqida eng ishonchli (birlamchi) manba kim?",
+    "options": [
+      "Raqib kanal",
+      "Maktab ma’muriyatining rasmiy izohi",
+      "Noma’lum yuboruvchi",
+      "Eng ko‘p izoh yozgan obunachi"
+    ],
+    "answer": 1,
+    "why": "Birlamchi manba — voqea haqida bevosita ma’lumotga ega bo‘lgan rasmiy tomon."
+  }
+];
+
+  function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  function renderQuiz(){
+    const box = document.getElementById('quiz');
+    box.innerHTML = QUIZ.map((item, i) => {
+      const n = i + 1;
+      let inner = '';
+      if(item.type === 'mc'){
+        inner = item.options.map((opt, j) =>
+          '<label><input type="radio" name="q' + n + '" value="' + j + '"> ' + escapeHtml(opt) + '</label>'
+        ).join('');
+      } else {
+        inner = '<input type="text" id="q' + n + '" class="short-answer" placeholder="Javobni yozing..." autocomplete="off">' +
+                '<p class="open-hint">' + escapeHtml(item.hint) + '</p>';
+      }
+      return '<div class="quiz-question" id="box' + n + '"><h4>' + n + '. ' + escapeHtml(item.q) + '</h4>' + inner +
+             '<div class="feedback" id="fb' + n + '"></div></div>';
+    }).join('');
+  }
+
+  function normalizeAnswer(text){
+    return text.toLowerCase().replace(/[’‘`ʻʼ']/g, "'").replace(/\s+/g, ' ').trim();
+  }
+
+  function checkQuiz(){
+    const result = document.getElementById('quizResult');
+    let missing = 0;
+    QUIZ.forEach((item, i) => {
+      const n = i + 1;
+      if(item.type === 'mc'){ if(!document.querySelector('input[name="q' + n + '"]:checked')) missing++; }
+      else if(!normalizeAnswer(document.getElementById('q' + n).value)) missing++;
+    });
+    if(missing){
+      result.textContent = 'Iltimos, barcha ' + QUIZ.length + ' ta savolga javob bering (yana ' + missing + ' ta qoldi).';
+      result.style.color = '#b45309';
+      return;
+    }
+
+    let score = 0;
+    QUIZ.forEach((item, i) => {
+      const n = i + 1;
+      const box = document.getElementById('box' + n);
+      const fb = document.getElementById('fb' + n);
+      let ok, correctText;
+      if(item.type === 'mc'){
+        const sel = Number(document.querySelector('input[name="q' + n + '"]:checked').value);
+        ok = sel === item.answer;
+        correctText = item.options[item.answer];
+      } else {
+        const val = normalizeAnswer(document.getElementById('q' + n).value);
+        ok = item.accept.map(normalizeAnswer).includes(val);
+        correctText = item.correct;
+      }
+      if(ok) score++;
+      box.classList.remove('ok','no');
+      box.classList.add(ok ? 'ok' : 'no');
+      fb.innerHTML = (ok ? '<strong style="color:#15803d">✔ To‘g‘ri.</strong> ' :
+        '<strong style="color:#e11d48">✘ Noto‘g‘ri.</strong> To‘g‘ri javob: <strong>' + escapeHtml(correctText) + '</strong>. ') + escapeHtml(item.why);
+    });
+
+    const total = QUIZ.length;
+    if(score === total){ result.textContent = 'Ajoyib! Natija: ' + score + ' / ' + total; result.style.color = '#15803d'; }
+    else if(score >= 7){ result.textContent = 'Yaxshi! Natija: ' + score + ' / ' + total; result.style.color = '#2563eb'; }
+    else if(score >= 5){ result.textContent = 'Qoniqarli. Natija: ' + score + ' / ' + total + '. Izohlarni o‘qib chiqing.'; result.style.color = '#b45309'; }
+    else { result.textContent = 'Yana bir bor urinib ko‘ring. Natija: ' + score + ' / ' + total; result.style.color = '#dc2626'; }
+  }
+
+  function resetQuiz(){
+    renderQuiz();
+    document.getElementById('quizResult').textContent = '';
+  }
+
+  renderQuiz();
+  </script>
+</body>
+</html>

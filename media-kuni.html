@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Media-kuni — infoyosh.uz</title><meta name="description" content="Bir kunlik kompleks tadbir: Men va axborot muhiti">
+<style>
+:root{--ink:#14213d;--muted:#5b6475;--bg:#f6f7fb;--card:#fff;--line:#e3e6ee;--pri:#0f5e9c;--pri2:#e8f1fa;--acc:#e8732a;--acc2:#fdf0e7;--ok:#1f8a4c;--ok2:#e6f4ec;--bad:#c0392b;--bad2:#fbeaea;--warn:#b7791f;--warn2:#fdf6e3;--r:14px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;font-size:17px}
+a{color:var(--pri)}
+.top{background:var(--ink);color:#fff;position:sticky;top:0;z-index:20}
+.top .in{max-width:1100px;margin:auto;display:flex;align-items:center;gap:18px;padding:10px 20px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:20px;color:#fff;text-decoration:none;letter-spacing:.3px}.logo b{color:#ffb27d}
+.nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.nav a{color:#d7deea;text-decoration:none;padding:6px 12px;border-radius:999px;font-size:15px}
+.nav a:hover{background:#ffffff1a;color:#fff}.nav a.on{background:#fff;color:var(--ink);font-weight:600}
+.hero{background:linear-gradient(135deg,#0f5e9c 0%,#14213d 100%);color:#fff}
+.hero .in{max-width:1100px;margin:auto;padding:48px 20px 40px}
+.tag{display:inline-block;background:#ffffff22;border:1px solid #ffffff44;border-radius:999px;padding:3px 12px;font-size:13px;letter-spacing:.4px;text-transform:uppercase}
+.hero h1{font-size:clamp(26px,4vw,40px);line-height:1.2;margin:14px 0 10px}
+.hero p{max-width:760px;color:#dfe8f5;margin:0;font-size:18px}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.meta span{background:#ffffff1a;border-radius:10px;padding:6px 12px;font-size:14px}
+main{max-width:1100px;margin:auto;padding:28px 20px 60px}
+section{margin:0 0 34px}
+h2{font-size:26px;margin:0 0 14px;line-height:1.25}
+h3{font-size:19px;margin:0 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:0 1px 2px #14213d0a}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.lead{font-size:18px;color:#2d3648}
+.muted{color:var(--muted)}
+.steps{counter-reset:s;display:grid;gap:14px}
+.step{display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:start}
+.num{width:56px;height:56px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center;font-weight:800;font-size:22px}
+.step .card{padding:18px 20px}
+.time{display:inline-block;font-size:13px;background:var(--pri2);color:var(--pri);border-radius:999px;padding:2px 10px;margin-left:6px;font-weight:600;vertical-align:middle}
+.note{border-left:4px solid var(--acc);background:var(--acc2);padding:12px 16px;border-radius:0 10px 10px 0;margin:12px 0}
+.goal{border-left:4px solid var(--pri);background:var(--pri2);padding:12px 16px;border-radius:0 10px 10px 0}
+ul.clean{padding-left:20px;margin:8px 0}ul.clean li{margin:4px 0}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:10px;padding:10px 16px;font-size:16px;font-weight:600;cursor:pointer;background:var(--pri);color:#fff;text-decoration:none;font-family:inherit}
+.btn:hover{filter:brightness(1.08)}.btn.ghost{background:#fff;color:var(--pri);border:1.5px solid var(--pri)}.btn.acc{background:var(--acc)}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.check{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;margin:8px 0;transition:.15s}
+.check input{width:22px;height:22px;margin-top:2px;accent-color:var(--ok);flex:none}
+.check.done{border-color:var(--ok);background:var(--ok2)}
+.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--ok);transition:.3s}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tabs button{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:inherit;color:var(--ink);text-align:left}
+.tabs button b{display:block;font-size:13px;color:var(--muted);font-weight:600}
+.tabs button.on{border-color:var(--pri);background:var(--pri2)}
+.panel{display:none}.panel.on{display:block}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:600;background:var(--pri2);color:var(--pri);margin:2px 4px 2px 0}
+.role{border-top:5px solid var(--acc)}.role.b{border-top-color:var(--pri)}
+.timer{font-variant-numeric:tabular-nums;font-size:44px;font-weight:800;letter-spacing:1px;margin:6px 0}
+.q{display:none}.q.on{display:block}
+.opts{display:grid;gap:10px;margin:14px 0}
+.opt{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;font-size:16px;cursor:pointer;font-family:inherit;color:var(--ink)}
+.opt:hover{border-color:var(--pri)}.opt.right{border-color:var(--ok);background:var(--ok2)}.opt.wrong{border-color:var(--bad);background:var(--bad2)}
+.msg{display:none;padding:12px 14px;border-radius:12px;margin-top:6px}.msg.on{display:block}.msg.ok{background:var(--ok2)}.msg.no{background:var(--bad2)}
+.post{background:#f0f2f7;border-radius:12px;padding:14px 16px;border:1px dashed #c5cbd8;font-size:16px}
+.post .src{font-size:13px;color:var(--muted);margin-bottom:6px}
+textarea,input[type=text]{width:100%;font-family:inherit;font-size:16px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+textarea:focus,input[type=text]:focus{outline:none;border-color:var(--pri)}
+.pledge{background:#fff;border:2px solid var(--ink);border-radius:16px;padding:26px;position:relative}
+.pledge h3{text-align:center;font-size:22px;margin-bottom:4px}
+.pledge ol{margin:14px 0 0;padding-left:22px}.pledge li{margin:6px 0}
+.sign{display:flex;justify-content:space-between;gap:20px;margin-top:22px;color:var(--muted);font-size:14px;flex-wrap:wrap}
+.tool{display:flex;gap:14px;align-items:flex-start}
+.ico{width:46px;height:46px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--pri2);color:var(--pri);font-weight:800;font-size:18px}
+.day{display:grid;grid-template-columns:80px 1fr;gap:14px;align-items:start}
+.dnum{background:var(--ink);color:#fff;border-radius:14px;text-align:center;padding:10px 4px;font-weight:700;line-height:1.1}
+.dnum span{display:block;font-size:30px}
+.hub a.card{display:block;text-decoration:none;color:inherit;transition:.15s}
+.hub a.card:hover{border-color:var(--pri);transform:translateY(-2px)}
+.hub .k{font-size:13px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.5px}
+.foot{border-top:1px solid var(--line);padding:22px 20px;text-align:center;color:var(--muted);font-size:14px}
+table.t{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}
+table.t th,table.t td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+table.t th{background:var(--pri2)}
+.cells{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+@media (max-width:640px){body{font-size:16px}.step{grid-template-columns:42px 1fr}.num{width:42px;height:42px;font-size:18px}.day{grid-template-columns:1fr}.dnum{display:flex;gap:8px;align-items:center;justify-content:center}.dnum span{display:inline;font-size:20px}}
+@media print{.top,.noprint,.foot{display:none!important}body{background:#fff}.card{box-shadow:none}.hero{background:#fff;color:#000}.hero p,.meta span{color:#000}.panel{display:block!important}.q{display:block!important}}
+</style></head><body>
+<header class="top"><div class="in"><a class="logo" href="index.html#tadbirlar">info<b>yosh</b>.uz</a><nav class="nav"><a href="index.html#tadbirlar">Tadbirlar</a><a href="trening.html">Trening</a><a href="axborot-haftaligi.html">Axborot haftaligi</a><a href="media-kuni.html" class=on>Media-kuni</a><a href="onlayn-soat.html">Onlayn soat</a></nav></div></header>
+<div class="hero"><div class="in"><span class="tag">Kompleks tadbir · 1 kun</span>
+<h1>“Media-kuni”: Men va axborot muhiti</h1>
+<p>Axborotni tahlil qilish, ijodiy yaratish va axloqiy baholash faoliyatlarini uyg‘unlashtiruvchi, maktabning umumiy madaniy hayoti bilan bog‘langan bir kunlik tadbir.</p>
+<div class="meta"><span>Butun maktab</span><span>3 ta asosiy faoliyat</span><span>Media klub yetakchiligida</span></div></div></div>
+<main><section><h2>Kun dasturi</h2><div class="grid g3">
+<div class="card"><div class="ico">1</div><h3 style="margin-top:12px">“Media ko‘rgazma”</h3><p>O‘quvchilar yaratgan infografika, plakat, videorolik va mini-maqolalar namoyishi.</p><div class="note" style="margin-bottom:0"><b>Maslahat:</b> har bir ish yonida “manba” yorlig‘i bo‘lsin — qaysi ma’lumotlardan foydalanilgani ko‘rsatiladi.</div></div>
+<div class="card"><div class="ico">2</div><h3 style="margin-top:12px">“Feykga qarshi bir daqiqa”</h3><p>Har bir sinf o‘quvchilarining axborot xavfsizligi bo‘yicha qisqa (1 daqiqalik) chiqishlari.</p><div class="note" style="margin-bottom:0"><b>Format:</b> bitta qoida + bitta misol + bitta maslahat.</div></div>
+<div class="card"><div class="ico">3</div><h3 style="margin-top:12px">“Yangilik tahlili”</h3><p>Media klub a’zolari hafta davomida tahlil qilgan yangiliklar bo‘yicha jamoaviy muhokama.</p><div class="note" style="margin-bottom:0"><b>Savollar:</b> Manba kim? Dalil bormi? Kimga foyda, kimga zarar?</div></div>
+</div></section>
+
+<section><div class="card"><h2>“Feykga qarshi bir daqiqa” chiqishini tayyorlash</h2>
+<p class="muted">Sinf o‘z chiqishini shu shablon bo‘yicha tayyorlaydi. Taymer bilan mashq qiling.</p>
+<div class="grid g2">
+<div><label><b>Qoida</b></label><input type="text" id="f1" placeholder="Masalan: Xabarni tarqatishdan oldin manbasini tekshir"><br><br>
+<label><b>Misol</b></label><textarea id="f2" rows="3" placeholder="Qanday holatda bu qoida yordam beradi?"></textarea><br><br>
+<label><b>Maslahat</b></label><input type="text" id="f3" placeholder="Masalan: Rasmiy sahifani ochib solishtir"></div>
+<div class="post" style="background:#fff"><div class="src">Chiqish matni (taxminiy o‘qish vaqti: <b id="sec">0</b> soniya)</div><div id="spk" style="white-space:pre-wrap">Maydonlarni to‘ldiring…</div></div>
+</div></div></section>
+
+<section><div class="card"><h2>Tashkiliy reja (namuna)</h2>
+<table class="t"><tr><th>Vaqt</th><th>Faoliyat</th><th>Mas’ul</th></tr>
+<tr><td>1-soat</td><td>Ochilish, “Men va axborot muhiti” mavzusiga kirish</td><td>Direktor o‘rinbosari, media klub rahbari</td></tr>
+<tr><td>2-soat</td><td>“Media ko‘rgazma” — sinflar ishlarini ko‘rish va ovoz berish</td><td>Sinf rahbarlari</td></tr>
+<tr><td>3-soat</td><td>“Feykga qarshi bir daqiqa” — sinflar chiqishlari</td><td>Media klub a’zolari</td></tr>
+<tr><td>4-soat</td><td>“Yangilik tahlili” — jamoaviy muhokama va yakun</td><td>Media klub, psixolog, kutubxonachi</td></tr></table>
+<p class="muted" style="margin-top:10px">Reja maktab sharoitiga qarab o‘zgartiriladi.</p></div></section>
+
+<section><div class="card"><h2>Asosiy ahamiyati</h2><p class="lead">Media-kun o‘quvchilarda axborotni tahlil qilish va uni ijtimoiy mas’uliyat bilan qayta yaratish tajribasini shakllantiradi.</p></div></section></main>
+<footer class="foot">infoyosh.uz — o‘quvchilarning axborot iste’moli madaniyatini oshirishga mo‘ljallangan raqamli ta’lim platformasi · Sinfdan tashqari tadbirlar bo‘limi</footer>
+<script>
+function upd(){const g=id=>document.getElementById(id).value.trim();const a=g('f1'),b=g('f2'),c=g('f3');
+const t=[a&&('Qoida: '+a),b&&('Misol: '+b),c&&('Maslahat: '+c)].filter(Boolean).join('\n\n');
+document.getElementById('spk').textContent=t||'Maydonlarni to‘ldiring…';
+const w=t.split(/\s+/).filter(Boolean).length;const s=Math.round(w/2);const el=document.getElementById('sec');el.textContent=s;el.style.color=s>60?'#c0392b':''}
+['f1','f2','f3'].forEach(id=>document.getElementById(id).addEventListener('input',upd));</script></body></html>
