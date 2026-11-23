@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krossvord — 8-sinf, 11-dars: Web-sahifada matn joylashtirish va ularni boshqarish. Link joylashtirish</title>
+<style>
+  :root{--bg:#0f1b2d;--panel:#16263f;--panel2:#1d3252;--ink:#eef3fb;--muted:#a9bbd4;--accent:#ffb627;--accent2:#3fc1c9;--ok:#2ecc71;--word:#ffe9b8;--sel:#ffb627;--cellInk:#10203a}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+  header{padding:12px 20px;background:linear-gradient(90deg,#16263f,#21406b);display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;justify-content:space-between;border-bottom:3px solid var(--accent)}
+  header h1{margin:0;font-size:clamp(17px,2vw,26px)}
+  header .sub{color:var(--muted);font-size:clamp(13px,1.1vw,16px);margin-top:3px}
+  .stats{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .pill{background:var(--panel2);border:1px solid #2d4a75;border-radius:999px;padding:6px 13px;font-weight:600;font-size:15px;white-space:nowrap}
+  .pill b{color:var(--accent)}
+  main{display:grid;grid-template-columns:minmax(0,auto) minmax(320px,1fr);gap:18px;padding:16px 20px;align-items:start}
+  @media (max-width:1000px){main{grid-template-columns:1fr}}
+  .board-wrap{background:var(--panel);border-radius:16px;padding:14px;box-shadow:0 8px 24px #0006}
+  .current{min-height:64px;background:var(--panel2);border-left:6px solid var(--accent);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:clamp(16px,1.45vw,21px);line-height:1.35}
+  .current .tag{color:var(--accent);font-weight:700;margin-right:6px}
+  #grid{display:grid;gap:3px;margin:0 auto;width:min(60vh,100%)}
+  .c{position:relative;border-radius:4px;aspect-ratio:1/1}
+  .c.on{background:#fff;box-shadow:inset 0 0 0 1px #c9d4e6;cursor:pointer}
+  .c.on.inword{background:var(--word)}
+  .c.on.sel{background:var(--sel);box-shadow:inset 0 0 0 3px #b36b00}
+  .c.on.good{background:#c9f7da}
+  .c.on.wrong{background:#ffd0d0}
+  .c.on.revealed .l{color:#7a4fd1}
+  .c .n{position:absolute;top:1px;left:3px;font-size:clamp(8px,1vh,12px);font-weight:700;color:#3a4d6b;pointer-events:none}
+  .c .l{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:clamp(12px,2.4vh,28px);color:var(--cellInk);pointer-events:none}
+  .controls{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;justify-content:center}
+  button{font:inherit;font-size:15px;font-weight:700;border-radius:10px;padding:10px 14px;cursor:pointer;background:var(--panel2);color:var(--ink);border:1px solid #2d4a75;min-height:44px}
+  button:hover{filter:brightness(1.2)}
+  button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  button.primary{background:var(--accent);color:#2a1a00;border-color:var(--accent)}
+  button.teal{background:var(--accent2);color:#06262a;border-color:var(--accent2)}
+  .kbd{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:12px}
+  .kbd button{min-width:44px;padding:8px 6px;font-size:17px}
+  .kbd button.wide{min-width:70px}
+  .clues{background:var(--panel);border-radius:16px;padding:14px;box-shadow:0 8px 24px #0006;max-height:calc(100vh - 120px);overflow:auto}
+  .clues h2{margin:4px 0 10px;font-size:19px;color:var(--accent2)}
+  .clues ol{list-style:none;margin:0 0 14px;padding:0}
+  .clues li{padding:8px 10px;border-radius:8px;margin-bottom:4px;cursor:pointer;font-size:16px;line-height:1.4;border:1px solid transparent}
+  .clues li:hover{background:var(--panel2)}
+  .clues li.active{background:var(--panel2);border-color:var(--accent)}
+  .clues li.solved{opacity:.7}
+  .clues li.solved .num::after{content:" ✔";color:var(--ok)}
+  .clues .num{font-weight:800;color:var(--accent);margin-right:4px}
+  .clues .len{color:var(--muted);font-size:14px}
+  .modal{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+  .modal.hide{display:none}
+  .box{background:var(--panel);border:2px solid var(--accent);border-radius:18px;max-width:720px;width:100%;padding:22px 26px;font-size:18px;line-height:1.5;max-height:92vh;overflow:auto}
+  .box h2{margin-top:0;color:var(--accent)}
+  .box ul{padding-left:22px}
+  .toast{position:fixed;top:92px;left:50%;transform:translateX(-50%);background:var(--panel2);border:2px solid var(--accent2);padding:11px 20px;border-radius:12px;font-weight:700;font-size:18px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:60;max-width:90vw;text-align:center}
+  .toast.show{opacity:1}
+  #kb{position:absolute;opacity:0;width:1px;height:1px;left:-100px}
+  .legend{color:var(--muted);font-size:13px;text-align:center;margin-top:8px}
+  .answers{display:none}
+  @media print{
+    @page{margin:12mm}
+    body{background:#fff;color:#000} header{background:#fff;border-color:#000} .stats,.controls,.kbd,.legend,.current{display:none}
+    main{display:block;padding:0} .board-wrap,.clues{box-shadow:none;background:#fff;max-height:none;overflow:visible}
+    #grid{width:120mm} .c.on{background:#fff!important;box-shadow:inset 0 0 0 1px #000} .c .l{display:none} .c .n{color:#000}
+    .clues li{color:#000;padding:2px 0;font-size:12pt} .clues h2{color:#000}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>🧩 Krossvord: Web-sahifada matn joylashtirish va ularni boshqarish. Link joylashtirish</h1>
+    <div class="sub">8-sinf · Informatika va AT · II chorak · 11-dars · Manba: 8-sinf darslik, 2-modul “Veb-sayt dizaynini yaratish”</div>
+  </div>
+  <div class="stats">
+    <span class="pill">Yechildi: <b id="solvedCnt">0</b> / <b id="totalCnt">0</b></span>
+    <span class="pill">⏱ <b id="timer">00:00</b></span>
+    <span class="pill">Yordam: <b id="hintCnt">0</b></span>
+  </div>
+</header>
+<main>
+  <section class="board-wrap">
+    <div class="current" id="current">Katakni yoki savolni tanlang va javobni yozing.</div>
+    <div id="grid" role="grid" aria-label="Krossvord to‘ri"></div>
+    <input id="kb" type="text" autocomplete="off" autocapitalize="characters" aria-label="Harf kiritish">
+    <div class="kbd" id="kbd" aria-label="Ekran klaviaturasi"></div>
+    <div class="controls">
+      <button class="primary" id="btnCheck">✔ Tekshirish</button>
+      <button id="btnLetter">💡 Harf ochish</button>
+      <button id="btnWord">🔎 So‘zni ochish</button>
+      <button id="btnDir">⇄ Yo‘nalish</button>
+      <button id="btnReset">↺ Qaytadan</button>
+      <button class="teal" id="btnAll">👁 Javoblar</button>
+      <button id="btnRules">📘 Qoida</button>
+      <button id="btnFull">⛶ To‘liq ekran</button>
+      <button id="btnPrint">🖨 Chop etish</button>
+    </div>
+    <div class="legend">Klaviatura: harflar — yozish · O‘ va G‘ uchun harfdan keyin ' (apostrof) bosing · ← → ↑ ↓ — yurish · Backspace — o‘chirish · Probel — yo‘nalish · Enter — tekshirish</div>
+  </section>
+  <aside class="clues">
+    <h2>➡ Gorizontal</h2>
+    <ol id="cluesA"></ol>
+    <h2>⬇ Vertikal</h2>
+    <ol id="cluesD"></ol>
+  </aside>
+</main>
+
+<div class="modal" id="rules">
+  <div class="box">
+    <h2>📘 O‘yin qoidasi</h2>
+    <ul>
+      <li>Krossvord darslikdagi “<b>Web-sahifada matn joylashtirish va ularni boshqarish. Link joylashtirish</b>” mavzusi asosida tuzilgan.</li>
+      <li>Katakni bosing yoki o‘ngdagi savolni tanlang va javobni yozing. Klaviatura yoki ekrandagi harf tugmalaridan foydalaning.</li>
+      <li><b>O‘</b> va <b>G‘</b> bitta katakka yoziladi: harfdan keyin <b>'</b> (apostrof) bosing yoki ekrandagi O‘ / G‘ tugmasini bosing.</li>
+      <li>Javoblar bo‘sh joysiz va chiziqchasiz yoziladi. To‘g‘ri topilgan so‘z yashil rangga kiradi.</li>
+      <li>Jamoaviy variant: sinfni 2 guruhga bo‘ling, guruhlar navbat bilan so‘z tanlaydi. To‘g‘ri so‘z — 1 ball, “Harf ochish” ishlatilgan so‘z — 0,5 ball.</li>
+    </ul>
+    <div style="text-align:center"><button class="primary" id="btnStart">Boshlash ▶</button></div>
+  </div>
+</div>
+<div class="modal hide" id="finish">
+  <div class="box" style="text-align:center">
+    <h2>🎉 Krossvord yechildi!</h2>
+    <p id="finishText"></p>
+    <button class="primary" id="btnAgain">↺ Qayta o‘ynash</button>
+    <button id="btnClose">Yopish</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== KROSSVORD MA’LUMOTLARI =====
+   javob — katakchalar ro‘yxati (O‘ va G‘ bitta katak); r, c — boshlanish katagi; d: "A" gorizontal, "D" vertikal */
+const SOZLAR = [
+{
+"javob": [
+"G",
+"I",
+"P",
+"E",
+"R",
+"H",
+"A",
+"V",
+"O",
+"L",
+"A"
+],
+"savol": "Veb-sahifalarni bir-biriga bog‘lovchi bosiladigan havola.",
+"r": 11,
+"c": 3,
+"d": "A"
+},
+{
+"javob": [
+"T",
+"A",
+"G",
+"S",
+"A",
+"R",
+"L",
+"A",
+"V",
+"H",
+"A"
+],
+"savol": "<h2> tegi bilan qanday matn qo‘shiladi?",
+"r": 2,
+"c": 8,
+"d": "D"
+},
+{
+"javob": [
+"N",
+"A",
+"V",
+"I",
+"G",
+"A",
+"T",
+"S",
+"I",
+"Y",
+"A"
+],
+"savol": "Saytdagi sahifalar orasida harakatlanish funksiyasi.",
+"r": 3,
+"c": 3,
+"d": "A"
+},
+{
+"javob": [
+"T",
+"A",
+"R",
+"T",
+"I",
+"B",
+"L",
+"I"
+],
+"savol": "Raqamlangan ro‘yxat (<ol> tegi) — ... ro‘yxat.",
+"r": 7,
+"c": 6,
+"d": "A"
+},
+{
+"javob": [
+"T",
+"A",
+"R",
+"T",
+"I",
+"B",
+"S",
+"I",
+"Z"
+],
+"savol": "O‘q nuqtali, raqamsiz ro‘yxat (<ul> tegi) — ... ro‘yxat.",
+"r": 5,
+"c": 2,
+"d": "A"
+},
+{
+"javob": [
+"P",
+"A",
+"R",
+"A",
+"G",
+"R",
+"A",
+"F"
+],
+"savol": "Oddiy matnlar <p> tegi bilan yoziladi. Bu ... matni.",
+"r": 0,
+"c": 4,
+"d": "D"
+},
+{
+"javob": [
+"X",
+"U",
+"S",
+"U",
+"S",
+"I",
+"Y",
+"A",
+"T"
+],
+"savol": "href — bu tegning qo‘shimcha ...i.",
+"r": 9,
+"c": 1,
+"d": "A"
+},
+{
+"javob": [
+"S",
+"A",
+"R",
+"L",
+"A",
+"V",
+"H",
+"A"
+],
+"savol": "Sahifaga eng yirik matn <h1> tegi bilan qo‘shiladi. Bu qanday matn?",
+"r": 1,
+"c": 0,
+"d": "A"
+},
+{
+"javob": [
+"P",
+"A",
+"P",
+"K",
+"A"
+],
+"savol": "Havolada faqat fayl nomini yozish uchun barcha sahifalar bitta ...da bo‘lishi kerak.",
+"r": 0,
+"c": 1,
+"d": "D"
+},
+{
+"javob": [
+"H",
+"R",
+"E",
+"F"
+],
+"savol": "<a ...=“webpage.html”> — qayerga havola qilinishini bildiruvchi qism.",
+"r": 7,
+"c": 1,
+"d": "A"
+},
+{
+"javob": [
+"B",
+"O",
+"D",
+"Y"
+],
+"savol": "Sarlavha va paragraf matnlari qaysi tegning ochilish va yopilishi orasiga yoziladi?",
+"r": 0,
+"c": 12,
+"d": "D"
+},
+{
+"javob": [
+"A",
+"N",
+"K",
+"O",
+"R"
+],
+"savol": "Havolada foydalanuvchi bosadigan matn.",
+"r": 1,
+"c": 9,
+"d": "A"
+}
+];
+
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+const APOS=/['‘’ʻʼ`]/;
+let R=0,C=0;SOZLAR.forEach(w=>{const L=w.javob.length;R=Math.max(R,w.d==="D"?w.r+L:w.r+1);C=Math.max(C,w.d==="A"?w.c+L:w.c+1);});
+const sol={},entry={},revealed=new Set(),cellWords={};const key=(r,c)=>r+","+c;
+SOZLAR.forEach((w,i)=>{for(let k=0;k<w.javob.length;k++){const r=w.d==="A"?w.r:w.r+k,c=w.d==="A"?w.c+k:w.c,K=key(r,c);sol[K]=w.javob[k];(cellWords[K]=cellWords[K]||{})[w.d]=i;}});
+const starts={};let num=0;
+for(let r=0;r<R;r++)for(let c=0;c<C;c++){const s=SOZLAR.filter(w=>w.r===r&&w.c===c);if(s.length){num++;starts[key(r,c)]=num;s.forEach(w=>w.num=num);}}
+const gridEl=document.getElementById("grid");
+gridEl.style.gridTemplateColumns=`repeat(${C},1fr)`;
+gridEl.style.width=`min(${Math.round(54*C/Math.max(R,C))}vh,100%)`;
+const cells={};
+for(let r=0;r<R;r++)for(let c=0;c<C;c++){const d=document.createElement("div"),K=key(r,c);d.className="c";
+  if(sol[K]){d.classList.add("on");d.innerHTML=(starts[K]?`<span class="n">${starts[K]}</span>`:"")+`<span class="l"></span>`;d.addEventListener("click",()=>clickCell(r,c));cells[K]=d;}
+  gridEl.appendChild(d);}
+const liMap={};
+["A","D"].forEach(dir=>{const ol=document.getElementById(dir==="A"?"cluesA":"cluesD");
+  SOZLAR.map((w,i)=>({w,i})).filter(o=>o.w.d===dir).sort((a,b)=>a.w.num-b.w.num).forEach(({w,i})=>{
+    const li=document.createElement("li");li.innerHTML=`<span class="num">${w.num}.</span> ${esc(w.savol)} <span class="len">(${w.javob.length} harf)</span>`;
+    li.addEventListener("click",()=>selectWord(i));ol.appendChild(li);liMap[i]=li;});});
+document.getElementById("totalCnt").textContent=SOZLAR.length;
+// ekran klaviaturasi
+const KB="A B D E F G H I J K L M N O P Q R S T U V X Y Z O‘ G‘ C W".split(" ");
+const kbdEl=document.getElementById("kbd");
+KB.forEach(ch=>{const b=document.createElement("button");b.textContent=ch;b.addEventListener("click",()=>{typeLetter(ch);});kbdEl.appendChild(b);});
+const bs=document.createElement("button");bs.textContent="⌫";bs.className="wide";bs.title="O‘chirish";bs.addEventListener("click",()=>backspace());kbdEl.appendChild(bs);
+
+let cur=null,dir="A",hints=0,t0=null,tick=null,solved=new Set(),finished=false,lastTyped=null;
+const kb=document.getElementById("kb");
+const isTouch=matchMedia("(pointer:coarse)").matches;
+function focusKb(){if(!isTouch)kb.focus({preventScroll:true});}
+function clickCell(r,c){const K=key(r,c),cw=cellWords[K];
+  if(cur&&cur.r===r&&cur.c===c&&cw.A!==undefined&&cw.D!==undefined)dir=dir==="A"?"D":"A";else if(cw[dir]===undefined)dir=cw.A!==undefined?"A":"D";
+  cur={r,c};lastTyped=null;render();focusKb();startTimer();}
+function wordCells(i){const w=SOZLAR[i],a=[];for(let k=0;k<w.javob.length;k++)a.push(w.d==="A"?[w.r,w.c+k]:[w.r+k,w.c]);return a;}
+function selectWord(i){const w=SOZLAR[i];dir=w.d;let t=wordCells(i)[0];for(const [r,c] of wordCells(i)){if(!entry[key(r,c)]){t=[r,c];break;}}
+  cur={r:t[0],c:t[1]};lastTyped=null;render();focusKb();startTimer();if(window.innerWidth<=1000)document.getElementById("current").scrollIntoView({block:"start",behavior:"smooth"});}
+function curWordIdx(){if(!cur)return null;const cw=cellWords[key(cur.r,cur.c)];return cw[dir]!==undefined?cw[dir]:(cw.A!==undefined?cw.A:cw.D);}
+function render(){const wi=curWordIdx();const inW=new Set(wi!=null?wordCells(wi).map(([r,c])=>key(r,c)):[]);
+  for(const K in cells){const el=cells[K];el.classList.toggle("inword",inW.has(K));el.classList.toggle("sel",!!cur&&K===key(cur.r,cur.c));el.querySelector(".l").textContent=entry[K]||"";el.classList.toggle("revealed",revealed.has(K));}
+  Object.values(liMap).forEach(li=>li.classList.remove("active"));const ce=document.getElementById("current");
+  if(wi!=null){liMap[wi].classList.add("active");if(window.innerWidth>1000)liMap[wi].scrollIntoView({block:"nearest",behavior:"smooth"});const w=SOZLAR[wi];
+    ce.innerHTML=`<span class="tag">${w.num} ${w.d==="A"?"➡ Gorizontal":"⬇ Vertikal"}:</span>${esc(w.savol)} <span style="color:var(--muted)">(${w.javob.length} harf)</span>`;}}
+function move(dr,dc){if(!cur)return;let r=cur.r+dr,c=cur.c+dc;while(r>=0&&c>=0&&r<R&&c<C){if(sol[key(r,c)]){cur={r,c};lastTyped=null;return;}r+=dr;c+=dc;}}
+function setCell(K,ch){if(revealed.has(K))return;entry[K]=ch;cells[K].classList.remove("wrong");}
+function typeLetter(ch){if(!cur||finished)return;
+  if(ch.length===1&&APOS.test(ch)){ // O‘ / G‘ ga aylantirish
+    const K=lastTyped||key(cur.r,cur.c);const v=entry[K];if(v==="O"||v==="G"){setCell(K,v+"‘");checkSolved();render();}return;}
+  const K=key(cur.r,cur.c);setCell(K,ch);lastTyped=K;
+  const w=SOZLAR[curWordIdx()];if(dir!==w.d)dir=w.d;const [dr,dc]=dir==="A"?[0,1]:[1,0];if(sol[key(cur.r+dr,cur.c+dc)])cur={r:cur.r+dr,c:cur.c+dc};
+  checkSolved();render();focusKb();}
+function backspace(){if(!cur)return;lastTyped=null;const K=key(cur.r,cur.c);
+  if(entry[K]&&!revealed.has(K)){delete entry[K];}else{const [dr,dc]=dir==="A"?[0,-1]:[-1,0];const p=key(cur.r+dr,cur.c+dc);if(sol[p]){cur={r:cur.r+dr,c:cur.c+dc};if(!revealed.has(p))delete entry[p];}}
+  cells[key(cur.r,cur.c)].classList.remove("wrong");checkSolved();render();focusKb();}
+const CYR={"Ў":"O‘","Ғ":"G‘"};
+kb.addEventListener("input",()=>{const v=kb.value.toUpperCase();kb.value="";for(let ch of v){ch=CYR[ch]||ch;if(/^[A-Z]$/.test(ch)||ch.length===2||APOS.test(ch))typeLetter(ch);}});
+document.addEventListener("keydown",e=>{
+  if(!document.getElementById("rules").classList.contains("hide")||!document.getElementById("finish").classList.contains("hide"))return;
+  const k=e.key;
+  if(k==="ArrowRight"){dir="A";move(0,1);render();e.preventDefault();}
+  else if(k==="ArrowLeft"){dir="A";move(0,-1);render();e.preventDefault();}
+  else if(k==="ArrowDown"){dir="D";move(1,0);render();e.preventDefault();}
+  else if(k==="ArrowUp"){dir="D";move(-1,0);render();e.preventDefault();}
+  else if(k==="Backspace"||k==="Delete"){backspace();e.preventDefault();}
+  else if(k===" "){toggleDir();e.preventDefault();}
+  else if(k==="Enter"){checkAll();e.preventDefault();}
+  else if(k==="Tab"){e.preventDefault();nextWord(e.shiftKey?-1:1);}
+});
+function nextWord(step){const order=SOZLAR.map((w,i)=>i).sort((a,b)=>(SOZLAR[a].d+String(SOZLAR[a].num).padStart(3,"0")).localeCompare(SOZLAR[b].d+String(SOZLAR[b].num).padStart(3,"0")));
+  const wi=curWordIdx();let p=wi==null?-1:order.indexOf(wi);p=(p+step+order.length)%order.length;selectWord(order[p]);}
+function toggleDir(){if(!cur)return;const cw=cellWords[key(cur.r,cur.c)];const nd=dir==="A"?"D":"A";if(cw[nd]!==undefined){dir=nd;render();}}
+function isWordSolved(i){return wordCells(i).every(([r,c])=>entry[key(r,c)]===sol[key(r,c)]);}
+function checkSolved(){SOZLAR.forEach((w,i)=>{const s=isWordSolved(i);
+    if(s&&!solved.has(i)){solved.add(i);liMap[i].classList.add("solved");if(!finished)toast("✅ To‘g‘ri: "+w.javob.join(""));}
+    else if(!s&&solved.has(i)){solved.delete(i);liMap[i].classList.remove("solved");}});
+  const g=new Set();solved.forEach(i=>wordCells(i).forEach(([r,c])=>g.add(key(r,c))));for(const K in cells)cells[K].classList.toggle("good",g.has(K));
+  document.getElementById("solvedCnt").textContent=solved.size;
+  if(solved.size===SOZLAR.length&&!finished){finished=true;stopTimer();
+    setTimeout(()=>{document.getElementById("finishText").innerHTML=`Barcha <b>${SOZLAR.length}</b> ta so‘z topildi.<br>Vaqt: <b>${document.getElementById("timer").textContent}</b> · Yordamdan foydalanildi: <b>${hints}</b> marta.`;document.getElementById("finish").classList.remove("hide");},500);}}
+function checkAll(){let wrong=0,empty=0;for(const K in cells){cells[K].classList.remove("wrong");if(!entry[K])empty++;else if(entry[K]!==sol[K]){cells[K].classList.add("wrong");wrong++;}}
+  toast(wrong?`❌ ${wrong} ta katakda xato bor (qizil). Bo‘sh: ${empty}`:(empty?`👍 Xato yo‘q! Hali ${empty} ta bo‘sh katak qoldi`:"🎉 Hammasi to‘g‘ri!"));}
+function revealCell(K){entry[K]=sol[K];revealed.add(K);cells[K].classList.remove("wrong");}
+document.getElementById("btnCheck").onclick=()=>{checkAll();focusKb();};
+document.getElementById("btnLetter").onclick=()=>{if(!cur){toast("Avval katakni tanlang");return;}const K=key(cur.r,cur.c);if(entry[K]===sol[K]){toast("Bu katak allaqachon to‘g‘ri");return;}revealCell(K);hints++;upd();checkSolved();render();focusKb();};
+document.getElementById("btnWord").onclick=()=>{const wi=curWordIdx();if(wi==null){toast("Avval so‘zni tanlang");return;}wordCells(wi).forEach(([r,c])=>{const K=key(r,c);if(entry[K]!==sol[K])revealCell(K);});hints+=3;upd();checkSolved();render();focusKb();};
+document.getElementById("btnDir").onclick=()=>{toggleDir();focusKb();};
+document.getElementById("btnAll").onclick=()=>{if(!window.confirm("Barcha javoblarni ko‘rsatishni xohlaysizmi?"))return;for(const K in cells)if(entry[K]!==sol[K])revealCell(K);finished=true;stopTimer();checkSolved();render();toast("Barcha javoblar ko‘rsatildi");};
+function reset(){for(const K in entry)delete entry[K];revealed.clear();solved.clear();hints=0;finished=false;cur=null;lastTyped=null;
+  for(const K in cells)cells[K].classList.remove("good","wrong");Object.values(liMap).forEach(li=>li.classList.remove("solved"));
+  stopTimer();t0=null;document.getElementById("timer").textContent="00:00";upd();document.getElementById("solvedCnt").textContent=0;
+  document.getElementById("current").textContent="Katakni yoki savolni tanlang va javobni yozing.";render();}
+document.getElementById("btnReset").onclick=reset;
+document.getElementById("btnAgain").onclick=()=>{document.getElementById("finish").classList.add("hide");reset();};
+document.getElementById("btnClose").onclick=()=>document.getElementById("finish").classList.add("hide");
+document.getElementById("btnRules").onclick=()=>document.getElementById("rules").classList.remove("hide");
+document.getElementById("btnStart").onclick=()=>{document.getElementById("rules").classList.add("hide");selectWord(SOZLAR.findIndex(w=>w.num===1));};
+document.getElementById("btnFull").onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}catch(e){}};
+document.getElementById("btnPrint").onclick=()=>window.print();
+function upd(){document.getElementById("hintCnt").textContent=hints;}
+function startTimer(){if(t0||finished)return;t0=Date.now();tick=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);document.getElementById("timer").textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");},500);}
+function stopTimer(){clearInterval(tick);}
+let tt;function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2200);}
+render();
+</script>
+</body>
+</html>

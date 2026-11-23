@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sirli sandiq</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+:root{
+  --bg:#eef2f9;--bg2:#e3e9f5;--card:#ffffff;--ink:#14213d;--muted:#5b6785;--line:#d7deec;
+  --ok:#15803d;--okbg:#dcfce7;--bad:#b91c1c;--badbg:#fee2e2;--warn:#d97706;
+  --a:#2563eb;--a2:#1d4ed8;--asoft:#dbeafe;
+  --p1:#2563eb;--p2:#dc2626;--p3:#059669;--p4:#9333ea;
+  --r:18px;--sh:0 10px 30px rgba(20,33,61,.10),0 2px 6px rgba(20,33,61,.06);
+  font-size:clamp(15px,1.15vw,22px);
+}
+html,body{height:100%}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Noto Sans",Arial,sans-serif;color:var(--ink);
+  background:radial-gradient(1200px 600px at 10% -10%,var(--asoft),transparent 60%),radial-gradient(900px 500px at 110% 110%,var(--bg2),transparent 60%),var(--bg);
+  display:flex;flex-direction:column;overflow-x:hidden}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--a);outline-offset:3px}
+
+/* Header */
+.top{display:flex;align-items:center;gap:1rem;padding:.6rem 1.2rem;background:rgba(255,255,255,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.top .title{flex:1;min-width:0;text-align:center}
+.game-name{font-weight:800;font-size:1.35rem;letter-spacing:.2px;display:flex;align-items:center;justify-content:center;gap:.5rem;color:var(--a2)}
+.game-name svg{width:1.6rem;height:1.6rem}
+.topic{color:var(--muted);font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tools{display:flex;gap:.5rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;border:0;border-radius:12px;padding:.7rem 1.2rem;font-weight:700;text-decoration:none;
+  background:var(--a);color:#fff;box-shadow:0 4px 0 var(--a2);transition:transform .08s,box-shadow .08s,filter .15s;min-height:2.8rem}
+.btn:hover{filter:brightness(1.07)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--a2)}
+.btn.big{font-size:1.25rem;padding:.9rem 2rem;border-radius:16px}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:0 0 0 1px var(--line),0 3px 0 var(--line)}
+.btn.ghost:active{box-shadow:0 0 0 1px var(--line)}
+.btn.small{padding:.45rem .8rem;min-height:2.3rem;font-size:.9rem}
+.btn.ok{background:var(--ok);box-shadow:0 4px 0 #0f5f2d}
+.btn.bad{background:var(--bad);box-shadow:0 4px 0 #8a1515}
+.btn.gold{background:#f59e0b;box-shadow:0 4px 0 #b45309;color:#1f1300}
+.btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
+
+main{flex:1;display:flex;flex-direction:column;padding:1rem 1.2rem 1.2rem;gap:1rem;max-width:1600px;width:100%;margin:0 auto}
+.screen{display:none;flex:1;flex-direction:column;gap:1rem;animation:fadeIn .35s ease}
+.screen.on{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:1.3rem 1.5rem;border:1px solid rgba(215,222,236,.7)}
+
+/* Setup */
+.setup{display:grid;grid-template-columns:1.1fr 1fr;gap:1.2rem;align-items:start}
+.setup h2{font-size:1.5rem;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.rules{list-style:none;display:grid;gap:.55rem}
+.rules li{display:flex;gap:.7rem;align-items:flex-start;line-height:1.4}
+.rules li b.n{flex:none;width:1.8rem;height:1.8rem;border-radius:50%;background:var(--asoft);color:var(--a2);display:grid;place-items:center;font-size:.9rem}
+.field{display:grid;gap:.35rem;margin-bottom:.9rem}
+.field label{font-weight:700;font-size:.95rem;color:var(--muted)}
+.field input,.field select{border:2px solid var(--line);border-radius:12px;padding:.65rem .9rem;background:#fff;font-size:1.05rem;width:100%}
+.field input:focus,.field select:focus{border-color:var(--a);outline:none}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.dot{display:inline-block;width:.8rem;height:.8rem;border-radius:50%;margin-right:.35rem;vertical-align:middle}
+.src{color:var(--muted);font-size:.85rem;margin-top:.8rem}
+
+/* Question */
+.qbox{display:flex;flex-direction:column;gap:.9rem}
+.qhead{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .8rem;border-radius:999px;font-weight:700;font-size:.85rem;background:var(--asoft);color:var(--a2)}
+.chip.l1{background:#dcfce7;color:#166534}.chip.l2{background:#fef3c7;color:#92400e}.chip.l3{background:#fee2e2;color:#991b1b}.chip.l4{background:#ede9fe;color:#5b21b6}
+.qtext{font-size:clamp(1.3rem,2.1vw,2.3rem);font-weight:750;line-height:1.3;overflow-wrap:anywhere}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.opt{display:flex;align-items:center;gap:.8rem;text-align:left;border:2px solid var(--line);background:#fff;border-radius:14px;padding:.8rem 1rem;font-size:clamp(1.05rem,1.45vw,1.6rem);font-weight:600;min-height:3.6rem;transition:border-color .15s,background .15s,transform .1s;overflow-wrap:anywhere}
+.opt:hover:not([disabled]){border-color:var(--a);background:#f6f9ff;transform:translateY(-1px)}
+.opt .k{flex:none;width:2.2rem;height:2.2rem;border-radius:10px;background:var(--bg);display:grid;place-items:center;font-weight:800;color:var(--muted)}
+.opt .mk{margin-left:auto;font-weight:800;font-size:.85em;flex:none}
+.opt[disabled]{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.right .k{background:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--badbg)}
+.opt.wrong .k{background:var(--bad);color:#fff}
+.opt.dim{opacity:.55}
+.fb{border-radius:14px;padding:.8rem 1rem;font-size:1.05rem;line-height:1.45;display:none;border-left:6px solid}
+.fb.on{display:block;animation:fadeIn .3s}
+.fb.ok{background:var(--okbg);border-color:var(--ok)}
+.fb.bad{background:var(--badbg);border-color:var(--bad)}
+.fb.info{background:#eef2ff;border-color:#6366f1}
+.fb b.h{display:block;font-size:1.15rem;margin-bottom:.15rem}
+.grade{display:flex;gap:.6rem;flex-wrap:wrap}
+.ans{display:none;background:#f8fafc;border:2px dashed var(--line);border-radius:14px;padding:.8rem 1rem;line-height:1.5}
+.ans.on{display:block}
+
+/* Timer ring */
+.timer{--p:1;--c:var(--a);width:4.2rem;height:4.2rem;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:1.35rem;flex:none;
+  background:conic-gradient(var(--c) calc(var(--p)*360deg),#e5e9f2 0);position:relative}
+.timer::before{content:"";position:absolute;inset:6px;border-radius:50%;background:#fff}
+.timer span{position:relative}
+.timer.warn{--c:var(--bad);animation:pulse .5s infinite alternate}
+.timer.off{--p:0}
+@keyframes pulse{to{transform:scale(1.07)}}
+
+/* Overlay modal */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:40;padding:1.2rem}
+.overlay.on{display:flex;animation:fadeIn .25s}
+.modal{width:min(1150px,100%);max-height:calc(100vh - 2.4rem);overflow:auto}
+
+/* Results */
+.result{align-items:center;justify-content:center;text-align:center}
+.trophy{width:7rem;height:7rem;margin:0 auto}
+.result h2{font-size:clamp(1.8rem,3.4vw,3.2rem);margin:.4rem 0}
+.result .sub{color:var(--muted);font-size:1.15rem}
+.rtable{margin:1.2rem auto;border-collapse:collapse;min-width:min(620px,100%);font-size:1.1rem}
+.rtable th,.rtable td{padding:.6rem 1rem;border-bottom:1px solid var(--line);text-align:left}
+.rtable th{color:var(--muted);font-size:.9rem;text-transform:uppercase;letter-spacing:.5px}
+.rtable tr.win td{font-weight:800;background:#fffbeb}
+.actions{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-top:.6rem}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+
+/* Banner */
+.banner{position:fixed;left:50%;top:22%;transform:translate(-50%,-50%) scale(.8);background:#fff;border-radius:20px;box-shadow:var(--sh);padding:1.1rem 2rem;font-size:1.6rem;font-weight:800;z-index:50;opacity:0;pointer-events:none;transition:.3s;text-align:center;border:3px solid var(--a)}
+.banner.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+/* Ad toast */
+.ad{position:fixed;right:1rem;bottom:1rem;z-index:70;width:min(330px,calc(100vw - 2rem));background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:16px;
+  box-shadow:0 14px 34px rgba(15,23,42,.35);padding:.75rem 2.2rem .75rem .75rem;transform:translateY(140%);opacity:0;transition:transform .5s cubic-bezier(.2,.9,.3,1.2),opacity .4s;font-size:.88rem}
+.ad.on{transform:none;opacity:1}
+.ad a{display:flex;gap:.7rem;align-items:center;color:inherit;text-decoration:none}
+.ad .logo{flex:none;width:2.8rem;height:2.8rem;border-radius:12px;background:linear-gradient(135deg,#38bdf8,#6366f1);display:grid;place-items:center;font-weight:900;font-size:1.35rem;box-shadow:inset 0 -3px 0 rgba(0,0,0,.2)}
+.ad b{display:block;font-size:1rem;color:#7dd3fc}
+.ad span{display:block;line-height:1.3;opacity:.95}
+.ad .go{display:inline-block;margin-top:.3rem;background:#38bdf8;color:#0f172a;font-weight:800;border-radius:8px;padding:.15rem .55rem;font-size:.78rem}
+.ad .x{position:absolute;top:.35rem;right:.4rem;width:1.6rem;height:1.6rem;border:0;border-radius:8px;background:rgba(255,255,255,.12);color:#fff;font-size:1rem;line-height:1}
+.ad .x:hover{background:rgba(255,255,255,.25)}
+
+.kbd{display:inline-block;border:1px solid var(--line);border-bottom-width:3px;border-radius:6px;padding:0 .35rem;font-size:.8em;background:#fff;color:var(--muted)}
+.hint{color:var(--muted);font-size:.85rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+@media (max-width:900px){.setup{grid-template-columns:1fr}.opts{grid-template-columns:1fr}.topic{white-space:normal}.tools .lbl{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* Tezkor rejim — ikki panel */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:1rem;flex:1}
+.pp{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:1rem 1.1rem;border-top:7px solid var(--pc);display:flex;flex-direction:column;gap:.7rem;min-width:0}
+.pp .ph{display:flex;align-items:center;gap:.7rem}
+.pp .pn{flex:1;font-weight:800;font-size:1.15rem;color:var(--pc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp .ps{font-weight:900;font-size:1.3rem;color:var(--pc);white-space:nowrap}
+.pp .timer{width:3.3rem;height:3.3rem;font-size:1.1rem;--c:var(--pc)}
+.qtext.dq{font-size:clamp(1.05rem,1.6vw,1.75rem)}
+.opts.d{grid-template-columns:1fr 1fr;gap:.6rem}
+.opts.d .opt{font-size:clamp(.95rem,1.25vw,1.35rem);min-height:3.1rem;padding:.6rem .8rem}
+.opts.d .opt .k{width:1.9rem;height:1.9rem}
+.dfb{min-height:2.6em;font-weight:700;line-height:1.3;padding:.4rem .7rem;border-radius:10px;font-size:.98rem}
+.dfb.ok{background:var(--okbg);color:var(--ok)}.dfb.bad{background:var(--badbg);color:var(--bad)}.dfb.info{background:#eef2ff;color:#3730a3}
+.pp .keys{font-size:.8rem;color:var(--muted)}
+@media (max-width:900px){.duo{grid-template-columns:1fr}}
+/* Boshlash oynasi */
+.startcard h2{justify-content:center}
+.startbtn{width:100%;font-size:clamp(1.3rem,2vw,1.9rem)!important;padding:1.1rem 1rem!important;margin-bottom:.8rem;animation:glow 2s infinite}
+@keyframes glow{50%{box-shadow:0 4px 0 var(--a2),0 0 0 8px var(--asoft)}}
+.cfgsum{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:center;margin-bottom:.8rem}
+.cfgsum span{background:var(--bg);border-radius:999px;padding:.2rem .65rem;font-size:.8rem;font-weight:700;color:var(--muted)}
+#cfg{margin-top:1rem;padding-top:1rem;border-top:2px dashed var(--line);animation:fadeIn .3s}
+.opt-l{font-weight:500;font-size:.8em;opacity:.8}
+.opts.d.one{grid-template-columns:1fr}
+
+:root{ --a:#7c3aed;--a2:#5b21b6;--asoft:#ede9fe }
+
+.board{display:grid;grid-template-columns:1fr 20rem;gap:1rem;flex:1}
+.chests{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;align-content:start}
+.chest{position:relative;border:0;background:linear-gradient(160deg,#fff,#f5f3ff);border-radius:18px;box-shadow:var(--sh);padding:.8rem .5rem .6rem;display:flex;flex-direction:column;align-items:center;gap:.2rem;transition:transform .15s,box-shadow .15s;min-height:9rem}
+.chest:hover:not([disabled]){transform:translateY(-4px) rotate(-1deg);box-shadow:0 16px 30px rgba(91,33,182,.22)}
+.chest svg{width:min(8rem,80%);height:auto}
+.chest .num{position:absolute;top:.4rem;left:.6rem;font-weight:900;font-size:1.5rem;color:#5b21b6}
+.chest .lab{font-weight:800;font-size:.95rem;color:var(--muted);min-height:1.3em}
+.chest[disabled]{cursor:default;background:#f1f5f9;box-shadow:none;border:2px dashed var(--line)}
+.chest[disabled] svg{opacity:.45;filter:grayscale(.6)}
+.chest .who{font-size:.8rem;font-weight:700}
+.side{display:flex;flex-direction:column;gap:.8rem}
+.team{display:flex;align-items:center;gap:.7rem;padding:.7rem .9rem;border-radius:14px;background:#fff;box-shadow:var(--sh);border:3px solid transparent;transition:.2s}
+.team.on{border-color:currentColor;transform:scale(1.03)}
+.team .nm{flex:1;font-weight:800;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.team .pt{font-size:1.6rem;font-weight:900}
+.team .op{font-size:.78rem;color:var(--muted);display:block;font-weight:600}
+.legend{font-size:.85rem;color:var(--muted);line-height:1.6}
+.turnbig{font-size:1.15rem;font-weight:800;text-align:center;padding:.6rem;border-radius:14px;background:#fff;box-shadow:var(--sh)}
+.mhead{display:flex;align-items:center;gap:1rem;margin-bottom:.8rem}
+.mhead .ttl{flex:1;font-size:1.25rem;font-weight:800}
+.open-anim{animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.6) rotate(-6deg);opacity:0}}
+@media (max-width:1000px){.board{grid-template-columns:1fr}.chests{grid-template-columns:repeat(3,1fr)}}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="btn ghost small" id="homeBtn" href="#" hidden aria-hidden="true" tabindex="-1">← <span class="lbl">Menyu</span></a>
+  <div class="title">
+    <div class="game-name">🗝️ Sirli sandiq</div>
+    <div class="topic" id="topicLine"></div>
+  </div>
+  <div class="tools">
+    <button class="btn ghost small" id="soundBtn" title="Ovozni yoqish/o‘chirish">🔊</button>
+    <button class="btn ghost small" id="fsBtn" title="To‘liq ekran">⛶ <span class="lbl">To‘liq ekran</span></button>
+  </div>
+</header>
+<main>
+
+<section class="screen on" id="setup">
+  <div class="setup">
+    <div class="card">
+      <h2>🗝️ O‘yin qoidalari</h2>
+      <ul class="rules">
+        <li><b class="n">1</b><span>O‘yinda <b>2–4 ta jamoa</b> qatnashadi. Jamoalar navbat bilan sandiq tanlaydi.</span></li>
+        <li><b class="n">2</b><span>12 ta sandiqning har biri faqat bir marta ochiladi. Har jamoaga teng sondagi sandiq tegadi.</span></li>
+        <li><b class="n">3</b><span>Oson savol — <b>10</b>, o‘rtacha — <b>20</b>, murakkab — <b>30</b> ball.</span></li>
+        <li><b class="n">4</b><span>Sirli amaliy topshiriq — <b>20</b> ball va mezon bo‘yicha <b>+10 bonus</b>.</span></li>
+        <li><b class="n">5</b><span>Xato javob uchun ball ayrilmaydi. Variantli savollar avtomatik, og‘zaki va amaliy topshiriqlar o‘qituvchi tomonidan baholanadi.</span></li>
+        <li><b class="n">!</b><span>Sandiqlar ballari turlicha — o‘yin musobaqa uchun, rasmiy baho o‘rnida qo‘llanmaydi.</span></li>
+      </ul>
+      <p class="src" data-src></p>
+    </div>
+    <form class="card startcard" id="form">
+      <h2>🎮 Tayyormisiz?</h2>
+      <p class="hint" style="margin-bottom:1rem">O‘yin standart sozlamalar bilan darhol boshlanadi. Ism va guruh nomlarini kiritish shart emas.</p>
+      <button class="btn big startbtn" type="submit">▶ O‘yinni boshlash</button>
+      <div class="cfgsum" id="cfgSum"></div>
+      <button class="btn ghost" type="button" id="cfgBtn" style="width:100%" aria-expanded="false">⚙️ Sozlamalar</button>
+      <div id="cfg" hidden>
+      <div class="field"><label for="tc">Jamoalar soni</label><select id="tc"><option>2</option><option selected>3</option><option>4</option></select></div>
+      <div id="names"></div>
+      <div class="field"><label for="time">Savol vaqti (amaliy topshiriqning o‘z vaqti bor)</label><select id="time"><option value="0">Cheklanmagan</option><option value="60" selected>60 soniya</option></select></div>
+    
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="screen" id="play">
+  <div class="board">
+    <div class="chests" id="chests"></div>
+    <div class="side">
+      <div class="turnbig" id="turn"></div>
+      <div id="teams" style="display:grid;gap:.7rem"></div>
+      <div class="card legend"><b>Ballar:</b><br>🟢 Oson — 10 · 🟡 O‘rtacha — 20<br>🔴 Murakkab — 30 · 🟣 Amaliy — 20 + 10<br><span class="hint">Sandiqni tanlash: sichqoncha, sensor yoki <span class="kbd">Tab</span> + <span class="kbd">Enter</span></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="screen result" id="result">
+  <div class="card" style="width:min(900px,100%)">
+    <svg class="trophy" viewBox="0 0 64 64"><path d="M18 8h28v10c0 10-6 17-14 17S18 28 18 18z" fill="#f59e0b"/><path d="M18 12H8c0 9 5 14 11 14M46 12h10c0 9-5 14-11 14" fill="none" stroke="#f59e0b" stroke-width="4"/><rect x="28" y="34" width="8" height="10" fill="#d97706"/><rect x="20" y="44" width="24" height="7" rx="2" fill="#92400e"/><rect x="16" y="51" width="32" height="6" rx="2" fill="#78350f"/></svg>
+    <h2 id="rTitle"></h2><p class="sub" id="rSub"></p>
+    <table class="rtable"><thead><tr><th>O‘rin</th><th>Jamoa</th><th>Ball</th><th>Ochilgan sandiq</th><th>To‘g‘ri / bajarilgan</th></tr></thead><tbody id="rBody"></tbody></table>
+    <div class="actions"><button class="btn big" id="againBtn">↻ Qayta o‘ynash</button><a class="btn big ghost" id="menuBtn" href="#" hidden aria-hidden="true" tabindex="-1">☰ Menyuga qaytish</a></div>
+  </div>
+</section>
+
+<div class="overlay" id="ov"><div class="card modal open-anim" id="modal">
+  <div class="mhead"><div class="ttl" id="mTitle"></div><div class="timer" id="timer"><span>30</span></div></div>
+  <div id="qarea"></div>
+  <div class="nextrow" style="display:flex;justify-content:flex-end;margin-top:.8rem"><button class="btn" id="closeBtn" hidden>Davom etish →</button></div>
+</div></div>
+
+</main>
+<div class="banner" id="banner" role="status" aria-live="polite"></div>
+<canvas id="confetti"></canvas>
+<aside class="ad" id="ad" aria-label="Reklama">
+  <a href="https://t.me/Pedlinebot" target="_blank" rel="noopener">
+    <div class="logo">P</div>
+    <div><b>@Pedlinebot</b><span>Olimpiada va attestatsiyaga tayyorlanish uchun ishonchli platforma!</span><i class="go">Telegramda ochish →</i></div>
+  </a>
+  <button class="x" aria-label="Yopish">×</button>
+</aside>
+<script>
+/* =====================================================================
+   SAVOLLAR VA MAVZU MA’LUMOTLARI — o‘qituvchi shu qismni tahrirlashi mumkin
+   ===================================================================== */
+const GAME = "Sirli sandiq";
+const TOPIC = {
+ "sinf": 8,
+ "chorak": 2,
+ "dars": 10,
+ "raqam": 1,
+ "nomi": "HTML tushunchasi va veb-sahifani sozlash",
+ "manba": "Informatika 8-sinf darsligi, 2-modul «Maqsadni amalga oshirish uchun veb-sayt dizaynini yaratish», 54–59-betlar",
+ "papka": "10-HTML tushunchasi va veb-sahifani sozlash",
+ "home": "#"
+};
+const DATA = {
+ "questions": [
+  {
+   "id": "S01",
+   "type": "mcq",
+   "q": "Veb-sahifa kodini yozish uchun ishlatiladigan oddiy matn muharriri?",
+   "options": [
+    "Notepad",
+    "Paint",
+    "PowerPoint",
+    "Excel"
+   ],
+   "answer": 0,
+   "explain": "54-bet.",
+   "level": 1,
+   "src": "54-bet",
+   "points": 10
+  },
+  {
+   "id": "S02",
+   "type": "mcq",
+   "q": "Veb-saytdagi bitta sahifa qanday ataladi?",
+   "options": [
+    "Veb-sahifa",
+    "Veb-sayt",
+    "Brauzer",
+    "Server"
+   ],
+   "answer": 0,
+   "explain": "Kalit so‘z.",
+   "level": 1,
+   "src": "55-bet",
+   "points": 10
+  },
+  {
+   "id": "S03",
+   "type": "tf",
+   "q": "HTML eng eski va keng tarqalgan veb tillaridan biri.",
+   "options": [
+    "To‘g‘ri",
+    "Noto‘g‘ri"
+   ],
+   "answer": 0,
+   "explain": "55-bet.",
+   "level": 1,
+   "src": "55-bet",
+   "points": 10
+  },
+  {
+   "id": "S04",
+   "type": "open",
+   "q": "HTML hujjatning asosiy tuzilmasini ayting.",
+   "answerText": "<!DOCTYPE html>, <html>, <head>, </head>, <body>, </body>, </html>.",
+   "level": 1,
+   "src": "56-bet",
+   "points": 10
+  },
+  {
+   "id": "S05",
+   "type": "mcq",
+   "q": "Veb-sahifani saqlash tartibi?",
+   "options": [
+    "File → Save As → papka → «nom.html» → Save",
+    "File → Print → printer → nusxa soni → OK",
+    "Edit → Copy → papka → Paste → Close",
+    "Save → papka → «nom.txt» → Close"
+   ],
+   "answer": 0,
+   "explain": "58-bet.",
+   "level": 2,
+   "src": "58-bet",
+   "points": 20
+  },
+  {
+   "id": "S06",
+   "type": "mcq",
+   "q": "<head> qismi nima uchun ishlatiladi?",
+   "options": [
+    "Sahifa nomi kabi elementlar uchun",
+    "Barcha matn va rasmlar uchun",
+    "Havolalar uchun",
+    "Ro‘yxatlar uchun"
+   ],
+   "answer": 0,
+   "explain": "56-bet.",
+   "level": 2,
+   "src": "56-bet",
+   "points": 20
+  },
+  {
+   "id": "S07",
+   "type": "open",
+   "q": "Ochish tegi va yopish tegining farqini misol bilan tushuntiring.",
+   "answerText": "Ochish tegi kontent boshida turadi (<body>), yopish tegi oxirida turadi va / bilan boshlanadi (</body>).",
+   "level": 2,
+   "src": "56-bet",
+   "points": 20
+  },
+  {
+   "id": "S08",
+   "type": "mcq",
+   "q": "1.1-mashg‘ulotda qanday papkalar yaratiladi?",
+   "options": [
+    "Website va uning ichida Images",
+    "Documents va Music",
+    "Desktop va Downloads",
+    "HTML va CSS"
+   ],
+   "answer": 0,
+   "explain": "1.1.",
+   "level": 2,
+   "src": "59-bet",
+   "points": 20
+  },
+  {
+   "id": "S09",
+   "type": "mcq",
+   "q": "Kodda xato qayerda? <html><head><title>Sinov</title></head><body></html>",
+   "options": [
+    "</body> yopish tegi yo‘q",
+    "<title> ortiqcha",
+    "<head> kerak emas",
+    "Xato yo‘q"
+   ],
+   "answer": 0,
+   "explain": "Har bir ochish tegi yopilishi kerak.",
+   "level": 3,
+   "src": "56–57-betlar",
+   "points": 30
+  },
+  {
+   "id": "S10",
+   "type": "open",
+   "q": "Nega HTML kodni juda aniq yozish kerak?",
+   "answerText": "Kichik xato (bo‘sh joy, yopilmagan teg, imlo) tufayli brauzer elementlarni noto‘g‘ri aks ettiradi yoki umuman ko‘rsatmaydi.",
+   "level": 3,
+   "src": "55–56, 87-betlar",
+   "points": 30
+  },
+  {
+   "id": "S11",
+   "type": "task",
+   "q": "Sirli amaliy topshiriq: Notepad’da HTML tuzilmasini yozing, <title> ga «Bosh sahifa» deb kiriting, faylni Website papkasiga «index.html» nomi bilan saqlab, brauzerda oching.",
+   "answerText": "20 ball — tuzilma to‘g‘ri, fayl .html bilan saqlangan va brauzerda ochilgan. +10 bonus — sarlavha brauzer panelida ko‘rinishini ko‘rsatgan.",
+   "level": 4,
+   "src": "56–59-betlar",
+   "points": 20,
+   "bonus": 10,
+   "time": 300
+  },
+  {
+   "id": "S12",
+   "type": "task",
+   "q": "Sirli amaliy topshiriq: kompyuterda Website papkasini, uning ichida Images papkasini yarating.",
+   "answerText": "20 ball — ikkala papka to‘g‘ri joylashgan. +10 bonus — qaysi fayllar qaysi papkaga saqlanishini tushuntirgan.",
+   "level": 4,
+   "src": "59, 1.1-mashg‘ulot",
+   "points": 20,
+   "bonus": 10,
+   "time": 120
+  }
+ ]
+};
+/* ===================================================================== */
+</script>
+<script>
+/* ===== Umumiy yordamchi kod (barcha o‘yinlar uchun bir xil) ===== */
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},
+             set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function show(id){$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0)}
+function cleanName(v,d){v=(v||'').trim().replace(/\s+/g,' ');return v?v.slice(0,24):d}
+
+/* Ovoz (fayl kerak emas — brauzerning o‘zida hosil qilinadi) */
+const Sound={on:store.get('ia_sound',true),ctx:null,
+  tone(f,d=.15,t='sine',v=.15,delay=0){if(!this.on)return;try{this.ctx=this.ctx||new(window.AudioContext||window.webkitAudioContext)();const c=this.ctx;if(c.state==='suspended')c.resume();const o=c.createOscillator(),g=c.createGain(),s=c.currentTime+delay;o.type=t;o.frequency.setValueAtTime(f,s);g.gain.setValueAtTime(v,s);g.gain.exponentialRampToValueAtTime(.0008,s+d);o.connect(g);g.connect(c.destination);o.start(s);o.stop(s+d+.03)}catch(e){}},
+  click(){this.tone(520,.05,'triangle',.07)},
+  ok(){this.tone(660,.12,'triangle',.16);this.tone(990,.2,'triangle',.16,.1)},
+  bad(){this.tone(200,.28,'sawtooth',.07)},
+  tick(){this.tone(1250,.04,'square',.03)},
+  spin(){this.tone(700,.03,'square',.03)},
+  win(){[523,659,784,1047,1319].forEach((f,i)=>this.tone(f,.28,'triangle',.15,i*.12))}
+};
+
+/* Vaqt hisoblagichi: bitta savolga bitta natija */
+class Timer{
+  constructor(el){this.el=el;this.id=null}
+  start(sec,onEnd){this.stop();this.total=sec;this.left=sec;this.onEnd=onEnd;
+    if(!sec){this.el.classList.add('off');this.el.classList.remove('warn');this.el.innerHTML='<span>∞</span>';this.el.title='Vaqt cheklanmagan';return}
+    this.el.classList.remove('off');this.render();
+    this.id=setInterval(()=>{this.left--;this.render();if(this.left>0&&this.left<=5)Sound.tick();
+      if(this.left<=0){this.stop();const f=this.onEnd;this.onEnd=null;f&&f()}},1000)}
+  stop(){if(this.id){clearInterval(this.id);this.id=null}this.el.classList.remove('warn')}
+  render(){this.el.innerHTML='<span>'+Math.max(0,this.left)+'</span>';this.el.style.setProperty('--p',Math.max(0,this.left)/this.total);
+    this.el.classList.toggle('warn',this.left<=5&&this.left>0);this.el.title='Qolgan vaqt: '+this.left+' soniya'}
+}
+
+/* Savolni chiqarish. type: mcq | tf | open | task
+   onDone({correct, points, timeout}) — faqat BIR marta chaqiriladi */
+let KEYH=null;
+function renderQ(box,q,opt){
+  opt=opt||{};let done=false;const L='ABCD';
+  const lv={1:['l1','Oson'],2:['l2','O‘rtacha'],3:['l3','Murakkab'],4:['l4','Amaliy topshiriq']}[q.level]||['','' ];
+  let h='<div class="qbox"><div class="qhead">'+(opt.chips||'')+(q.level&&!opt.noLevel?'<span class="chip '+lv[0]+'">'+lv[1]+'</span>':'')+
+        (q.type==='tf'?'<span class="chip">To‘g‘ri yoki noto‘g‘ri?</span>':'')+
+        (q.type==='open'?'<span class="chip">Og‘zaki javob</span>':'')+'</div>'+
+        '<div class="qtext">'+esc(q.q)+'</div>';
+  let order=[];
+  if(q.type==='mcq'||q.type==='tf'){
+    order=q.type==='tf'?[0,1]:shuffle(q.options.map((_,i)=>i));
+    h+='<div class="opts">'+order.map((oi,k)=>'<button class="opt" data-i="'+oi+'"><span class="k">'+L[k]+'</span><span>'+esc(q.options[oi])+'</span><span class="mk"></span></button>').join('')+'</div>';
+  }else{
+    h+='<div class="ans"><b>'+(q.type==='task'?'Baholash mezoni':'Javob namunasi')+':</b><br>'+esc(q.answerText)+'</div>';
+    h+='<div class="grade"><button class="btn ghost" data-act="show">👁 '+(q.type==='task'?'Mezonni ko‘rsatish':'Javobni ko‘rsatish')+'</button>';
+    if(q.type==='open')h+='<button class="btn ok" data-g="1">✓ To‘g‘ri</button><button class="btn bad" data-g="0">✗ Noto‘g‘ri</button>';
+    else h+='<button class="btn bad" data-p="0">Bajarilmadi · 0</button><button class="btn ok" data-p="'+q.points+'">Bajarildi · '+q.points+'</button><button class="btn gold" data-p="'+(q.points+q.bonus)+'">A’lo · '+q.points+' + '+q.bonus+' bonus</button>';
+    h+='</div><div class="hint">'+(q.type==='task'?'Topshiriqni o‘qituvchi mezon asosida baholaydi.':'Javobni o‘qituvchi tekshiradi.')+'</div>';
+  }
+  h+='<div class="fb"></div></div>';
+  box.innerHTML=h;
+  const fb=$('.fb',box);
+  function finish(res){if(done)return;done=true;KEYH=null;
+    $$('button',box).forEach(b=>{if(b.dataset.act!=='show')b.disabled=true});
+    const exp=q.explain?'<br>'+esc(q.explain):'';
+    if(q.type==='mcq'||q.type==='tf'){
+      $$('.opt',box).forEach(b=>{const i=+b.dataset.i;if(i===q.answer){b.classList.add('right');$('.mk',b).textContent='✓ To‘g‘ri javob'}
+        else if(res.chosen===i){b.classList.add('wrong');$('.mk',b).textContent='✗ Tanlangan'}else b.classList.add('dim')});
+    }else $('.ans',box).classList.add('on');
+    if(res.timeout){fb.className='fb bad on';fb.innerHTML='<b class="h">⏰ Vaqt tugadi!</b>To‘g‘ri javob: <b>'+esc(q.type==='mcq'||q.type==='tf'?q.options[q.answer]:'yuqorida')+'</b>'+exp;Sound.bad()}
+    else if(q.type==='task'){fb.className='fb '+(res.points>0?'ok':'bad')+' on';fb.innerHTML='<b class="h">'+(res.points>0?'✓ Baholandi: +'+res.points+' ball':'✗ Topshiriq bajarilmadi: 0 ball')+'</b>';res.points>0?Sound.ok():Sound.bad()}
+    else if(res.correct){fb.className='fb ok on';fb.innerHTML='<b class="h">✓ To‘g‘ri!</b>'+(exp?exp.slice(4):'');Sound.ok()}
+    else{fb.className='fb bad on';fb.innerHTML='<b class="h">✗ Noto‘g‘ri.</b>'+(q.type==='mcq'||q.type==='tf'?'To‘g‘ri javob: <b>'+esc(q.options[q.answer])+'</b>':'')+exp;Sound.bad()}
+    if(res.correct===undefined)res.correct=res.points>0;
+    opt.onDone&&opt.onDone(res);
+  }
+  if(q.type==='mcq'||q.type==='tf'){
+    $$('.opt',box).forEach(b=>b.onclick=()=>{const i=+b.dataset.i;finish({correct:i===q.answer,chosen:i,timeout:false})});
+    KEYH=e=>{const k=e.key.toUpperCase();let n='1234'.indexOf(k);if(n<0)n=L.indexOf(k);const bs=$$('.opt',box);if(n>=0&&bs[n]&&!bs[n].disabled){e.preventDefault();bs[n].click()}};
+  }else{
+    $('[data-act=show]',box).onclick=e=>{$('.ans',box).classList.add('on');e.currentTarget.disabled=true};
+    $$('[data-g]',box).forEach(b=>b.onclick=()=>finish({correct:b.dataset.g==='1',timeout:false}));
+    $$('[data-p]',box).forEach(b=>b.onclick=()=>finish({points:+b.dataset.p,timeout:false}));
+    KEYH=null;
+  }
+  return{timeout(){ if(done)return;
+      if(q.type==='mcq'||q.type==='tf')finish({correct:false,timeout:true});
+      else{ /* og‘zaki/amaliy: vaqt tugaganini bildiramiz, baholashni o‘qituvchi bir marta qiladi */
+        $('.ans',box).classList.add('on');fb.className='fb info on';fb.innerHTML='<b class="h">⏰ Vaqt tugadi</b>Endi javobni baholang.';Sound.bad()}},
+    get done(){return done}};
+}
+document.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;if(KEYH)KEYH(e);else if(window.onGameKey)window.onGameKey(e)});
+
+/* Banner va konfetti */
+function banner(t,ms){const b=$('#banner');b.innerHTML=t;b.classList.add('on');clearTimeout(b._t);b._t=setTimeout(()=>b.classList.remove('on'),ms||1800)}
+function confetti(){const c=$('#confetti'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+  const cols=['#2563eb','#dc2626','#f59e0b','#10b981','#a855f7','#06b6d4'];
+  const P=Array.from({length:170},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.5,r:4+Math.random()*6,c:cols[Math.random()*6|0],vy:2+Math.random()*3.5,vx:-1.5+Math.random()*3,a:Math.random()*6,va:-.2+Math.random()*.4}));
+  let t=0;(function f(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});
+    if(++t<260)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
+
+/* Sarlavha tugmalari */
+function initChrome(){
+  const sb=$('#soundBtn');const upd=()=>{sb.innerHTML=Sound.on?'🔊 <span class="lbl">Ovoz</span>':'🔇 <span class="lbl">Ovoz o‘chiq</span>';sb.setAttribute('aria-pressed',Sound.on)};upd();
+  sb.onclick=()=>{Sound.on=!Sound.on;store.set('ia_sound',Sound.on);upd()};
+  $('#fsBtn').onclick=()=>{try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()}catch(e){}};
+  $('#homeBtn').href=TOPIC.home;
+  $('#topicLine').textContent=TOPIC.sinf+'-sinf · '+TOPIC.chorak+'-chorak · '+TOPIC.dars+'-dars · '+TOPIC.nomi;
+  document.title=GAME+' — '+TOPIC.nomi+' ('+TOPIC.sinf+'-sinf)';
+  $$('[data-src]').forEach(e=>e.textContent='Manba: '+TOPIC.manba);
+  initAd();initStart();
+}
+
+/* @Pedlinebot reklamasi — burchakda qalqib chiquvchi kichik oyna */
+function initAd(){
+  const ad=$('#ad');let hideT;
+  const open=(ms)=>{ad.classList.add('on');clearTimeout(hideT);hideT=setTimeout(()=>ad.classList.remove('on'),ms||11000)};
+  $('.x',ad).onclick=e=>{e.preventDefault();ad.classList.remove('on')};
+  setTimeout(()=>open(),5000);
+  setInterval(()=>open(),150000);
+  window.showAd=open;
+}
+
+/* ===== Ikki o‘quvchi bir vaqtda (tezkor rejim) uchun savol paneli ===== */
+function dualQ(box,q,keys,onDone){
+  let done=false;const order=q.type==='tf'?[0,1]:shuffle(q.options.map((_,i)=>i));
+  const longOpt=q.options.some(o=>o.length>34);
+  box.innerHTML='<div class="qtext dq">'+esc(q.q)+'</div><div class="opts d'+(longOpt?' one':'')+'">'+order.map((oi,k)=>'<button class="opt" data-i="'+oi+'"><span class="k">'+keys[k]+'</span><span>'+esc(q.options[oi])+'</span></button>').join('')+'</div>';
+  const bs=$$('.opt',box);
+  function fin(chosen,to){if(done)return;done=true;
+    bs.forEach(b=>{b.disabled=true;const i=+b.dataset.i;if(i===q.answer)b.classList.add('right');else if(i===chosen)b.classList.add('wrong');else b.classList.add('dim')});
+    const ok=!to&&chosen===q.answer;ok?Sound.ok():Sound.bad();onDone(ok,!!to)}
+  bs.forEach(b=>b.addEventListener('click',()=>fin(+b.dataset.i,false)));
+  return{key(k){const n=keys.indexOf(k);if(n>=0&&bs[n]&&!done)bs[n].click()},timeout(){fin(-1,true)},get done(){return done}};
+}
+function countdown(cb){let n=3;const step=()=>{if(n>0){banner('<span style="font-size:3.5rem">'+n+'</span>',800);Sound.tick();n--;setTimeout(step,900)}else{banner('🚦 Boshladik!',700);Sound.ok();cb()}};step()}
+
+/* Tezkor rejim dvigateli: ikkala o‘quvchi bir xil ro‘yxatdan, lekin har xil tartibda savol oladi.
+   2-o‘quvchi tartibi 1-o‘quvchinikidan yarim ro‘yxatga surilgan — bir vaqtda bir xil savol chiqmaydi. */
+function DualRace(c){
+  const n=c.list.length,o0=shuffle(c.list),h=Math.floor(n/2),o1=o0.slice(h).concat(o0.slice(0,h));
+  const R={orders:[o0,o1],idx:[0,0],good:[0,0],bad:[0,0],tsum:[0,0],cur:[null,null],tm:[null,null],finished:[false,false],over:false,
+    timers:[new Timer(c.timerEls[0]),new Timer(c.timerEls[1])]};
+  function fb(i,cls,html){const e=c.fbEls[i];e.className='dfb '+cls;e.innerHTML=html}
+  function ask(i){ if(R.over)return;
+    if(R.idx[i]>=n){R.finished[i]=true;R.cur[i]=null;c.boxes[i].innerHTML='<div class="qtext dq" style="text-align:center;color:var(--muted)">✓ Savollar tugadi.<br>Raqib tugatishini kuting…</div>';fb(i,'info','Jami: '+R.good[i]+' ta to‘g‘ri, '+R.bad[i]+' ta xato');
+      if(R.finished[0]&&R.finished[1]){R.over=true;c.onAllDone()}return}
+    const q=R.orders[i][R.idx[i]++],t0=performance.now();fb(i,'','Savol '+R.idx[i]+' / '+n);
+    R.cur[i]=dualQ(c.boxes[i],q,c.keys[i],(ok,to)=>{ if(R.over)return;
+      R.timers[i].stop();R.tsum[i]+=(performance.now()-t0)/1000;
+      if(ok){R.good[i]++;fb(i,'ok','✓ To‘g‘ri! '+esc(q.explain||''));c.onCorrect(i);if(R.over)return;R.tm[i]=setTimeout(()=>ask(i),c.okDelay||1000)}
+      else{R.bad[i]++;fb(i,'bad',(to?'⏰ Vaqt tugadi. ':'✗ Noto‘g‘ri. ')+'To‘g‘ri javob: <b>'+esc(q.options[q.answer])+'</b>'+(c.pen?' · jarima '+c.pen+' soniya':''));
+        R.tm[i]=setTimeout(()=>ask(i),1300+c.pen*1000)}
+      c.onUpdate&&c.onUpdate()});
+    R.timers[i].start(c.time,()=>R.cur[i]&&R.cur[i].timeout());
+  }
+  R.start=()=>{ask(0);ask(1)};
+  R.stop=()=>{R.over=true;[0,1].forEach(i=>{clearTimeout(R.tm[i]);R.timers[i].stop();if(R.cur[i]&&!R.cur[i].done)$$('.opt',c.boxes[i]).forEach(b=>b.disabled=true)})};
+  R.key=k=>{if(R.over)return;[0,1].forEach(i=>{if(c.keys[i].includes(k)&&R.cur[i])R.cur[i].key(k)})};
+  R.avg=i=>{const a=R.good[i]+R.bad[i];return a?(R.tsum[i]/a).toFixed(1)+' s':'—'};
+  R.total=n;return R;
+}
+
+/* Boshlash oynasi: standart sozlamalar bilan darhol boshlash, "Sozlamalar" ixtiyoriy */
+function initStart(){
+  const btn=$('#cfgBtn'),cfg=$('#cfg');if(!btn)return;
+  const SH={tc:'Jamoalar',pc:'Ishtirokchilar',spins:'Aylantirish',target:'Marra',time:'Vaqt',pen:'Jarima',qn:'Savollar'};
+  const sum=()=>{$('#cfgSum').innerHTML=$$('select',cfg).map(s=>'<span>'+(SH[s.id]||'')+': '+esc(s.options[s.selectedIndex].text.replace(' (hammasi)',''))+'</span>').join('')};
+  sum();cfg.addEventListener('change',sum);
+  btn.onclick=()=>{cfg.hidden=!cfg.hidden;btn.setAttribute('aria-expanded',!cfg.hidden);btn.innerHTML=cfg.hidden?'⚙️ Sozlamalar':'✕ Sozlamalarni yopish';if(!cfg.hidden){const i=$('input,select',cfg);i&&i.focus()}};
+  setTimeout(()=>{const s=$('.startbtn');s&&s.focus({preventScroll:true})},50);
+  document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&$('#setup').classList.contains('on')&&!e.target.matches('input,select,textarea,button')){e.preventDefault();$('#form').requestSubmit()}});
+}
+
+</script>
+<script>
+
+const COLORS = ['var(--p1)', 'var(--p2)', 'var(--p3)', 'var(--p4)'];
+const CAT = { 1: ['🟢 Oson savol', 10], 2: ['🟡 O‘rtacha savol', 20], 3: ['🔴 Murakkab savol', 30], 4: ['🟣 Sirli amaliy topshiriq', 20] };
+const timer = new Timer($('#timer'));
+let S = null, cur = null;
+const chestSVG = (open) => open
+  ? '<svg viewBox="0 0 100 80"><path d="M12 38h76v34a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4z" fill="#a16207"/><path d="M12 38 22 10h56l10 28z" fill="#ca8a04"/><rect x="12" y="46" width="76" height="6" fill="#713f12"/><path d="M30 34l20-14 20 14" fill="#fde68a" opacity=".9"/><rect x="44" y="42" width="12" height="14" rx="2" fill="#facc15"/></svg>'
+  : '<svg viewBox="0 0 100 80"><path d="M12 36h76v36a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4z" fill="#92400e"/><path d="M12 36c0-14 10-24 24-24h28c14 0 24 10 24 24z" fill="#b45309"/><rect x="12" y="34" width="76" height="7" fill="#78350f"/><rect x="22" y="12" width="7" height="64" fill="#f59e0b"/><rect x="71" y="12" width="7" height="64" fill="#f59e0b"/><rect x="42" y="32" width="16" height="18" rx="3" fill="#fde047" stroke="#a16207" stroke-width="2"/><circle cx="50" cy="40" r="3" fill="#78350f"/><path d="M49 42h2v5h-2z" fill="#78350f"/></svg>';
+$('#menuBtn').href = TOPIC.home;
+function drawNames() { const n = +$('#tc').value, prev = store.get('ia_sandiq_names', []);
+  const keep = $$('#names input').map(i => i.value);
+  $('#names').innerHTML = Array.from({ length: n }, (_, i) => '<div class="field"><label for="t' + i + '"><span class="dot" style="background:' + COLORS[i] + '"></span>' + (i + 1) + '-jamoa nomi  <span class="opt-l">(ixtiyoriy)</span></label><input id="t' + i + '" maxlength="24" placeholder="' + (i + 1) + '-jamoa" value="' + esc(keep[i] ?? prev[i] ?? '') + '"></div>').join(''); }
+$('#tc').onchange = drawNames; drawNames();
+
+$('#form').onsubmit = e => { e.preventDefault(); Sound.click();
+  const n = +$('#tc').value, names = Array.from({ length: n }, (_, i) => cleanName($('#t' + i).value, (i + 1) + '-jamoa'));
+  store.set('ia_sandiq_names', names);
+  S = { names, pts: names.map(() => 0), opened: names.map(() => 0), good: names.map(() => 0), turn: 0, time: +$('#time').value, boxes: shuffle(DATA.questions).map(q => ({ q, open: false, by: -1, got: 0 })), over: false };
+  drawBoard(); show('play');
+};
+function drawBoard() {
+  $('#chests').innerHTML = S.boxes.map((b, i) => '<button class="chest" data-i="' + i + '" ' + (b.open ? 'disabled' : '') + ' aria-label="' + (i + 1) + '-sandiq' + (b.open ? ', ochilgan' : '') + '"><span class="num">' + (i + 1) + '</span>' + chestSVG(b.open) +
+    '<span class="lab">' + (b.open ? CAT[b.q.level][0] + ' · +' + b.got : 'Sandiq №' + (i + 1)) + '</span>' + (b.open ? '<span class="who" style="color:' + COLORS[b.by] + '">' + esc(S.names[b.by]) + '</span>' : '') + '</button>').join('');
+  $$('.chest').forEach(c => c.onclick = () => openBox(+c.dataset.i));
+  const per = S.boxes.length / S.names.length;
+  $('#teams').innerHTML = S.names.map((n, i) => '<div class="team ' + (i === S.turn ? 'on' : '') + '" style="color:' + COLORS[i] + '"><span class="dot" style="background:' + COLORS[i] + ';width:1rem;height:1rem"></span><span class="nm">' + esc(n) + '<span class="op">Ochgan: ' + S.opened[i] + ' / ' + per + '</span></span><span class="pt">' + S.pts[i] + '</span></div>').join('');
+  $('#turn').innerHTML = 'Navbat: <span style="color:' + COLORS[S.turn] + '">' + esc(S.names[S.turn]) + '</span><br><span class="hint">Sandiq tanlang</span>';
+}
+function openBox(i) {
+  const b = S.boxes[i]; if (!b || b.open || S.over || $('#ov').classList.contains('on')) return;
+  Sound.click(); b.open = true; b.by = S.turn; S.opened[S.turn]++;
+  const q = b.q, c = CAT[q.level];
+  $('#mTitle').innerHTML = '<span style="color:' + COLORS[S.turn] + '">' + esc(S.names[S.turn]) + '</span> · ' + (i + 1) + '-sandiq: ' + c[0] + ' — ' + (q.level === 4 ? '20 + 10 bonus' : c[1]) + ' ball';
+  $('#closeBtn').hidden = true; $('#ov').classList.add('on'); const m = $('#modal'); m.classList.remove('open-anim'); void m.offsetWidth; m.classList.add('open-anim');
+  cur = renderQ($('#qarea'), q, { noLevel: true, onDone: r => {
+    timer.stop(); let got = 0;
+    if (q.type === 'task') got = r.points || 0; else if (r.correct) got = q.points;
+    b.got = got; S.pts[b.by] += got; if (got > 0) S.good[b.by]++;
+    $('#closeBtn').hidden = false; $('#closeBtn').focus({preventScroll:true});
+  } });
+  timer.start(q.type === 'task' ? (S.time ? q.time : 0) : S.time, () => cur.timeout());
+}
+$('#closeBtn').onclick = () => { Sound.click(); $('#ov').classList.remove('on'); KEYH = null;
+  S.turn = (S.turn + 1) % S.names.length;
+  if (S.boxes.every(b => b.open)) return end();
+  drawBoard(); const nx = $('.chest:not([disabled])'); nx && nx.focus({preventScroll:true}); };
+window.onGameKey = e => { if (e.key === 'Enter' && $('#ov').classList.contains('on') && !$('#closeBtn').hidden) { e.preventDefault(); $('#closeBtn').click(); } };
+function end() {
+  S.over = true; drawBoard();
+  const order = S.names.map((n, i) => i).sort((a, b) => S.pts[b] - S.pts[a]);
+  const best = S.pts[order[0]], winners = order.filter(i => S.pts[i] === best);
+  $('#rTitle').textContent = winners.length > 1 ? '🤝 Teng natija: ' + winners.map(i => S.names[i]).join(' va ') : '🏆 G‘olib: ' + S.names[winners[0]];
+  $('#rSub').textContent = 'Barcha 12 ta sandiq ochildi.';
+  let place = 0, last = null;
+  $('#rBody').innerHTML = order.map((i, k) => { if (S.pts[i] !== last) { place = k + 1; last = S.pts[i]; }
+    return '<tr class="' + (S.pts[i] === best ? 'win' : '') + '"><td>' + (place === 1 ? '🥇' : place === 2 ? '🥈' : place === 3 ? '🥉' : place) + '</td><td><span class="dot" style="background:' + COLORS[i] + '"></span>' + esc(S.names[i]) + '</td><td><b>' + S.pts[i] + '</b></td><td>' + S.opened[i] + '</td><td>' + S.good[i] + '</td></tr>'; }).join('');
+  setTimeout(() => { show('result'); Sound.win(); confetti(); window.showAd && window.showAd(9000); }, 400);
+}
+$('#againBtn').onclick = () => { Sound.click(); show('setup'); };
+initChrome();
+
+</script>
+</body>
+</html>
